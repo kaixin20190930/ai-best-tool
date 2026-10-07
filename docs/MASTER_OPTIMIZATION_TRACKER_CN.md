@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-07
+更新时间：2026-10-08
+
+2026-10-08 **ELICIT-MATERIAL-DISPLAY-01 已发布并完成独立 QA**：未复制、自托管或热链 Elicit 官方 logo/截图；工具身份图与封面采用 AI Best Tool 自有中性编辑素材，真实展示采用 Elicit 官方频道可嵌入的 Research Agent 视频。统一发布器补齐 `video_url` fail-closed 与读回；`cn` 已按简体 locale 契约修正。生产 preflight、素材 hash、事务 rollback 和显式 commit 均通过，唯一实体 `c2e3a5f4-cf8e-4564-8563-093053962ed1` 为 `published + monitor/noindex`，下次复核 `2026-10-14`；不进入 sitemap，不创建 Task/Capability/Fit 关系。详见[交付记录](./ELICIT_MATERIAL_DISPLAY_2026-10-07_CN.md)。
 
 2026-10-07 **交付与验收流程改为增量风险分级**：每个候选/功能只保留一份权威证据快照，既有 PASS 仅在来源变化、复查到期、相关代码变化或生产异常时失效。任务先列 change set，再按 R/C/H 三级执行；纯研究不跑 TypeScript/build/smoke，运行时代码只跑受影响专项与必要 build，高风险数据库/安全/支付/SEO 边界才跑完整门禁。同一命令不再由开发、QA、总控重复执行，QA PASS 后无新差分不得再次复核。详细规则已写入[自动化测试与发布验收方案](./DECISION_PLATFORM_AUTOMATED_ACCEPTANCE_CN.md)，并同步到总控任务锁和每日自动化。后续 Elicit 只处理素材授权、真实展示和新上线纠错入口三个差分，不重验其已通过的七项准入。
 

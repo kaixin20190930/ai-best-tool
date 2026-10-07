@@ -2,11 +2,13 @@
   "slug": "elicit",
   "existingRoute": "/ai/elicit",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-10-07",
   "publishNotBefore": "2026-10-07",
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
   "sitemapChangeApproved": false,
+  "releasedAt": "2026-10-08",
+  "releaseIndexState": "monitor",
   "sources": {
     "official": [
       "https://elicit.com/",

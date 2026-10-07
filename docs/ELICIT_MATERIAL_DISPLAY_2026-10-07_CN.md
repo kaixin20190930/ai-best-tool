@@ -1,6 +1,13 @@
 # ELICIT-MATERIAL-DISPLAY-01 交付记录
 
-核查日：2026-10-07。基于已持久化的 Elicit 七项 PASS；本单元只处理剩余素材/内容展示差分。
+核查日：2026-10-07；生产发布日：2026-10-08。基于已持久化的 Elicit 七项 PASS；本单元只处理剩余素材/内容展示差分。
+
+## 生产交付结果
+
+2026-10-08 已完成素材部署、生产只读 preflight、事务 rollback、显式 commit 与本地化读回。生产唯一实体 ID 为
+`c2e3a5f4-cf8e-4564-8563-093053962ed1`，状态固定为 `published + monitor/noindex`，下次复核日为
+`2026-10-14`。Elicit 不进入 sitemap，不批准 Task/Capability/Fit 关系，也不改变站点索引额度。`cn` 字段已按现行
+locale 契约统一为简体中文；繁体页面继续使用既有回退机制，不虚构单独的数据库 `tw` 字段。
 
 ## Change set（开工锁定）
 
@@ -44,11 +51,11 @@
 ## 受控发布边界与验证
 
 统一发布器仅扩展现有 `tools.video_url` 字段，覆盖 insert、已有行更新、视频 URL 限制和事务内回读；未新增列或迁移。未提供
-新视频的旧条目在更新时保留原值。Elicit 预审保持 `productionWriteApproved=false`，真实发布只允许 controller 完成
-release-day preflight、部署并核对两个素材 hash、准备行级快照/rollback、取得 exact-commit 独立 QA 后显式 `--commit`。发布
-结果仅能是 `published + monitor/noindex`；index、sitemap、relationship 均为 false。
+新视频的旧条目在更新时保留原值。Elicit 预审在发布前保持 `productionWriteApproved=false`；controller 已完成
+release-day preflight、两个素材 hash 核对、事务 rollback、exact-commit 独立 QA 与显式 `--commit`。发布结果为
+`published + monitor/noindex`；index、sitemap、relationship 均为 false。
 
 验证等级
 C：`pnpm exec tsx scripts/test-elicit-material-display.ts`、`pnpm run test:candidate-release`、`pnpm exec tsc --noEmit`、`git diff --check`。
 未修改页面渲染、路由或构建配置，因此按任务规定不运行完整 build。测试数据库指向故意不可达的本机地
-址；`productionWrites=0`。素材门禁解除，独立内容/展示 QA 与 controller 的 preflight、rollback、commit 仍待执行。
+址；开发与独立 QA 阶段 `productionWrites=0`。素材门禁已解除，controller 的 preflight、rollback、commit 均已完成。

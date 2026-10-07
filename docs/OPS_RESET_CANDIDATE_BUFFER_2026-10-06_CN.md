@@ -1,5 +1,7 @@
 # 运营重启：成熟候选缓冲与七个运营日排期
 
+> 2026-10-08 状态更新：Elicit 已解除素材/内容门禁并按受控流程发布为 `published + monitor/noindex`；不进入 sitemap，关系仍未批准。其余候选状态沿用本文，下一候选转为 Murf Studio。
+
 核查日：2026-10-06（Asia/Shanghai）。单元：`OPS-RESET-01-CANDIDATE-BUFFER-AND-TASK-AUDIT`。基
 线：`main@e938d1c61d0ddb8d9ebfcbafdb5768781f300060`。
 
