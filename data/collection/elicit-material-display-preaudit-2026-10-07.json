@@ -1,0 +1,44 @@
+{
+  "slug": "elicit",
+  "existingRoute": "/ai/elicit",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-10-07",
+  "publishNotBefore": "2026-10-07",
+  "productionWriteApproved": false,
+  "sitemapChangeApproved": false,
+  "sources": {
+    "official": [
+      "https://elicit.com/",
+      "https://elicit.com/pricing",
+      "https://support.elicit.com/en/articles/14759154-systematic-reviews-in-elicit",
+      "https://support.elicit.com/en/articles/15646622-usage-limits-in-elicit",
+      "https://support.elicit.com/en/articles/14758189-export-your-data-from-elicit",
+      "https://support.elicit.com/en/articles/17220397-where-did-find-papers-extract-data-and-chat-with-papers-go",
+      "https://support.elicit.com/en/articles/14757928-elicit-s-limitations",
+      "https://support.elicit.com/en/articles/14758084-languages-other-than-english",
+      "https://support.elicit.com/en/articles/14758040-elicit-s-source-for-papers",
+      "https://support.elicit.com/en/articles/14758043-privacy-for-uploaded-papers",
+      "https://elicit.com/operations/privacy",
+      "https://elicit.com/operations/api-terms",
+      "https://elicit.com/operations/terms",
+      "https://elicit.com/operations/authorized-user-terms",
+      "https://elicit.com/operations/policies",
+      "https://support.elicit.com/en/articles/14759113-elicit-browser-extension",
+      "https://www.youtube.com/watch?v=gHtxaBhA1IA"
+    ],
+    "independent": [
+      "https://www.cambridge.org/core/journals/research-synthesis-methods/article/using-elicit-ai-research-assistant-for-data-extraction-in-systematic-reviews-a-feasibility-study-across-environmental-and-life-sciences/C97DAEC70C3173A260F0B12E729E7250",
+      "https://shura.shu.ac.uk/34504/1/Wolstenholme_2024_Student_experiences_of_using_Elicit.pdf"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Independent QA of exact commit and media provenance",
+    "Release-day cross-store identity and canonical preflight",
+    "Recheck volatile official facts and video embeddability",
+    "Deploy and verify exact local editorial assets before --commit",
+    "Capture target-row snapshot and row-scoped rollback",
+    "Explicit controller --commit only after preflight",
+    "Verify published + monitor/noindex, no sitemap or relationships"
+  ]
+}

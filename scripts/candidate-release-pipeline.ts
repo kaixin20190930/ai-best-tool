@@ -6,6 +6,7 @@ import { config } from 'dotenv';
 import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
+import { assertVideoReadback, validateVideoUrl } from './candidate-release-video';
 
 type Candidate = {
   slug: string;
@@ -55,6 +56,7 @@ type ReleasePayload = {
   detail: Localized;
   imageUrl: string;
   thumbnailUrl: string;
+  videoUrl?: string;
   tags: string[];
   features: Record<string, unknown>;
   useCases: LocalizedList;
@@ -130,6 +132,12 @@ const candidates: Candidate[] = [
     domain: 'descript.com',
     preauditFile: 'descript-preaudit-2026-09-20.json',
   },
+  {
+    slug: 'elicit',
+    aliases: ['elicit'],
+    domain: 'elicit.com',
+    preauditFile: 'elicit-material-display-preaudit-2026-10-07.json',
+  },
 ];
 
 function parseArgs(args: string[]) {
@@ -183,18 +191,28 @@ function loadPreaudit(candidate: Candidate): Preaudit {
   assert(audit.nextSlotChecklist.length >= 5, `${candidate.slug}: release checklist incomplete`);
   if (audit.ownerEarlyReleaseOverride) {
     const override = audit.ownerEarlyReleaseOverride;
-    assert.equal(override.candidate, candidate.slug, `${candidate.slug}: owner override cannot authorize another candidate`);
+    assert.equal(
+      override.candidate,
+      candidate.slug,
+      `${candidate.slug}: owner override cannot authorize another candidate`,
+    );
     assert.equal(
       override.originalPublishNotBefore,
       audit.publishNotBefore,
       `${candidate.slug}: owner override must preserve the original date gate`,
     );
-    assert(override.effectiveReleaseNotBefore >= override.authorizedOn, `${candidate.slug}: override predates authorization`);
+    assert(
+      override.effectiveReleaseNotBefore >= override.authorizedOn,
+      `${candidate.slug}: override predates authorization`,
+    );
     assert(
       override.effectiveReleaseNotBefore < override.originalPublishNotBefore,
       `${candidate.slug}: owner override must be an earlier, one-time release window`,
     );
-    assert(override.scope.includes(candidate.slug), `${candidate.slug}: owner override scope is not candidate-specific`);
+    assert(
+      override.scope.includes(candidate.slug),
+      `${candidate.slug}: owner override scope is not candidate-specific`,
+    );
     assert(
       override.preservedGates.includes('published + monitor/noindex') &&
         override.preservedGates.includes('sitemap excluded') &&
@@ -207,7 +225,9 @@ function loadPreaudit(candidate: Candidate): Preaudit {
 
 function releaseNotBefore(candidate: Candidate, audit: Preaudit) {
   const override = audit.ownerEarlyReleaseOverride;
-  return override && override.candidate === candidate.slug ? override.effectiveReleaseNotBefore : audit.publishNotBefore;
+  return override && override.candidate === candidate.slug
+    ? override.effectiveReleaseNotBefore
+    : audit.publishNotBefore;
 }
 
 function validatePublicAsset(assetPath: string) {
@@ -243,6 +263,7 @@ function loadPayload(candidate: Candidate, audit: Preaudit, asOf: string): Relea
   assert.equal(editorial?.reviewedAt, payload.reviewedAt, `${candidate.slug}: editorial review date mismatch`);
   validatePublicAsset(payload.imageUrl);
   validatePublicAsset(payload.thumbnailUrl);
+  validateVideoUrl(candidate.slug, payload.videoUrl);
   return payload;
 }
 
@@ -357,12 +378,13 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
     assert.equal(category.rowCount, 1, `${candidate.slug}: storage category must exist exactly once`);
     await client.query(
       `INSERT INTO tools
-       (id, name, title, content, detail, url, image_url, thumbnail_url, category_id, tags, pricing,
+       (id, name, title, content, detail, url, image_url, thumbnail_url, video_url, category_id, tags, pricing,
         features, use_cases, screenshots, status, page_quality_status, next_review_date, created_at, updated_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,ARRAY[]::text[],'published','monitor',$14,NOW(),NOW())
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,ARRAY[]::text[],'published','monitor',$15,NOW(),NOW())
        ON CONFLICT (id) DO UPDATE SET
          name=EXCLUDED.name,title=EXCLUDED.title,content=EXCLUDED.content,detail=EXCLUDED.detail,
          url=EXCLUDED.url,image_url=EXCLUDED.image_url,thumbnail_url=EXCLUDED.thumbnail_url,
+         video_url=COALESCE(EXCLUDED.video_url,tools.video_url),
          category_id=EXCLUDED.category_id,tags=EXCLUDED.tags,pricing=EXCLUDED.pricing,
          features=EXCLUDED.features,use_cases=EXCLUDED.use_cases,status='published',
          page_quality_status='monitor',next_review_date=EXCLUDED.next_review_date,updated_at=NOW()`,
@@ -375,6 +397,7 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
         payload.officialUrl,
         payload.imageUrl,
         payload.thumbnailUrl,
+        payload.videoUrl ?? null,
         category.rows[0].id,
         payload.tags,
         payload.pricing,
@@ -384,7 +407,7 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       ],
     );
     const row = await client.query(
-      'SELECT id, name, url, status, page_quality_status, features, title, content, detail, use_cases, image_url, thumbnail_url, next_review_date::text AS next_review_date FROM tools WHERE id = $1',
+      'SELECT id, name, url, status, page_quality_status, features, title, content, detail, use_cases, image_url, thumbnail_url, video_url, next_review_date::text AS next_review_date FROM tools WHERE id = $1',
       [payload.id],
     );
     assert.equal(row.rowCount, 1);
@@ -400,6 +423,7 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
     assert.deepEqual(row.rows[0].features, payload.features);
     assert.equal(row.rows[0].image_url, payload.imageUrl);
     assert.equal(row.rows[0].thumbnail_url, payload.thumbnailUrl);
+    assertVideoReadback(candidate.slug, payload.videoUrl, row.rows[0].video_url);
     assert.equal(row.rows[0].next_review_date, payload.nextReviewDate);
     await client.query(commit ? 'COMMIT' : 'ROLLBACK');
     console.log(`✅ ${candidate.slug}: ${commit ? 'committed' : 'rollback verified'} as published + monitor`);
@@ -465,7 +489,11 @@ async function main() {
           assert.equal(matches.rows[0].id, payload.id, `${candidate.slug}: existing entity id mismatch`);
           assert.equal(matches.rows[0].name, candidate.slug, `${candidate.slug}: existing canonical slug mismatch`);
           assert.equal(matches.rows[0].status, 'published', `${candidate.slug}: existing entity is not published`);
-          assert.equal(matches.rows[0].page_quality_status, 'monitor', `${candidate.slug}: existing entity is not monitor`);
+          assert.equal(
+            matches.rows[0].page_quality_status,
+            'monitor',
+            `${candidate.slug}: existing entity is not monitor`,
+          );
         } else {
           assert.equal(matches.rowCount, 0, `${candidate.slug}: existing entity requires manual review`);
         }

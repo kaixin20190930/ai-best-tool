@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Research listing</title>
+  <desc id="desc">AI Best Tool editorial identity tile. Not an Elicit logo or screenshot.</desc>
+  <rect width="256" height="256" rx="42" fill="#e8eef1"/>
+  <rect x="32" y="32" width="192" height="192" rx="24" fill="#ffffff" stroke="#9aadb7" stroke-width="3"/>
+  <path d="M70 84h116M70 110h116M70 136h80" stroke="#526a76" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="169" cy="169" r="21" fill="none" stroke="#526a76" stroke-width="8"/>
+  <path d="m184 184 19 19" stroke="#526a76" stroke-width="8" stroke-linecap="round"/>
+</svg>

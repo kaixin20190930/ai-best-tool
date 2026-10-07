@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="800" viewBox="0 0 1400 800" role="img" aria-labelledby="title desc">
+  <title id="title">Research tool editorial cover</title>
+  <desc id="desc">AI Best Tool editorial asset; not an Elicit logo, screenshot, or product interface.</desc>
+  <rect width="1400" height="800" fill="#edf2f4"/>
+  <rect x="94" y="92" width="1212" height="616" rx="32" fill="#fff" stroke="#aabcc4" stroke-width="3"/>
+  <text x="160" y="210" font-family="Arial,sans-serif" font-size="34" fill="#42606e">AI BEST TOOL · EDITORIAL GUIDE</text>
+  <text x="160" y="326" font-family="Arial,sans-serif" font-size="68" font-weight="700" fill="#193746">Research workflow</text>
+  <text x="160" y="402" font-family="Arial,sans-serif" font-size="34" fill="#42606e">Compare sources, limits, and review steps</text>
+  <path d="M160 490h800M160 548h620M160 606h720" stroke="#b6c6cd" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="1100" cy="530" r="86" fill="none" stroke="#526a76" stroke-width="18"/>
+  <path d="m1160 590 70 70" stroke="#526a76" stroke-width="18" stroke-linecap="round"/>
+</svg>
