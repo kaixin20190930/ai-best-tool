@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 
 export function validateVideoUrl(slug: string, videoUrl?: string) {
-  if (videoUrl === undefined) return;
+  if (videoUrl === undefined) {
+    assert.notEqual(slug, 'elicit', 'elicit: official video URL is required');
+    return;
+  }
   const video = new URL(videoUrl);
   assert.equal(video.protocol, 'https:', `${slug}: video must use HTTPS`);
   assert.equal(video.hostname, 'www.youtube-nocookie.com', `${slug}: video must use privacy-enhanced YouTube embed`);

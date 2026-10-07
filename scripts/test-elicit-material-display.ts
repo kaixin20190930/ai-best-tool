@@ -47,6 +47,8 @@ assert.match(source, /video_url=COALESCE\(EXCLUDED\.video_url,tools\.video_url\)
 assert.match(source, /thumbnail_url, video_url, next_review_date::text/);
 assert.match(source, /assertVideoReadback\(candidate\.slug, payload\.videoUrl, row\.rows\[0\]\.video_url\)/);
 assert.doesNotThrow(() => validateVideoUrl('elicit', payload.videoUrl));
+assert.throws(() => validateVideoUrl('elicit', undefined), /official video URL is required/);
+assert.doesNotThrow(() => validateVideoUrl('descript', undefined));
 assert.doesNotThrow(() => assertVideoReadback('elicit', payload.videoUrl, payload.videoUrl));
 assert.throws(() => assertVideoReadback('elicit', payload.videoUrl, null), /video URL readback mismatch/);
 
@@ -60,8 +62,11 @@ try {
   for (const directory of ['public', 'node_modules'])
     fs.symlinkSync(path.join(root, directory), path.join(fixture, directory), 'dir');
   const releaseFile = path.join(fixture, 'data/collection/elicit-release.json');
-  const run = (videoUrl: string) => {
-    fs.writeFileSync(releaseFile, JSON.stringify({ ...payload, videoUrl }));
+  const run = (videoUrl?: string) => {
+    const fixturePayload = { ...payload };
+    if (videoUrl === undefined) delete fixturePayload.videoUrl;
+    else fixturePayload.videoUrl = videoUrl;
+    fs.writeFileSync(releaseFile, JSON.stringify(fixturePayload));
     return spawnSync(
       process.execPath,
       [
@@ -89,6 +94,10 @@ try {
     assert.match(result.stderr, /video must use|video must be/);
     assert.doesNotMatch(result.stderr, /ECONNREFUSED/, 'Invalid embed must fail before database access');
   }
+  const missing = run();
+  assert.notEqual(missing.status, 0, 'Elicit release without videoUrl must fail closed');
+  assert.match(missing.stderr, /official video URL is required/);
+  assert.doesNotMatch(missing.stderr, /ECONNREFUSED/, 'Missing embed must fail before database access');
   const valid = run(payload.videoUrl);
   assert.notEqual(valid.status, 0);
   assert.match(
