@@ -1,0 +1,19 @@
+{
+  "mode": "post_rollback_readback",
+  "productionWrites": 0,
+  "readIsolation": "new_connection_read_only_transaction",
+  "results": [
+    {
+      "slug": "pipedream",
+      "preimageSha256": "c0505b96f29e8f18f825a820d54e72aa6d3bcd0580a5860d1c452377dc9a0e39",
+      "readbackSha256": "c0505b96f29e8f18f825a820d54e72aa6d3bcd0580a5860d1c452377dc9a0e39",
+      "status": "matched"
+    },
+    {
+      "slug": "cursor",
+      "preimageSha256": "5ea79d45cc05d01d07ce865dea074b44abcae244f49bde8792abae8eb44dd997",
+      "readbackSha256": "5ea79d45cc05d01d07ce865dea074b44abcae244f49bde8792abae8eb44dd997",
+      "status": "matched"
+    }
+  ]
+}

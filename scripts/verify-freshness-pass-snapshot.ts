@@ -12,6 +12,7 @@ const allowedSources = new Set([
   'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json',
   'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json',
   'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json',
+  'docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json',
 ]);
 
 // eslint-disable-next-line import/prefer-default-export
@@ -75,7 +76,8 @@ export function verifyFreshnessPassSnapshot(
   } else if (
     snapshot.source === 'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json' ||
     snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json' ||
-    snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json'
+    snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json' ||
+    snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json'
   ) {
     const audit = JSON.parse(sourceBytes.toString('utf8'));
     const item = audit.items?.find((entry: Record<string, unknown>) => entry.slug === candidate.slug);
@@ -115,6 +117,7 @@ export function verifyFreshnessPassSnapshot(
   if (phase === 'after') {
     const manifestBySource: Record<string, string> = {
       'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json': 'docs/FRESHNESS_FOURTH_BATCH_PREFLIGHT_2026-10-08.json',
+      'docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json': 'docs/FRESHNESS_FIFTH_BATCH_PREFLIGHT_2026-10-09.json',
       'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json': 'docs/FRESHNESS_THIRD_BATCH_PREFLIGHT_2026-10-08.json',
       'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json': 'docs/FRESHNESS_SECOND_BATCH_PREFLIGHT_2026-10-08.json',
     };
@@ -148,7 +151,8 @@ export function verifyFreshnessPassSnapshot(
       if (
         snapshot.source === 'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json' ||
         snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json' ||
-        snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json'
+        snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json' ||
+        snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json'
       ) {
         for (const [key, value] of Object.entries(expectedReview))
           assert.deepEqual(row.features?.maintenanceReview?.[key], value);

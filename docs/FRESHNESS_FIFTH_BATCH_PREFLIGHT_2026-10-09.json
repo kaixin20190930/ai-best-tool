@@ -1,0 +1,67 @@
+{
+  "mode": "preflight",
+  "batch": "fifth",
+  "productionWrites": 0,
+  "results": [
+    {
+      "slug": "pipedream",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "c0505b96f29e8f18f825a820d54e72aa6d3bcd0580a5860d1c452377dc9a0e39",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:pipedream",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json",
+        "sha256": "86b65d3ef19ff7933014d7475b2563df4f924e560b3e38c6cd1df7a787d2d2cc",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-09-07",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "f4953b2d6d9164be6583da44b3dba7851873565d2c23dd15ef36a8873ebfb32d",
+      "changedFields": [
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-23",
+      "sources": [
+        "https://pipedream.com/docs/pricing",
+        "https://pipedream.com/pricing",
+        "https://pipedream.com/workflows"
+      ],
+      "unresolved": [
+        "Actual production credit burn, external-user count, retention settings, and trigger ordering require target-workspace tests."
+      ],
+      "status": "ready"
+    },
+    {
+      "slug": "cursor",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "5ea79d45cc05d01d07ce865dea074b44abcae244f49bde8792abae8eb44dd997",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:cursor",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json",
+        "sha256": "86b65d3ef19ff7933014d7475b2563df4f924e560b3e38c6cd1df7a787d2d2cc",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-09-08",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "8c86db6802be285bbb5db2d60ce8da3ce9b4b9f222bcfaf4397cd0236f4830f6",
+      "changedFields": [
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-23",
+      "sources": [
+        "https://cursor.com/pricing",
+        "https://prod.cursor.com/help/account-and-billing/pricing",
+        "https://cursor.com/data-use",
+        "https://cursor.com/blog/joining-spacex",
+        "https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/"
+      ],
+      "unresolved": [
+        "Regional checkout, actual model spend, workspace Privacy Mode, and future third-party model availability require target-account verification."
+      ],
+      "status": "ready"
+    }
+  ]
+}

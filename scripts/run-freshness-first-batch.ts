@@ -11,6 +11,7 @@ import {
   freshnessResultStatus,
   inspectFreshnessState,
 } from './freshness-batch-state';
+import FIFTH_BATCH from './freshness-fifth-batch';
 import { FIRST_BATCH } from './freshness-first-batch';
 import FOURTH_BATCH, {
   assertFourthBatchReleaseManifest,
@@ -36,8 +37,9 @@ async function main() {
   const args = process.argv.slice(2);
   const third = args.includes('--batch=third');
   const fourth = args.includes('--batch=fourth');
+  const fifth = args.includes('--batch=fifth');
   const second = args.includes('--batch=second');
-  if ([second, third, fourth].filter(Boolean).length > 1) throw new Error('Choose one batch');
+  if ([second, third, fourth, fifth].filter(Boolean).length > 1) throw new Error('Choose one batch');
   let batch = FIRST_BATCH;
   let batchName = 'first';
   if (second) {
@@ -52,6 +54,10 @@ async function main() {
     batch = FOURTH_BATCH;
     batchName = 'fourth';
   }
+  if (fifth) {
+    batch = FIFTH_BATCH;
+    batchName = 'fifth';
+  }
   let mode: 'commit' | 'rollback' | 'preflight' = 'preflight';
   if (args.includes('--rollback')) mode = 'rollback';
   if (args.includes('--commit')) mode = 'commit';
@@ -61,7 +67,9 @@ async function main() {
   if (
     args.some(
       (arg) =>
-        !['--commit', '--rollback', '--batch=second', '--batch=third', '--batch=fourth'].includes(arg) &&
+        !['--commit', '--rollback', '--batch=second', '--batch=third', '--batch=fourth', '--batch=fifth'].includes(
+          arg,
+        ) &&
         !arg.startsWith('--manifest=') &&
         !arg.startsWith('--out='),
     )
@@ -101,8 +109,16 @@ async function main() {
         : 'Owner time override cannot be used with a different batch',
     );
   }
-  if (mode === 'commit' && (manifest?.mode !== 'preflight' || manifest?.results?.length !== 5))
+  if (mode === 'commit' && (manifest?.mode !== 'preflight' || manifest?.results?.length !== batch.length))
     throw new Error('Invalid reviewed manifest');
+  if (
+    fifth &&
+    mode === 'commit' &&
+    (manifest?.batch !== 'fifth' ||
+      manifest?.productionWrites !== 0 ||
+      manifest?.results?.map((row: any) => row.slug).join(',') !== FIFTH_BATCH.map((row) => row.slug).join(','))
+  )
+    throw new Error('Fifth batch reviewed manifest mismatch');
   if (third && mode === 'commit') assertThirdBatchReleaseManifest(manifest);
   if (fourth && mode === 'commit') assertFourthBatchReleaseManifest(manifest);
   config({ path: '.env.local', quiet: true });
@@ -128,6 +144,10 @@ async function main() {
         );
         assert.equal(before.status, 'published');
         assert(['monitor', 'continue_index'].includes(before.page_quality_status));
+        if (fifth) {
+          assert.equal(before.page_quality_status, 'monitor', `${candidate.slug}: index gate drift`);
+          assert.equal(before.pricing, 'freemium', `${candidate.slug}: pricing enum drift`);
+        }
         assert(before.features && typeof before.features === 'object' && !Array.isArray(before.features));
         if (!before.url || !/^https:\/\//.test(before.url)) throw new Error(`${candidate.slug}: entity URL risk`);
         const beforeHash = hash(before);
@@ -151,7 +171,7 @@ async function main() {
           (key) => JSON.stringify(next[key]) !== JSON.stringify(before[key]),
         );
         assert(changes.every((key) => ['detail', 'features', 'next_review_date'].includes(key)));
-        if (fourth && mode === 'commit') {
+        if ((fourth || fifth) && mode === 'commit') {
           let expectedChanges = changes;
           if (alreadyApplied) {
             expectedChanges = candidate.replacements?.length
@@ -207,6 +227,7 @@ async function main() {
         ownerTimeOverride: FOURTH_BATCH_OWNER_TIME_OVERRIDE,
       };
     }
+    if (fifth) releaseMeta = { batch: 'fifth' };
     const output = { mode, ...releaseMeta, productionWrites: freshnessProductionWrites(mode, results), results };
     const out = args.find((arg) => arg.startsWith('--out='))?.slice(6);
     if (out) fs.writeFileSync(out, JSON.stringify(output, null, 2) + '\n');
