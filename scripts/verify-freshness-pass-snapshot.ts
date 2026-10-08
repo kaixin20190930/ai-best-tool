@@ -1,4 +1,5 @@
 import crypto from 'node:crypto';
+import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import TOOL_MAINTENANCE_REVIEWS from '../lib/config/toolMaintenanceReviews';
@@ -8,8 +9,9 @@ const allowedSources = new Set([
   'lib/config/toolMaintenanceReviews.ts',
   'data/collection/synthesia-release.json',
 ]);
+const preflightManifestPath = 'docs/FRESHNESS_FIRST_BATCH_PREFLIGHT_2026-10-08.json';
 
-export function verifyFreshnessPassSnapshot(candidate: ReviewCandidate, row: Record<string, any>, asOf: string) {
+export function verifyFreshnessPassSnapshot(candidate: ReviewCandidate, row: Record<string, any>, asOf: string, phase: 'before' | 'after' = 'before') {
   const snapshot = candidate.passSnapshot;
   if (!snapshot?.id || !snapshot.source || !snapshot.sha256 || !snapshot.validThrough || !snapshot.reviewedAt || !snapshot.claimDueAt)
     throw new Error(`${candidate.slug}: missing PASS snapshot metadata`);
@@ -25,12 +27,17 @@ export function verifyFreshnessPassSnapshot(candidate: ReviewCandidate, row: Rec
   if (digest !== snapshot.sha256) throw new Error(`${candidate.slug}: PASS source digest mismatch`);
   if (row.id !== candidate.id || row.name !== candidate.slug || row.status !== 'published' || !/^https:\/\//.test(row.url || ''))
     throw new Error(`${candidate.slug}: production entity does not match PASS identity`);
+  let originalMaintenance: Record<string, unknown> = {};
   if (snapshot.source === 'lib/config/toolMaintenanceReviews.ts') {
     const source = TOOL_MAINTENANCE_REVIEWS[candidate.slug as keyof typeof TOOL_MAINTENANCE_REVIEWS];
     if (snapshot.id !== `maintenance-${source?.checkedAt}:${candidate.slug}` || source?.id !== candidate.id ||
-        source?.checkedAt !== snapshot.reviewedAt || source?.nextReviewDate !== snapshot.claimDueAt ||
-        row.features?.maintenanceReview?.checkedAt !== snapshot.reviewedAt ||
-        row.features?.maintenanceReview?.nextReviewDate !== snapshot.claimDueAt)
+        source?.checkedAt !== snapshot.reviewedAt || source?.nextReviewDate !== snapshot.claimDueAt)
+      throw new Error(`${candidate.slug}: PASS maintenance snapshot mismatch`);
+    const { id: _id, ...record } = source;
+    originalMaintenance = record;
+    if (phase === 'before' && (row.features?.maintenanceReview?.checkedAt !== snapshot.reviewedAt ||
+        row.features?.maintenanceReview?.nextReviewDate !== snapshot.claimDueAt ||
+        row.next_review_date !== snapshot.claimDueAt))
       throw new Error(`${candidate.slug}: PASS maintenance snapshot mismatch`);
   } else {
     const source = JSON.parse(sourceBytes.toString('utf8'));
@@ -39,6 +46,30 @@ export function verifyFreshnessPassSnapshot(candidate: ReviewCandidate, row: Rec
         source.nextReviewDate !== snapshot.claimDueAt || source.officialUrl !== row.url ||
         row.features?.editorial?.reviewedAt !== snapshot.reviewedAt)
       throw new Error(`${candidate.slug}: PASS release snapshot mismatch`);
+    if (phase === 'before' && row.next_review_date !== snapshot.claimDueAt)
+      throw new Error(`${candidate.slug}: PASS release schedule mismatch`);
+  }
+  if (phase === 'after') {
+    const manifest = JSON.parse(fs.readFileSync(path.resolve(preflightManifestPath), 'utf8'));
+    const inherited = manifest?.results?.find((entry: Record<string, unknown>) => entry.slug === candidate.slug);
+    if (manifest?.mode !== 'preflight' || !inherited || inherited.status !== 'ready' ||
+        !/^[0-9a-f]{64}$/.test(inherited.preimageSha256 || '') ||
+        JSON.stringify(inherited.passSnapshot) !== JSON.stringify(snapshot))
+      throw new Error(`${candidate.slug}: original PASS preflight manifest mismatch`);
+    const expectedReview = {
+      ...originalMaintenance,
+      checkedAt: candidate.checkedAt, nextReviewDate: candidate.nextReviewDate,
+      outcome: candidate.outcome, changeSummary: candidate.changeSummary,
+      scope: candidate.scope, sources: candidate.sources, unresolved: candidate.unresolved,
+      claims: candidate.claims || [],
+    };
+    try {
+      assert.deepEqual(row.features?.maintenanceReview, expectedReview);
+      assert.equal(row.next_review_date, candidate.nextReviewDate);
+      if (candidate.pricingSnapshot) assert.deepEqual(row.features?.pricingSnapshot, candidate.pricingSnapshot);
+    } catch {
+      throw new Error(`${candidate.slug}: applied maintenance snapshot mismatch`);
+    }
   }
   return snapshot;
 }

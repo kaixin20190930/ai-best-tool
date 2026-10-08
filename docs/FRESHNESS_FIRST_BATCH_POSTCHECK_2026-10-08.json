@@ -1,0 +1,133 @@
+{
+  "mode": "preflight",
+  "productionWrites": 0,
+  "results": [
+    {
+      "slug": "consensus",
+      "outcome": "fact_updated",
+      "preimageSha256": "1d31542204f021fd822bd5d9b6a0b5cfffd61ff784f0c83d6a281e70e21051d9",
+      "passSnapshot": {
+        "id": "maintenance-2026-09-06:consensus",
+        "source": "lib/config/toolMaintenanceReviews.ts",
+        "sha256": "1bf781b7e9b0ab784793380c90081fadfc5f3f6b959a92db02ef817f70da3491",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-10-06",
+        "scope": "entity_baseline_only"
+      },
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://help.consensus.app/en/articles/10087865-subscription-plans",
+        "https://help.consensus.app/en/articles/10055108-consensus-research-database",
+        "https://help.consensus.app/en/articles/11740827-how-to-use-deep-review"
+      ],
+      "unresolved": [
+        "Account-specific reset and independent accuracy remain untested."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "gamma",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "137a1ccafd1098e4c1362c062d92548591f00558b41240d5e6187eef429f2b52",
+      "passSnapshot": {
+        "id": "maintenance-2026-09-06:gamma",
+        "source": "lib/config/toolMaintenanceReviews.ts",
+        "sha256": "1bf781b7e9b0ab784793380c90081fadfc5f3f6b959a92db02ef817f70da3491",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-10-06",
+        "scope": "entity_baseline_only"
+      },
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://help.gamma.app/en/articles/8077107-how-can-i-upgrade-my-gamma-subscription",
+        "https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma",
+        "https://help.gamma.app/en/articles/12281928-does-gamma-use-my-content-to-train-its-ai-features"
+      ],
+      "unresolved": [
+        "Exact checkout amount and paid export fidelity require account testing."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "perplexity",
+      "outcome": "fact_updated",
+      "preimageSha256": "5851eb9464fb36642f86d626889f5d90267742e620c693b0ddb2f7f4d0f7da83",
+      "passSnapshot": {
+        "id": "maintenance-2026-09-06:perplexity",
+        "source": "lib/config/toolMaintenanceReviews.ts",
+        "sha256": "1bf781b7e9b0ab784793380c90081fadfc5f3f6b959a92db02ef817f70da3491",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-10-06",
+        "scope": "entity_baseline_only"
+      },
+      "changedFields": [],
+      "nextReviewDate": "2026-10-15",
+      "sources": [
+        "https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you",
+        "https://www.perplexity.ai/help-center/en/articles/13838041-how-credits-work-on-perplexity"
+      ],
+      "unresolved": [
+        "Free Pro Search daily number remains conflict/conditional; account meter is authoritative.",
+        "Weekly Computer inclusion rolls out gradually and was not verified in an account."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "make",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "7fc21a7c57ab9ec319132746ba56a43179228b65af7e53d6465c21f562631527",
+      "passSnapshot": {
+        "id": "maintenance-2026-09-06:make",
+        "source": "lib/config/toolMaintenanceReviews.ts",
+        "sha256": "1bf781b7e9b0ab784793380c90081fadfc5f3f6b959a92db02ef817f70da3491",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-10-06",
+        "scope": "entity_baseline_only"
+      },
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://help.make.com/credits",
+        "https://help.make.com/organizations",
+        "https://help.make.com/webhooks"
+      ],
+      "unresolved": [
+        "Actual scenario credit burn, queue behavior and failure recovery require a live representative workflow."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "synthesia",
+      "outcome": "fact_updated",
+      "preimageSha256": "bce289e2dd3b465e7b3119995ac0f59f7e26782777f7bae542d8c508cb247965",
+      "passSnapshot": {
+        "id": "release-2026-09-08:synthesia",
+        "source": "data/collection/synthesia-release.json",
+        "sha256": "4a3dae6fc47fe77723c6b5e1b2725c4c3593d9e9ef8ce77a55be94c30259fe29",
+        "reviewedAt": "2026-09-08",
+        "validThrough": "2026-12-07",
+        "claimDueAt": "2026-10-08",
+        "scope": "entity_baseline_only"
+      },
+      "changedFields": [],
+      "nextReviewDate": "2026-10-15",
+      "sources": [
+        "https://www.synthesia.io/pricing",
+        "https://docs.synthesia.io/docs/user-licenses",
+        "https://docs.synthesia.io/docs/personal-avatars",
+        "https://docs.synthesia.io/reference/introduction"
+      ],
+      "unresolved": [
+        "API entitlement and rate limits must be confirmed in the target account; legacy Creator claims are suppressed.",
+        "Checkout and add-on prices may depend on billing selection."
+      ],
+      "status": "already_applied"
+    }
+  ]
+}

@@ -34,7 +34,8 @@ async function main() {
         const found = await client.query(`${readSql}${mode === 'preflight' ? '' : ' FOR UPDATE'}`, [candidate.id, candidate.slug]);
         assert.equal(found.rowCount, 1, `${candidate.slug}: entity missing or duplicate`);
         const before = found.rows[0].record;
-        const passSnapshot = verifyFreshnessPassSnapshot(candidate, before, new Date().toISOString().slice(0, 10));
+        const appliedMarker = before.features?.maintenanceReview?.checkedAt === candidate.checkedAt;
+        const passSnapshot = verifyFreshnessPassSnapshot(candidate, before, new Date().toISOString().slice(0, 10), appliedMarker ? 'after' : 'before');
         assert.equal(before.status, 'published');
         assert(['monitor','continue_index'].includes(before.page_quality_status));
         assert(before.features && typeof before.features === 'object' && !Array.isArray(before.features));
@@ -44,9 +45,7 @@ async function main() {
         if (mode === 'commit' && (!approved || approved.preimageSha256 !== beforeHash ||
             JSON.stringify(approved.passSnapshot) !== JSON.stringify(passSnapshot)))
           throw new Error(`${candidate.slug}: preimage or PASS snapshot drift`);
-        const alreadyApplied = before.features?.maintenanceReview?.checkedAt === candidate.checkedAt &&
-          before.features?.maintenanceReview?.changeSummary === candidate.changeSummary &&
-          found.rows[0].due === candidate.nextReviewDate;
+        const alreadyApplied = appliedMarker;
         const next = structuredClone(before);
         next.detail = alreadyApplied ? before.detail : applyCandidateDetail(before.detail, candidate);
         next.features = { ...before.features, maintenanceReview: {
