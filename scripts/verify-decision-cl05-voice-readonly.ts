@@ -123,6 +123,15 @@ async function main() {
   }
   // No profile means no same-owner source/claim. No relationship means no subject link.
   const ownerEvidenceCounts = { profiles: profiles.length, sources: 0, claims: 0, links: 0 };
+  const [pageResponse, sitemapResponse] = await Promise.all([
+    fetch('https://aibesttool.com/cn/tasks/ai-voiceover', { cache: 'no-store' }),
+    fetch('https://aibesttool.com/sitemap.xml', { cache: 'no-store' }),
+  ]);
+  assert.equal(pageResponse.status, 404, 'Voice Task Page unexpectedly opened');
+  assert.match(pageResponse.headers.get('x-robots-tag') || '', /noindex/i, 'Voice Task Page lost noindex');
+  assert.equal(sitemapResponse.status, 200, 'Production sitemap unavailable');
+  const sitemap = await sitemapResponse.text();
+  assert.ok(!sitemap.includes('/tasks/ai-voiceover'), 'Voice Task URL unexpectedly entered sitemap');
   console.log(
     JSON.stringify(
       {
@@ -136,6 +145,7 @@ async function main() {
         fits,
         profiles,
         ownerEvidenceCounts,
+        taskPage: { status: pageResponse.status, noindex: true, sitemapMatches: 0 },
       },
       null,
       2,
