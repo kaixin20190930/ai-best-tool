@@ -1,0 +1,668 @@
+{
+  "asOf": "2026-10-08",
+  "readOnly": true,
+  "totalTools": 71,
+  "published": 55,
+  "duePublished": 34,
+  "counts": {
+    "schedule_sync": 1,
+    "claim_due": 21,
+    "entity_due": 5,
+    "manual_archive_review": 7
+  },
+  "selected": [
+    "gemini",
+    "notion",
+    "n8n",
+    "openrouter",
+    "poe"
+  ],
+  "items": [
+    {
+      "id": "eca3ba76-9e1c-449d-bfa8-43e1a390d681",
+      "slug": "adobe",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-08",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 0,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 0
+    },
+    {
+      "id": "e5a1f5c0-e737-4a12-9c96-d8ef54de2c02",
+      "slug": "anime-girl-studio",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "2443fa93-effd-4a9b-857a-5728e482efe9",
+      "slug": "artiversehub-ai",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "22561562-5b7e-4e32-b629-ea8626abeeda",
+      "slug": "chatgpt-mac",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 2
+    },
+    {
+      "id": "149cf3e0-5f5c-4bdf-ac02-80ec5064fb92",
+      "slug": "claude",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-01",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "high",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 7,
+      "sourceUrl": "https://support.claude.com/en/articles/11049762-choose-a-claude-plan",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": true,
+      "priority": 117
+    },
+    {
+      "id": "35b7a4ae-1200-41f2-94c5-d5ba4dc98704",
+      "slug": "codex",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-20",
+        "editorialReviewedAt": "2026-09-06",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 18,
+      "sourceUrl": "https://learn.chatgpt.com/docs",
+      "sourceAccessible": true,
+      "taskDecisionDependency": true,
+      "indexRisk": false,
+      "priority": 63
+    },
+    {
+      "id": "f15873ae-c6ef-4f0a-b811-b40c2aba76ab",
+      "slug": "consensus",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": "2026-09-06"
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 2,
+      "sourceUrl": "https://help.consensus.app/en/articles/9922673-how-consensus-works",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 12
+    },
+    {
+      "id": "ef1cc4b5-98be-474b-b422-7b6f79ca6c3d",
+      "slug": "cursor",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-08",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 30,
+      "sourceUrl": "https://cursor.com/pricing",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 40
+    },
+    {
+      "id": "344e9732-ef03-4c23-993d-a35a65f4d41b",
+      "slug": "deepl",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-01",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "high",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 7,
+      "sourceUrl": "https://www.deepl.com/en/products-overview",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": true,
+      "priority": 117
+    },
+    {
+      "id": "dd8cb6a3-ef78-4747-9075-ebf663290410",
+      "slug": "dune",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-20",
+        "editorialReviewedAt": "2026-09-06",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 18,
+      "sourceUrl": "https://docs.dune.com/docs/product-comparison",
+      "sourceAccessible": true,
+      "taskDecisionDependency": true,
+      "indexRisk": false,
+      "priority": 63
+    },
+    {
+      "id": "6f62a262-3cb3-4201-9127-b1c4eda6438f",
+      "slug": "emdash",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-01",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "high",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 7,
+      "sourceUrl": "https://emdash.com/",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": true,
+      "priority": 117
+    },
+    {
+      "id": "c00e172c-5121-4c9e-826d-b7cc40faf559",
+      "slug": "fastimage-ai-sketch-to-image",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "7ae4bbb2-847f-45cc-9294-e96663fa02a3",
+      "slug": "fathom",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-01",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "high",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 7,
+      "sourceUrl": "https://help.fathom.video/en/articles/5290881",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": true,
+      "priority": 117
+    },
+    {
+      "id": "6512aa61-8663-49f8-809d-2a2ab4e529ad",
+      "slug": "gamma",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": "2026-09-06"
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 2,
+      "sourceUrl": "https://gamma.app/",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 12
+    },
+    {
+      "id": "ccddfbaa-b7eb-4192-b9d6-aafc40488719",
+      "slug": "gemini",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-18",
+        "editorialReviewedAt": "2026-09-04",
+        "maintenanceCheckedAt": "2026-09-04"
+      },
+      "risk": "high",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 20,
+      "sourceUrl": "https://support.google.com/gemini/answer/13278668?hl=en",
+      "sourceAccessible": true,
+      "taskDecisionDependency": true,
+      "indexRisk": true,
+      "priority": 165
+    },
+    {
+      "id": "8f09dc60-e77b-41e8-b2e0-9cefbc228d0d",
+      "slug": "github-copilot",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-20",
+        "editorialReviewedAt": "2026-09-06",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 18,
+      "sourceUrl": "https://github.com/features/copilot/plans",
+      "sourceAccessible": true,
+      "taskDecisionDependency": true,
+      "indexRisk": false,
+      "priority": 63
+    },
+    {
+      "id": "73a3ca28-707c-4460-b769-50ee47ba5e69",
+      "slug": "gpt_4o",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 2
+    },
+    {
+      "id": "38b8635f-7d00-4809-813a-052af63c83bd",
+      "slug": "honeydo",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "711df152-fdcf-4a19-930c-ab866b67605f",
+      "slug": "luma-ai",
+      "classification": "schedule_sync",
+      "reason": "Dated source-backed review is newer than the schedule; synchronize only after scope and cadence check.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-06",
+        "editorialReviewedAt": "2026-09-25",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 32,
+      "sourceUrl": "https://lumalabs.ai/llm-info",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 42
+    },
+    {
+      "id": "c0bb3aba-33be-4e14-903e-5f1d036eec4a",
+      "slug": "make",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": "2026-09-06"
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 2,
+      "sourceUrl": "https://www.make.com/en/pricing",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 12
+    },
+    {
+      "id": "23bb3601-a5ac-42c3-bff3-64b06a063959",
+      "slug": "n8n",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-18",
+        "editorialReviewedAt": "2026-09-04",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "high",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 20,
+      "sourceUrl": "https://n8n.io/pricing/",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": true,
+      "priority": 130
+    },
+    {
+      "id": "fffb8714-bf45-4e61-bbee-fde1c6f97fd8",
+      "slug": "notion",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-18",
+        "editorialReviewedAt": "2026-09-04",
+        "maintenanceCheckedAt": "2026-09-04"
+      },
+      "risk": "high",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 20,
+      "sourceUrl": "https://www.notion.com/help/notion-ai-faqs",
+      "sourceAccessible": true,
+      "taskDecisionDependency": true,
+      "indexRisk": true,
+      "priority": 165
+    },
+    {
+      "id": "1ac05946-fab2-48bf-9c5d-6188124db8fb",
+      "slug": "openai",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 2
+    },
+    {
+      "id": "f77fb817-e8dc-4c22-b7cd-8edc2e5b0a5e",
+      "slug": "openrouter",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-18",
+        "editorialReviewedAt": "2026-09-04",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "high",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 20,
+      "sourceUrl": "https://openrouter.ai/pricing",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": true,
+      "priority": 130
+    },
+    {
+      "id": "3d018623-85f9-4df4-bd55-9a4a0e7a2d93",
+      "slug": "perplexity",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": "2026-09-06"
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 2,
+      "sourceUrl": "https://www.perplexity.ai/help-center/en/articles/10352895-how-does-perplexity-work",
+      "sourceAccessible": true,
+      "taskDecisionDependency": true,
+      "indexRisk": false,
+      "priority": 47
+    },
+    {
+      "id": "2b5a4ac9-16a2-48f2-b53e-38fc6467aab0",
+      "slug": "pipedream",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-07",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 31,
+      "sourceUrl": "https://pipedream.com/docs/pricing",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 41
+    },
+    {
+      "id": "0dfc49cb-f226-41fe-896a-8a881f5c2761",
+      "slug": "poe",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-18",
+        "editorialReviewedAt": "2026-09-04",
+        "maintenanceCheckedAt": "2026-09-04"
+      },
+      "risk": "high",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 20,
+      "sourceUrl": "https://help.poe.com/hc/en-us/articles/19945140063636-Poe-Purchases-FAQs",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": true,
+      "priority": 130
+    },
+    {
+      "id": "f39ef025-c2b4-4392-be38-95a377931b5e",
+      "slug": "runway",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-05",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 33,
+      "sourceUrl": "https://runway.com/pricing",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 43
+    },
+    {
+      "id": "44dd71ec-57fb-4d1b-b702-002693fb7c36",
+      "slug": "salesforce_einstein",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-08",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 0,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 0
+    },
+    {
+      "id": "d79b9807-66dd-4f1d-82a8-b77e07b62f79",
+      "slug": "shop_your_ai_powered_Shopping_assistant",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "87a0f886-1472-4111-a09a-6a6c781dcf42",
+      "slug": "synthesia",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-08",
+        "editorialReviewedAt": "2026-09-08",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 0,
+      "sourceUrl": "https://www.synthesia.io/pricing",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 10
+    },
+    {
+      "id": "b880e586-db24-4a51-b275-e4933229ca81",
+      "slug": "tattooai-design",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "b189f440-f5d7-44ca-9b10-5906c6eedb62",
+      "slug": "the-graph",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-09",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 29,
+      "sourceUrl": "https://thegraph.com/docs/en/",
+      "sourceAccessible": true,
+      "taskDecisionDependency": true,
+      "indexRisk": false,
+      "priority": 74
+    },
+    {
+      "id": "eaa24478-b5ae-4afc-a821-c549fe950a59",
+      "slug": "woy-ai",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    }
+  ]
+}

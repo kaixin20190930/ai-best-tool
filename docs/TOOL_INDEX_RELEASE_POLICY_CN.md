@@ -52,6 +52,10 @@ sitemap。2026-09-01 一次创建了 11 个成熟工具实体，它们此前全�
 
 ## 实体发布与 Claim 核验分层
 
+2026-10-08 freshness 执行节奏：每日允许两条线并行，最多 1 个成熟新工具进入实体发布流程，同时最多处理 1 个、上限 5 条的既有工具 freshness 批次。新工具通过身份、唯一 canonical、核心功能、合法素材、误导风险和页面完整性等实体门禁后，可先进入 `published + monitor/noindex`；账号级价格、额度、权限等 Claim 保留 `conditional/conflict/unknown`、公开边界和下次复核日，不等待所有账号实测才发布。索引批准仍独立执行，不因 freshness 更新或新工具公开而增加额度。
+
+积压按 `schedule_sync`、`claim_due`、`entity_due`、`manual_archive_review` 分流。只有有日期、范围和来源的有效 review/maintenance evidence 才可能作排期同步；`updated_at` 不证明事实核查。批次默认只读，写入需精确前像、逐工具事务回滚预演和显式提交；实体级风险直接停止该工具，不改状态、canonical 或索引字段。审计与首批证据见 [2026-10-08 freshness 批次](./FRESHNESS_BACKLOG_RESET_2026-10-08_CN.md)。
+
 公开页面资格和每条 Claim 的断言资格分别判定。实体级全局 `HOLD` 仅由身份、唯一 canonical、重复意图、核心功能真实性、素材版权/法律安全、明显误导或页面内容不足触发。价格、账号权益、额度、删除/导出/商用边界等可变 Claim 的 `unknown`、`conditional`、`conflict`、`stale` 只阻止该 Claim 的公开精确断言和精确推荐；页面可省略精确值，或显示明确边界、限制、来源和 `nextReviewDate`，并保持 `published + monitor/noindex`。
 
 状态集合：`verified_public`、`verified_account`、`conditional`、`conflict`、`unknown`、`stale`。账号核验仅对其账号/套餐范围有效；只有 `verified_public` 可支撑无范围限制的公开精确断言，`verified_account` 可支撑明确限定在已核验账号内的判断。冲突 Claim 必须展示限制、来源与 `nextReviewDate`，自身继续 HOLD。运行时 manifest 可用 `entityReleaseApproved` 表达实体结果、用 `claimLevelHolds` 表达未决 Claim；缺少该可选契约的旧 manifest 继续按原状态读取。
