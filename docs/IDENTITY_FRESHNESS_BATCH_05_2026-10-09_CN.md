@@ -6,7 +6,7 @@
 
 | 对象 | 本批分类与动作 | 可执行候选 | 边界 |
 | --- | --- | --- | --- |
-| `pipedream` | 独立可选择的 Workflows/Connect 平台；`KEEP`，`claim_due`、`reviewed_no_change` | Freshness 仅新增 `features.maintenanceReview`、`next_review_date=2026-10-23` | [Workflows 计费文档](https://pipedream.com/docs/pricing)仍区分按计算时间和内存的 segment credits；[Connect 定价](https://pipedream.com/pricing)仍有使用 credits 与外部用户两个输入。目标工作区的真实消耗、并发、保留设置待试用。 |
+| `pipedream` | Connect 继续支持，Workflows/String 将停止；`KEEP`，`claim_due`、`fact_updated` | Freshness 精确替换 Pipedream 三语 `detail` 段落，新增 `features.maintenanceReview`、`next_review_date=2026-10-23` | [官方停止服务公告](https://pipedream.com/docs/workflows)明确 Workflows 与 String 于 2027-03-31 停止，Connect 不受影响。[计费文档](https://pipedream.com/docs/pricing)将 Workflows segment 计算 credits 与 Connect 使用 credits、外部用户计费分开。既有账号迁移、退款和导出安排应逐项核对，不在本补丁推断。 |
 | `cursor` | 独立代码编辑器及 Agent；`KEEP`，`claim_due`、`reviewed_no_change` | Freshness 仅新增 `features.maintenanceReview`、`next_review_date=2026-10-23` | [套餐帮助](https://prod.cursor.com/help/account-and-billing/pricing)支持现有公开价格，[隐私说明](https://cursor.com/data-use)保留滥用调查和非 ZDR 例外；[Cursor 收购公告](https://cursor.com/blog/joining-spacex)及 [OpenAI 官方声明](https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/)支持既有“拟定 11 月 12 日”表述，最终停用日期和账号实际可用模型仍未确定。 |
 | `chatgpt-mac` | ChatGPT 桌面客户端入口；`MERGE_REDIRECT` **身份候选** | 单独批次：先建立并核准真实 ChatGPT 主记录，再更新站内链接及历史身份说明，核验流量与 canonical 后决定是否 301 到主记录 | [OpenAI Docs 的桌面应用说明](https://learn.chatgpt.com/docs/app)将桌面 app 列为 ChatGPT 的入口，不支持当成独立工具。当前生产无 `chatgpt` 工具行，故本批不得执行重定向。 |
 | `gpt_4o` | 当前仍列于 OpenAI API 的模型名称；`ARCHIVE` **目录身份候选** | 单独批次：从工具比较关系及推荐入口移出，保留带 API 来源的 noindex 历史/模型说明或迁入模型目录；无一对一工具重定向 | [官方模型页](https://developers.openai.com/api/docs/models/gpt-4o)仍提供 API 模型信息。不能把模型重定向成 ChatGPT 或 Codex；API 可用性和账户权限单独核验。 |
@@ -28,11 +28,11 @@
 
 ## Freshness 候选与 QA
 
-两条均沿用 2026-09-01 的 dated editorial 实体 PASS，validThrough 为 2026-11-30；其来源仅作实体基线，不能当作本次 Claim 证据。官方资料在 2026-10-09 单独复核，`detail` 后像 SHA-256 各自不变。允许字段只有 `features.maintenanceReview` 和 `next_review_date`；`status`、`page_quality_status`、`id`、`name`、`title`、`url`、`pricing` 及其他列必须相等，index/sitemap 由原门禁维持。
+两条均沿用 2026-09-01 的 dated editorial 实体 PASS，validThrough 为 2026-11-30；其来源仅作实体基线，不能当作本次 Claim 证据。官方资料在 2026-10-09 单独复核。Pipedream `detail` 三语后像 SHA-256 为 `90dd935294b5348370e34ca7a910aa39bb3c60ed0681a6c60bacf893c6cc8b61`；Cursor 正文后像不变。允许字段只有 Pipedream 的 `detail`、两项的 `features.maintenanceReview` 和 `next_review_date`；`status`、`page_quality_status`、`id`、`name`、`title`、`url`、`pricing` 及其他列必须相等，index/sitemap 由原门禁维持。
 
 - [生产只读 preflight](./FRESHNESS_FIFTH_BATCH_PREFLIGHT_2026-10-09.json)：两项 `ready`，锁完整行前像、PASS、详情后像、来源和允许字段；`productionWrites=0`。
 - [事务 rollback 演练](./FRESHNESS_FIFTH_BATCH_ROLLBACK_2026-10-09.json)：两项 `rolled_back`，持久 `productionWrites=0`。
 - [独立只读回验](./FRESHNESS_FIFTH_BATCH_POST_ROLLBACK_2026-10-09.json)：演练进程退出后新连接逐行读取，完整行 hash 与 preflight 相同；`productionWrites=0`。
-- `scripts/test-freshness-fifth-batch.ts` 覆盖顺序、PASS、manifest 来源/后像篡改、独立回读篡改与缺行、后像重放零写入及详情、日期、来源 tamper；TypeScript `tsc --noEmit` 通过。
+- `scripts/test-freshness-fifth-batch.ts` 覆盖顺序、PASS、Pipedream Workflows/String 与 Connect 区分、过度泛化禁例、精确替换、manifest 来源/后像篡改、独立回读篡改与缺行、后像重放零写入及详情、日期、来源 tamper；TypeScript `tsc --noEmit` 通过。
 
 发布前总控仍需独立 QA，并在提交时重新锁生产前像；若 `view_count`、`updated_at` 等运行时列漂移，也应重新 preflight。生产提交后要做新的只读 postcheck。本开发任务不执行 `--commit`、push 或身份路由/索引变更。

@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import { buildFreshnessNext, freshnessProductionWrites, inspectFreshnessState } from './freshness-batch-state';
 import FIFTH_BATCH from './freshness-fifth-batch';
 import verifyFifthPostRollbackReadback from './freshness-fifth-post-rollback-state';
+import { applyCandidateDetail } from './freshness-first-batch';
 import { assertFourthBatchReviewedResult } from './freshness-fourth-batch';
 
 const read = (path: string) => JSON.parse(fs.readFileSync(path, 'utf8'));
@@ -36,8 +37,10 @@ for (const [index, candidate] of FIFTH_BATCH.entries()) {
   assert.equal(trial.status, 'rolled_back');
   assert.equal(approved.preimageSha256, trial.preimageSha256);
   assert.equal(approved.preimageSha256, independent.readbackSha256);
-  assert.deepEqual(approved.changedFields, ['features', 'next_review_date']);
-  assertFourthBatchReviewedResult(candidate, approved, ['features', 'next_review_date']);
+  const changedFields =
+    candidate.slug === 'pipedream' ? ['detail', 'features', 'next_review_date'] : ['features', 'next_review_date'];
+  assert.deepEqual(approved.changedFields, changedFields);
+  assertFourthBatchReviewedResult(candidate, approved, changedFields);
   assert.throws(
     () => assertFourthBatchReviewedResult(candidate, { ...approved, sources: [] }, approved.changedFields),
     /reviewed manifest candidate mismatch/,
@@ -52,6 +55,39 @@ for (const [index, candidate] of FIFTH_BATCH.entries()) {
     /reviewed manifest candidate mismatch/,
   );
 }
+
+const pipedream = FIFTH_BATCH[0];
+assert.equal(pipedream.outcome, 'fact_updated');
+assert.deepEqual(
+  pipedream.replacements?.map((r) => r.locale),
+  ['en', 'en', 'en', 'zh', 'zh', 'zh', 'cn', 'cn', 'cn'],
+);
+const oldDetail = {
+  en: pipedream
+    .replacements!.filter((r) => r.locale === 'en')
+    .map((r) => r.from)
+    .join('\n'),
+  zh: pipedream
+    .replacements!.filter((r) => r.locale === 'zh')
+    .map((r) => r.from)
+    .join('\n'),
+  cn: pipedream
+    .replacements!.filter((r) => r.locale === 'cn')
+    .map((r) => r.from)
+    .join('\n'),
+};
+const newDetail = applyCandidateDetail(oldDetail, pipedream);
+for (const locale of ['en', 'zh', 'cn'] as const) {
+  const text = newDetail[locale];
+  assert(text.includes(locale === 'en' ? 'March 31, 2027' : '2027 年 3 月 31 日'));
+  assert(text.includes('Workflows') && text.includes('String') && text.includes('Connect'));
+  assert(text.includes(locale === 'en' ? 'external-user billing' : '外部用户计费'));
+  assert(text.includes(locale === 'en' ? 'Workflows compute credits' : 'Workflows 计算 credits'));
+  assert(!/Connect (?:will|may) shut down|Connect.{0,16}停止服务/i.test(text));
+  assert(!/automatic migration|automatic refund|automatic export|自动迁移|自动退款|自动导出/i.test(text));
+}
+assert.throws(() => applyCandidateDetail(newDetail, pipedream), /missing exact preimage/);
+assert.deepEqual(FIFTH_BATCH[1].replacements, undefined);
 
 const rows = FIFTH_BATCH.map((candidate) => ({ id: candidate.id, name: candidate.slug, view_count: 0 }));
 const syntheticPreflight = {

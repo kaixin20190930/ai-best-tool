@@ -5,7 +5,7 @@
   "results": [
     {
       "slug": "pipedream",
-      "outcome": "reviewed_no_change",
+      "outcome": "fact_updated",
       "preimageSha256": "c0505b96f29e8f18f825a820d54e72aa6d3bcd0580a5860d1c452377dc9a0e39",
       "passSnapshot": {
         "id": "editorial-2026-09-01:pipedream",
@@ -16,19 +16,20 @@
         "claimDueAt": "2026-09-07",
         "scope": "entity_baseline_only"
       },
-      "expectedDetailSha256": "f4953b2d6d9164be6583da44b3dba7851873565d2c23dd15ef36a8873ebfb32d",
+      "expectedDetailSha256": "90dd935294b5348370e34ca7a910aa39bb3c60ed0681a6c60bacf893c6cc8b61",
       "changedFields": [
+        "detail",
         "features",
         "next_review_date"
       ],
       "nextReviewDate": "2026-10-23",
       "sources": [
+        "https://pipedream.com/docs/workflows",
         "https://pipedream.com/docs/pricing",
-        "https://pipedream.com/pricing",
-        "https://pipedream.com/workflows"
+        "https://pipedream.com/pricing"
       ],
       "unresolved": [
-        "Actual production credit burn, external-user count, retention settings, and trigger ordering require target-workspace tests."
+        "Existing-account transition, refund and data-export specifics are not inferred in this patch; confirm them directly with the account and official notice. Actual Connect credit burn and external-user count require target-workspace checks."
       ],
       "status": "rolled_back"
     },
