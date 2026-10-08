@@ -1,4 +1,6 @@
 import type { ReviewCandidate } from './freshness-first-batch';
+import { applyCandidateDetail } from './freshness-first-batch';
+import { applyCandidateFeatures } from './freshness-third-batch';
 import { verifyFreshnessPassSnapshot } from './verify-freshness-pass-snapshot';
 
 export type FreshnessMode = 'preflight' | 'rollback' | 'commit';
@@ -8,6 +10,22 @@ export function inspectFreshnessState(candidate: ReviewCandidate, row: Record<st
   const alreadyApplied = row.features?.maintenanceReview?.checkedAt === candidate.checkedAt;
   const passSnapshot = verifyFreshnessPassSnapshot(candidate, row, asOf, alreadyApplied ? 'after' : 'before');
   return { alreadyApplied, passSnapshot };
+}
+
+export function buildFreshnessNext(candidate: ReviewCandidate, before: Record<string, any>, alreadyApplied: boolean) {
+  const next = structuredClone(before);
+  if (alreadyApplied) return next;
+  next.detail = applyCandidateDetail(before.detail, candidate);
+  next.features = { ...applyCandidateFeatures(before.features, candidate), maintenanceReview: {
+    ...(before.features.maintenanceReview || {}),
+    checkedAt: candidate.checkedAt, nextReviewDate: candidate.nextReviewDate,
+    outcome: candidate.outcome, changeSummary: candidate.changeSummary,
+    scope: candidate.scope, sources: candidate.sources, unresolved: candidate.unresolved,
+    claims: candidate.claims || [],
+  } };
+  if (candidate.pricingSnapshot) next.features.pricingSnapshot = candidate.pricingSnapshot;
+  next.next_review_date = candidate.nextReviewDate;
+  return next;
 }
 
 export function freshnessResultStatus(mode: FreshnessMode, alreadyApplied: boolean): FreshnessResultStatus {

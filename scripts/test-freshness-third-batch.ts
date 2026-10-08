@@ -5,11 +5,12 @@ import { spawnSync } from 'node:child_process';
 import THIRD_BATCH, { applyCandidateFeatures, assertThirdBatchReleaseManifest, thirdBatchReleaseAllowed,
   THIRD_BATCH_OWNER_TIME_OVERRIDE, THIRD_BATCH_PUBLISH_NOT_BEFORE } from './freshness-third-batch';
 import { applyCandidateDetail } from './freshness-first-batch';
-import { inspectFreshnessState, freshnessProductionWrites, freshnessResultStatus } from './freshness-batch-state';
+import { buildFreshnessNext, inspectFreshnessState, freshnessProductionWrites, freshnessResultStatus } from './freshness-batch-state';
 
 const audit = JSON.parse(fs.readFileSync('docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json', 'utf8'));
 const preflight = JSON.parse(fs.readFileSync('docs/FRESHNESS_THIRD_BATCH_PREFLIGHT_2026-10-08.json', 'utf8'));
 const rollback = JSON.parse(fs.readFileSync('docs/FRESHNESS_THIRD_BATCH_ROLLBACK_2026-10-08.json', 'utf8'));
+const productionPostcheck = JSON.parse(fs.readFileSync('docs/FRESHNESS_THIRD_BATCH_POSTCHECK_2026-10-08.json', 'utf8'));
 const hash = (value: unknown) => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
 assert.equal(THIRD_BATCH_PUBLISH_NOT_BEFORE, '2026-10-09');
@@ -44,6 +45,10 @@ for (const artifact of [preflight, rollback]) {
 }
 assert.equal(preflight.mode, 'preflight');
 assert.equal(rollback.mode, 'rollback');
+assert.equal(productionPostcheck.mode, 'preflight');
+assert.equal(productionPostcheck.productionWrites, 0);
+assert.deepEqual(productionPostcheck.results.map((row: any) => row.slug), THIRD_BATCH.map(row => row.slug));
+assert(productionPostcheck.results.every((row: any) => row.status === 'already_applied' && row.changedFields.length === 0));
 for (const candidate of THIRD_BATCH) {
   const sourceItem = audit.items.find((row: any) => row.slug === candidate.slug);
   const before = preflight.results.find((row: any) => row.slug === candidate.slug);
@@ -82,6 +87,11 @@ for (const candidate of THIRD_BATCH) {
     next_review_date: candidate.nextReviewDate, detail, features,
   };
   assert.equal(inspectFreshnessState(replay, row, '2026-10-08').alreadyApplied, true);
+  const postcheck = buildFreshnessNext(replay, row, true);
+  assert.deepEqual(postcheck, row);
+  assert.deepEqual(['detail', 'features', 'next_review_date'].filter(key => JSON.stringify(postcheck[key as keyof typeof postcheck]) !== JSON.stringify(row[key as keyof typeof row])), []);
+  if (candidate.replacements?.length)
+    assert.throws(() => applyCandidateDetail(detail, candidate), /missing exact preimage/);
   assert.equal(freshnessResultStatus('preflight', true), 'already_applied');
   assert.equal(freshnessResultStatus('commit', true), 'already_applied');
   assert.equal(freshnessProductionWrites('commit', [{ status: 'already_applied' }]), 0);

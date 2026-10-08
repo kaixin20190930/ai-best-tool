@@ -16,4 +16,4 @@
 
 QA 复核发现 Fathom 的完整前像由 `19e58990b3490ac173b6765194c2cbbec4bcc94dff76853e5bdaed9ea27ed428` 漂移至 `0a6d048bc89e6be0b1f5daaa7e555e995301849548020c76706644fecee94964`。生产只读审计查到唯一对应的 `/ai/fathom` `page_view`，时间为 2026-10-08T10:55:54.386Z；其运行时路径会同时增加 `view_count` 并更新 `updated_at`。当前行 `view_count=1`、`updated_at=2026-10-08T10:55:54.391642+00:00`；仅将这两个审计字段在内存中还原为 `view_count=0`、原 `created_at=2026-09-01T12:08:47.499495+00:00`，完整行 SHA-256 **精确恢复**旧前像。正文和功能事实没有变化。新的 preflight/rollback 锁定当前 `0a6d048b…` 前像，提交时仍会按原样拒绝任何进一步漂移。第一或第二批即使加载第三批 Owner 覆盖 manifest，也会在建立数据库连接之前拒绝；专项负例覆盖两个入口。
 
-Owner 时间授权允许 2026-10-08 在独立 QA 后按新 preflight manifest 作受控提交；本轮开发不执行生产提交。两份无关 SQL 保留在工作区，排除于本候选提交。
+Owner 时间授权允许 2026-10-08 在独立 QA 后按新 preflight manifest 作受控提交；总控已完成五项生产写入（`productionWrites=5`）。首次生产只读 postcheck 暴露已应用分支误重放 `featureReplacements` 前像的缺陷；修复后[只读 postcheck](./FRESHNESS_THIRD_BATCH_POSTCHECK_2026-10-08.json)五项均为 `already_applied`、`changedFields=[]`、`productionWrites=0`。已应用路径直接采用经 PASS 快照和完整 detail/maintenance/排期/功能 Claim 后像校验的当前行，不再重放任何前像补丁；首次应用路径和门禁保持不变。本次修复没有再次提交生产。两份无关 SQL 保留在工作区，排除于本候选提交。

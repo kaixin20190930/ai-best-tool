@@ -4,11 +4,11 @@ import fs from 'node:fs';
 import { config } from 'dotenv';
 import { Client } from 'pg';
 import { getDatabaseConnectionString } from '../lib/database/connection';
-import { FIRST_BATCH, applyCandidateDetail } from './freshness-first-batch';
+import { FIRST_BATCH } from './freshness-first-batch';
 import SECOND_BATCH from './freshness-second-batch';
-import THIRD_BATCH, { applyCandidateFeatures, assertThirdBatchReleaseManifest, thirdBatchReleaseAllowed,
+import THIRD_BATCH, { assertThirdBatchReleaseManifest, thirdBatchReleaseAllowed,
   THIRD_BATCH_OWNER_TIME_OVERRIDE, THIRD_BATCH_PUBLISH_NOT_BEFORE } from './freshness-third-batch';
-import { freshnessProductionWrites, freshnessResultStatus, inspectFreshnessState } from './freshness-batch-state';
+import { buildFreshnessNext, freshnessProductionWrites, freshnessResultStatus, inspectFreshnessState } from './freshness-batch-state';
 
 const protectedKeys = ['status','page_quality_status','name','url','title','id','pricing'];
 const hash = (value: unknown) => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -52,21 +52,11 @@ async function main() {
         if (!before.url || !/^https:\/\//.test(before.url)) throw new Error(`${candidate.slug}: entity URL risk`);
         const beforeHash = hash(before);
         const approved = manifest?.results?.find((item: any) => item.slug === candidate.slug);
-        if (mode === 'commit' && (!approved || approved.preimageSha256 !== beforeHash ||
+        if (mode === 'commit' && (!approved || (!alreadyApplied && approved.preimageSha256 !== beforeHash) ||
             JSON.stringify(approved.passSnapshot) !== JSON.stringify(passSnapshot)))
           throw new Error(`${candidate.slug}: preimage or PASS snapshot drift`);
-        const next = structuredClone(before);
-        next.detail = alreadyApplied ? before.detail : applyCandidateDetail(before.detail, candidate);
+        const next = buildFreshnessNext(candidate, before, alreadyApplied);
         assert.equal(hash(next.detail), candidate.expectedDetailSha256, `${candidate.slug}: candidate detail postimage mismatch`);
-        next.features = { ...applyCandidateFeatures(before.features, candidate), maintenanceReview: {
-          ...(before.features.maintenanceReview || {}),
-          checkedAt: candidate.checkedAt, nextReviewDate: candidate.nextReviewDate,
-          outcome: candidate.outcome, changeSummary: candidate.changeSummary,
-          scope: candidate.scope, sources: candidate.sources, unresolved: candidate.unresolved,
-          claims: candidate.claims || [],
-        } };
-        if (candidate.pricingSnapshot) next.features.pricingSnapshot = candidate.pricingSnapshot;
-        next.next_review_date = candidate.nextReviewDate;
         for (const key of protectedKeys) assert.deepEqual(next[key], before[key], `${candidate.slug}: protected ${key}`);
         const changes = ['detail','features','next_review_date'].filter(key => JSON.stringify(next[key]) !== JSON.stringify(before[key]));
         assert(changes.every(key => ['detail','features','next_review_date'].includes(key)));
