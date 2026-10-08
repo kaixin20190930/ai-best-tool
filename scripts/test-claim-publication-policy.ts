@@ -123,6 +123,21 @@ assert.equal(
   null,
   'Legacy manifest without policy fields must remain compatible',
 );
+const failedIdentityPolicy: PublicationPolicyManifest = {
+  entityGates: { ...passingEntityGates, identity: 'fail' },
+  claims: [],
+};
+assert.throws(
+  () =>
+    validateOptionalPublicationPolicy({
+      status: 'released',
+      entityReleaseApproved: false,
+      claimLevelHolds: [],
+      publicationPolicy: failedIdentityPolicy,
+    }),
+  /Entity-level HOLD cannot enter released/,
+  'A released manifest must reject entity-level HOLD',
+);
 assert.equal(
   claimReviewIntervalDays('price', 'first'),
   7,

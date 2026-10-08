@@ -140,8 +140,15 @@ export function validateOptionalPublicationPolicy(preaudit: {
   if (JSON.stringify(preaudit.claimLevelHolds || []) !== JSON.stringify(decision.claimLevelHolds)) {
     throw new Error('claimLevelHolds does not match claim-level results');
   }
-  if (preaudit.status === 'ready_for_next_slot' && !decision.entityReleaseApproved) {
-    throw new Error('Entity-level HOLD cannot enter ready_for_next_slot');
+  const releaseApprovedStatuses = new Set([
+    'ready_for_next_slot',
+    'released',
+    'published',
+    'approved',
+    'READY_MONITOR',
+  ]);
+  if (releaseApprovedStatuses.has(preaudit.status) && !decision.entityReleaseApproved) {
+    throw new Error(`Entity-level HOLD cannot enter ${preaudit.status}`);
   }
   return decision;
 }
