@@ -5,6 +5,7 @@ import { config } from 'dotenv';
 import { Client } from 'pg';
 import { getDatabaseConnectionString } from '../lib/database/connection';
 import { FIRST_BATCH, applyCandidateDetail } from './freshness-first-batch';
+import SECOND_BATCH from './freshness-second-batch';
 import { verifyFreshnessPassSnapshot } from './verify-freshness-pass-snapshot';
 
 const protectedKeys = ['status','page_quality_status','name','url','title','id','pricing'];
@@ -14,11 +15,12 @@ const readSql = `SELECT to_jsonb(t) - 'search_vector' AS record, next_review_dat
 
 async function main() {
   const args = process.argv.slice(2);
+  const batch = args.includes('--batch=second') ? SECOND_BATCH : FIRST_BATCH;
   const mode = args.includes('--commit') ? 'commit' : args.includes('--rollback') ? 'rollback' : 'preflight';
   if (args.includes('--commit') && args.includes('--rollback')) throw new Error('Choose one mode');
   const manifestPath = args.find(arg => arg.startsWith('--manifest='))?.slice(11);
   if (mode === 'commit' && !manifestPath) throw new Error('Commit requires reviewed --manifest path');
-  if (args.some(arg => !['--commit','--rollback'].includes(arg) && !arg.startsWith('--manifest=') && !arg.startsWith('--out='))) throw new Error('Unsupported argument');
+  if (args.some(arg => !['--commit','--rollback','--batch=second'].includes(arg) && !arg.startsWith('--manifest=') && !arg.startsWith('--out='))) throw new Error('Unsupported argument');
   const manifest = manifestPath ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')) : null;
   if (mode === 'commit' && (manifest?.mode !== 'preflight' || manifest?.results?.length !== 5)) throw new Error('Invalid reviewed manifest');
   config({ path: '.env.local', quiet: true });
@@ -26,7 +28,7 @@ async function main() {
   await client.connect();
   const results = [];
   try {
-    for (const candidate of FIRST_BATCH) {
+    for (const candidate of batch) {
       await client.query(mode === 'preflight' ? 'BEGIN READ ONLY' : 'BEGIN');
       try {
         await client.query("SET LOCAL lock_timeout='5s'");

@@ -1,5 +1,5 @@
 export type ReviewCandidate = {
-  slug: string; id: string; outcome: 'reviewed_no_change' | 'fact_updated';
+  slug: string; id: string; expectedUrl?: string; outcome: 'reviewed_no_change' | 'fact_updated';
   passSnapshot: { id: string; source: string; sha256: string; reviewedAt: string; validThrough: string; claimDueAt: string; scope: 'entity_baseline_only' };
   expectedDetailSha256: string;
   checkedAt: string; nextReviewDate: string; scope: string; changeSummary: string;
