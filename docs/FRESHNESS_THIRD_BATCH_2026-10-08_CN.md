@@ -14,4 +14,6 @@
 
 [生产只读 preflight](./FRESHNESS_THIRD_BATCH_PREFLIGHT_2026-10-08.json)五项均 `ready`，记录逐项前像 SHA-256、PASS 来源、正文后像 SHA-256、原计划日期及 Owner 覆盖记录；`productionWrites=0`。[事务回滚演练](./FRESHNESS_THIRD_BATCH_ROLLBACK_2026-10-08.json)五项均 `rolled_back`，对允许字段及受保护字段作事务内回读，持久 `productionWrites=0`。回滚后再次只读读取的五项前像 SHA-256 与原 preflight 完全相同。测试覆盖 `already_applied` 的幂等零写入，以及正文、维护记录、排期、功能 Claim 和 Owner 覆盖记录篡改负例。受保护的 `status`、`page_quality_status`、URL、pricing、身份字段不变；无迁移、push 或 sitemap 改动。
 
+QA 复核发现 Fathom 的完整前像由 `19e58990b3490ac173b6765194c2cbbec4bcc94dff76853e5bdaed9ea27ed428` 漂移至 `0a6d048bc89e6be0b1f5daaa7e555e995301849548020c76706644fecee94964`。生产只读审计查到唯一对应的 `/ai/fathom` `page_view`，时间为 2026-10-08T10:55:54.386Z；其运行时路径会同时增加 `view_count` 并更新 `updated_at`。当前行 `view_count=1`、`updated_at=2026-10-08T10:55:54.391642+00:00`；仅将这两个审计字段在内存中还原为 `view_count=0`、原 `created_at=2026-09-01T12:08:47.499495+00:00`，完整行 SHA-256 **精确恢复**旧前像。正文和功能事实没有变化。新的 preflight/rollback 锁定当前 `0a6d048b…` 前像，提交时仍会按原样拒绝任何进一步漂移。第一或第二批即使加载第三批 Owner 覆盖 manifest，也会在建立数据库连接之前拒绝；专项负例覆盖两个入口。
+
 Owner 时间授权允许 2026-10-08 在独立 QA 后按新 preflight manifest 作受控提交；本轮开发不执行生产提交。两份无关 SQL 保留在工作区，排除于本候选提交。

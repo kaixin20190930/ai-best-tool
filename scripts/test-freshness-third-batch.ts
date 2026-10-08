@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import THIRD_BATCH, { applyCandidateFeatures, assertThirdBatchReleaseManifest, thirdBatchReleaseAllowed,
   THIRD_BATCH_OWNER_TIME_OVERRIDE, THIRD_BATCH_PUBLISH_NOT_BEFORE } from './freshness-third-batch';
 import { applyCandidateDetail } from './freshness-first-batch';
@@ -23,6 +24,17 @@ assert.equal(thirdBatchReleaseAllowed('invalid'), false);
 assertThirdBatchReleaseManifest(preflight);
 assert.throws(() => assertThirdBatchReleaseManifest({ ...preflight, ownerTimeOverride: { ...THIRD_BATCH_OWNER_TIME_OVERRIDE, effectiveReleaseDate: '2026-10-07' } }), /owner time override mismatch/);
 assert.throws(() => assertThirdBatchReleaseManifest({ ...preflight, publishNotBefore: '2026-10-08' }), /owner time override mismatch/);
+for (const batchArgs of [[], ['--batch=second']]) {
+  for (const modeArgs of [[], ['--rollback'], ['--commit']]) {
+    const rejected = spawnSync('./node_modules/.bin/tsx', [
+      'scripts/run-freshness-first-batch.ts', ...batchArgs, ...modeArgs,
+      '--manifest=docs/FRESHNESS_THIRD_BATCH_PREFLIGHT_2026-10-08.json',
+    ], { encoding: 'utf8' });
+    assert.equal(rejected.status, 1);
+    assert.match(rejected.stderr, /Third batch owner time override cannot be used with first or second batch/);
+    assert.doesNotMatch(rejected.stderr, /connect|database|ECONN/i);
+  }
+}
 assert.deepEqual(THIRD_BATCH.map(row => row.slug), audit.selected);
 for (const artifact of [preflight, rollback]) {
   assert.equal(artifact.productionWrites, 0);

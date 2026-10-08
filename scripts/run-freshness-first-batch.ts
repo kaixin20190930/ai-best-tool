@@ -28,6 +28,8 @@ async function main() {
   if (third && mode === 'commit' && !thirdBatchReleaseAllowed(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())))
     throw new Error(`Third batch effectiveReleaseDate ${THIRD_BATCH_OWNER_TIME_OVERRIDE.effectiveReleaseDate}`);
   const manifest = manifestPath ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')) : null;
+  if (!third && manifest?.ownerTimeOverride)
+    throw new Error('Third batch owner time override cannot be used with first or second batch');
   if (mode === 'commit' && (manifest?.mode !== 'preflight' || manifest?.results?.length !== 5)) throw new Error('Invalid reviewed manifest');
   if (third && mode === 'commit') assertThirdBatchReleaseManifest(manifest);
   config({ path: '.env.local', quiet: true });
