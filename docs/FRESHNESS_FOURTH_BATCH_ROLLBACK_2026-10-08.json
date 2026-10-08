@@ -1,0 +1,157 @@
+{
+  "mode": "rollback",
+  "publishNotBefore": "2026-10-10",
+  "ownerTimeOverride": {
+    "batch": "fourth",
+    "originalPublishNotBefore": "2026-10-10",
+    "ownerAuthorizedOn": "2026-10-08",
+    "effectiveReleaseDate": "2026-10-08",
+    "reason": "Owner authorized sequential execution without calendar delay"
+  },
+  "productionWrites": 0,
+  "results": [
+    {
+      "slug": "codex",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "1aad88085d2b4d87e623dbe5fb9be5848390e85cade1b6ae68631753b120f34a",
+      "passSnapshot": {
+        "id": "editorial-2026-09-06:codex",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-09-20",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "7b54b288a8cbb04b467fd9eb76de77ec7770f9052b51998c3f216f689b323377",
+      "changedFields": [
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://learn.chatgpt.com/docs/pricing",
+        "https://learn.chatgpt.com/docs/cloud",
+        "https://learn.chatgpt.com/docs/agent-approvals-security"
+      ],
+      "unresolved": [
+        "Plan, region, model, workspace policy and remaining usage require target-account verification."
+      ],
+      "status": "rolled_back"
+    },
+    {
+      "slug": "dune",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "382be77444d9e0c04fc3a1e0f6c7b6b6faa61e0495cee641b6d609b48d7c84fc",
+      "passSnapshot": {
+        "id": "editorial-2026-09-06:dune",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-09-20",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "566ee59c8f323469bf60dd924eab833ba6810c00b7b799c5b58aa0cb6b33b6db",
+      "changedFields": [
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://docs.dune.com/docs/product-comparison",
+        "https://docs.dune.com/web-app/overview"
+      ],
+      "unresolved": [
+        "Actual query freshness, credit burn and Datashare terms depend on the target deployment and account."
+      ],
+      "status": "rolled_back"
+    },
+    {
+      "slug": "github-copilot",
+      "outcome": "fact_updated",
+      "preimageSha256": "76b4027f1e47d67c3f1ae76494b7d91fa3278039e46590d03797917601f503f7",
+      "passSnapshot": {
+        "id": "editorial-2026-09-06:github-copilot",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-09-20",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "3ae421a49539d60ab886cff9526081dbdc8a325fa6d1d57d8b172c9f7de81d89",
+      "changedFields": [
+        "detail",
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://github.com/features/copilot/plans",
+        "https://docs.github.com/en/copilot/concepts/context/content-exclusion"
+      ],
+      "unresolved": [
+        "Regional checkout, organization policy, model-specific credit consumption and remaining balance require account verification."
+      ],
+      "status": "rolled_back"
+    },
+    {
+      "slug": "runway",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "de8a6da5c2e98c844da15e3d9a977cc4e950a19bd4fc51ce90da57b75d17c4ad",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:runway",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-09-05",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "94c6022df2fc301036381dd17e44b9d308795a9754e5b0a1ff0bb73e45b1cdba",
+      "changedFields": [
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://runway.com/pricing",
+        "https://help.runwayml.com/hc/en-us/articles/15124877443219-How-do-credits-work",
+        "https://help.runwayml.com/hc/en-us/articles/21664961171475-Which-plan-is-right-for-me"
+      ],
+      "unresolved": [
+        "Model access, output costs, legacy migration and Creative/API balances require target-workspace verification."
+      ],
+      "status": "rolled_back"
+    },
+    {
+      "slug": "luma-ai",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "6429051881770c2a6848cb37a03325c8a621831aefe70aa55616ff7e507b75ee",
+      "passSnapshot": {
+        "id": "editorial-2026-09-25:luma-ai",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-25",
+        "validThrough": "2026-12-24",
+        "claimDueAt": "2026-09-06",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "522bee5a5b382639988d580b9342ea90b3b9fce4c71afb576f7e12f475002e85",
+      "changedFields": [
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://lumalabs.ai/llm-info",
+        "https://lumalabs.ai/api"
+      ],
+      "unresolved": [
+        "Selected App plan rights, API model price, region and account credits require signed-in verification."
+      ],
+      "status": "rolled_back"
+    }
+  ]
+}
