@@ -1,0 +1,42 @@
+{
+  "unit": "OPENAI-FAMILY-IDENTITY-GOVERNANCE-01",
+  "asOf": "2026-10-09 Asia/Shanghai",
+  "productionWrites": 0,
+  "method": {
+    "database": "BEGIN READ ONLY; parameterized SELECT from public.tools, tool_index_release_log and tool_index_review_runs; ROLLBACK; fresh connection",
+    "http": "GET production HTML, robots.txt and sitemap.xml",
+    "code": "static references in app, lib, middleware and sitemap"
+  },
+  "rows": [
+    { "slug": "chatgpt", "exists": false, "shell": true, "http": 200, "indexable": false },
+    { "slug": "chatgpt-mac", "id": "22561562-5b7e-4e32-b629-ea8626abeeda", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-06", "rowSha256": "1d68dc48bbbd3fae65231941316fdefbb10d4752b9cfcd8603413040e729fa23", "http": 200, "indexable": false },
+    { "slug": "gpt_4o", "id": "73a3ca28-707c-4460-b769-50ee47ba5e69", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-06", "rowSha256": "7639c4de3fbf9ba8de857ea3d810b053ca212b58a58dd0d28b33078fb8a209c1", "http": 200, "indexable": false },
+    { "slug": "openai", "id": "1ac05946-fab2-48bf-9c5d-6188124db8fb", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-06", "rowSha256": "eda1d65396baeb17efba9c1a43aff46289d7de297ad147abb7354ba20d3a569c", "http": 200, "indexable": false },
+    { "slug": "codex", "id": "35b7a4ae-1200-41f2-94c5-d5ba4dc98704", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-22", "rowSha256": "294dd3fa81dd6b063a2d7a246bb563baed492af7a5c9f57fb6d9696f0706a8b1", "http": 200, "indexable": false }
+  ],
+  "urlState": {
+    "english": "/ai/{slug}",
+    "chinese": "/cn/ai/{slug}",
+    "explicitEnglish": "/en/ai/{slug} normalizes to /ai/{slug}",
+    "otherSupportedLocales": ["jp", "de", "es", "fr", "pt", "ru", "tw"],
+    "observedOtherLocale": "/jp/ai/chatgpt: 200, self canonical, noindex",
+    "sampledPages": "all sampled English and Chinese pages returned 200, self canonical, meta noindex, follow",
+    "robotsTxt": "User-agent: *; Allow: /; Sitemap: https://aibesttool.com/sitemap.xml",
+    "sitemapMatches": { "chatgpt": 0, "chatgpt-mac": 0, "gpt_4o": 0, "openai": 0, "codex": 0 },
+    "aliasesForLegacyThree": 0
+  },
+  "indexLedger": {
+    "legacyThree": "one baseline entry each; release_day null; approval date unknown",
+    "codex": "no release entry",
+    "chatgpt": "no tool row and no release entry",
+    "reviewRunsForFive": 0
+  },
+  "codeEdges": [
+    "reviewedToolRelationships: claude/gemini -> gpt_4o",
+    "reviewedToolRelationships: gemini -> chatgpt-mac",
+    "reviewedToolRelationships: gpt_4o <-> chatgpt-mac",
+    "guides/ai-tools-for-customer-support -> chatgpt-mac",
+    "guides/ai-chatbot-tools and ai-tools-for-code-review -> chatgpt shell",
+    "lib/data.ts retains legacy chatgpt-mac, gpt_4o and openai records"
+  ]
+}
