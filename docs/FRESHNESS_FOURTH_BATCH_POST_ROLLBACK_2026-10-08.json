@@ -1,0 +1,37 @@
+{
+  "mode": "post_rollback_readback",
+  "productionWrites": 0,
+  "readIsolation": "new_connection_read_only_transaction",
+  "results": [
+    {
+      "slug": "codex",
+      "preimageSha256": "1aad88085d2b4d87e623dbe5fb9be5848390e85cade1b6ae68631753b120f34a",
+      "readbackSha256": "1aad88085d2b4d87e623dbe5fb9be5848390e85cade1b6ae68631753b120f34a",
+      "status": "matched"
+    },
+    {
+      "slug": "dune",
+      "preimageSha256": "382be77444d9e0c04fc3a1e0f6c7b6b6faa61e0495cee641b6d609b48d7c84fc",
+      "readbackSha256": "382be77444d9e0c04fc3a1e0f6c7b6b6faa61e0495cee641b6d609b48d7c84fc",
+      "status": "matched"
+    },
+    {
+      "slug": "github-copilot",
+      "preimageSha256": "76b4027f1e47d67c3f1ae76494b7d91fa3278039e46590d03797917601f503f7",
+      "readbackSha256": "76b4027f1e47d67c3f1ae76494b7d91fa3278039e46590d03797917601f503f7",
+      "status": "matched"
+    },
+    {
+      "slug": "runway",
+      "preimageSha256": "de8a6da5c2e98c844da15e3d9a977cc4e950a19bd4fc51ce90da57b75d17c4ad",
+      "readbackSha256": "de8a6da5c2e98c844da15e3d9a977cc4e950a19bd4fc51ce90da57b75d17c4ad",
+      "status": "matched"
+    },
+    {
+      "slug": "luma-ai",
+      "preimageSha256": "6429051881770c2a6848cb37a03325c8a621831aefe70aa55616ff7e507b75ee",
+      "readbackSha256": "6429051881770c2a6848cb37a03325c8a621831aefe70aa55616ff7e507b75ee",
+      "status": "matched"
+    }
+  ]
+}

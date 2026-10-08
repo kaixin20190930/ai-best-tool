@@ -12,10 +12,12 @@ import FOURTH_BATCH, {
   FOURTH_BATCH_PUBLISH_NOT_BEFORE,
   fourthBatchReleaseAllowed,
 } from './freshness-fourth-batch';
+import verifyFourthPostRollbackReadback from './freshness-fourth-post-rollback-state';
 
 const audit = JSON.parse(fs.readFileSync('docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json', 'utf8'));
 const preflight = JSON.parse(fs.readFileSync('docs/FRESHNESS_FOURTH_BATCH_PREFLIGHT_2026-10-08.json', 'utf8'));
 const rollback = JSON.parse(fs.readFileSync('docs/FRESHNESS_FOURTH_BATCH_ROLLBACK_2026-10-08.json', 'utf8'));
+const postRollback = JSON.parse(fs.readFileSync('docs/FRESHNESS_FOURTH_BATCH_POST_ROLLBACK_2026-10-08.json', 'utf8'));
 const hash = (value: unknown) => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
 assert.equal(FOURTH_BATCH_PUBLISH_NOT_BEFORE, '2026-10-10');
@@ -62,6 +64,44 @@ for (const artifact of [preflight, rollback]) {
 }
 assert.equal(preflight.mode, 'preflight');
 assert.equal(rollback.mode, 'rollback');
+assert.equal(postRollback.mode, 'post_rollback_readback');
+assert.equal(postRollback.productionWrites, 0);
+assert.equal(postRollback.readIsolation, 'new_connection_read_only_transaction');
+assert.deepEqual(
+  postRollback.results.map((row: any) => row.slug),
+  FOURTH_BATCH.map((row) => row.slug),
+);
+for (const [index, row] of postRollback.results.entries()) {
+  assert.equal(row.status, 'matched');
+  assert.equal(row.preimageSha256, preflight.results[index].preimageSha256);
+  assert.equal(row.readbackSha256, preflight.results[index].preimageSha256);
+}
+const syntheticRows = FOURTH_BATCH.map((candidate) => ({ id: candidate.id, name: candidate.slug, view_count: 0 }));
+const syntheticPreflight = {
+  ...preflight,
+  results: preflight.results.map((row: any, index: number) => ({ ...row, preimageSha256: hash(syntheticRows[index]) })),
+};
+const syntheticRollback = {
+  ...rollback,
+  results: rollback.results.map((row: any, index: number) => ({ ...row, preimageSha256: hash(syntheticRows[index]) })),
+};
+const readback = verifyFourthPostRollbackReadback(syntheticPreflight, syntheticRollback, syntheticRows);
+assert(readback.results.every((row) => row.status === 'matched'));
+const tamperedRows = structuredClone(syntheticRows);
+tamperedRows[0].view_count = 1;
+assert.throws(
+  () => verifyFourthPostRollbackReadback(syntheticPreflight, syntheticRollback, tamperedRows),
+  /independent post-rollback readback drift/,
+);
+assert.throws(
+  () => verifyFourthPostRollbackReadback(syntheticPreflight, syntheticRollback, []),
+  /Independent readback must return five rows/,
+);
+assert.throws(
+  () =>
+    verifyFourthPostRollbackReadback(syntheticPreflight, { ...syntheticRollback, productionWrites: 1 }, syntheticRows),
+  /1 !== 0/,
+);
 for (const candidate of FOURTH_BATCH) {
   const sourceItem = audit.items.find((row: any) => row.slug === candidate.slug);
   const before = preflight.results.find((row: any) => row.slug === candidate.slug);
@@ -146,4 +186,6 @@ const githubDetail = Object.fromEntries(github.replacements!.map((patch) => [pat
 const patched = applyCandidateDetail(githubDetail, github);
 assert(patched.en.includes('new Max tier at $100/month'));
 assert.throws(() => applyCandidateDetail(patched, github), /missing exact preimage/);
-console.log('PASS fourth freshness batch: order, PASS, preimage, protected fields, rollback, replay and tamper');
+console.log(
+  'PASS fourth freshness batch: order, PASS, preimage, independent post-rollback readback, replay and tamper',
+);

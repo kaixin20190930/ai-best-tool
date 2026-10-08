@@ -12,6 +12,6 @@
 
 候选 `publishNotBefore=2026-10-10`。Owner 已授权按批次顺序执行而不等待自然日；本批专属 `ownerTimeOverride.effectiveReleaseDate=2026-10-08`，仅覆盖日期门禁，不覆盖独立 QA、前像、PASS、后像、保护字段或索引门禁。开发阶段不执行 `--commit`、不 push。生产持久写入为零。
 
-[生产只读 preflight](./FRESHNESS_FOURTH_BATCH_PREFLIGHT_2026-10-08.json)五项均 `ready`，锁定完整行 SHA-256、PASS 来源 SHA-256、正文后像 SHA-256、来源、限制和预期字段。[事务回滚演练](./FRESHNESS_FOURTH_BATCH_ROLLBACK_2026-10-08.json)五项均 `rolled_back`，持久 `productionWrites=0`；演练后再次只读 preflight 的五项完整前像 SHA-256 与原 preflight 全部相同。运行时 `view_count`、`updated_at` 属于审计漂移，不能视为业务 Claim 差异；任何提交前漂移仍需重做 preflight，不能忽略哈希门禁。
+[生产只读 preflight](./FRESHNESS_FOURTH_BATCH_PREFLIGHT_2026-10-08.json)五项均 `ready`，锁定完整行 SHA-256、PASS 来源 SHA-256、正文后像 SHA-256、来源、限制和预期字段。[事务回滚演练](./FRESHNESS_FOURTH_BATCH_ROLLBACK_2026-10-08.json)五项均 `rolled_back`，持久 `productionWrites=0`。演练进程完成并关闭连接后，[独立只读回验](./FRESHNESS_FOURTH_BATCH_POST_ROLLBACK_2026-10-08.json)用新连接和 `BEGIN READ ONLY` 逐项重新读取生产行；五项完整行 SHA-256 均与原 preflight 精确一致，`productionWrites=0`。专项测试使用篡改的独立回读行和缺失回读行作负例，防止把事务内 before hash 冒充回验。运行时 `view_count`、`updated_at` 属于审计漂移，不能视为业务 Claim 差异；任何提交前漂移仍需重做 preflight，不能忽略哈希门禁。
 
 提交候选只允许 `detail`（仅 GitHub Copilot）、`features.maintenanceReview` 和 `next_review_date` 改动。脚本逐行检查 `status`、`page_quality_status`、`name`、`url`、`title`、`id`、`pricing` 等保护字段及所有其他列，并要求提交 manifest 与候选后像一致。既有 `features.editorial`、`marketValidation`、canonical 和索引状态保持原值。专项测试覆盖顺序、批次日期覆盖隔离、PASS、精确替换、manifest 篡改、后像篡改与已应用重放零写入；TypeScript 与第三批回归通过。独立 QA 应核对官方证据、五项前像及字段边界后才考虑生产提交。
