@@ -144,6 +144,6 @@
     "Use AI Best Tool editorial SVG only; no vendor media or screenshot",
     "Review trilingual Claim limits, sources, correction entry and next-review dates",
     "Run protected-row preflight and transaction rollback; independent release QA before controller commit",
-    "Verify published + monitor/noindex, sitemap exclusion and zero Task/Capability/Fit writes"
+    "After explicit controller commit, run --phase=verify --online; require one published + monitor entity, trilingual canonical/noindex pages, sitemap zero and Task/Capability/Fit zero before close"
   ]
 }

@@ -6,10 +6,16 @@ import { config } from 'dotenv';
 import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
+import { createAdminClient } from '../lib/supabase/admin';
 import { assertVideoReadback, validateVideoUrl } from './candidate-release-video';
 import { validateOptionalPublicationPolicy, type PublicationPolicyManifest } from './claim-publication-policy';
 import { assertMurfEmptyPreimage, assertMurfSingleInsert } from './murf-release-guard';
-import { assertPikaEmptyPreimage, assertPikaSingleInsert } from './pika-release-guard';
+import {
+  assertPikaEmptyPreimage,
+  assertPikaOnlinePage,
+  assertPikaPostcheck,
+  assertPikaSingleInsert,
+} from './pika-release-guard';
 
 type Candidate = {
   slug: string;
@@ -338,7 +344,9 @@ async function fetchPage(pathname: string) {
 async function validateOnlineFallback(candidate: Candidate, expectReleased: boolean) {
   const sitemap = await fetchPage('/sitemap.xml');
   assert(sitemap.response.ok, 'Unable to read production sitemap');
-  for (const pathname of [`/ai/${candidate.slug}`, `/cn/ai/${candidate.slug}`]) {
+  const paths = [`/ai/${candidate.slug}`, `/cn/ai/${candidate.slug}`];
+  if (candidate.slug === 'pika' && expectReleased) paths.push(`/tw/ai/${candidate.slug}`);
+  for (const pathname of paths) {
     const { response, html } = await fetchPage(pathname);
     assert(response.ok, `${candidate.slug}: ${pathname} returned ${response.status}`);
     assert.equal(canonicalFromHtml(html), `https://aibesttool.com${pathname}`, `${candidate.slug}: canonical mismatch`);
@@ -348,6 +356,19 @@ async function validateOnlineFallback(candidate: Candidate, expectReleased: bool
       `${candidate.slug}: monitor page leaked into sitemap`,
     );
     const heading = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)?.[1]?.replace(/<[^>]+>/g, '') || '';
+    if (candidate.slug === 'pika' && expectReleased) {
+      assertPikaOnlinePage(
+        pathname,
+        {
+          status: response.status,
+          canonical: canonicalFromHtml(html),
+          noindex: isNoindex(response.headers, html),
+          heading,
+          decisionCard: html.includes('id="decision-card"'),
+        },
+        sitemap.html,
+      );
+    }
     if (expectReleased) {
       assert(
         heading.toLowerCase().includes(candidate.slug.split('-')[0]),
@@ -363,6 +384,24 @@ async function validateOnlineFallback(candidate: Candidate, expectReleased: bool
       `✅ ${candidate.slug}: reserved route is 200, self-canonical, noindex, and outside sitemap; heading reported separately`,
     );
   }
+}
+
+async function validatePikaRelations(toolId: string) {
+  const db = createAdminClient();
+  const [tasks, capabilities, fits] = await Promise.all([
+    db.from('decision_tasks').select('id', { count: 'exact', head: true }).eq('slug', 'pika'),
+    db.from('tool_capabilities').select('id', { count: 'exact', head: true }).eq('tool_id', toolId),
+    db.from('tool_task_fits').select('id', { count: 'exact', head: true }).eq('tool_id', toolId),
+  ]);
+  for (const [label, result] of [
+    ['tasks', tasks],
+    ['capabilities', capabilities],
+    ['fits', fits],
+  ] as const) {
+    if (result.error || result.count === null)
+      throw new Error(`pika: ${label} postcheck unreadable: ${result.error?.message || 'no count'}`);
+  }
+  return { tasks: tasks.count!, capabilities: capabilities.count!, fits: fits.count! };
 }
 
 async function validateDeployedAssets(payload: ReleasePayload) {
@@ -511,12 +550,17 @@ async function main() {
         'ready_for_next_slot',
         `${candidate.slug}: preflight only accepts an unreleased candidate`,
       );
+    } else if (candidate.slug === 'pika') {
+      assert(options.online, 'pika: verify requires --online after a real commit');
+      assert(['ready_for_next_slot', 'released'].includes(audit.status), 'pika: invalid postcommit audit status');
     } else {
       assert.equal(audit.status, 'released', `${candidate.slug}: verify requires a released audit record`);
     }
     const client = await openDatabase();
     try {
-      if (options.phase === 'preflight') await client.query('BEGIN READ ONLY');
+      if (options.phase === 'preflight' || (candidate.slug === 'pika' && options.phase === 'verify')) {
+        await client.query('BEGIN READ ONLY');
+      }
       const matches = await findMatches(client, candidate);
       if (options.phase === 'preflight') {
         if (candidate.existingEntityExpected) {
@@ -545,10 +589,17 @@ async function main() {
         assert.equal(matches.rows[0].name, candidate.slug);
         assert.equal(matches.rows[0].status, 'published');
         assert.equal(matches.rows[0].page_quality_status, 'monitor');
+        if (candidate.slug === 'pika') {
+          const payload = loadPayload(candidate, audit, options.asOf);
+          const relations = await validatePikaRelations(payload.id);
+          assertPikaPostcheck(matches.rows, payload.id, relations);
+        }
       }
       console.log(`✅ ${candidate.slug}: database ${options.phase} passed`);
     } finally {
-      if (options.phase === 'preflight') await client.query('ROLLBACK');
+      if (options.phase === 'preflight' || (candidate.slug === 'pika' && options.phase === 'verify')) {
+        await client.query('ROLLBACK');
+      }
       await client.end();
     }
     if (options.online) await validateOnlineFallback(candidate, options.phase === 'verify');
