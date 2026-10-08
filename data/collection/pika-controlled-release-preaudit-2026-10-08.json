@@ -1,0 +1,149 @@
+{
+  "slug": "pika",
+  "existingRoute": "/ai/pika",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-10-08",
+  "publishNotBefore": "2026-10-08",
+  "releaseIndexState": "monitor",
+  "entityReleaseApproved": true,
+  "claimLevelHolds": [
+    "plan-price",
+    "credit-expiry",
+    "commercial-tier",
+    "download-share-watermark",
+    "export-format",
+    "generation-and-retry-cost",
+    "product-fidelity",
+    "current-video-privacy"
+  ],
+  "publicationPolicy": {
+    "entityGates": {
+      "identity": "pass",
+      "uniqueCanonical": "pass",
+      "duplicateIntent": "pass",
+      "coreFunction": "pass",
+      "assetRightsAndLegalSafety": "pass",
+      "misleadingClaims": "pass",
+      "pageContentSufficiency": "pass"
+    },
+    "claims": [
+      {
+        "id": "plan-price",
+        "category": "price",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Current Create plan cards and legacy FAQ describe different plans and quotas; checkout and migrated-account mapping remain unverified.",
+        "sources": [
+          "https://pika.art/pricing",
+          "https://pika.art/faq",
+          "https://pika.art/blog/welcome-to-the-new-pika"
+        ],
+        "nextReviewDate": "2026-10-15"
+      },
+      {
+        "id": "credit-expiry",
+        "category": "account_rights",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Current Create says purchased top-ups expire after 365 days; legacy FAQ says purchased credits do not expire. Account and migration scope remain unresolved.",
+        "sources": [
+          "https://pika.art/pricing",
+          "https://pika.art/faq",
+          "https://pika.art/blog/welcome-to-the-new-pika"
+        ],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "commercial-tier",
+        "category": "account_rights",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Current Create and legacy FAQ name different commercial tiers; verify the target account, model and delivery rights.",
+        "sources": ["https://pika.art/pricing", "https://pika.art/faq", "https://pika.art/terms-of-service"],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "download-share-watermark",
+        "category": "account_rights",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Current Create plan table and legacy FAQ disagree; download and direct-share paths may differ. Neither was tested here.",
+        "sources": ["https://pika.art/pricing", "https://pika.art/faq"],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "export-format",
+        "category": "core_capability",
+        "status": "unknown",
+        "exposure": "omitted",
+        "preciseRecommendation": false,
+        "publicLimitation": "No authenticated export established container, codec or delivery path.",
+        "sources": ["https://create.pika.art/apps/pika-2-5", "https://create.pika.art/apps/product-ad"],
+        "nextReviewDate": "2026-11-07"
+      },
+      {
+        "id": "generation-and-retry-cost",
+        "category": "account_rights",
+        "status": "unknown",
+        "exposure": "omitted",
+        "preciseRecommendation": false,
+        "publicLimitation": "Pika 2.5 and Product Ad charges, failed-run refunds and retry cost are not established for an account.",
+        "sources": ["https://pika.art/pricing", "https://create.pika.art/apps/product-ad"],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "product-fidelity",
+        "category": "core_capability",
+        "status": "unknown",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Product Ad describes image plus brief but does not establish exact labels, logo or shape fidelity. Inspect each frame.",
+        "sources": ["https://create.pika.art/apps/product-ad", "https://pika.art/terms-of-service"],
+        "nextReviewDate": "2026-11-07"
+      },
+      {
+        "id": "current-video-privacy",
+        "category": "privacy_rights",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Ordinary content may be used for model development; present Create visibility, opt-out and deletion scope require account-specific confirmation.",
+        "sources": ["https://pika.art/terms-of-service", "https://pika.art/privacy-policy", "https://pika.art/faq"],
+        "nextReviewDate": "2026-10-22"
+      }
+    ]
+  },
+  "productionWriteApproved": false,
+  "sitemapChangeApproved": false,
+  "sources": {
+    "official": [
+      "https://pika.art/",
+      "https://pika.art/pricing",
+      "https://pika.art/faq",
+      "https://pika.art/terms-of-service",
+      "https://pika.art/privacy-policy",
+      "https://create.pika.art/apps/pika-2-5",
+      "https://create.pika.art/apps/product-ad",
+      "https://pika.art/blog/welcome-to-the-new-pika",
+      "https://create.pika.art/apps/create-video?tab=video-tools",
+      "https://pika.art/contact"
+    ],
+    "independent": [
+      "https://www.tomsguide.com/ai/ai-image-video/i-just-pika-2-to-the-test-and-its-the-best-ai-video-generator-yet-and-better-than-sora",
+      "https://mspoweruser.com/pika-ai-review/"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Inherit prerelease QA PASS for stable identity, core value and independent market record",
+    "Repeat read-only identity, profile, synonym routes and sitemap checks on release day",
+    "Use AI Best Tool editorial SVG only; no vendor media or screenshot",
+    "Review trilingual Claim limits, sources, correction entry and next-review dates",
+    "Run protected-row preflight and transaction rollback; independent release QA before controller commit",
+    "Verify published + monitor/noindex, sitemap exclusion and zero Task/Capability/Fit writes"
+  ]
+}

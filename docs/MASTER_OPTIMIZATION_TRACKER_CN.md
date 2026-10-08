@@ -2,6 +2,8 @@
 
 更新时间：2026-10-08
 
+2026-10-08 **PIKA-CLAIM-GATED-RELEASE-01 本地受控发布候选 READY_MONITOR**：继承 Owner 所述 prerelease `QA_PASS`，按实体/Claim 两层门禁重审当日冲突与未知项。套餐、credits、商用、水印、导出、重试成本、商品保真和当前视频隐私共八项保留 Claim 级限定；三语公开稿省略无法证明的精确断言。使用本站自有中性 SVG，不复用官方资产。生产只读查重为 0，三语 canonical/noindex 壳页与 sitemap 排除确认；唯一固定 ID 的受保护发布事务已完成 ROLLBACK，`productionWrites=0`。待独立发布 QA 与总控批准、素材部署后才可显式 commit；不批准 index/sitemap 或 Task/Capability/Fit。详见[受控发布候选](./PIKA_CONTROLLED_RELEASE_CANDIDATE_2026-10-08_CN.md)。
+
 2026-10-08 **FRESHNESS-BATCH-03 生产提交与独立 QA 完成**：Owner 明确授权按顺序执行，不再等待原计划 `publishNotBefore=2026-10-09`；该时间覆盖被固定为第三批专属元数据，first/second 批次在连接数据库前拒绝复用，证据、前像、回滚、QA 与索引门禁均未放宽。Claude、DeepL、Emdash、Fathom、The Graph 共 5 项完成受控更新；生产 commit `productionWrites=5`，修复已应用记录重复重放前像补丁后，只读 postcheck 全部为 `already_applied`、`changedFields=[]`、`productionWrites=0`。Fathom 的前像漂移被证明仅来自一次页面访问引起的 `view_count/updated_at` 变化，业务事实未变。published 到期数从 24 降至 **19**，`claim_due` 从 11 降至 **6**；工具状态、canonical、index 和 sitemap 均未改变。详见[第三批交付记录](./FRESHNESS_THIRD_BATCH_2026-10-08_CN.md)与[提交后积压审计](./FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json)。
 
 2026-10-08 **FRESHNESS-BACKLOG-RESET-01 首批生产提交与幂等 postcheck 完成**：总控已按原始 preflight 提交 Consensus、Gamma、Perplexity、Make、Synthesia 共 5 条；只读全量审计的 published 到期数从 34 降至 **29**（排期同步 1、Claim 到期 16、实体核查 5、人工归档评估 7）。提交后旧 PASS 校验器一度将已应用的新 `maintenanceReview` 误判为快照错配；现已改为严格区分提交前与已应用记录，后者必须精确匹配候选维护记录和下次日期，并保留原始 preflight manifest 与来源哈希的追溯。5 条只读 postcheck 全为 `already_applied`、`changedFields=[]`、`productionWrites=0`；修复过程未再次写生产、未 push。详见[交付与 postcheck](./FRESHNESS_BACKLOG_RESET_2026-10-08_CN.md)。

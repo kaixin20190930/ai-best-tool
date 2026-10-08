@@ -9,6 +9,7 @@ import { getDatabaseConnectionString } from '../lib/database/connection';
 import { assertVideoReadback, validateVideoUrl } from './candidate-release-video';
 import { validateOptionalPublicationPolicy, type PublicationPolicyManifest } from './claim-publication-policy';
 import { assertMurfEmptyPreimage, assertMurfSingleInsert } from './murf-release-guard';
+import { assertPikaEmptyPreimage, assertPikaSingleInsert } from './pika-release-guard';
 
 type Candidate = {
   slug: string;
@@ -148,6 +149,12 @@ const candidates: Candidate[] = [
     aliases: ['murf', 'murf-ai', 'murf studio'],
     domain: 'murf.ai',
     preauditFile: 'murf-controlled-release-preaudit-2026-10-08.json',
+  },
+  {
+    slug: 'pika',
+    aliases: ['pika', 'pika-ai', 'pika-labs', 'mellis'],
+    domain: 'pika.art',
+    preauditFile: 'pika-controlled-release-preaudit-2026-10-08.json',
   },
 ];
 
@@ -393,9 +400,10 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       matches.rows.every((row) => row.id === payload.id && row.name === candidate.slug),
       `${candidate.slug}: conflicting entity exists`,
     );
-    if (candidate.slug === 'murf') {
+    if (candidate.slug === 'murf' || candidate.slug === 'pika') {
       const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
-      assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
+      if (candidate.slug === 'murf') assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
+      else assertPikaEmptyPreimage(matches.rows, existingId.rows, payload.id);
     }
     const category = await client.query('SELECT id FROM categories WHERE slug = $1', [payload.categorySlug]);
     assert.equal(category.rowCount, 1, `${candidate.slug}: storage category must exist exactly once`);
@@ -428,10 +436,11 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
         payload.features,
         useCases,
         payload.nextReviewDate,
-        candidate.slug === 'murf',
+        candidate.slug === 'murf' || candidate.slug === 'pika',
       ],
     );
     if (candidate.slug === 'murf') assertMurfSingleInsert(insert.rowCount);
+    if (candidate.slug === 'pika') assertPikaSingleInsert(insert.rowCount);
     const row = await client.query(
       'SELECT id, name, url, status, page_quality_status, features, title, content, detail, use_cases, image_url, thumbnail_url, video_url, next_review_date::text AS next_review_date FROM tools WHERE id = $1',
       [payload.id],
@@ -523,10 +532,11 @@ async function main() {
           );
         } else {
           assert.equal(matches.rowCount, 0, `${candidate.slug}: existing entity requires manual review`);
-          if (candidate.slug === 'murf') {
+          if (candidate.slug === 'murf' || candidate.slug === 'pika') {
             const payload = loadPayload(candidate, audit, options.asOf);
             const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
-            assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
+            if (candidate.slug === 'murf') assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
+            else assertPikaEmptyPreimage(matches.rows, existingId.rows, payload.id);
           }
         }
       }
