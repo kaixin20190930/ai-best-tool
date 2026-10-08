@@ -6,6 +6,15 @@
       "slug": "consensus",
       "outcome": "fact_updated",
       "preimageSha256": "88c7a04632803860892142fa886560956dac038ebe633bd9512af21149e8d3ec",
+      "passSnapshot": {
+        "id": "maintenance-2026-09-06:consensus",
+        "source": "lib/config/toolMaintenanceReviews.ts",
+        "sha256": "1bf781b7e9b0ab784793380c90081fadfc5f3f6b959a92db02ef817f70da3491",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-10-06",
+        "scope": "entity_baseline_only"
+      },
       "changedFields": [
         "detail",
         "features",
@@ -26,6 +35,15 @@
       "slug": "gamma",
       "outcome": "reviewed_no_change",
       "preimageSha256": "f6b36166fb7343d2ead695ea11ee59f9c04e810ee9c781ccb5f574077e8cafb2",
+      "passSnapshot": {
+        "id": "maintenance-2026-09-06:gamma",
+        "source": "lib/config/toolMaintenanceReviews.ts",
+        "sha256": "1bf781b7e9b0ab784793380c90081fadfc5f3f6b959a92db02ef817f70da3491",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-10-06",
+        "scope": "entity_baseline_only"
+      },
       "changedFields": [
         "features",
         "next_review_date"
@@ -45,6 +63,15 @@
       "slug": "perplexity",
       "outcome": "fact_updated",
       "preimageSha256": "25edd641c2f30f6f808444200dd5ee33c80a19d36ad5f2378d33279312b885eb",
+      "passSnapshot": {
+        "id": "maintenance-2026-09-06:perplexity",
+        "source": "lib/config/toolMaintenanceReviews.ts",
+        "sha256": "1bf781b7e9b0ab784793380c90081fadfc5f3f6b959a92db02ef817f70da3491",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-10-06",
+        "scope": "entity_baseline_only"
+      },
       "changedFields": [
         "detail",
         "features",
@@ -65,6 +92,15 @@
       "slug": "make",
       "outcome": "reviewed_no_change",
       "preimageSha256": "c34f77e053d88e537fbae572d67723302630fd066d31550f1c4afe3e6843017a",
+      "passSnapshot": {
+        "id": "maintenance-2026-09-06:make",
+        "source": "lib/config/toolMaintenanceReviews.ts",
+        "sha256": "1bf781b7e9b0ab784793380c90081fadfc5f3f6b959a92db02ef817f70da3491",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-10-06",
+        "scope": "entity_baseline_only"
+      },
       "changedFields": [
         "features",
         "next_review_date"
@@ -84,6 +120,15 @@
       "slug": "synthesia",
       "outcome": "fact_updated",
       "preimageSha256": "4d0031801d0a3fdb3a16cdc50ab96e943b39ca16a1c0556a1e4dd23cabf1c1fd",
+      "passSnapshot": {
+        "id": "release-2026-09-08:synthesia",
+        "source": "data/collection/synthesia-release.json",
+        "sha256": "4a3dae6fc47fe77723c6b5e1b2725c4c3593d9e9ef8ce77a55be94c30259fe29",
+        "reviewedAt": "2026-09-08",
+        "validThrough": "2026-12-07",
+        "claimDueAt": "2026-10-08",
+        "scope": "entity_baseline_only"
+      },
       "changedFields": [
         "detail",
         "features",

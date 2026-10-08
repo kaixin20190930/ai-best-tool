@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import { classifyBacklog, selectBacklogBatch, type BacklogRow } from './freshness-backlog';
 import { claimReviewIntervalDays } from './claim-publication-policy';
 import { FIRST_BATCH, applyCandidateDetail } from './freshness-first-batch';
+import { verifyFreshnessPassSnapshot } from './verify-freshness-pass-snapshot';
 
 const base: BacklogRow = { id: 'a', name: 'claude', status: 'published', page_quality_status: 'continue_index',
   next_review_date: '2026-10-01', updated_at: '2026-10-08', url: 'https://claude.ai',
@@ -15,6 +16,9 @@ assert.equal(classifyBacklog({ ...base, status: 'draft' }, '2026-10-08'), null);
 const items = Array.from({ length: 9 }, (_, index) => classifyBacklog({ ...base, id: String(index), name: `tool-${index}` }, '2026-10-08')!);
 assert.equal(selectBacklogBatch(items).length, 5);
 assert.throws(() => selectBacklogBatch(items, 6));
+assert.deepEqual(selectBacklogBatch([
+  { ...items[0], slug: 'z', priority: 1 }, { ...items[1], slug: 'a', priority: 1 },
+], 2).map(item => item.slug), ['a', 'z']);
 assert.equal(claimReviewIntervalDays('price', 'routine'), 14);
 assert.equal(claimReviewIntervalDays('account_rights', 'first'), 14);
 assert.equal(claimReviewIntervalDays('account_rights', 'routine', 2), 30);
@@ -29,10 +33,22 @@ assert(changed.en.includes('500 API or MCP calls'));
 assert(changed.en.includes('2,000 per month'));
 assert.equal(detail.en.includes('250 API'), true);
 assert.throws(() => applyCandidateDetail({ ...detail, en: 'unexpected' }, consensus), /missing exact preimage/);
+const passRow = { id: consensus.id, name: consensus.slug, status: 'published', url: 'https://consensus.app/',
+  features: { maintenanceReview: { checkedAt: '2026-09-06', nextReviewDate: '2026-10-06' } } };
+assert.equal(verifyFreshnessPassSnapshot(consensus, passRow, '2026-10-08').id, consensus.passSnapshot.id);
+assert.throws(() => verifyFreshnessPassSnapshot({ ...consensus, passSnapshot: { ...consensus.passSnapshot, id: '' } }, passRow, '2026-10-08'), /missing PASS/);
+assert.throws(() => verifyFreshnessPassSnapshot(consensus, passRow, '2026-12-06'), /expired/);
+assert.throws(() => verifyFreshnessPassSnapshot(consensus, { ...passRow, id: 'wrong' }, '2026-10-08'), /does not match PASS identity/);
+assert.throws(() => verifyFreshnessPassSnapshot({ ...consensus, passSnapshot: { ...consensus.passSnapshot, sha256: '0'.repeat(64) } }, passRow, '2026-10-08'), /digest mismatch/);
+assert.throws(() => verifyFreshnessPassSnapshot({ ...consensus, passSnapshot: { ...consensus.passSnapshot, validThrough: '2027-01-01' } }, passRow, '2026-10-08'), /cadence/);
+const synthesia = FIRST_BATCH[4];
+assert.equal(verifyFreshnessPassSnapshot(synthesia, { id: synthesia.id, name: synthesia.slug, status: 'published',
+  url: 'https://www.synthesia.io/', features: { editorial: { reviewedAt: '2026-09-08' } } }, '2026-10-08').id,
+  synthesia.passSnapshot.id);
 const runner = fs.readFileSync('scripts/run-freshness-first-batch.ts', 'utf8');
 assert(runner.includes("'BEGIN READ ONLY'"));
 assert(runner.includes("'ROLLBACK'"));
-assert(runner.includes('preimage drift'));
+assert(runner.includes('preimage or PASS snapshot drift'));
 assert(runner.includes('alreadyApplied'));
 assert(runner.includes('protectedKeys'));
 assert(!/UPDATE public\.tools SET[^`]*page_quality_status/s.test(runner));

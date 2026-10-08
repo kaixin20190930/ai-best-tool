@@ -7,6 +7,7 @@
 - `pnpm exec tsx scripts/audit-freshness-backlog.ts --date=2026-10-08` 只读全量分类。可用 `--out=路径` 保存 JSON；默认 selector 依据索引风险、Task/Decision 依赖、逾期天数及官方来源是否存在排序，最多取 5 条。人工归档评估不自动下架。
 - 每天最多并行推进 1 个成熟新工具及 1 个最多 5 条的 freshness 批次。新工具按实体门禁与 Claim 级限定发布到 monitor/noindex；账户级未决事实保留限定和复核日。索引另走独立审批。
 - 首批指定 Consensus、Gamma、Perplexity、Make、Synthesia，来自既有 PASS 快照的增量核查；这不是 selector 自动前五。每条有独立官方来源、前像哈希、变更字段和回滚边界。[preflight](./FRESHNESS_FIRST_BATCH_PREFLIGHT_2026-10-08.json) 与 [rollback](./FRESHNESS_FIRST_BATCH_ROLLBACK_2026-10-08.json) 均已完成，未提交生产。无迁移，无索引或 sitemap 改动。
+- 继承的 PASS 仅覆盖实体身份基线，不延长旧 Claim 的有效期。四条 2026-09-06 维护 PASS 来自 `lib/config/toolMaintenanceReviews.ts`，Synthesia 2026-09-08 发布 PASS 来自 `data/collection/synthesia-release.json`；每条报告保存快照 ID、文件 SHA-256、原复核日、原 Claim 到期日及实体基线 `validThrough`。实体基线期限按身份/canonical 常规 90 天推导，分别为 2026-12-05 和 2026-12-07；四条旧 Claim 已于 10-06 到期，Synthesia 于 10-08 到期，正是本次增量官方核查的对象。preflight 校验来源文件、生产 ID/slug/URL、原维护或编辑日期与未过期实体基线，任何缺失、错配或过期都停止。
 
 ## 首批结论
 

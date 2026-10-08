@@ -52,5 +52,5 @@ export function classifyBacklog(row: BacklogRow, today: string) {
 
 export function selectBacklogBatch(items: NonNullable<ReturnType<typeof classifyBacklog>>[], limit = 5) {
   if (!Number.isInteger(limit) || limit < 1 || limit > 5) throw new Error('Freshness batch limit must be 1..5');
-  return [...items].sort((a, b) => b.priority - a.priority || a.slug.localeCompare(b.slug)).slice(0, limit);
+  return [...items].sort((a, b) => b.priority - a.priority || (a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0)).slice(0, limit);
 }

@@ -5,6 +5,7 @@ import { config } from 'dotenv';
 import { Client } from 'pg';
 import { getDatabaseConnectionString } from '../lib/database/connection';
 import { FIRST_BATCH, applyCandidateDetail } from './freshness-first-batch';
+import { verifyFreshnessPassSnapshot } from './verify-freshness-pass-snapshot';
 
 const protectedKeys = ['status','page_quality_status','name','url','title','id','pricing'];
 const hash = (value: unknown) => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -33,13 +34,16 @@ async function main() {
         const found = await client.query(`${readSql}${mode === 'preflight' ? '' : ' FOR UPDATE'}`, [candidate.id, candidate.slug]);
         assert.equal(found.rowCount, 1, `${candidate.slug}: entity missing or duplicate`);
         const before = found.rows[0].record;
+        const passSnapshot = verifyFreshnessPassSnapshot(candidate, before, new Date().toISOString().slice(0, 10));
         assert.equal(before.status, 'published');
         assert(['monitor','continue_index'].includes(before.page_quality_status));
         assert(before.features && typeof before.features === 'object' && !Array.isArray(before.features));
         if (!before.url || !/^https:\/\//.test(before.url)) throw new Error(`${candidate.slug}: entity URL risk`);
         const beforeHash = hash(before);
         const approved = manifest?.results?.find((item: any) => item.slug === candidate.slug);
-        if (mode === 'commit' && (!approved || approved.preimageSha256 !== beforeHash)) throw new Error(`${candidate.slug}: preimage drift`);
+        if (mode === 'commit' && (!approved || approved.preimageSha256 !== beforeHash ||
+            JSON.stringify(approved.passSnapshot) !== JSON.stringify(passSnapshot)))
+          throw new Error(`${candidate.slug}: preimage or PASS snapshot drift`);
         const alreadyApplied = before.features?.maintenanceReview?.checkedAt === candidate.checkedAt &&
           before.features?.maintenanceReview?.changeSummary === candidate.changeSummary &&
           found.rows[0].due === candidate.nextReviewDate;
@@ -70,6 +74,7 @@ async function main() {
         }
         if (mode === 'commit') await client.query('COMMIT'); else await client.query('ROLLBACK');
         results.push({ slug: candidate.slug, outcome: candidate.outcome, preimageSha256: beforeHash,
+          passSnapshot,
           changedFields: alreadyApplied ? [] : changes, nextReviewDate: candidate.nextReviewDate,
           sources: candidate.sources, unresolved: candidate.unresolved, status: alreadyApplied ? 'already_applied' : mode === 'commit' ? 'committed' : mode === 'rollback' ? 'rolled_back' : 'ready' });
       } catch (error) { await client.query('ROLLBACK'); throw error; }
