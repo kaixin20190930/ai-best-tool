@@ -1,6 +1,22 @@
 import type { ReviewCandidate } from './freshness-first-batch';
 
 export const THIRD_BATCH_PUBLISH_NOT_BEFORE = '2026-10-09';
+export const THIRD_BATCH_OWNER_TIME_OVERRIDE = Object.freeze({
+  batch: 'third',
+  originalPublishNotBefore: THIRD_BATCH_PUBLISH_NOT_BEFORE,
+  ownerAuthorizedOn: '2026-10-08',
+  effectiveReleaseDate: '2026-10-08',
+  reason: 'Owner authorized sequential execution without calendar delay',
+});
+export function thirdBatchReleaseAllowed(asOfShanghai: string) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(asOfShanghai) &&
+    asOfShanghai >= THIRD_BATCH_OWNER_TIME_OVERRIDE.effectiveReleaseDate;
+}
+export function assertThirdBatchReleaseManifest(manifest: Record<string, any>) {
+  if (manifest?.publishNotBefore !== THIRD_BATCH_PUBLISH_NOT_BEFORE ||
+      JSON.stringify(manifest?.ownerTimeOverride) !== JSON.stringify(THIRD_BATCH_OWNER_TIME_OVERRIDE))
+    throw new Error('Third batch reviewed manifest owner time override mismatch');
+}
 const source = 'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json';
 const sha256 = '8c8f4bf6780adc2d11c6eef4d40e25df66c6bded0f4fc74a6b8bc69d6a994557';
 const pass = (slug: string, due: string, iso = false) => ({

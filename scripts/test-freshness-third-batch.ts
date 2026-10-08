@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
-import THIRD_BATCH, { applyCandidateFeatures, THIRD_BATCH_PUBLISH_NOT_BEFORE } from './freshness-third-batch';
+import THIRD_BATCH, { applyCandidateFeatures, assertThirdBatchReleaseManifest, thirdBatchReleaseAllowed,
+  THIRD_BATCH_OWNER_TIME_OVERRIDE, THIRD_BATCH_PUBLISH_NOT_BEFORE } from './freshness-third-batch';
 import { applyCandidateDetail } from './freshness-first-batch';
 import { inspectFreshnessState, freshnessProductionWrites, freshnessResultStatus } from './freshness-batch-state';
 
@@ -11,10 +12,22 @@ const rollback = JSON.parse(fs.readFileSync('docs/FRESHNESS_THIRD_BATCH_ROLLBACK
 const hash = (value: unknown) => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
 assert.equal(THIRD_BATCH_PUBLISH_NOT_BEFORE, '2026-10-09');
+assert.deepEqual(THIRD_BATCH_OWNER_TIME_OVERRIDE, {
+  batch: 'third', originalPublishNotBefore: '2026-10-09', ownerAuthorizedOn: '2026-10-08',
+  effectiveReleaseDate: '2026-10-08', reason: 'Owner authorized sequential execution without calendar delay',
+});
+assert.equal(thirdBatchReleaseAllowed('2026-10-07'), false);
+assert.equal(thirdBatchReleaseAllowed('2026-10-08'), true);
+assert.equal(thirdBatchReleaseAllowed('2026-10-09'), true);
+assert.equal(thirdBatchReleaseAllowed('invalid'), false);
+assertThirdBatchReleaseManifest(preflight);
+assert.throws(() => assertThirdBatchReleaseManifest({ ...preflight, ownerTimeOverride: { ...THIRD_BATCH_OWNER_TIME_OVERRIDE, effectiveReleaseDate: '2026-10-07' } }), /owner time override mismatch/);
+assert.throws(() => assertThirdBatchReleaseManifest({ ...preflight, publishNotBefore: '2026-10-08' }), /owner time override mismatch/);
 assert.deepEqual(THIRD_BATCH.map(row => row.slug), audit.selected);
 for (const artifact of [preflight, rollback]) {
   assert.equal(artifact.productionWrites, 0);
   assert.equal(artifact.publishNotBefore, THIRD_BATCH_PUBLISH_NOT_BEFORE);
+  assert.deepEqual(artifact.ownerTimeOverride, THIRD_BATCH_OWNER_TIME_OVERRIDE);
   assert.equal(artifact.results.length, 5);
 }
 assert.equal(preflight.mode, 'preflight');

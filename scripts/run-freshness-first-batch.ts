@@ -6,7 +6,8 @@ import { Client } from 'pg';
 import { getDatabaseConnectionString } from '../lib/database/connection';
 import { FIRST_BATCH, applyCandidateDetail } from './freshness-first-batch';
 import SECOND_BATCH from './freshness-second-batch';
-import THIRD_BATCH, { applyCandidateFeatures, THIRD_BATCH_PUBLISH_NOT_BEFORE } from './freshness-third-batch';
+import THIRD_BATCH, { applyCandidateFeatures, assertThirdBatchReleaseManifest, thirdBatchReleaseAllowed,
+  THIRD_BATCH_OWNER_TIME_OVERRIDE, THIRD_BATCH_PUBLISH_NOT_BEFORE } from './freshness-third-batch';
 import { freshnessProductionWrites, freshnessResultStatus, inspectFreshnessState } from './freshness-batch-state';
 
 const protectedKeys = ['status','page_quality_status','name','url','title','id','pricing'];
@@ -24,12 +25,11 @@ async function main() {
   if (mode === 'commit' && !manifestPath) throw new Error('Commit requires reviewed --manifest path');
   if (args.some(arg => !['--commit','--rollback','--batch=second','--batch=third'].includes(arg) && !arg.startsWith('--manifest=') && !arg.startsWith('--out='))) throw new Error('Unsupported argument');
   if (args.includes('--batch=second') && third) throw new Error('Choose one batch');
-  if (third && mode === 'commit' && new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()) < THIRD_BATCH_PUBLISH_NOT_BEFORE)
-    throw new Error(`Third batch publishNotBefore ${THIRD_BATCH_PUBLISH_NOT_BEFORE}`);
+  if (third && mode === 'commit' && !thirdBatchReleaseAllowed(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())))
+    throw new Error(`Third batch effectiveReleaseDate ${THIRD_BATCH_OWNER_TIME_OVERRIDE.effectiveReleaseDate}`);
   const manifest = manifestPath ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')) : null;
   if (mode === 'commit' && (manifest?.mode !== 'preflight' || manifest?.results?.length !== 5)) throw new Error('Invalid reviewed manifest');
-  if (third && mode === 'commit' && manifest?.publishNotBefore !== THIRD_BATCH_PUBLISH_NOT_BEFORE)
-    throw new Error('Third batch reviewed manifest release slot mismatch');
+  if (third && mode === 'commit') assertThirdBatchReleaseManifest(manifest);
   config({ path: '.env.local', quiet: true });
   const client = new Client({ connectionString: getDatabaseConnectionString() });
   await client.connect();
@@ -87,7 +87,8 @@ async function main() {
           sources: candidate.sources, unresolved: candidate.unresolved, status: freshnessResultStatus(mode, alreadyApplied) });
       } catch (error) { await client.query('ROLLBACK'); throw error; }
     }
-    const output = { mode, ...(third ? { publishNotBefore: THIRD_BATCH_PUBLISH_NOT_BEFORE } : {}), productionWrites: freshnessProductionWrites(mode, results), results };
+    const output = { mode, ...(third ? { publishNotBefore: THIRD_BATCH_PUBLISH_NOT_BEFORE,
+      ownerTimeOverride: THIRD_BATCH_OWNER_TIME_OVERRIDE } : {}), productionWrites: freshnessProductionWrites(mode, results), results };
     const out = args.find(arg => arg.startsWith('--out='))?.slice(6);
     if (out) fs.writeFileSync(out, JSON.stringify(output, null, 2) + '\n');
     else console.log(JSON.stringify(output, null, 2));

@@ -1,6 +1,13 @@
 {
   "mode": "rollback",
   "publishNotBefore": "2026-10-09",
+  "ownerTimeOverride": {
+    "batch": "third",
+    "originalPublishNotBefore": "2026-10-09",
+    "ownerAuthorizedOn": "2026-10-08",
+    "effectiveReleaseDate": "2026-10-08",
+    "reason": "Owner authorized sequential execution without calendar delay"
+  },
   "productionWrites": 0,
   "results": [
     {
@@ -94,7 +101,7 @@
     {
       "slug": "fathom",
       "outcome": "fact_updated",
-      "preimageSha256": "19e58990b3490ac173b6765194c2cbbec4bcc94dff76853e5bdaed9ea27ed428",
+      "preimageSha256": "0a6d048bc89e6be0b1f5daaa7e555e995301849548020c76706644fecee94964",
       "passSnapshot": {
         "id": "editorial-2026-09-01:fathom",
         "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json",
