@@ -44,24 +44,30 @@ async function main() {
     .select('id,product_name,canonical_domain')
     .or('product_name.ilike.%murf%,canonical_domain.ilike.%murf%,canonical_domain.ilike.%murf studio%');
   if (profiles.error) throw new Error(profiles.error.message);
-  const pages = await Promise.all(
-    ['/ai/murf', '/cn/ai/murf', '/tw/ai/murf', '/ai/murf-ai', '/cn/ai/murf-ai', '/tw/ai/murf-ai', '/sitemap.xml'].map(
-      async (path) => {
-        const r = await fetch('https://aibesttool.com' + path);
-        const html = await r.text();
-        return {
-          path,
-          status: r.status,
-          canonical: html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1],
-          robots: html.match(/<meta name="robots" content="([^"]+)"/)?.[1],
-          h1: html.match(/<h1[^>]*>(.*?)<\/h1>/s)?.[1]?.replace(/<[^>]*>/g, ''),
-          ...(path === '/sitemap.xml'
-            ? { locCount: (html.match(/<loc>/g) || []).length, murfMatches: (html.match(/murf/gi) || []).length }
-            : {}),
-        };
-      },
-    ),
-  );
+  const pages = [];
+  for (const path of [
+    '/ai/murf',
+    '/cn/ai/murf',
+    '/tw/ai/murf',
+    '/ai/murf-ai',
+    '/cn/ai/murf-ai',
+    '/tw/ai/murf-ai',
+    '/sitemap.xml',
+  ]) {
+    const r = await fetch('https://aibesttool.com' + path, { redirect: 'manual', signal: AbortSignal.timeout(20_000) });
+    const html = await r.text();
+    pages.push({
+      path,
+      status: r.status,
+      location: r.headers.get('location'),
+      canonical: html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1],
+      robots: html.match(/<meta name="robots" content="([^"]+)"/)?.[1],
+      h1: html.match(/<h1[^>]*>(.*?)<\/h1>/s)?.[1]?.replace(/<[^>]*>/g, ''),
+      ...(path === '/sitemap.xml'
+        ? { locCount: (html.match(/<loc>/g) || []).length, murfMatches: (html.match(/murf/gi) || []).length }
+        : {}),
+    });
+  }
   console.log(
     JSON.stringify(
       {
@@ -78,6 +84,6 @@ async function main() {
   );
 }
 main().catch((e) => {
-  console.error(e.message);
+  console.error(e.stack || e.message);
   process.exitCode = 1;
 });

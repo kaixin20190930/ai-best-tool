@@ -7,10 +7,8 @@ import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
 import { assertVideoReadback, validateVideoUrl } from './candidate-release-video';
-import {
-  validateOptionalPublicationPolicy,
-  type PublicationPolicyManifest,
-} from './claim-publication-policy';
+import { validateOptionalPublicationPolicy, type PublicationPolicyManifest } from './claim-publication-policy';
+import { assertMurfEmptyPreimage, assertMurfSingleInsert } from './murf-release-guard';
 
 type Candidate = {
   slug: string;
@@ -144,6 +142,12 @@ const candidates: Candidate[] = [
     aliases: ['elicit'],
     domain: 'elicit.com',
     preauditFile: 'elicit-material-display-preaudit-2026-10-07.json',
+  },
+  {
+    slug: 'murf',
+    aliases: ['murf', 'murf-ai', 'murf studio'],
+    domain: 'murf.ai',
+    preauditFile: 'murf-controlled-release-preaudit-2026-10-08.json',
   },
 ];
 
@@ -389,9 +393,13 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       matches.rows.every((row) => row.id === payload.id && row.name === candidate.slug),
       `${candidate.slug}: conflicting entity exists`,
     );
+    if (candidate.slug === 'murf') {
+      const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
+      assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
+    }
     const category = await client.query('SELECT id FROM categories WHERE slug = $1', [payload.categorySlug]);
     assert.equal(category.rowCount, 1, `${candidate.slug}: storage category must exist exactly once`);
-    await client.query(
+    const insert = await client.query(
       `INSERT INTO tools
        (id, name, title, content, detail, url, image_url, thumbnail_url, video_url, category_id, tags, pricing,
         features, use_cases, screenshots, status, page_quality_status, next_review_date, created_at, updated_at)
@@ -402,7 +410,8 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
          video_url=COALESCE(EXCLUDED.video_url,tools.video_url),
          category_id=EXCLUDED.category_id,tags=EXCLUDED.tags,pricing=EXCLUDED.pricing,
          features=EXCLUDED.features,use_cases=EXCLUDED.use_cases,status='published',
-         page_quality_status='monitor',next_review_date=EXCLUDED.next_review_date,updated_at=NOW()`,
+         page_quality_status='monitor',next_review_date=EXCLUDED.next_review_date,updated_at=NOW()
+       WHERE $16::boolean = false`,
       [
         payload.id,
         candidate.slug,
@@ -419,8 +428,10 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
         payload.features,
         useCases,
         payload.nextReviewDate,
+        candidate.slug === 'murf',
       ],
     );
+    if (candidate.slug === 'murf') assertMurfSingleInsert(insert.rowCount);
     const row = await client.query(
       'SELECT id, name, url, status, page_quality_status, features, title, content, detail, use_cases, image_url, thumbnail_url, video_url, next_review_date::text AS next_review_date FROM tools WHERE id = $1',
       [payload.id],
@@ -496,6 +507,7 @@ async function main() {
     }
     const client = await openDatabase();
     try {
+      if (options.phase === 'preflight') await client.query('BEGIN READ ONLY');
       const matches = await findMatches(client, candidate);
       if (options.phase === 'preflight') {
         if (candidate.existingEntityExpected) {
@@ -511,6 +523,11 @@ async function main() {
           );
         } else {
           assert.equal(matches.rowCount, 0, `${candidate.slug}: existing entity requires manual review`);
+          if (candidate.slug === 'murf') {
+            const payload = loadPayload(candidate, audit, options.asOf);
+            const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
+            assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
+          }
         }
       }
       if (options.phase === 'verify') {
@@ -521,6 +538,7 @@ async function main() {
       }
       console.log(`✅ ${candidate.slug}: database ${options.phase} passed`);
     } finally {
+      if (options.phase === 'preflight') await client.query('ROLLBACK');
       await client.end();
     }
     if (options.online) await validateOnlineFallback(candidate, options.phase === 'verify');

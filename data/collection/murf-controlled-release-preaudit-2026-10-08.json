@@ -1,0 +1,146 @@
+{
+  "slug": "murf",
+  "existingRoute": "/ai/murf",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-10-08",
+  "publishNotBefore": "2026-10-08",
+  "releaseIndexState": "monitor",
+  "entityReleaseApproved": true,
+  "claimLevelHolds": [
+    "studio-checkout-price",
+    "studio-plan-entitlements",
+    "studio-project-and-vgt-quota",
+    "termination-and-deletion",
+    "existing-audio-retrieval",
+    "ordinary-studio-training"
+  ],
+  "publicationPolicy": {
+    "entityGates": {
+      "identity": "pass",
+      "uniqueCanonical": "pass",
+      "duplicateIntent": "pass",
+      "coreFunction": "pass",
+      "assetRightsAndLegalSafety": "pass",
+      "misleadingClaims": "pass",
+      "pageContentSufficiency": "pass"
+    },
+    "claims": [
+      {
+        "id": "studio-checkout-price",
+        "category": "price",
+        "status": "unknown",
+        "exposure": "omitted",
+        "preciseRecommendation": false,
+        "publicLimitation": "Current Studio price and billing terms require the intended account checkout.",
+        "sources": ["https://murf.ai/pricing"],
+        "nextReviewDate": "2026-10-15"
+      },
+      {
+        "id": "studio-plan-entitlements",
+        "category": "account_rights",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Creator/Business exports, editor seats and collaboration depend on the selected plan and account. Do not infer a universal entitlement from a public card.",
+        "sources": ["https://murf.ai/pricing", "https://help.murf.ai/invite-users-to-project"],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "studio-project-and-vgt-quota",
+        "category": "account_rights",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Current Studio cards and Workspace help disagree on project and generation quotas. Verify the intended account and order; no exact quota is promised.",
+        "sources": [
+          "https://murf.ai/pricing",
+          "https://help.murf.ai/what-is-a-workspace",
+          "https://help.murf.ai/projects"
+        ],
+        "nextReviewDate": "2026-10-15"
+      },
+      {
+        "id": "termination-and-deletion",
+        "category": "privacy_rights",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Privacy and Security pages use different 30/90-day account and Customer Data deletion scopes, with exceptions. Cancellation, termination and a deletion request differ; confirm the applicable contract.",
+        "sources": [
+          "https://murf.ai/legal/privacy-policy",
+          "https://murf.ai/security",
+          "https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling"
+        ],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "existing-audio-retrieval",
+        "category": "privacy_rights",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Cancellation help describes paid download ending with the billing cycle; Security describes retrieval of existing audio after agreement end. Scope and mechanism are unresolved.",
+        "sources": [
+          "https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling",
+          "https://murf.ai/security"
+        ],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "ordinary-studio-training",
+        "category": "privacy_rights",
+        "status": "unknown",
+        "exposure": "omitted",
+        "preciseRecommendation": false,
+        "publicLimitation": "The Enterprise no-training statement has not been established for ordinary Studio accounts.",
+        "sources": ["https://murf.ai/pricing", "https://murf.ai/legal/privacy-policy"],
+        "nextReviewDate": "2026-10-22"
+      }
+    ]
+  },
+  "productionWriteApproved": false,
+  "sitemapChangeApproved": false,
+  "sources": {
+    "official": [
+      "https://murf.ai/",
+      "https://murf.ai/pricing",
+      "https://help.murf.ai/do-i-have-commercial-rights-over-the-voice-over-created",
+      "https://murf.ai/legal/terms-of-service",
+      "https://murf.ai/legal/privacy-policy",
+      "https://murf.ai/security",
+      "https://help.murf.ai/is-murf-free-to-use",
+      "https://help.murf.ai/how-can-i-get-more-vgt-during-my-free-trial",
+      "https://help.murf.ai/what-is-a-workspace",
+      "https://help.murf.ai/projects",
+      "https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling",
+      "https://help.murf.ai/what-is-voice-generation-time-vgt",
+      "https://help.murf.ai/vgt-validity",
+      "https://help.murf.ai/murf-studio-basics",
+      "https://help.murf.ai/languages-and-accents",
+      "https://help.murf.ai/invite-users-to-project",
+      "https://help.murf.ai/import-limits",
+      "https://help.murf.ai/timeline-introduction",
+      "https://help.murf.ai/syncing-images-and-videos-with-voice-blocks",
+      "https://help.murf.ai/voice-only",
+      "https://help.murf.ai/voice-music",
+      "https://help.murf.ai/video-export",
+      "https://help.murf.ai/what-are-youtube-codes",
+      "https://murf.ai/legal/affiliate-program-terms-of-service",
+      "https://murf.ai/legal/api-usage-agreement"
+    ],
+    "independent": [
+      "https://scholarworks.iu.edu/journals/index.php/ijdl/article/view/42061",
+      "https://www.reddit.com/r/instructionaldesign/comments/1fonqvp/murf_is_not_being_truthful_about_their_pricing/"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Inherit identity/alias/media and independent content QA PASS from deployed closeout",
+    "Release-day cross-store unique Murf Studio entity and canonical read-only check",
+    "Exact Claim-level boundary and public source review",
+    "Validate deployed editorial cover and official tutorial embed",
+    "Capture target-row baseline and run transaction rollback",
+    "Single explicit controller commit only after candidate approval",
+    "Verify monitor/noindex, sitemap exclusion and no Task/Capability/Fit writes"
+  ]
+}

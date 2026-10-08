@@ -1,0 +1,380 @@
+{
+  "id": "8f2d4b5e-7481-4bb8-9f21-8d2de1c0f631",
+  "slug": "murf",
+  "officialUrl": "https://murf.ai/",
+  "reviewedAt": "2026-10-08",
+  "nextReviewDate": "2026-10-15",
+  "categorySlug": "chatbot",
+  "pricing": "freemium",
+  "title": {
+    "en": "Murf Studio: AI narration and media timeline",
+    "zh": "Murf Studio：AI 旁白与媒体时间轴",
+    "cn": "Murf Studio：AI 旁白與媒體時間軸"
+  },
+  "content": {
+    "en": "Murf Studio turns scripts into editable AI narration with a media timeline for lessons, explainers and product demos. Downloading and commercial delivery require a paid plan.",
+    "zh": "Murf Studio 将脚本转为可编辑的 AI 旁白，并用媒体时间轴配合课程、讲解和产品演示。下载成品与商用交付需要付费套餐。",
+    "cn": "Murf Studio 將腳本轉為可編輯的 AI 旁白，並以媒體時間軸搭配課程、解說及產品展示。下載成品與商用交付需要付費方案。"
+  },
+  "detail": {
+    "en": "Use the browser Studio to split a script into blocks, choose a voice, adjust pronunciation and pacing, and align narration with video or images. This is a candidate for repeatable course narration when a person can review the finished audio. It is separate from Murf API, conversational Agents and Dub.\n\nTry a representative script before choosing a subscription. Changes to text can consume generation time again, and project slots differ from generation minutes. Paid download access does not imply unlimited synthesis or broadcast rights. Plan-specific documents put invited collaboration in Enterprise; a preview link is not another editor seat. No synthesis or account checkout was tested in this review.\n\nCancellation help says download access ends at billing-cycle end; the security page describes up to 90 days after agreement end to retrieve existing audio. Their scope and retrieval method remain unresolved; do not assume either universal cutoff or guaranteed continued access.\n\nBest for: Course authors who revise narration in sections and check pronunciation against the script.; Individuals producing explainers with licensed media who can pay for exports and review timing.\n\nNot ideal for: Anyone needing free downloadable commercial voiceovers.; Teams expecting multiple editors, TV/radio rights or a documented no-training commitment in every self-serve plan.; Real-time voice-agent/API projects or workflows requiring proven lip-sync and fully unattended multilingual quality.\n\nLimitations: Text edits can consume VGT again; budget for revisions rather than only the final runtime.; Official pages disagree on project limits, voice/language totals and some plan features; confirm the actual account and order.; Broadcast rights are an Enterprise add-on; stock media and uploaded scripts require their own rights checks.; Review names, numbers, accents and synchronization; no quality benchmark was run here.; Cancellation help says download access ends at billing-cycle end; the security page describes up to 90 days after agreement end to retrieve existing audio. Their scope and retrieval method remain unresolved; do not assume either universal cutoff or guaranteed continued access.\n\nPricing boundary: Free Studio offers a limited one-time voice-generation trial with no downloads or commercial license. Paid Creator and Business plans have monthly and annual billing; annual headline monthly equivalents are paid yearly. Exact prices and quota promises are omitted pending account/checkout confirmation and reconciliation of help-page conflicts. Enterprise is custom; collaboration and broadcast add-ons need explicit scope.\n\nPrivacy and exit boundary: Separate subscription cancellation, account termination, deletion requests and backup erasure. The privacy policy specifies account deletion within 30 days after termination with exceptions; security states automatic deletion within 90 days without a request and requested deletion including backups up to 90 days in complex cases. A 30-day request response is separate. These scopes remain unresolved, not a universal deadline. Ordinary Studio training/opt-out scope remains unverified; Enterprise commitments do not transfer.\n\nPlatforms: Browser Studio account; this review covers its public documentation and pricing UI. No native app, offline operation, regional availability or mobile feature parity was validated.\n\nEvidence and review: Official: https://murf.ai/pricing https://help.murf.ai/what-is-a-workspace https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling https://murf.ai/legal/privacy-policy https://murf.ai/security | Next review: 2026-10-15.\n\nMurf Academy official tutorial embed; AI Best Tool editorial cover, not a product screenshot or hands-on test.",
+    "zh": "在浏览器 Studio 中分段输入脚本、选择声音、调整发音和节奏，再把旁白与视频或图片对齐。它适合有人审听、需要反复修订的课程配音；本条不包含 Murf API、对话 Agents 或 Dub 的权益。\n\n先用代表性脚本测试再选套餐。修改文本后重新生成可能再次消耗时长，项目槽位也不等于生成分钟数。付费可下载不代表无限生成或自动拥有广播权。套餐专属文档将邀请协作限定为 Enterprise，预览链接不是额外编辑席位。本次没有登录生成、购买或账户结账实测。\n\n取消帮助称账期结束下载权限终止；安全页称协议结束后最长 90 天可取回既有音频。适用范围与取回方式仍有冲突待核，不能假定一律无法取回或保证继续下载。\n\n适合: 需要分段修订课程旁白，并能逐句复核发音的课程作者。; 使用已清权媒体制作讲解视频，愿意付费导出并检查时间对齐的个人创作者。\n\n不适合: 需要免费可下载且可商用配音的用户。; 要求普通自助套餐自带多编辑席位、电视广播权或明确不训练保证的团队。; 实时语音 Agent/API 项目，或要求已验证唇形同步及全自动多语言质量的流程。\n\n限制: 改动文本可能再次消耗生成时长；预算应包含修订，不能只计算成品时长。; 官方页面的项目数、语言/声音总数和部分套餐功能不一致，应核对目标账户及订单。; 广播权为 Enterprise 加购范围；素材库音乐、上传脚本和其他媒体仍需分别清权。; 人名、数字、口音和音画时间需人工检查；本次未做质量基准测试。; 取消帮助称账期结束下载权限终止；安全页称协议结束后最长 90 天可取回既有音频。适用范围与取回方式仍有冲突待核，不能假定一律无法取回或保证继续下载。\n\n价格与权益边界: 免费 Studio 提供有限的一次性语音生成试用，不含下载和商用许可。Creator 与 Business 有月付和年付，年付页面的月均价不代表逐月付款。因账户/结账未验证且帮助页存在冲突，本稿不承诺精确价格和套餐额度。Enterprise 为定制报价，协作及广播加购范围需明确。\n\n隐私与退出边界: 须分开取消订阅、终止账户、删除请求与备份删除。隐私政策称账户终止后 30 天内删除并列例外；安全页称无请求时 90 天内自动删除，请求删除包含备份，复杂情况最长 90 天。请求 30 天内回复另计。适用范围冲突待核，不能统一为删除期限。普通 Studio 训练/退出范围仍未核实，不外推 Enterprise 承诺。\n\n平台: 浏览器 Studio 账户；本次覆盖公开文档与定价界面。未验证原生应用、离线使用、地区可用性或移动端功能一致性。\n\n来源及复查: 官方来源：https://murf.ai/pricing https://help.murf.ai/what-is-a-workspace https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling https://murf.ai/legal/privacy-policy https://murf.ai/security | 下次复查：2026-10-15.\n\nMurf Academy 官方教学视频嵌入；封面为本站自有编辑素材，不是产品截图或本站实测。",
+    "cn": "在瀏覽器 Studio 中分段輸入腳本、選擇聲音、調整發音和節奏，再將旁白與影片或圖片對齊。它適合有人試聽、需要持續修改的課程配音；本條目不涵蓋 Murf API、對話 Agents 或 Dub 的權益。\n\n先用具代表性的腳本測試再選方案。修改文字後重新生成可能再次消耗時數，專案名額也不等於生成分鐘數。付費可下載不代表無限生成或自動取得廣播權。方案專屬文件將邀請協作限於 Enterprise，預覽連結不是額外編輯席次。本次未登入生成、購買或測試帳戶結帳。\n\n取消說明稱計費週期結束即終止下載權限；安全頁稱協議結束後最長 90 天可取回既有音訊。適用範圍與取回方式仍有衝突待核，不能假定一律無法取回或保證繼續下載。\n\n適合: 需要分段修改課程旁白，且能逐句核對發音的課程製作者。; 使用已取得授權的媒體製作解說影片，願意付費匯出並檢查時間對齊的個人創作者。\n\n不適合: 需要免費下載且可商用配音的使用者。; 要求一般自助方案內含多位編輯者、電視廣播權或明確不訓練保證的團隊。; 即時語音 Agent/API 專案，或要求已驗證嘴形同步及全自動多語品質的流程。\n\n限制: 修改文字可能再次消耗生成時數；預算須計入修改，不能只算成品長度。; 官方頁面的專案數、語言/聲音總數及部分方案功能不一致，應核對目標帳戶及訂單。; 廣播權屬 Enterprise 加購範圍；素材庫音樂、上傳腳本及其他媒體仍須分別確認授權。; 人名、數字、口音及影音時間須人工檢查；本次未做品質基準測試。; 取消說明稱計費週期結束即終止下載權限；安全頁稱協議結束後最長 90 天可取回既有音訊。適用範圍與取回方式仍有衝突待核，不能假定一律無法取回或保證繼續下載。\n\n價格與權益邊界: 免費 Studio 提供有限的一次性語音生成試用，不含下載與商用授權。Creator 和 Business 有月繳與年繳，年繳頁面的月平均價格不代表逐月付款。因帳戶/結帳未驗證且說明頁存在衝突，本稿不承諾精確價格與方案額度。Enterprise 採客製報價，協作及廣播加購範圍須明確確認。\n\n隱私與退出邊界: 須分開取消訂閱、終止帳戶、刪除請求與備份刪除。隱私政策稱帳戶終止後 30 天內刪除並列例外；安全頁稱無請求時 90 天內自動刪除，請求刪除包含備份，複雜情況最長 90 天。請求 30 天內回覆另計。適用範圍衝突待核，不能統一為刪除期限。一般 Studio 訓練/退出範圍仍未核實，不外推 Enterprise 承諾。\n\n平台: 瀏覽器 Studio 帳戶；本次涵蓋公開文件與定價介面。未驗證原生應用程式、離線使用、地區可用性或行動版功能是否一致。\n\n來源及複查: 官方来源：https://murf.ai/pricing https://help.murf.ai/what-is-a-workspace https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling https://murf.ai/legal/privacy-policy https://murf.ai/security | 下次复查：2026-10-15.\n\nMurf Academy 官方教学视频嵌入；封面为本站自有编辑素材，不是产品截图或本站实测。"
+  },
+  "imageUrl": "/images/tool-media/murf-studio-editorial-cover.svg",
+  "thumbnailUrl": "/images/tool-media/murf-studio-editorial-cover.svg",
+  "videoUrl": "https://www.youtube-nocookie.com/embed/M2-5OhbVwaE",
+  "tags": ["text-to-speech", "voiceover", "audio-generation"],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": [
+          "Course authors who revise narration in sections and check pronunciation against the script.",
+          "Individuals producing explainers with licensed media who can pay for exports and review timing."
+        ],
+        "zh": [
+          "需要分段修订课程旁白，并能逐句复核发音的课程作者。",
+          "使用已清权媒体制作讲解视频，愿意付费导出并检查时间对齐的个人创作者。"
+        ],
+        "cn": [
+          "需要分段修改課程旁白，且能逐句核對發音的課程製作者。",
+          "使用已取得授權的媒體製作解說影片，願意付費匯出並檢查時間對齊的個人創作者。"
+        ]
+      },
+      "notIdealFor": {
+        "en": [
+          "Anyone needing free downloadable commercial voiceovers.",
+          "Teams expecting multiple editors, TV/radio rights or a documented no-training commitment in every self-serve plan.",
+          "Real-time voice-agent/API projects or workflows requiring proven lip-sync and fully unattended multilingual quality."
+        ],
+        "zh": [
+          "需要免费可下载且可商用配音的用户。",
+          "要求普通自助套餐自带多编辑席位、电视广播权或明确不训练保证的团队。",
+          "实时语音 Agent/API 项目，或要求已验证唇形同步及全自动多语言质量的流程。"
+        ],
+        "cn": [
+          "需要免費下載且可商用配音的使用者。",
+          "要求一般自助方案內含多位編輯者、電視廣播權或明確不訓練保證的團隊。",
+          "即時語音 Agent/API 專案，或要求已驗證嘴形同步及全自動多語品質的流程。"
+        ]
+      }
+    },
+    "decision": {
+      "limitations": {
+        "en": [
+          "Text edits can consume VGT again; budget for revisions rather than only the final runtime.",
+          "Official pages disagree on project limits, voice/language totals and some plan features; confirm the actual account and order.",
+          "Broadcast rights are an Enterprise add-on; stock media and uploaded scripts require their own rights checks.",
+          "Review names, numbers, accents and synchronization; no quality benchmark was run here.",
+          "Cancellation help says download access ends at billing-cycle end; the security page describes up to 90 days after agreement end to retrieve existing audio. Their scope and retrieval method remain unresolved; do not assume either universal cutoff or guaranteed continued access."
+        ],
+        "zh": [
+          "改动文本可能再次消耗生成时长；预算应包含修订，不能只计算成品时长。",
+          "官方页面的项目数、语言/声音总数和部分套餐功能不一致，应核对目标账户及订单。",
+          "广播权为 Enterprise 加购范围；素材库音乐、上传脚本和其他媒体仍需分别清权。",
+          "人名、数字、口音和音画时间需人工检查；本次未做质量基准测试。",
+          "取消帮助称账期结束下载权限终止；安全页称协议结束后最长 90 天可取回既有音频。适用范围与取回方式仍有冲突待核，不能假定一律无法取回或保证继续下载。"
+        ],
+        "cn": [
+          "修改文字可能再次消耗生成時數；預算須計入修改，不能只算成品長度。",
+          "官方頁面的專案數、語言/聲音總數及部分方案功能不一致，應核對目標帳戶及訂單。",
+          "廣播權屬 Enterprise 加購範圍；素材庫音樂、上傳腳本及其他媒體仍須分別確認授權。",
+          "人名、數字、口音及影音時間須人工檢查；本次未做品質基準測試。",
+          "取消說明稱計費週期結束即終止下載權限；安全頁稱協議結束後最長 90 天可取回既有音訊。適用範圍與取回方式仍有衝突待核，不能假定一律無法取回或保證繼續下載。"
+        ]
+      },
+      "compareNext": {
+        "en": [
+          {
+            "target": "elevenlabs",
+            "reason": "Compare expressive narration and the revision effort for the same script; review its separate rights and credit model."
+          },
+          {
+            "target": "descript",
+            "reason": "Compare an editing-first workflow when recorded media and transcript revisions dominate."
+          }
+        ],
+        "zh": [
+          {
+            "target": "elevenlabs",
+            "reason": "用同一脚本比较表现力与修订成本，并另核其权利和计量规则。"
+          },
+          {
+            "target": "descript",
+            "reason": "若工作重点是已有录音/视频及转录稿修改，可比较以编辑为主的流程。"
+          }
+        ],
+        "cn": [
+          {
+            "target": "elevenlabs",
+            "reason": "以相同腳本比較表現力及修改成本，並另行確認其權利與計量方式。"
+          },
+          {
+            "target": "descript",
+            "reason": "若主要處理既有錄音/影片及逐字稿修改，可比較以編輯為主的流程。"
+          }
+        ]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-10-08",
+      "reviewedBy": "AI Best Tool editorial; prior identity/material QA PASS",
+      "sourceUrl": "https://murf.ai/",
+      "trustNote": {
+        "en": "Public-source review; no account checkout or synthesis test.",
+        "zh": "依据公开来源；未测试账号结账或语音生成。",
+        "cn": "依據公開來源；未測試帳號結帳或語音生成。"
+      }
+    },
+    "evidence": {
+      "official": [
+        {
+          "label": "home",
+          "url": "https://murf.ai/",
+          "checkedAt": "2026-10-08"
+        },
+        {
+          "label": "pricing",
+          "url": "https://murf.ai/pricing",
+          "checkedAt": "2026-10-08"
+        },
+        {
+          "label": "commercial",
+          "url": "https://help.murf.ai/do-i-have-commercial-rights-over-the-voice-over-created",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "terms",
+          "url": "https://murf.ai/legal/terms-of-service",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "privacy",
+          "url": "https://murf.ai/legal/privacy-policy",
+          "checkedAt": "2026-10-08"
+        },
+        {
+          "label": "security",
+          "url": "https://murf.ai/security",
+          "checkedAt": "2026-10-08"
+        },
+        {
+          "label": "free",
+          "url": "https://help.murf.ai/is-murf-free-to-use",
+          "checkedAt": "2026-10-08"
+        },
+        {
+          "label": "free-once",
+          "url": "https://help.murf.ai/how-can-i-get-more-vgt-during-my-free-trial",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "workspace",
+          "url": "https://help.murf.ai/what-is-a-workspace",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "projects",
+          "url": "https://help.murf.ai/projects",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "cancel",
+          "url": "https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "vgt",
+          "url": "https://help.murf.ai/what-is-voice-generation-time-vgt",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "validity",
+          "url": "https://help.murf.ai/vgt-validity",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "studio",
+          "url": "https://help.murf.ai/murf-studio-basics",
+          "checkedAt": "2026-10-08"
+        },
+        {
+          "label": "language",
+          "url": "https://help.murf.ai/languages-and-accents",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "collaboration",
+          "url": "https://help.murf.ai/invite-users-to-project",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "import",
+          "url": "https://help.murf.ai/import-limits",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "timeline",
+          "url": "https://help.murf.ai/timeline-introduction",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "sync",
+          "url": "https://help.murf.ai/syncing-images-and-videos-with-voice-blocks",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "voice-export",
+          "url": "https://help.murf.ai/voice-only",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "music-export",
+          "url": "https://help.murf.ai/voice-music",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "video-export",
+          "url": "https://help.murf.ai/video-export",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "youtube",
+          "url": "https://help.murf.ai/what-are-youtube-codes",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "affiliate",
+          "url": "https://murf.ai/legal/affiliate-program-terms-of-service",
+          "checkedAt": "2026-10-07"
+        },
+        {
+          "label": "api-terms",
+          "url": "https://murf.ai/legal/api-usage-agreement",
+          "checkedAt": "2026-10-07"
+        }
+      ],
+      "independent": [
+        "https://scholarworks.iu.edu/journals/index.php/ijdl/article/view/42061",
+        "https://www.reddit.com/r/instructionaldesign/comments/1fonqvp/murf_is_not_being_truthful_about_their_pricing/"
+      ]
+    },
+    "claimReview": [
+      {
+        "id": "studio-checkout-price",
+        "category": "price",
+        "status": "unknown",
+        "exposure": "omitted",
+        "preciseRecommendation": false,
+        "publicLimitation": "Current Studio price and billing terms require the intended account checkout.",
+        "sources": ["https://murf.ai/pricing"],
+        "nextReviewDate": "2026-10-15"
+      },
+      {
+        "id": "studio-plan-entitlements",
+        "category": "account_rights",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Creator/Business exports, editor seats and collaboration depend on the selected plan and account. Do not infer a universal entitlement from a public card.",
+        "sources": ["https://murf.ai/pricing", "https://help.murf.ai/invite-users-to-project"],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "studio-project-and-vgt-quota",
+        "category": "account_rights",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Current Studio cards and Workspace help disagree on project and generation quotas. Verify the intended account and order; no exact quota is promised.",
+        "sources": [
+          "https://murf.ai/pricing",
+          "https://help.murf.ai/what-is-a-workspace",
+          "https://help.murf.ai/projects"
+        ],
+        "nextReviewDate": "2026-10-15"
+      },
+      {
+        "id": "termination-and-deletion",
+        "category": "privacy_rights",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Privacy and Security pages use different 30/90-day account and Customer Data deletion scopes, with exceptions. Cancellation, termination and a deletion request differ; confirm the applicable contract.",
+        "sources": [
+          "https://murf.ai/legal/privacy-policy",
+          "https://murf.ai/security",
+          "https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling"
+        ],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "existing-audio-retrieval",
+        "category": "privacy_rights",
+        "status": "conflict",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Cancellation help describes paid download ending with the billing cycle; Security describes retrieval of existing audio after agreement end. Scope and mechanism are unresolved.",
+        "sources": [
+          "https://help.murf.ai/what-happens-to-my-account-and-projects-after-canceling",
+          "https://murf.ai/security"
+        ],
+        "nextReviewDate": "2026-10-22"
+      },
+      {
+        "id": "ordinary-studio-training",
+        "category": "privacy_rights",
+        "status": "unknown",
+        "exposure": "omitted",
+        "preciseRecommendation": false,
+        "publicLimitation": "The Enterprise no-training statement has not been established for ordinary Studio accounts.",
+        "sources": ["https://murf.ai/pricing", "https://murf.ai/legal/privacy-policy"],
+        "nextReviewDate": "2026-10-22"
+      }
+    ],
+    "media": {
+      "assets": [
+        {
+          "path": "/images/tool-media/murf-studio-editorial-cover.svg",
+          "owner": "AI Best Tool",
+          "isOfficialLogo": false,
+          "isProductScreenshot": false
+        }
+      ],
+      "officialEmbed": {
+        "url": "https://www.youtube-nocookie.com/embed/M2-5OhbVwaE",
+        "title": "Getting Started with Murf Studio",
+        "sourcePage": "https://murf.ai/academy/home",
+        "publisher": "Murf Academy",
+        "usageBoundary": "Embed official player only; no download, self-hosting, crop or thumbnail hotlink."
+      }
+    },
+    "liveSignal": {
+      "profileCorrection": "/developer/listing?intent=profile_correction&slug=murf#claim-form",
+      "ownerUpdate": "/developer/listing?intent=ownership_update&slug=murf#claim-form",
+      "status": "shared public tool page entry; submissions enter manual review"
+    },
+    "release": {
+      "indexState": "monitor",
+      "sitemapChangeApproved": false,
+      "relationshipCreationApproved": false,
+      "productionWrites": 0,
+      "vendor": "Murf",
+      "product": "Murf Studio"
+    }
+  },
+  "useCases": {
+    "en": [
+      "Course authors who revise narration in sections and check pronunciation against the script.",
+      "Individuals producing explainers with licensed media who can pay for exports and review timing."
+    ],
+    "zh": [
+      "需要分段修订课程旁白，并能逐句复核发音的课程作者。",
+      "使用已清权媒体制作讲解视频，愿意付费导出并检查时间对齐的个人创作者。"
+    ],
+    "cn": [
+      "需要分段修改課程旁白，且能逐句核對發音的課程製作者。",
+      "使用已取得授權的媒體製作解說影片，願意付費匯出並檢查時間對齊的個人創作者。"
+    ]
+  }
+}

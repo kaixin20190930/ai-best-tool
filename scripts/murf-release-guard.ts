@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+
+type Match = { id: string; name: string; status?: string; page_quality_status?: string };
+
+export function assertMurfEmptyPreimage(matches: Match[], idMatches: Match[], expectedId: string) {
+  assert.equal(matches.length, 0, 'murf: duplicate slug, title, or domain requires manual review');
+  assert.equal(idMatches.length, 0, 'murf: protected existing ID requires manual review');
+  assert.match(expectedId, /^[0-9a-f-]{36}$/i);
+}
+
+export function assertMurfSingleInsert(rowCount: number | null) {
+  assert.equal(rowCount, 1, 'murf: insert did not create exactly one entity; protected row was not overwritten');
+}
