@@ -15,6 +15,7 @@
         "claimDueAt": "2026-10-06",
         "scope": "entity_baseline_only"
       },
+      "expectedDetailSha256": "0e9a1ce9c5a87f4b39a11d1ee32b2aec5afb0c2a905dcf83d2752c472c5508d9",
       "changedFields": [],
       "nextReviewDate": "2026-10-22",
       "sources": [
@@ -40,6 +41,7 @@
         "claimDueAt": "2026-10-06",
         "scope": "entity_baseline_only"
       },
+      "expectedDetailSha256": "df1c466f6390ca8a1649991a0314e9fef08ed96cf7286c9eff6cc70c844e1628",
       "changedFields": [],
       "nextReviewDate": "2026-10-22",
       "sources": [
@@ -65,6 +67,7 @@
         "claimDueAt": "2026-10-06",
         "scope": "entity_baseline_only"
       },
+      "expectedDetailSha256": "60c556d19fe13f601554a90e270d7736bdfdbcbf08b8b8871c45fce385e4df2f",
       "changedFields": [],
       "nextReviewDate": "2026-10-15",
       "sources": [
@@ -90,6 +93,7 @@
         "claimDueAt": "2026-10-06",
         "scope": "entity_baseline_only"
       },
+      "expectedDetailSha256": "08ee83e941b2f0212b5f2657780b65b8cf2f8990cdc25142e1a5cd47ab8ad42a",
       "changedFields": [],
       "nextReviewDate": "2026-10-22",
       "sources": [
@@ -115,6 +119,7 @@
         "claimDueAt": "2026-10-08",
         "scope": "entity_baseline_only"
       },
+      "expectedDetailSha256": "9739ae6d66d8f6b1f7359032c3f74919993c0d9ae686a633792f7e82edec2704",
       "changedFields": [],
       "nextReviewDate": "2026-10-15",
       "sources": [

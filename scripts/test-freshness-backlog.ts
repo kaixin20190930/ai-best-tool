@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import { classifyBacklog, selectBacklogBatch, type BacklogRow } from './freshness-backlog';
 import { claimReviewIntervalDays } from './claim-publication-policy';
@@ -43,17 +44,20 @@ assert.throws(() => verifyFreshnessPassSnapshot(consensus, { ...passRow, id: 'wr
 assert.throws(() => verifyFreshnessPassSnapshot({ ...consensus, passSnapshot: { ...consensus.passSnapshot, sha256: '0'.repeat(64) } }, passRow, '2026-10-08'), /digest mismatch/);
 assert.throws(() => verifyFreshnessPassSnapshot({ ...consensus, passSnapshot: { ...consensus.passSnapshot, validThrough: '2027-01-01' } }, passRow, '2026-10-08'), /cadence/);
 const { id: _id, ...oldReview } = TOOL_MAINTENANCE_REVIEWS.consensus;
-const appliedRow = { ...passRow, next_review_date: consensus.nextReviewDate, features: { maintenanceReview: {
+const appliedDetail = { en: 'verified candidate after image', zh: '已核候选后像', cn: '已核候选后像' };
+const appliedCandidate = { ...consensus, expectedDetailSha256: crypto.createHash('sha256').update(JSON.stringify(appliedDetail)).digest('hex') };
+const appliedRow = { ...passRow, detail: appliedDetail, next_review_date: consensus.nextReviewDate, features: { maintenanceReview: {
   ...oldReview, checkedAt: consensus.checkedAt, nextReviewDate: consensus.nextReviewDate,
   outcome: consensus.outcome, changeSummary: consensus.changeSummary,
   scope: consensus.scope, sources: consensus.sources, unresolved: consensus.unresolved,
   claims: consensus.claims || [],
 } } };
-assert.equal(verifyFreshnessPassSnapshot(consensus, appliedRow, '2026-10-08', 'after').id, consensus.passSnapshot.id);
+assert.equal(verifyFreshnessPassSnapshot(appliedCandidate, appliedRow, '2026-10-08', 'after').id, consensus.passSnapshot.id);
 assert.throws(() => verifyFreshnessPassSnapshot(consensus, appliedRow, '2026-10-08', 'before'), /PASS maintenance snapshot mismatch/);
-assert.throws(() => verifyFreshnessPassSnapshot(consensus, { ...appliedRow, next_review_date: '2026-10-23' }, '2026-10-08', 'after'), /applied maintenance snapshot mismatch/);
-assert.throws(() => verifyFreshnessPassSnapshot(consensus, { ...appliedRow, features: { maintenanceReview: { ...appliedRow.features.maintenanceReview, outcome: 'reviewed_no_change' } } }, '2026-10-08', 'after'), /applied maintenance snapshot mismatch/);
-assert.throws(() => verifyFreshnessPassSnapshot({ ...consensus, passSnapshot: { ...consensus.passSnapshot, id: 'wrong' } }, appliedRow, '2026-10-08', 'after'), /PASS maintenance snapshot mismatch/);
+assert.throws(() => verifyFreshnessPassSnapshot(appliedCandidate, { ...appliedRow, next_review_date: '2026-10-23' }, '2026-10-08', 'after'), /applied maintenance snapshot mismatch/);
+assert.throws(() => verifyFreshnessPassSnapshot(appliedCandidate, { ...appliedRow, detail: { ...appliedDetail, en: 'tampered' } }, '2026-10-08', 'after'), /applied maintenance snapshot mismatch/);
+assert.throws(() => verifyFreshnessPassSnapshot(appliedCandidate, { ...appliedRow, features: { maintenanceReview: { ...appliedRow.features.maintenanceReview, outcome: 'reviewed_no_change' } } }, '2026-10-08', 'after'), /applied maintenance snapshot mismatch/);
+assert.throws(() => verifyFreshnessPassSnapshot({ ...appliedCandidate, passSnapshot: { ...consensus.passSnapshot, id: 'wrong' } }, appliedRow, '2026-10-08', 'after'), /PASS maintenance snapshot mismatch/);
 const synthesia = FIRST_BATCH[4];
 assert.equal(verifyFreshnessPassSnapshot(synthesia, { id: synthesia.id, name: synthesia.slug, status: 'published',
   url: 'https://www.synthesia.io/', next_review_date: '2026-10-08', features: { editorial: { reviewedAt: '2026-09-08' } } }, '2026-10-08').id,

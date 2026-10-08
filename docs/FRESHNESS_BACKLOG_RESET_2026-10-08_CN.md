@@ -30,3 +30,5 @@
 总控随后已按原始 preflight manifest 执行生产 commit，5 条均写入成功；本任务没有重复执行该命令。提交后首次重跑 preflight 在 Consensus 报 `PASS maintenance snapshot mismatch`：旧校验器要求生产 `maintenanceReview` 仍保留 9 月 6 日日期，无法识别经受控提交后的新记录。修复后，未应用记录继续严格要求旧 PASS 与精确 preimage；已应用记录则校验当前 `maintenanceReview` 完全等于候选、`next_review_date` 正确，并通过原始 preflight manifest、来源文件哈希、ID/slug/URL 和实体基线期限追溯旧 PASS。字段或日期篡改会失败，不会被视作幂等成功。
 
 [只读 postcheck](./FRESHNESS_FIRST_BATCH_POSTCHECK_2026-10-08.json) 返回 5 条 `already_applied`、`changedFields=[]`、`productionWrites=0`。[提交后全量审计](./FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json)为 71 tools、55 published、29 到期；余下 `schedule_sync=1`、`claim_due=16`、`entity_due=5`、`manual_archive_review=7`。本次修复仅改校验逻辑、测试和文档，没有再次写生产，也未 push。专项测试、TypeScript 与 diff check 通过；未改运行时或发布路径，未执行完整 build。
+
+最后一轮 QA 发现 `already_applied` 曾只核维护元数据和排期，无法拦截正文 `detail` 被篡改。现已把经生产提交后只读回验确认的五条 `detail` 后像 SHA-256 固定在候选中，并在候选应用前与已应用 postcheck 都校验；后者同时检查完整 `maintenanceReview`、Synthesia 结构化 `pricingSnapshot` 和下次日期。任意 `detail` 篡改负例会失败。重新运行的真实只读 postcheck 仍为五条 `already_applied`、零变更、零生产写入。

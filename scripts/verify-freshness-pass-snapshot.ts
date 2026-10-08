@@ -64,6 +64,9 @@ export function verifyFreshnessPassSnapshot(candidate: ReviewCandidate, row: Rec
       claims: candidate.claims || [],
     };
     try {
+      const actualDetailHash = crypto.createHash('sha256').update(JSON.stringify(row.detail)).digest('hex');
+      assert.match(candidate.expectedDetailSha256, /^[0-9a-f]{64}$/);
+      assert.equal(actualDetailHash, candidate.expectedDetailSha256);
       assert.deepEqual(row.features?.maintenanceReview, expectedReview);
       assert.equal(row.next_review_date, candidate.nextReviewDate);
       if (candidate.pricingSnapshot) assert.deepEqual(row.features?.pricingSnapshot, candidate.pricingSnapshot);

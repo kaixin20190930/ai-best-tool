@@ -1,6 +1,7 @@
 export type ReviewCandidate = {
   slug: string; id: string; outcome: 'reviewed_no_change' | 'fact_updated';
   passSnapshot: { id: string; source: string; sha256: string; reviewedAt: string; validThrough: string; claimDueAt: string; scope: 'entity_baseline_only' };
+  expectedDetailSha256: string;
   checkedAt: string; nextReviewDate: string; scope: string; changeSummary: string;
   sources: string[]; unresolved: string[];
   replacements?: { field: 'detail'; locale: 'en' | 'zh' | 'cn'; from: string; to: string }[];
@@ -25,7 +26,7 @@ const maintenancePass = (slug: string) => ({ id: `maintenance-2026-09-06:${slug}
   reviewedAt: '2026-09-06', validThrough: '2026-12-05', claimDueAt: '2026-10-06', scope: 'entity_baseline_only' as const });
 
 export const FIRST_BATCH: ReviewCandidate[] = [
-  { slug: 'consensus', id: 'f15873ae-c6ef-4f0a-b811-b40c2aba76ab', passSnapshot: maintenancePass('consensus'), outcome: 'fact_updated', checkedAt: '2026-10-08', nextReviewDate: '2026-10-22',
+  { slug: 'consensus', id: 'f15873ae-c6ef-4f0a-b811-b40c2aba76ab', passSnapshot: maintenancePass('consensus'), expectedDetailSha256: '0e9a1ce9c5a87f4b39a11d1ee32b2aec5afb0c2a905dcf83d2752c472c5508d9', outcome: 'fact_updated', checkedAt: '2026-10-08', nextReviewDate: '2026-10-22',
     scope: 'Official plan/API allowances, corpus and full-text boundary since 2026-09-06; no account or independent accuracy test.',
     changeSummary: 'Official Pro and Deep API/MCP monthly allowances changed from 250/1,000 to 500/2,000; other checked public boundaries remain aligned.',
     sources: ['https://help.consensus.app/en/articles/10087865-subscription-plans','https://help.consensus.app/en/articles/10055108-consensus-research-database','https://help.consensus.app/en/articles/11740827-how-to-use-deep-review'],
@@ -38,13 +39,13 @@ export const FIRST_BATCH: ReviewCandidate[] = [
         { field: 'detail' as const, locale, from: consensusApi.zh[2], to: consensusApi.zh[3] },
       ]),
     ] },
-  { slug: 'gamma', id: '6512aa61-8663-49f8-809d-2a2ab4e529ad', passSnapshot: maintenancePass('gamma'), outcome: 'reviewed_no_change', checkedAt: '2026-10-08', nextReviewDate: '2026-10-22',
+  { slug: 'gamma', id: '6512aa61-8663-49f8-809d-2a2ab4e529ad', passSnapshot: maintenancePass('gamma'), expectedDetailSha256: 'df1c466f6390ca8a1649991a0314e9fef08ed96cf7286c9eff6cc70c844e1628', outcome: 'reviewed_no_change', checkedAt: '2026-10-08', nextReviewDate: '2026-10-22',
     scope: 'Official plan credits, import/export and training controls since 2026-09-06; no paid checkout or export test.',
     changeSummary: 'Decision-relevant public claims still align; official article now also lists Business, which the existing page does not claim to enumerate.',
     sources: ['https://help.gamma.app/en/articles/8077107-how-can-i-upgrade-my-gamma-subscription','https://help.gamma.app/en/articles/8022861-what-s-the-easiest-way-to-export-my-gamma','https://help.gamma.app/en/articles/12281928-does-gamma-use-my-content-to-train-its-ai-features'],
     unresolved: ['Exact checkout amount and paid export fidelity require account testing.'],
     claims: [{ id: 'checkout-price', status: 'unknown', category: 'price', nextReviewDate: '2026-10-15', limitation: 'Exact amount needs account checkout.' }] },
-  { slug: 'perplexity', id: '3d018623-85f9-4df4-bd55-9a4a0e7a2d93', passSnapshot: maintenancePass('perplexity'), outcome: 'fact_updated', checkedAt: '2026-10-08', nextReviewDate: '2026-10-15',
+  { slug: 'perplexity', id: '3d018623-85f9-4df4-bd55-9a4a0e7a2d93', passSnapshot: maintenancePass('perplexity'), expectedDetailSha256: '60c556d19fe13f601554a90e270d7736bdfdbcbf08b8b8871c45fce385e4df2f', outcome: 'fact_updated', checkedAt: '2026-10-08', nextReviewDate: '2026-10-15',
     scope: 'Official consumer allowance and Computer usage change since 2026-09-06; no signed-in account test.',
     changeSummary: 'Remove exact Free Pro Search count while official help conflicts; paid Consumer Pro now has rolling weekly Computer usage for eligible accounts before credits.',
     sources: ['https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you','https://www.perplexity.ai/help-center/en/articles/13838041-how-credits-work-on-perplexity'],
@@ -56,13 +57,14 @@ export const FIRST_BATCH: ReviewCandidate[] = [
     replacements: (['en','zh','cn'] as const).map(locale => ({ field: 'detail' as const, locale,
       from: locale === 'en' ? 'Free currently includes three Pro Searches per day and one Research query per month.' : 'Free 当前每天包含 3 次 Pro Search、每月 1 次 Research。',
       to: locale === 'en' ? 'Free Pro Search and Research allowances vary across official help pages; check the signed-in usage meter before relying on an exact count.' : '官方帮助页的 Free Pro Search 与 Research 额度口径可能冲突；准确次数应以登录后的用量页为准。' })) },
-  { slug: 'make', id: 'c0bb3aba-33be-4e14-903e-5f1d036eec4a', passSnapshot: maintenancePass('make'), outcome: 'reviewed_no_change', checkedAt: '2026-10-08', nextReviewDate: '2026-10-22',
+  { slug: 'make', id: 'c0bb3aba-33be-4e14-903e-5f1d036eec4a', passSnapshot: maintenancePass('make'), expectedDetailSha256: '08ee83e941b2f0212b5f2657780b65b8cf2f8990cdc25142e1a5cd47ab8ad42a', outcome: 'reviewed_no_change', checkedAt: '2026-10-08', nextReviewDate: '2026-10-22',
     scope: 'Official credit mechanics, provider cost split and fixed data region since 2026-09-06; not a scenario run.',
     changeSummary: 'Reviewed decision boundaries remain aligned with current official credit and organization documentation.',
     sources: ['https://help.make.com/credits','https://help.make.com/organizations','https://help.make.com/webhooks'],
     unresolved: ['Actual scenario credit burn, queue behavior and failure recovery require a live representative workflow.'] },
   { slug: 'synthesia', id: '87a0f886-1472-4111-a09a-6a6c781dcf42', passSnapshot: { id: 'release-2026-09-08:synthesia', source: synthSource, sha256: synthSha,
     reviewedAt: '2026-09-08', validThrough: '2026-12-07', claimDueAt: '2026-10-08', scope: 'entity_baseline_only' }, outcome: 'fact_updated', checkedAt: '2026-10-08', nextReviewDate: '2026-10-15',
+    expectedDetailSha256: '9739ae6d66d8f6b1f7359032c3f74919993c0d9ae686a633792f7e82edec2704',
     scope: 'Official pricing, credits and avatar consent since 2026-09-08; no checkout, API account or video generation.',
     changeSummary: 'Basic/Starter/Pro credits and packaging changed materially; replace stale plan paragraph with bounded current public summary. API entitlement remains conditional pending account verification.',
     sources: ['https://www.synthesia.io/pricing','https://docs.synthesia.io/docs/user-licenses','https://docs.synthesia.io/docs/personal-avatars','https://docs.synthesia.io/reference/introduction'],

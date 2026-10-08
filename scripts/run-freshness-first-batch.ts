@@ -48,6 +48,7 @@ async function main() {
         const alreadyApplied = appliedMarker;
         const next = structuredClone(before);
         next.detail = alreadyApplied ? before.detail : applyCandidateDetail(before.detail, candidate);
+        assert.equal(hash(next.detail), candidate.expectedDetailSha256, `${candidate.slug}: candidate detail postimage mismatch`);
         next.features = { ...before.features, maintenanceReview: {
           ...(before.features.maintenanceReview || {}),
           checkedAt: candidate.checkedAt, nextReviewDate: candidate.nextReviewDate,
@@ -74,6 +75,7 @@ async function main() {
         if (mode === 'commit') await client.query('COMMIT'); else await client.query('ROLLBACK');
         results.push({ slug: candidate.slug, outcome: candidate.outcome, preimageSha256: beforeHash,
           passSnapshot,
+          expectedDetailSha256: candidate.expectedDetailSha256,
           changedFields: alreadyApplied ? [] : changes, nextReviewDate: candidate.nextReviewDate,
           sources: candidate.sources, unresolved: candidate.unresolved, status: alreadyApplied ? 'already_applied' : mode === 'commit' ? 'committed' : mode === 'rollback' ? 'rolled_back' : 'ready' });
       } catch (error) { await client.query('ROLLBACK'); throw error; }
