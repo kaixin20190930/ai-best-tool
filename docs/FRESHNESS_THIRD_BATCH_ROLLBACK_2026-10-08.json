@@ -1,0 +1,154 @@
+{
+  "mode": "rollback",
+  "publishNotBefore": "2026-10-09",
+  "productionWrites": 0,
+  "results": [
+    {
+      "slug": "claude",
+      "outcome": "fact_updated",
+      "preimageSha256": "26ffcead60a48a797206d8c08afb8e535d0cfeef410e700365e28cb1d79072aa",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:claude",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json",
+        "sha256": "8c8f4bf6780adc2d11c6eef4d40e25df66c6bded0f4fc74a6b8bc69d6a994557",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-10-01",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "009f93b55abbc345e2f2f44693950e5f82a6d40dc7b99943360519a7bfb9d70b",
+      "changedFields": [
+        "detail",
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://claude.com/pricing",
+        "https://support.claude.com/en/articles/17154008-monthly-api-credits-for-max-and-team-plans",
+        "https://support.claude.com/en/articles/9876003-i-have-a-paid-claude-subscription-pro-max-team-or-enterprise-plans-why-is-claude-api-usage-billed-separately-from-my-paid-claude-plan"
+      ],
+      "unresolved": [
+        "Regional checkout, Max/Team eligibility, linked Console organization, credit balance and account capacity require signed-in verification."
+      ],
+      "status": "rolled_back"
+    },
+    {
+      "slug": "deepl",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "bca0e2c61357b7ec1617f9968733d455144e658d09fb207bbd4bba65581854f2",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:deepl",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json",
+        "sha256": "8c8f4bf6780adc2d11c6eef4d40e25df66c6bded0f4fc74a6b8bc69d6a994557",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-10-01",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "90b3fa8d05e00f801400cd46fd585b5e1a5fad25aeaa4efefd1899185b5557d3",
+      "changedFields": [
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://support.deepl.com/hc/en-us/articles/6318834492700-About-DeepL-Write",
+        "https://support.deepl.com/hc/en-us/articles/360021200939-DeepL-API-plans",
+        "https://support.deepl.com/hc/en-us/articles/360020582359-File-formats"
+      ],
+      "unresolved": [
+        "Selected subscription, file limits, API quota and security settings require account/workflow verification."
+      ],
+      "status": "rolled_back"
+    },
+    {
+      "slug": "emdash",
+      "outcome": "fact_updated",
+      "preimageSha256": "51723001ed5608fe3c1341f97819aba5f554efff6c67fa720b7484b877882f1e",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:emdash",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json",
+        "sha256": "8c8f4bf6780adc2d11c6eef4d40e25df66c6bded0f4fc74a6b8bc69d6a994557",
+        "reviewedAt": "2026-09-01T00:00:00.000Z",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-10-01",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "c59b1bf411cca9f03720f1f620c9c7556c299da0e3772e9dedf441c3749af0ee",
+      "changedFields": [
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://emdash.com/",
+        "https://emdash.com/changelog",
+        "https://github.com/generalaction/emdash/releases"
+      ],
+      "unresolved": [
+        "Provider authentication, billing and compatibility differ by selected agent and account."
+      ],
+      "status": "rolled_back"
+    },
+    {
+      "slug": "fathom",
+      "outcome": "fact_updated",
+      "preimageSha256": "19e58990b3490ac173b6765194c2cbbec4bcc94dff76853e5bdaed9ea27ed428",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:fathom",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json",
+        "sha256": "8c8f4bf6780adc2d11c6eef4d40e25df66c6bded0f4fc74a6b8bc69d6a994557",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-10-01",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "533f9b6fdd33e641929a02318520b3f7e0665386c2bc8c81dced2d321c6e8022",
+      "changedFields": [
+        "detail",
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://help.fathom.video/en/articles/5290881",
+        "https://help.fathom.video/en/articles/296576",
+        "https://help.fathom.video/en/articles/11577345"
+      ],
+      "unresolved": [
+        "iOS access, bot-free rollout, platform compatibility and recording consent require target-account testing."
+      ],
+      "status": "rolled_back"
+    },
+    {
+      "slug": "the-graph",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "47b1ea6ae7b088d1f183b8f7061d82b615bd6ef73c10e53248b2b3bc5d327710",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:the-graph",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json",
+        "sha256": "8c8f4bf6780adc2d11c6eef4d40e25df66c6bded0f4fc74a6b8bc69d6a994557",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-09-09",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "ab4d9ac2d3ef3bb71951ebc983b6a6822a0cc37a9850d3b7e34cb42846ac9510",
+      "changedFields": [
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://thegraph.com/studio-pricing/",
+        "https://thegraph.com/docs/en/subgraphs/querying/introduction/",
+        "https://thegraph.com/docs/en/gateways/subgraphs/consumer-side/pricing-payments/"
+      ],
+      "unresolved": [
+        "Specific Subgraph lag, indexer support, key restriction and billing need deployment/account checks."
+      ],
+      "status": "rolled_back"
+    }
+  ]
+}

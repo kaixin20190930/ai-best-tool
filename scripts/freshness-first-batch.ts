@@ -5,6 +5,7 @@ export type ReviewCandidate = {
   checkedAt: string; nextReviewDate: string; scope: string; changeSummary: string;
   sources: string[]; unresolved: string[];
   replacements?: { field: 'detail'; locale: 'en' | 'zh' | 'cn'; from: string; to: string }[];
+  featureReplacements?: { path: string[]; from: string; to: string }[];
   pricingSnapshot?: Record<string, string>;
   claims?: { id: string; status: 'conditional' | 'conflict' | 'unknown'; category: 'price' | 'account_rights' | 'core_capability'; nextReviewDate: string; limitation: string }[];
 };

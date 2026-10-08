@@ -9,15 +9,17 @@ const allowedSources = new Set([
   'lib/config/toolMaintenanceReviews.ts',
   'data/collection/synthesia-release.json',
   'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json',
+  'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json',
 ]);
 
 export function verifyFreshnessPassSnapshot(candidate: ReviewCandidate, row: Record<string, any>, asOf: string, phase: 'before' | 'after' = 'before') {
   const snapshot = candidate.passSnapshot;
   if (!snapshot?.id || !snapshot.source || !snapshot.sha256 || !snapshot.validThrough || !snapshot.reviewedAt || !snapshot.claimDueAt)
     throw new Error(`${candidate.slug}: missing PASS snapshot metadata`);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(asOf) || snapshot.reviewedAt > asOf || snapshot.validThrough < asOf)
+  const reviewedDate = snapshot.reviewedAt.slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(asOf) || reviewedDate > asOf || snapshot.validThrough < asOf)
     throw new Error(`${candidate.slug}: PASS entity baseline expired or invalid`);
-  const derivedValidThrough = new Date(Date.parse(`${snapshot.reviewedAt}T00:00:00Z`) + 90 * 86400000).toISOString().slice(0, 10);
+  const derivedValidThrough = new Date(Date.parse(`${reviewedDate}T00:00:00Z`) + 90 * 86400000).toISOString().slice(0, 10);
   if (snapshot.validThrough !== derivedValidThrough) throw new Error(`${candidate.slug}: PASS validThrough does not match entity cadence`);
   if (snapshot.scope !== 'entity_baseline_only' || snapshot.claimDueAt > asOf)
     throw new Error(`${candidate.slug}: PASS scope or claim-due mismatch`);
@@ -41,12 +43,12 @@ export function verifyFreshnessPassSnapshot(candidate: ReviewCandidate, row: Rec
         row.features?.maintenanceReview?.nextReviewDate !== snapshot.claimDueAt ||
         row.next_review_date !== snapshot.claimDueAt))
       throw new Error(`${candidate.slug}: PASS maintenance snapshot mismatch`);
-  } else if (snapshot.source === 'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json') {
+  } else if (snapshot.source === 'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json' || snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json') {
     const audit = JSON.parse(sourceBytes.toString('utf8'));
     const item = audit.items?.find((entry: Record<string, unknown>) => entry.slug === candidate.slug);
-    if (snapshot.id !== `editorial-${snapshot.reviewedAt}:${candidate.slug}` ||
+    if (snapshot.id !== `editorial-${reviewedDate}:${candidate.slug}` ||
         item?.id !== candidate.id || item?.classification !== 'claim_due' ||
-        item?.basisDates?.editorialReviewedAt !== snapshot.reviewedAt ||
+        item?.basisDates?.editorialReviewedAt !== reviewedDate ||
         item?.basisDates?.nextReviewDate !== snapshot.claimDueAt ||
         row.features?.editorial?.reviewedAt !== snapshot.reviewedAt ||
         row.features?.editorial?.sourceUrl !== item?.sourceUrl)
@@ -67,8 +69,9 @@ export function verifyFreshnessPassSnapshot(candidate: ReviewCandidate, row: Rec
       throw new Error(`${candidate.slug}: PASS release schedule mismatch`);
   }
   if (phase === 'after') {
-    const preflightManifestPath = snapshot.source === 'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json' ?
-      'docs/FRESHNESS_SECOND_BATCH_PREFLIGHT_2026-10-08.json' : 'docs/FRESHNESS_FIRST_BATCH_PREFLIGHT_2026-10-08.json';
+    const preflightManifestPath = snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json' ?
+      'docs/FRESHNESS_THIRD_BATCH_PREFLIGHT_2026-10-08.json' : snapshot.source === 'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json' ?
+        'docs/FRESHNESS_SECOND_BATCH_PREFLIGHT_2026-10-08.json' : 'docs/FRESHNESS_FIRST_BATCH_PREFLIGHT_2026-10-08.json';
     const manifest = JSON.parse(fs.readFileSync(path.resolve(preflightManifestPath), 'utf8'));
     const inherited = manifest?.results?.find((entry: Record<string, unknown>) => entry.slug === candidate.slug);
     if (manifest?.mode !== 'preflight' || !inherited || inherited.status !== 'ready' ||
@@ -86,11 +89,15 @@ export function verifyFreshnessPassSnapshot(candidate: ReviewCandidate, row: Rec
       const actualDetailHash = crypto.createHash('sha256').update(JSON.stringify(row.detail)).digest('hex');
       assert.match(candidate.expectedDetailSha256, /^[0-9a-f]{64}$/);
       assert.equal(actualDetailHash, candidate.expectedDetailSha256);
-      if (snapshot.source === 'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json') {
+      if (snapshot.source === 'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json' || snapshot.source === 'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json') {
         for (const [key, value] of Object.entries(expectedReview))
           assert.deepEqual(row.features?.maintenanceReview?.[key], value);
       } else assert.deepEqual(row.features?.maintenanceReview, expectedReview);
       assert.equal(row.next_review_date, candidate.nextReviewDate);
+      for (const patch of candidate.featureReplacements || []) {
+        const actual = patch.path.reduce((value: any, key) => value?.[key], row.features);
+        assert.equal(actual, patch.to);
+      }
       if (candidate.pricingSnapshot) assert.deepEqual(row.features?.pricingSnapshot, candidate.pricingSnapshot);
     } catch {
       throw new Error(`${candidate.slug}: applied maintenance snapshot mismatch`);
