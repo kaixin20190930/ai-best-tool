@@ -1,0 +1,288 @@
+{
+  "asOf": "2026-10-08",
+  "readOnly": true,
+  "totalTools": 75,
+  "published": 57,
+  "duePublished": 14,
+  "counts": {
+    "schedule_sync": 0,
+    "claim_due": 2,
+    "entity_due": 5,
+    "manual_archive_review": 7
+  },
+  "selected": [
+    "pipedream",
+    "cursor",
+    "chatgpt-mac",
+    "gpt_4o",
+    "openai"
+  ],
+  "items": [
+    {
+      "id": "eca3ba76-9e1c-449d-bfa8-43e1a390d681",
+      "slug": "adobe",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-08",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 0,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 0
+    },
+    {
+      "id": "e5a1f5c0-e737-4a12-9c96-d8ef54de2c02",
+      "slug": "anime-girl-studio",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "2443fa93-effd-4a9b-857a-5728e482efe9",
+      "slug": "artiversehub-ai",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "22561562-5b7e-4e32-b629-ea8626abeeda",
+      "slug": "chatgpt-mac",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 2
+    },
+    {
+      "id": "ef1cc4b5-98be-474b-b422-7b6f79ca6c3d",
+      "slug": "cursor",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-08",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 30,
+      "sourceUrl": "https://cursor.com/pricing",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 40
+    },
+    {
+      "id": "c00e172c-5121-4c9e-826d-b7cc40faf559",
+      "slug": "fastimage-ai-sketch-to-image",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "73a3ca28-707c-4460-b769-50ee47ba5e69",
+      "slug": "gpt_4o",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 2
+    },
+    {
+      "id": "38b8635f-7d00-4809-813a-052af63c83bd",
+      "slug": "honeydo",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "1ac05946-fab2-48bf-9c5d-6188124db8fb",
+      "slug": "openai",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 2
+    },
+    {
+      "id": "2b5a4ac9-16a2-48f2-b53e-38fc6467aab0",
+      "slug": "pipedream",
+      "classification": "claim_due",
+      "reason": "Mutable public claims reached review date; dated source evidence must be refreshed.",
+      "basisDates": {
+        "nextReviewDate": "2026-09-07",
+        "editorialReviewedAt": "2026-09-01",
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 14,
+      "overdueDays": 31,
+      "sourceUrl": "https://pipedream.com/docs/pricing",
+      "sourceAccessible": true,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 41
+    },
+    {
+      "id": "44dd71ec-57fb-4d1b-b702-002693fb7c36",
+      "slug": "salesforce_einstein",
+      "classification": "entity_due",
+      "reason": "No dated editorial or maintenance evidence for identity, canonical and core function.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-08",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 30,
+      "overdueDays": 0,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": 0
+    },
+    {
+      "id": "d79b9807-66dd-4f1d-82a8-b77e07b62f79",
+      "slug": "shop_your_ai_powered_Shopping_assistant",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "b880e586-db24-4a51-b275-e4933229ca81",
+      "slug": "tattooai-design",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    },
+    {
+      "id": "eaa24478-b5ae-4afc-a821-c549fe950a59",
+      "slug": "woy-ai",
+      "classification": "manual_archive_review",
+      "reason": "Legacy or low-evidence listing needs value, identity, and maintainability decision.",
+      "basisDates": {
+        "nextReviewDate": "2026-10-06",
+        "editorialReviewedAt": null,
+        "maintenanceCheckedAt": null
+      },
+      "risk": "medium",
+      "recommendedCadenceDays": 7,
+      "overdueDays": 2,
+      "sourceUrl": null,
+      "sourceAccessible": false,
+      "taskDecisionDependency": false,
+      "indexRisk": false,
+      "priority": -18
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "mode": "preflight",
+  "publishNotBefore": "2026-10-10",
+  "ownerTimeOverride": {
+    "batch": "fourth",
+    "originalPublishNotBefore": "2026-10-10",
+    "ownerAuthorizedOn": "2026-10-08",
+    "effectiveReleaseDate": "2026-10-08",
+    "reason": "Owner authorized sequential execution without calendar delay"
+  },
+  "productionWrites": 0,
+  "results": [
+    {
+      "slug": "codex",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "294dd3fa81dd6b063a2d7a246bb563baed492af7a5c9f57fb6d9696f0706a8b1",
+      "passSnapshot": {
+        "id": "editorial-2026-09-06:codex",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-09-20",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "7b54b288a8cbb04b467fd9eb76de77ec7770f9052b51998c3f216f689b323377",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://learn.chatgpt.com/docs/pricing",
+        "https://learn.chatgpt.com/docs/cloud",
+        "https://learn.chatgpt.com/docs/agent-approvals-security"
+      ],
+      "unresolved": [
+        "Plan, region, model, workspace policy and remaining usage require target-account verification."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "dune",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "262a9af443768e44a79925a437ec3e0b9cb40d8c093b477fb61663beef09ff12",
+      "passSnapshot": {
+        "id": "editorial-2026-09-06:dune",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-09-20",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "566ee59c8f323469bf60dd924eab833ba6810c00b7b799c5b58aa0cb6b33b6db",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://docs.dune.com/docs/product-comparison",
+        "https://docs.dune.com/web-app/overview"
+      ],
+      "unresolved": [
+        "Actual query freshness, credit burn and Datashare terms depend on the target deployment and account."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "github-copilot",
+      "outcome": "fact_updated",
+      "preimageSha256": "0960abc0d40959b9606e6581881e6e3dbf60d4ae17921d44f215cbf828cce62f",
+      "passSnapshot": {
+        "id": "editorial-2026-09-06:github-copilot",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-06",
+        "validThrough": "2026-12-05",
+        "claimDueAt": "2026-09-20",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "3ae421a49539d60ab886cff9526081dbdc8a325fa6d1d57d8b172c9f7de81d89",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://github.com/features/copilot/plans",
+        "https://docs.github.com/en/copilot/concepts/context/content-exclusion"
+      ],
+      "unresolved": [
+        "Regional checkout, organization policy, model-specific credit consumption and remaining balance require account verification."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "runway",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "c36343f96d944a8ab6d4417d305b69e74ae83cede3e9f5d6d36a6d54f3dda9b9",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:runway",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-09-05",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "94c6022df2fc301036381dd17e44b9d308795a9754e5b0a1ff0bb73e45b1cdba",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://runway.com/pricing",
+        "https://help.runwayml.com/hc/en-us/articles/15124877443219-How-do-credits-work",
+        "https://help.runwayml.com/hc/en-us/articles/21664961171475-Which-plan-is-right-for-me"
+      ],
+      "unresolved": [
+        "Model access, output costs, legacy migration and Creative/API balances require target-workspace verification."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "luma-ai",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "d9e3a3525e34834a0776443300fec9210b5b1184a9aa1817c8a9a077195a4843",
+      "passSnapshot": {
+        "id": "editorial-2026-09-25:luma-ai",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json",
+        "sha256": "c1a80678e7103e8ac0a335e93024c461991ad6c59181de12632d98a6336c519f",
+        "reviewedAt": "2026-09-25",
+        "validThrough": "2026-12-24",
+        "claimDueAt": "2026-09-06",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "522bee5a5b382639988d580b9342ea90b3b9fce4c71afb576f7e12f475002e85",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://lumalabs.ai/llm-info",
+        "https://lumalabs.ai/api"
+      ],
+      "unresolved": [
+        "Selected App plan rights, API model price, region and account credits require signed-in verification."
+      ],
+      "status": "already_applied"
+    }
+  ]
+}
