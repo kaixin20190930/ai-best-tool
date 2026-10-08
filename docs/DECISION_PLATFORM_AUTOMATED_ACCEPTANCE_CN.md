@@ -18,6 +18,12 @@
 - 环境缺失形成的 N/A 记录一次即可；不得为形式绿灯重复安装、重建或重跑。
 - QA PASS 即关闭验收；只有新差分或生产异常才能重开。单项超过 60 分钟、同类流程问题连续两次 QA FAIL，或验收成本明显超过用户可见改动时，总控必须缩小范围。
 
+## 2026-10-08 Claim 发布门禁契约
+
+候选公开资格按实体/页面和 Claim 两层验收。实体级身份、唯一 canonical、重复意图、核心功能真实性、素材版权/法律安全、明显误导、页面内容不足任一失败时为全局 HOLD。可变 Claim 的 `unknown`、`conditional`、`conflict`、`stale` 仅保持 Claim 级 HOLD；精确值省略，或显示边界/限制、来源和 `nextReviewDate` 时，实体仍可 `READY_MONITOR`。`conflict` 缺公开限制、来源或下次复查日必须失败。manifest 新字段为可选，旧包兼容；`entityReleaseApproved` 不可替代 `claimLevelHolds`。该契约不产生 `continue_index` 或 sitemap 批准。
+
+专项用例至少覆盖未验证账户价格且省略精确值、身份/核心功能实体 HOLD、冲突 Claim 的公开限制与复查日、Murf 类 monitor/noindex + Claim HOLD、禁止自动批准索引，以及旧 manifest 兼容。运行时契约变化执行专项测试与 TypeScript；发布路径改变时额外执行一次 build，并检查 `git diff --check`。不因该规则单元触发生产 smoke、迁移或部署。
+
 ## 一、质量门禁
 
 涉及 H 级数据库、安全或发布边界变更时使用完整顺序；R/C 级按上面的增量规则裁剪：

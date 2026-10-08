@@ -2,6 +2,8 @@
 
 更新时间：2026-10-08
 
+2026-10-08 **CLAIM-GATED-PUBLICATION-POLICY-01 规则与运行时契约完成**：发布门禁拆分为实体/页面批准和单条 Claim holds。实体身份、唯一 canonical、重复意图、核心能力真实性、素材权利/法律安全、明显误导及内容不足仍触发全局 HOLD；未验证价格、账号权益、配额、隐私/删除/导出/商用边界可留在 claimLevelHolds，不妨碍实体在边界与复查信息完整时进入 `READY_MONITOR` / `published + monitor/noindex`。新 manifest 字段可选，旧 manifest 兼容；价格/账号/隐私权利/核心能力/身份的首复与常规频率已固化。策略专项、candidate-release 回归、`tsc --noEmit`、`git diff --check` 均通过；`pnpm run build` 编译通过但静态生成因缺少 `SUPABASE_SECRET_KEY` / `SUPABASE_SERVICE_ROLE_KEY` 在 `/api/monitor/trial-reminders` 失败。**此实现不批准任何候选，不写生产，不批准 `continue_index` 或 sitemap，不含迁移或部署。**
+
 2026-10-08 **MURF-STUDIO-IDENTITY-MATERIAL-01 身份与别名收口已部署，工具发布仍 HOLD**：唯一候选实体明确为 Murf Studio（vendor Murf），不把 Murf API、Dub 或 Agents 建成额外工具。历史 `murf-ai` 三语路径已在生产 308 至 `/murf` 对应 canonical；新路径保持 self-canonical、`noindex, follow`，sitemap 匹配 0。平台自有中性封面与 Murf Academy 官方 Studio 教学 embed 通过独立 QA；价格/账号权益及终止后的删除与音频取回范围仍有真实证据缺口，因此未创建生产实体、未批准索引或关系，`productionWrites=0`。提交 `df3f7873` 已部署，完整 build 与生产 SEO smoke 通过。详见[收口记录](./MURF_STUDIO_IDENTITY_MATERIAL_CLOSEOUT_2026-10-08_CN.md)。
 
 2026-10-08 **ELICIT-MATERIAL-DISPLAY-01 已发布并完成独立 QA**：未复制、自托管或热链 Elicit 官方 logo/截图；工具身份图与封面采用 AI Best Tool 自有中性编辑素材，真实展示采用 Elicit 官方频道可嵌入的 Research Agent 视频。统一发布器补齐 `video_url` fail-closed 与读回；`cn` 已按简体 locale 契约修正。生产 preflight、素材 hash、事务 rollback 和显式 commit 均通过，唯一实体 `c2e3a5f4-cf8e-4564-8563-093053962ed1` 为 `published + monitor/noindex`，下次复核 `2026-10-14`；不进入 sitemap，不创建 Task/Capability/Fit 关系。详见[交付记录](./ELICIT_MATERIAL_DISPLAY_2026-10-07_CN.md)。

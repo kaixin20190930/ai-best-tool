@@ -50,6 +50,14 @@ sitemap。2026-09-01 一次创建了 11 个成熟工具实体，它们此前全�
 
 “不在 sitemap”不再作为 noindex 的替代品。工具详情元数据与 sitemap 必须共同使用同一索引门禁。
 
+## 实体发布与 Claim 核验分层
+
+公开页面资格和每条 Claim 的断言资格分别判定。实体级全局 `HOLD` 仅由身份、唯一 canonical、重复意图、核心功能真实性、素材版权/法律安全、明显误导或页面内容不足触发。价格、账号权益、额度、删除/导出/商用边界等可变 Claim 的 `unknown`、`conditional`、`conflict`、`stale` 只阻止该 Claim 的公开精确断言和精确推荐；页面可省略精确值，或显示明确边界、限制、来源和 `nextReviewDate`，并保持 `published + monitor/noindex`。
+
+状态集合：`verified_public`、`verified_account`、`conditional`、`conflict`、`unknown`、`stale`。账号核验仅对其账号/套餐范围有效；只有 `verified_public` 可支撑无范围限制的公开精确断言，`verified_account` 可支撑明确限定在已核验账号内的判断。冲突 Claim 必须展示限制、来源与 `nextReviewDate`，自身继续 HOLD。运行时 manifest 可用 `entityReleaseApproved` 表达实体结果、用 `claimLevelHolds` 表达未决 Claim；缺少该可选契约的旧 manifest 继续按原状态读取。
+
+复核间隔（首复/常规）：价格 7/14 天，账号权益 14/30 天，隐私与权利 14/30 天，核心能力 30/60 天，身份 canonical 30/90 天。账号级事实连续两次无法取得后改为每 30 天复核。实体通过该门禁只可进入 monitor；`continue_index`、robots 放行和 sitemap 资格仍由更严格且独立的索引评审决定，本政策不会自动批准它们。
+
 ## 2026-09-02 首批节奏调整
 
 当前保留 `Emdash` 与 `Fathom` 为首批索引页。其余 9 个 2026-09-01 新增工具改为 `monitor`，按每天最多一个复核：
@@ -113,8 +121,7 @@ sitemap。2026-09-01 一次创建了 11 个成熟工具实体，它们此前全�
 ### 发布前可观察的五个维度
 
 1. **技术完整性**：页面 200、英中 self-canonical、`noindex,follow`、不在 sitemap、素材可访问、结构化数据与可见内容一致。
-2. **内容完整性**：质量分至少 80，且 Decision Card、Best for、Not ideal for、比较维度、价格/额度、真实限制、最近核查和下
-   次复查均非占位内容。
+2. **内容完整性**：质量分至少 80，且 Decision Card、Best for、Not ideal for、比较维度、影响决策的价格/额度边界、真实限制、最近核查和下次复查均非占位内容。精确价格/额度未知时可以省略数值；不得因此把 Claim 写成已验证，也不得据此触发实体级 HOLD。
 3. **证据与市场真实性**：`marketValidation.verdict = validated`，至少两条互补官方来源、一条强独立采用信号和另一条强/辅助
    信号；厂商自述、品牌知名度或付费不能单独通过。
 4. **身份与搜索意图**：只有一个 canonical 产品实体；不与现有 Tool、Best、Guide、comparison、alias 争夺同一意图；功能名不

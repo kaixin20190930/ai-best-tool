@@ -125,6 +125,16 @@ AI 相关性判断必须写成：**谁，通过什么入口，让 AI 承担什�
 | 允许索引 | 另经内容质量、重复意图、SEO 架构及索引额度复核；当前暂停时不得批准 |
 | 推荐 / Best for | 对明确任务有比较依据、限制与方法，不能因收录或付费自动授予 |
 
+### 实体发布门禁与 Claim 核验门禁
+
+发布判断分为实体/页面层与单条 Claim 层。全局 `HOLD` 只用于实体身份不清、canonical 不唯一、重复意图未解决、核心功能真实性失败、素材版权或法律安全未通过、明显误导，或页面内容不足。价格、账号权益、额度、删除/导出/商用边界等可变事实属于 Claim 级判断；`unknown`、`conditional`、`conflict`、`stale` 不自动让整个实体进入 `HOLD`。
+
+Claim 至少使用 `verified_public`、`verified_account`、`conditional`、`conflict`、`unknown`、`stale` 状态。仅 `verified_public` 可支撑无条件的公开精确断言；`verified_account` 只可用于明确限定到已核验账号的判断，不得泛化为所有用户权益。`conditional`、`conflict`、`unknown`、`stale` 必须从精确断言与精确推荐中排除。页面可以省略精确值；若展示边界或限制，须说明适用范围、来源与 `nextReviewDate`。`conflict` 必须公开限制、来源和 `nextReviewDate`，且 Claim 本身继续保持 HOLD。
+
+实体门禁通过、页面诚实呈现未决 Claim 时，可为 `READY_MONITOR` 并以 `published + monitor/noindex` 公开。`entityReleaseApproved` 表示实体/页面层通过，`claimLevelHolds` 保留仍不可断言/精确推荐的 Claim；二者不可合并成一个全局状态。该状态不批准 `continue_index`，不进入 sitemap，也不生成索引批准。
+
+复核间隔固定为：价格 7 天首复/14 天常规；账号权益 14/30 天；隐私与权利 14/30 天；核心能力 30/60 天；身份 canonical 30/90 天。连续两次无法取得账号级事实后转为每 30 天复核，不把持续无法验证当成通过。
+
 ## 编辑记录与历史复核
 
 每次复核至少记录：工具 ID/slug、具体产品名、对象类型、主产品依赖、AI 任务与使用入口、八项门槛逐项结论（通过/未通过/待核验）、官方来源、独立信号及其强弱理由、核查人与日期、结论与下一步、下次复查日期。

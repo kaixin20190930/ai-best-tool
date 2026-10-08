@@ -7,6 +7,10 @@ import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
 import { assertVideoReadback, validateVideoUrl } from './candidate-release-video';
+import {
+  validateOptionalPublicationPolicy,
+  type PublicationPolicyManifest,
+} from './claim-publication-policy';
 
 type Candidate = {
   slug: string;
@@ -25,6 +29,9 @@ type Preaudit = {
   publishNotBefore: string;
   releasedAt?: string;
   releaseIndexState?: 'monitor' | 'continue_index';
+  entityReleaseApproved?: boolean;
+  claimLevelHolds?: string[];
+  publicationPolicy?: PublicationPolicyManifest;
   productionWriteApproved: boolean;
   sitemapChangeApproved: boolean;
   sources: { official: string[]; independent: string[] };
@@ -162,6 +169,14 @@ function loadPreaudit(candidate: Candidate): Preaudit {
   const audit = readJson<Preaudit>(path.join(root, 'data', 'collection', candidate.preauditFile));
   assert.equal(audit.slug, candidate.slug);
   assert.equal(audit.existingRoute, `/ai/${candidate.slug}`);
+  const publicationDecision = validateOptionalPublicationPolicy(audit);
+  if (publicationDecision) {
+    assert.equal(
+      publicationDecision.continueIndexApproved,
+      false,
+      `${candidate.slug}: publication policy cannot approve indexing`,
+    );
+  }
   assert.equal(
     audit.action,
     candidate.existingEntityExpected ? 'refresh_existing_entity' : 'migrate_existing_fallback',
