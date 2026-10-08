@@ -6,7 +6,7 @@ import { Client } from 'pg';
 import { getDatabaseConnectionString } from '../lib/database/connection';
 import { FIRST_BATCH, applyCandidateDetail } from './freshness-first-batch';
 import SECOND_BATCH from './freshness-second-batch';
-import { verifyFreshnessPassSnapshot } from './verify-freshness-pass-snapshot';
+import { freshnessProductionWrites, freshnessResultStatus, inspectFreshnessState } from './freshness-batch-state';
 
 const protectedKeys = ['status','page_quality_status','name','url','title','id','pricing'];
 const hash = (value: unknown) => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -36,8 +36,7 @@ async function main() {
         const found = await client.query(`${readSql}${mode === 'preflight' ? '' : ' FOR UPDATE'}`, [candidate.id, candidate.slug]);
         assert.equal(found.rowCount, 1, `${candidate.slug}: entity missing or duplicate`);
         const before = found.rows[0].record;
-        const appliedMarker = before.features?.maintenanceReview?.checkedAt === candidate.checkedAt;
-        const passSnapshot = verifyFreshnessPassSnapshot(candidate, before, new Date().toISOString().slice(0, 10), appliedMarker ? 'after' : 'before');
+        const { alreadyApplied, passSnapshot } = inspectFreshnessState(candidate, before, new Date().toISOString().slice(0, 10));
         assert.equal(before.status, 'published');
         assert(['monitor','continue_index'].includes(before.page_quality_status));
         assert(before.features && typeof before.features === 'object' && !Array.isArray(before.features));
@@ -47,7 +46,6 @@ async function main() {
         if (mode === 'commit' && (!approved || approved.preimageSha256 !== beforeHash ||
             JSON.stringify(approved.passSnapshot) !== JSON.stringify(passSnapshot)))
           throw new Error(`${candidate.slug}: preimage or PASS snapshot drift`);
-        const alreadyApplied = appliedMarker;
         const next = structuredClone(before);
         next.detail = alreadyApplied ? before.detail : applyCandidateDetail(before.detail, candidate);
         assert.equal(hash(next.detail), candidate.expectedDetailSha256, `${candidate.slug}: candidate detail postimage mismatch`);
@@ -79,10 +77,10 @@ async function main() {
           passSnapshot,
           expectedDetailSha256: candidate.expectedDetailSha256,
           changedFields: alreadyApplied ? [] : changes, nextReviewDate: candidate.nextReviewDate,
-          sources: candidate.sources, unresolved: candidate.unresolved, status: alreadyApplied ? 'already_applied' : mode === 'commit' ? 'committed' : mode === 'rollback' ? 'rolled_back' : 'ready' });
+          sources: candidate.sources, unresolved: candidate.unresolved, status: freshnessResultStatus(mode, alreadyApplied) });
       } catch (error) { await client.query('ROLLBACK'); throw error; }
     }
-    const output = { mode, productionWrites: mode === 'commit' ? results.filter(row => row.status === 'committed').length : 0, results };
+    const output = { mode, productionWrites: freshnessProductionWrites(mode, results), results };
     const out = args.find(arg => arg.startsWith('--out='))?.slice(6);
     if (out) fs.writeFileSync(out, JSON.stringify(output, null, 2) + '\n');
     else console.log(JSON.stringify(output, null, 2));

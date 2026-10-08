@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 
+import { freshnessProductionWrites, freshnessResultStatus, inspectFreshnessState } from './freshness-batch-state';
 import { applyCandidateDetail } from './freshness-first-batch';
 import SECOND_BATCH from './freshness-second-batch';
 import { verifyFreshnessPassSnapshot } from './verify-freshness-pass-snapshot';
@@ -88,6 +89,68 @@ assert.throws(
     ),
   /PASS editorial snapshot mismatch/,
 );
+const gemini = SECOND_BATCH[0];
+const geminiAudit = audit.items.find((row: any) => row.slug === gemini.slug);
+const postDetail = { en: 'checked English postimage', zh: '已核中文后像', cn: '已核中文后像' };
+const postCandidate = {
+  ...gemini,
+  expectedDetailSha256: crypto.createHash('sha256').update(JSON.stringify(postDetail)).digest('hex'),
+};
+const postRow = {
+  id: gemini.id,
+  name: gemini.slug,
+  status: 'published',
+  url: gemini.expectedUrl,
+  detail: postDetail,
+  next_review_date: gemini.nextReviewDate,
+  features: {
+    editorial: { reviewedAt: gemini.passSnapshot.reviewedAt, sourceUrl: geminiAudit.sourceUrl },
+    maintenanceReview: {
+      checkedAt: gemini.checkedAt,
+      nextReviewDate: gemini.nextReviewDate,
+      outcome: gemini.outcome,
+      changeSummary: gemini.changeSummary,
+      scope: gemini.scope,
+      sources: gemini.sources,
+      unresolved: gemini.unresolved,
+      claims: gemini.claims || [],
+    },
+  },
+};
+const repeat = inspectFreshnessState(postCandidate, postRow, '2026-10-08');
+assert.equal(repeat.alreadyApplied, true);
+assert.equal(repeat.passSnapshot.id, gemini.passSnapshot.id);
+const repeatedPreflight = {
+  status: freshnessResultStatus('preflight', repeat.alreadyApplied),
+  changedFields: repeat.alreadyApplied ? [] : ['detail', 'features', 'next_review_date'],
+};
+assert.deepEqual(repeatedPreflight, { status: 'already_applied', changedFields: [] });
+assert.equal(freshnessProductionWrites('preflight', [repeatedPreflight]), 0);
+assert.equal(freshnessResultStatus('commit', repeat.alreadyApplied), 'already_applied');
+assert.equal(freshnessProductionWrites('commit', [{ status: 'already_applied' }]), 0);
+assert.throws(
+  () => inspectFreshnessState(postCandidate, { ...postRow, detail: { ...postDetail, en: 'tampered' } }, '2026-10-08'),
+  /applied maintenance snapshot mismatch/,
+);
+assert.throws(
+  () =>
+    inspectFreshnessState(
+      postCandidate,
+      {
+        ...postRow,
+        features: {
+          ...postRow.features,
+          maintenanceReview: { ...postRow.features.maintenanceReview, nextReviewDate: '2026-10-23' },
+        },
+      },
+      '2026-10-08',
+    ),
+  /applied maintenance snapshot mismatch/,
+);
+assert.throws(
+  () => inspectFreshnessState(postCandidate, { ...postRow, next_review_date: '2026-10-23' }, '2026-10-08'),
+  /applied maintenance snapshot mismatch/,
+);
 const openrouter = SECOND_BATCH.find((row) => row.slug === 'openrouter')!;
 const old = {
   en: 'Pricing checked 2026-09-04: Pay-as-you-go has a 5.5% platform fee and no minimum spend. BYOK has no platform fee on the first $25,000 of list-price inference per month, then 5%; Enterprise has a separate $200,000 threshold.',
@@ -103,5 +166,5 @@ assert.notEqual(
   crypto.createHash('sha256').update(JSON.stringify(updated)).digest('hex'),
 );
 console.log(
-  'PASS second freshness batch selection, PASS lineage, scoped claims, exact patches, preflight and rollback',
+  'PASS second freshness batch selection, PASS lineage, scoped claims, exact patches, replay postimage, preflight and rollback',
 );

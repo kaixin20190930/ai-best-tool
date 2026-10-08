@@ -25,3 +25,5 @@
 验证命令：`pnpm exec tsx scripts/test-freshness-second-batch.ts`、`pnpm exec tsx scripts/test-freshness-backlog.ts`、`./node_modules/.bin/tsc --noEmit`、`git diff --check`。未改运行时/路由，因此不运行 build。
 
 新增两份 TypeScript 文件的 `eslint --quiet` 已通过。对共用旧文件运行 `eslint --quiet --fix-dry-run` 后仍有 6 条历史规则报错：`run-freshness-first-batch.ts` 的 `no-nested-ternary`（3）和 `no-shadow`（1），`verify-freshness-pass-snapshot.ts` 的 `import/prefer-default-export`、`naming-convention`（各 1）；相同行可在本提交父版本找到。本批未重排旧流水线，提交时使用仓库既有 `HUSKY=0`，保留此 lint 债供独立处理。
+
+QA 增量复验补充了第二批 `already_applied` 后像用例：完整正文摘要、维护记录和排期通过；逐一篡改 `detail`、`maintenanceReview.nextReviewDate` 或 `next_review_date` 均被拒绝。复用执行器的状态与写入计数函数断言重复预检返回 `already_applied`、`changedFields=[]`、`productionWrites=0`，重复 commit 状态的写入数也为 0。本次只增加本地验证，未执行生产 commit。
