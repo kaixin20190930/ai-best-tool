@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-08
+更新时间：2026-10-09
+
+2026-10-09 **IDENTITY-FRESHNESS-BATCH-05 生产提交与收口完成**：按第四批后队列处理 Pipedream、Cursor 两项到期 Claim，并对 ChatGPT Mac、GPT-4o、OpenAI 完成身份只读审计。Pipedream 三语正文补明 Workflows/String 将于 2027-03-31 停止、Connect 继续支持及各自计费边界；Cursor 公开 Claim 无正文变化。总控在独立 QA 后完成 fresh preflight、rollback 与独立只读回验（均 `productionWrites=0`），受控提交仅两项 freshness patch（`productionWrites=2`）；[只读 postcheck](./FRESHNESS_FIFTH_BATCH_POSTCHECK_2026-10-09.json)两项均 `already_applied`、`changedFields=[]`、`productionWrites=0`。三个身份项的 MERGE_REDIRECT/ARCHIVE 仍是单独候选，未执行；工具 status、page_quality_status、pricing、URL/canonical、index 和 sitemap 均未改变。[第五批后 backlog](./FRESHNESS_BACKLOG_AFTER_BATCH5_2026-10-09.json)为 75 个工具、57 个 published、13 个 published 到期项（`schedule_sync=0`、`claim_due=1`、`entity_due=5`、`manual_archive_review=7`），下一选择为 Replit、ChatGPT Mac、GPT-4o、OpenAI、Adobe。详见[第五批交付审计](./IDENTITY_FRESHNESS_BATCH_05_2026-10-09_CN.md)。
 
 2026-10-08 **PIKA-CLAIM-GATED-RELEASE-01 已受控发布**：继承 prerelease `QA_PASS`，按实体/Claim 两层门禁保留套餐、credits、商用、水印、导出、重试成本、商品保真及当前视频隐私八条 Claim HOLD；三语公开稿省略无法证明的精确断言，封面为本站自有中性 SVG。总控在独立 QA 后完成资产 200/hash、fresh preflight online、事务 rollback 与显式 commit；唯一实体 `23d1e226-15f1-568a-9906-57726d982780` 为 `published + monitor/noindex`。发布后 `verify --online` PASS：三语 canonical/noindex 正确、sitemap Pika 0、Task/Capability/Fit 0。未批准 `continue_index` 或 sitemap；本地文档收口未再次写生产、未 push。详见[受控发布记录](./PIKA_CONTROLLED_RELEASE_CANDIDATE_2026-10-08_CN.md)。
 

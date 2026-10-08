@@ -1,0 +1,61 @@
+{
+  "mode": "preflight",
+  "batch": "fifth",
+  "productionWrites": 0,
+  "results": [
+    {
+      "slug": "pipedream",
+      "outcome": "fact_updated",
+      "preimageSha256": "e62f613a96e3c0b0b21c49014506d0ef1ff003d688900ea0b831b0c40cdbf660",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:pipedream",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json",
+        "sha256": "86b65d3ef19ff7933014d7475b2563df4f924e560b3e38c6cd1df7a787d2d2cc",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-09-07",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "90dd935294b5348370e34ca7a910aa39bb3c60ed0681a6c60bacf893c6cc8b61",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-23",
+      "sources": [
+        "https://pipedream.com/docs/workflows",
+        "https://pipedream.com/docs/pricing",
+        "https://pipedream.com/pricing"
+      ],
+      "unresolved": [
+        "Existing-account transition, refund and data-export specifics are not inferred in this patch; confirm them directly with the account and official notice. Actual Connect credit burn and external-user count require target-workspace checks."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "cursor",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "8b9256d75f6b101af5c884eabddd2d73660bb0cef294ea2f60002cefb8e0047f",
+      "passSnapshot": {
+        "id": "editorial-2026-09-01:cursor",
+        "source": "docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json",
+        "sha256": "86b65d3ef19ff7933014d7475b2563df4f924e560b3e38c6cd1df7a787d2d2cc",
+        "reviewedAt": "2026-09-01",
+        "validThrough": "2026-11-30",
+        "claimDueAt": "2026-09-08",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "8c86db6802be285bbb5db2d60ce8da3ce9b4b9f222bcfaf4397cd0236f4830f6",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-23",
+      "sources": [
+        "https://cursor.com/pricing",
+        "https://prod.cursor.com/help/account-and-billing/pricing",
+        "https://cursor.com/data-use",
+        "https://cursor.com/blog/joining-spacex",
+        "https://openai.com/index/our-decision-on-cursor-following-its-acquisition-by-spacex/"
+      ],
+      "unresolved": [
+        "Regional checkout, actual model spend, workspace Privacy Mode, and future third-party model availability require target-account verification."
+      ],
+      "status": "already_applied"
+    }
+  ]
+}

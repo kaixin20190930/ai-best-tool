@@ -1,6 +1,6 @@
 # IDENTITY-FRESHNESS-BATCH-05：行动矩阵与生产只读审计
 
-日期：2026-10-09（上海）。选择顺序锁定为 [第四批后 backlog](./FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json) 的 `selected`：Pipedream、Cursor、ChatGPT Mac、GPT-4o、OpenAI。原文件 SHA-256：`86b65d3ef19ff7933014d7475b2563df4f924e560b3e38c6cd1df7a787d2d2cc`。`claim_due` 与 `entity_due` 分开处理；本批没有生产提交。
+日期：2026-10-09（上海）。选择顺序锁定为 [第四批后 backlog](./FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json) 的 `selected`：Pipedream、Cursor、ChatGPT Mac、GPT-4o、OpenAI。原文件 SHA-256：`86b65d3ef19ff7933014d7475b2563df4f924e560b3e38c6cd1df7a787d2d2cc`。`claim_due` 与 `entity_due` 分开处理；总控已在独立 QA 后仅提交两项 freshness patch，三个身份候选未执行。
 
 ## 五项 action matrix
 
@@ -12,7 +12,7 @@
 | `gpt_4o` | 当前仍列于 OpenAI API 的模型名称；`ARCHIVE` **目录身份候选** | 单独批次：从工具比较关系及推荐入口移出，保留带 API 来源的 noindex 历史/模型说明或迁入模型目录；无一对一工具重定向 | [官方模型页](https://developers.openai.com/api/docs/models/gpt-4o)仍提供 API 模型信息。不能把模型重定向成 ChatGPT 或 Codex；API 可用性和账户权限单独核验。 |
 | `openai` | 公司/品牌及产品家族页；`ARCHIVE` **目录身份候选** | 单独批次：改作品牌导航或历史说明，撤出工具推荐与比较关系，按具体产品分流；不做单一产品 301 | [OpenAI 官方产品/开发者入口](https://developers.openai.com/chatgpt)与 [ChatGPT 文档](https://learn.chatgpt.com/docs/app)显示产品和入口分层；不存在统一功能、统一价格的“OpenAI 工具”。 |
 
-`MERGE_REDIRECT` 与 `ARCHIVE` 是身份候选，不是本批生产动作。它们需要迁移评估：目标页真实性、已有外链与站内链接、locale 路由、历史查询意图、canonical、索引及 sitemap。尤其 GPT-4o 仍有 API 用途，不能把“非独立工具”误作“已停止的模型”。
+`MERGE_REDIRECT` 与 `ARCHIVE` 是身份候选，不是本批生产动作。它们需要迁移评估：目标页真实性、已有外链与站内链接、locale 路由、历史查询意图、canonical、索引及 sitemap。尤其 GPT-4o 仍有 API 用途，不能把“非独立工具”误作“已停止的模型”。总控本轮没有改变三条身份记录、路由或索引。
 
 ## 生产只读身份矩阵
 
@@ -35,4 +35,10 @@
 - [独立只读回验](./FRESHNESS_FIFTH_BATCH_POST_ROLLBACK_2026-10-09.json)：演练进程退出后新连接逐行读取，完整行 hash 与 preflight 相同；`productionWrites=0`。
 - `scripts/test-freshness-fifth-batch.ts` 覆盖顺序、PASS、Pipedream Workflows/String 与 Connect 区分、过度泛化禁例、精确替换、manifest 来源/后像篡改、独立回读篡改与缺行、后像重放零写入及详情、日期、来源 tamper；TypeScript `tsc --noEmit` 通过。
 
-发布前总控仍需独立 QA，并在提交时重新锁生产前像；若 `view_count`、`updated_at` 等运行时列漂移，也应重新 preflight。生产提交后要做新的只读 postcheck。本开发任务不执行 `--commit`、push 或身份路由/索引变更。
+## 生产提交与第五批收口
+
+总控独立 QA 后重新执行了生产前像锁定、事务 rollback 和新连接只读回验；三项均为 `productionWrites=0`。受控 commit 仅更新 Pipedream 与 Cursor，`productionWrites=2`。本任务随后生成的[独立只读 postcheck](./FRESHNESS_FIFTH_BATCH_POSTCHECK_2026-10-09.json)对两项均返回 `already_applied`、`changedFields=[]`、`productionWrites=0`，确认后像可重放且未再次写入。开发与文档收口没有执行生产 `--commit` 或 push。
+
+本批只改变 Pipedream 的三语 `detail`、两项 `features.maintenanceReview` 与 `next_review_date`。两项工具的 `status`、`page_quality_status`、`pricing`、URL/canonical、索引和 sitemap 均保持原值；三项身份候选仍为 `published + monitor/noindex`，没有合并、归档或重定向。
+
+[第五批后生产只读 backlog](./FRESHNESS_BACKLOG_AFTER_BATCH5_2026-10-09.json)的 SHA-256 为 `776c10e2e5fe0f3afefd9f0e7b8d4b5262f8d2e4151da7bcc276ac897d86fec9`：截至 2026-10-09，工具 75 个、published 57 个、published 到期 13 项；`schedule_sync=0`、`claim_due=1`、`entity_due=5`、`manual_archive_review=7`。下一组确定性选择为 `replit`、`chatgpt-mac`、`gpt_4o`、`openai`、`adobe`，此处仅记录队列，不预先执行身份变更。
