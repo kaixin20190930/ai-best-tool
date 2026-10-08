@@ -1,6 +1,6 @@
 # 第二批到期 Claim 复核候选（2026-10-08）
 
-本交付只制作可精确验收的候选，**生产持久写入为 0，未 push**。[实时只读审计](./FRESHNESS_SECOND_BATCH_AUDIT_2026-10-08.json)仍为 71 条工具、55 条 published、29 条到期，其中 `claim_due=16`。确定性选择器前五依次为 Gemini、Notion、n8n、OpenRouter、Poe，与预期相同。`updated_at` 仅用于并发前像哈希，绝不作为事实证据。
+本交付先制作可精确验收的候选，并在独立 QA PASS 后完成受控生产提交。[实时只读审计](./FRESHNESS_SECOND_BATCH_AUDIT_2026-10-08.json)基线为 71 条工具、55 条 published、29 条到期，其中 `claim_due=16`。确定性选择器前五依次为 Gemini、Notion、n8n、OpenRouter、Poe，与预期相同。`updated_at` 仅用于并发前像哈希，绝不作为事实证据。
 
 ## Claim 差分
 
@@ -16,14 +16,16 @@
 
 ## 执行与验收边界
 
-五项沿用首批通用执行器 [`run-freshness-first-batch.ts`](../scripts/run-freshness-first-batch.ts)，指定 `--batch=second`。实体基线继承 2026-09-04 的已发布编辑记录，身份资料固定在[首批 post-commit 审计](./FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json)的 SHA-256；有效至 2026-12-03，仅覆盖实体基线，旧 Claim 仍在 2026-09-18 到期。preflight 校验快照文件摘要、ID/slug、生产 URL、编辑来源与日期、到期日、正文精确替换及固定后像 SHA-256。实际生产写入如另行授权，必须用预检 manifest 的完整前像 SHA-256；提交后需只读核正文、维护记录、排期及受保护字段。当前没有执行 `--commit`。
+五项沿用首批通用执行器 [`run-freshness-first-batch.ts`](../scripts/run-freshness-first-batch.ts)，指定 `--batch=second`。实体基线继承 2026-09-04 的已发布编辑记录，身份资料固定在[首批 post-commit 审计](./FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json)的 SHA-256；有效至 2026-12-03，仅覆盖实体基线，旧 Claim 仍在 2026-09-18 到期。preflight 校验快照文件摘要、ID/slug、生产 URL、编辑来源与日期、到期日、正文精确替换及固定后像 SHA-256。生产提交使用经 QA 审核的完整前像 manifest；提交后只读核对正文、维护记录、排期及受保护字段。
 
 - [只读 preflight](./FRESHNESS_SECOND_BATCH_PREFLIGHT_2026-10-08.json)：5 条 `ready`，每条前像哈希和后像摘要均固定，`productionWrites=0`。
 - [逐项回滚演练](./FRESHNESS_SECOND_BATCH_ROLLBACK_2026-10-08.json)：5 条 `rolled_back`，事务内后像和受保护字段断言通过，持久写入为 0。
+- [生产后只读 postcheck](./FRESHNESS_SECOND_BATCH_POSTCHECK_2026-10-08.json)：5 条均为 `already_applied`、`changedFields=[]`、`productionWrites=0`。
+- [第二批后积压审计](./FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json)：published 到期数从 29 降至 **24**；余下 `schedule_sync=1`、`claim_due=11`、`entity_due=5`、`manual_archive_review=7`。下一批确定性顺序为 Claude、DeepL、Emdash、Fathom、The Graph。
 - 允许的候选字段只有 `detail`、`features.maintenanceReview` 和 `next_review_date`；状态、页面质量、URL/canonical、index 与 sitemap 均不改。无数据库迁移。两份无关本地 SQL 修改不在本交付范围。
 
 验证命令：`pnpm exec tsx scripts/test-freshness-second-batch.ts`、`pnpm exec tsx scripts/test-freshness-backlog.ts`、`./node_modules/.bin/tsc --noEmit`、`git diff --check`。未改运行时/路由，因此不运行 build。
 
 新增两份 TypeScript 文件的 `eslint --quiet` 已通过。对共用旧文件运行 `eslint --quiet --fix-dry-run` 后仍有 6 条历史规则报错：`run-freshness-first-batch.ts` 的 `no-nested-ternary`（3）和 `no-shadow`（1），`verify-freshness-pass-snapshot.ts` 的 `import/prefer-default-export`、`naming-convention`（各 1）；相同行可在本提交父版本找到。本批未重排旧流水线，提交时使用仓库既有 `HUSKY=0`，保留此 lint 债供独立处理。
 
-QA 增量复验补充了第二批 `already_applied` 后像用例：完整正文摘要、维护记录和排期通过；逐一篡改 `detail`、`maintenanceReview.nextReviewDate` 或 `next_review_date` 均被拒绝。复用执行器的状态与写入计数函数断言重复预检返回 `already_applied`、`changedFields=[]`、`productionWrites=0`，重复 commit 状态的写入数也为 0。本次只增加本地验证，未执行生产 commit。
+QA 增量复验补充了第二批 `already_applied` 后像用例：完整正文摘要、维护记录和排期通过；逐一篡改 `detail`、`maintenanceReview.nextReviewDate` 或 `next_review_date` 均被拒绝。复用执行器的状态与写入计数函数断言重复预检返回 `already_applied`、`changedFields=[]`、`productionWrites=0`，重复 commit 状态的写入数也为 0。最终 QA 对增量提交 `55317397` 返回 `QA_PASS`，随后总控只执行一次生产提交和一次只读 postcheck。

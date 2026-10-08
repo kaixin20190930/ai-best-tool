@@ -1,0 +1,134 @@
+{
+  "mode": "preflight",
+  "productionWrites": 0,
+  "results": [
+    {
+      "slug": "gemini",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "9513521a4ff9bc365fa8e08a17bb82f51f9fec8f3a0221fd0f5e831fb4920ba9",
+      "passSnapshot": {
+        "id": "editorial-2026-09-04:gemini",
+        "source": "docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json",
+        "sha256": "9363aef0427fad07ad4fbda25e1b753e76aa3b0b9dcb8d9f4050c77e28ba10d1",
+        "reviewedAt": "2026-09-04",
+        "validThrough": "2026-12-03",
+        "claimDueAt": "2026-09-18",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "7ffec7d12f1ae37650818d0f6410c909a0c2459f7e57207da5fd6bc747784b00",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://support.google.com/gemini/answer/16275805?hl=en",
+        "https://support.google.com/gemini/answer/13594961?hl=en",
+        "https://support.google.com/gemini/answer/13278668?hl=en"
+      ],
+      "unresolved": [
+        "Account-specific limits, region and work/school administration are not publicly verifiable."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "notion",
+      "outcome": "fact_updated",
+      "preimageSha256": "b0ecfb82a35256b0398c414409a6a12d1a792030299cf9c564e67565c1288dff",
+      "passSnapshot": {
+        "id": "editorial-2026-09-04:notion",
+        "source": "docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json",
+        "sha256": "9363aef0427fad07ad4fbda25e1b753e76aa3b0b9dcb8d9f4050c77e28ba10d1",
+        "reviewedAt": "2026-09-04",
+        "validThrough": "2026-12-03",
+        "claimDueAt": "2026-09-18",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "79c5f08241f41253f10d5257e967b67c7ab3240dde645875f904fe4c542d5f2c",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://www.notion.com/help/notion-ai-faqs",
+        "https://www.notion.com/help/notion-ai-security-practices"
+      ],
+      "unresolved": [
+        "Workspace premium-model enablement, actual credits and enabled data-retaining LLMs require admin/account inspection."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "n8n",
+      "outcome": "fact_updated",
+      "preimageSha256": "2383e87ec1eea84de1ffc8a687d31f10a8cae341eb13e691ff4647aebaaf1cec",
+      "passSnapshot": {
+        "id": "editorial-2026-09-04:n8n",
+        "source": "docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json",
+        "sha256": "9363aef0427fad07ad4fbda25e1b753e76aa3b0b9dcb8d9f4050c77e28ba10d1",
+        "reviewedAt": "2026-09-04",
+        "validThrough": "2026-12-03",
+        "claimDueAt": "2026-09-18",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "3529734b7374bb520c5c4f2890453e708b6171a8311d048b716167d017f298cb",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://n8n.io/pricing/",
+        "https://docs.n8n.io/deploy/host-n8n/community-edition-features/",
+        "https://docs.n8n.io/privacy-and-security/sustainable-use-license"
+      ],
+      "unresolved": [
+        "Selected account billing, AI model consumption and external provider charges require workflow/account inspection."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "openrouter",
+      "outcome": "fact_updated",
+      "preimageSha256": "0e051ae71ecb007904d09742da19556016ffb6c51cb74eac45f84a4bdd406f82",
+      "passSnapshot": {
+        "id": "editorial-2026-09-04:openrouter",
+        "source": "docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json",
+        "sha256": "9363aef0427fad07ad4fbda25e1b753e76aa3b0b9dcb8d9f4050c77e28ba10d1",
+        "reviewedAt": "2026-09-04",
+        "validThrough": "2026-12-03",
+        "claimDueAt": "2026-09-18",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "688e283f363233ebe6cfd0594430dfdd2a8b3e8a30bdf6ca79f349d5fb3eba38",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-15",
+      "sources": [
+        "https://openrouter.ai/pricing",
+        "https://openrouter.ai/docs/guides/routing/provider-selection",
+        "https://openrouter.ai/docs/guides/privacy/provider-logging"
+      ],
+      "unresolved": [
+        "Enterprise BYOK terms are custom and exact endpoint/provider costs require account verification."
+      ],
+      "status": "already_applied"
+    },
+    {
+      "slug": "poe",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "81b4ad1b350569e392895bfc7ebd9be62e6461082bd95b12a4ccf2a6acd55fd9",
+      "passSnapshot": {
+        "id": "editorial-2026-09-04:poe",
+        "source": "docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json",
+        "sha256": "9363aef0427fad07ad4fbda25e1b753e76aa3b0b9dcb8d9f4050c77e28ba10d1",
+        "reviewedAt": "2026-09-04",
+        "validThrough": "2026-12-03",
+        "claimDueAt": "2026-09-18",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "eb8206298cdd9e5ff2200de3063557ab4619e8ec1cf3a95f23e25a20c3fce75f",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-22",
+      "sources": [
+        "https://help.poe.com/hc/en-us/articles/19945140063636-Poe-Purchases-FAQs",
+        "https://poe.com/pages/privacy-center"
+      ],
+      "unresolved": [
+        "Regional checkout, plan points, selected bot cost and actual shield permissions require account inspection."
+      ],
+      "status": "already_applied"
+    }
+  ]
+}
