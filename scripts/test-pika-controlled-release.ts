@@ -13,8 +13,9 @@ const audit = JSON.parse(fs.readFileSync('data/collection/pika-controlled-releas
 const payload = JSON.parse(fs.readFileSync('data/collection/pika-release.json', 'utf8'));
 const pipeline = fs.readFileSync('scripts/candidate-release-pipeline.ts', 'utf8');
 
-assert.equal(audit.status, 'ready_for_next_slot');
-assert.equal(audit.productionWriteApproved, false);
+assert.equal(audit.status, 'released');
+assert.equal(audit.productionWriteApproved, true);
+assert.equal(audit.releasedAt, '2026-10-08');
 assert.equal(audit.sitemapChangeApproved, false);
 assert.equal(audit.releaseIndexState, 'monitor');
 assert.deepEqual(validateOptionalPublicationPolicy(audit)?.claimLevelHolds, audit.claimLevelHolds);
@@ -150,5 +151,5 @@ for (const bad of [
 }
 assert.throws(() => assertPikaOnlinePage('/ai/pika', online, '<loc>https://aibesttool.com/tw/ai/pika</loc>'));
 assert(pipeline.includes('pika: verify requires --online after a real commit'));
-assert(pipeline.includes('/tw/ai/${candidate.slug}'));
+assert(/paths\.push\(`\/tw\/ai\/\$\{candidate\.slug\}`\)/.test(pipeline));
 console.log('PASS Pika controlled release: two-layer gates, localized boundary, media and protected-row negatives');

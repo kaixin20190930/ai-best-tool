@@ -2,7 +2,7 @@
   "slug": "pika",
   "existingRoute": "/ai/pika",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-10-08",
   "publishNotBefore": "2026-10-08",
   "releaseIndexState": "monitor",
@@ -118,7 +118,7 @@
       }
     ]
   },
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
   "sitemapChangeApproved": false,
   "sources": {
     "official": [
@@ -145,5 +145,6 @@
     "Review trilingual Claim limits, sources, correction entry and next-review dates",
     "Run protected-row preflight and transaction rollback; independent release QA before controller commit",
     "After explicit controller commit, run --phase=verify --online; require one published + monitor entity, trilingual canonical/noindex pages, sitemap zero and Task/Capability/Fit zero before close"
-  ]
+  ],
+  "releasedAt": "2026-10-08"
 }
