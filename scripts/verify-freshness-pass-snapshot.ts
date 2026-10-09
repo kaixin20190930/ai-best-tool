@@ -13,6 +13,7 @@ const allowedSources = new Set([
   'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json',
   'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json',
   'docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json',
+  'data/collection/replit-release.json',
 ]);
 
 // eslint-disable-next-line import/prefer-default-export
@@ -118,6 +119,7 @@ export function verifyFreshnessPassSnapshot(
     const manifestBySource: Record<string, string> = {
       'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json': 'docs/FRESHNESS_FOURTH_BATCH_PREFLIGHT_2026-10-08.json',
       'docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json': 'docs/FRESHNESS_FIFTH_BATCH_PREFLIGHT_2026-10-09.json',
+      'data/collection/replit-release.json': 'docs/REPLIT_FRESHNESS_PREFLIGHT_2026-10-09.json',
       'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json': 'docs/FRESHNESS_THIRD_BATCH_PREFLIGHT_2026-10-08.json',
       'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json': 'docs/FRESHNESS_SECOND_BATCH_PREFLIGHT_2026-10-08.json',
     };

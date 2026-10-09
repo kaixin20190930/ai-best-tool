@@ -20,6 +20,7 @@ import FOURTH_BATCH, {
   FOURTH_BATCH_PUBLISH_NOT_BEFORE,
   fourthBatchReleaseAllowed,
 } from './freshness-fourth-batch';
+import REPLIT from './freshness-replit';
 import SECOND_BATCH from './freshness-second-batch';
 import THIRD_BATCH, {
   assertThirdBatchReleaseManifest,
@@ -38,8 +39,9 @@ async function main() {
   const third = args.includes('--batch=third');
   const fourth = args.includes('--batch=fourth');
   const fifth = args.includes('--batch=fifth');
+  const replit = args.includes('--batch=replit');
   const second = args.includes('--batch=second');
-  if ([second, third, fourth, fifth].filter(Boolean).length > 1) throw new Error('Choose one batch');
+  if ([second, third, fourth, fifth, replit].filter(Boolean).length > 1) throw new Error('Choose one batch');
   let batch = FIRST_BATCH;
   let batchName = 'first';
   if (second) {
@@ -58,6 +60,10 @@ async function main() {
     batch = FIFTH_BATCH;
     batchName = 'fifth';
   }
+  if (replit) {
+    batch = REPLIT;
+    batchName = 'replit';
+  }
   let mode: 'commit' | 'rollback' | 'preflight' = 'preflight';
   if (args.includes('--rollback')) mode = 'rollback';
   if (args.includes('--commit')) mode = 'commit';
@@ -67,9 +73,15 @@ async function main() {
   if (
     args.some(
       (arg) =>
-        !['--commit', '--rollback', '--batch=second', '--batch=third', '--batch=fourth', '--batch=fifth'].includes(
-          arg,
-        ) &&
+        ![
+          '--commit',
+          '--rollback',
+          '--batch=second',
+          '--batch=third',
+          '--batch=fourth',
+          '--batch=fifth',
+          '--batch=replit',
+        ].includes(arg) &&
         !arg.startsWith('--manifest=') &&
         !arg.startsWith('--out='),
     )
@@ -112,11 +124,11 @@ async function main() {
   if (mode === 'commit' && (manifest?.mode !== 'preflight' || manifest?.results?.length !== batch.length))
     throw new Error('Invalid reviewed manifest');
   if (
-    fifth &&
+    (fifth || replit) &&
     mode === 'commit' &&
-    (manifest?.batch !== 'fifth' ||
+    (manifest?.batch !== batchName ||
       manifest?.productionWrites !== 0 ||
-      manifest?.results?.map((row: any) => row.slug).join(',') !== FIFTH_BATCH.map((row) => row.slug).join(','))
+      manifest?.results?.map((row: any) => row.slug).join(',') !== batch.map((row) => row.slug).join(','))
   )
     throw new Error('Fifth batch reviewed manifest mismatch');
   if (third && mode === 'commit') assertThirdBatchReleaseManifest(manifest);
@@ -144,7 +156,7 @@ async function main() {
         );
         assert.equal(before.status, 'published');
         assert(['monitor', 'continue_index'].includes(before.page_quality_status));
-        if (fifth) {
+        if (fifth || replit) {
           assert.equal(before.page_quality_status, 'monitor', `${candidate.slug}: index gate drift`);
           assert.equal(before.pricing, 'freemium', `${candidate.slug}: pricing enum drift`);
         }
@@ -171,7 +183,7 @@ async function main() {
           (key) => JSON.stringify(next[key]) !== JSON.stringify(before[key]),
         );
         assert(changes.every((key) => ['detail', 'features', 'next_review_date'].includes(key)));
-        if ((fourth || fifth) && mode === 'commit') {
+        if ((fourth || fifth || replit) && mode === 'commit') {
           let expectedChanges = changes;
           if (alreadyApplied) {
             expectedChanges = candidate.replacements?.length
@@ -228,6 +240,7 @@ async function main() {
       };
     }
     if (fifth) releaseMeta = { batch: 'fifth' };
+    if (replit) releaseMeta = { batch: 'replit' };
     const output = { mode, ...releaseMeta, productionWrites: freshnessProductionWrites(mode, results), results };
     const out = args.find((arg) => arg.startsWith('--out='))?.slice(6);
     if (out) fs.writeFileSync(out, JSON.stringify(output, null, 2) + '\n');

@@ -1,0 +1,42 @@
+{
+  "mode": "preflight",
+  "batch": "replit",
+  "productionWrites": 0,
+  "results": [
+    {
+      "slug": "replit",
+      "outcome": "fact_updated",
+      "preimageSha256": "e17951ef663fc46b895110b3c3c4b70b96f5de815cc5c3b061df9da270a12d24",
+      "passSnapshot": {
+        "id": "release-2026-09-09:replit",
+        "source": "data/collection/replit-release.json",
+        "sha256": "152fe4c059f6b3d386a152fc6254c33a55eefca03c28d042c39ad8a3a623b6e6",
+        "reviewedAt": "2026-09-09",
+        "validThrough": "2026-12-08",
+        "claimDueAt": "2026-10-09",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "41db2b61fba39801c69fba05e70e8965816600c991ce6d1a79c8a49adec0fb5a",
+      "changedFields": [
+        "detail",
+        "features",
+        "next_review_date"
+      ],
+      "nextReviewDate": "2026-10-16",
+      "sources": [
+        "https://replit.com/pricing",
+        "https://docs.replit.com/billing/plans/starter-plan",
+        "https://docs.replit.com/billing/plans/replit-core",
+        "https://docs.replit.com/billing/plans/replit-pro",
+        "https://docs.replit.com/billing/ai-billing",
+        "https://docs.replit.com/billing/deployment-pricing",
+        "https://docs.replit.com/billing/managing-spend"
+      ],
+      "unresolved": [
+        "The current public pricing page did not expose plan amounts in the retrieved page; exact monthly/annual checkout, included credits, regional tax and Enterprise terms require target-account verification.",
+        "Actual Agent, deployment and managed-service credit burn, and the effective budget or shutdown settings, require a representative account and workload."
+      ],
+      "status": "ready"
+    }
+  ]
+}
