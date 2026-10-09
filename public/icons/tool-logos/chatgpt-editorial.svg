@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="ChatGPT editorial category tile">
+  <rect width="128" height="128" rx="28" fill="#e7f7f1"/>
+  <rect x="12" y="12" width="104" height="104" rx="23" fill="#103b32"/>
+  <path d="M34 41h60v35H59L43 89V76h-9z" fill="none" stroke="#b9eed8" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="50" cy="59" r="3" fill="#b9eed8"/><circle cx="64" cy="59" r="3" fill="#b9eed8"/><circle cx="78" cy="59" r="3" fill="#b9eed8"/>
+</svg>

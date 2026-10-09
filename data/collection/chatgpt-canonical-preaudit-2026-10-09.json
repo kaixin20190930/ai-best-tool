@@ -1,0 +1,54 @@
+{
+  "slug": "chatgpt",
+  "existingRoute": "/ai/chatgpt",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-10-09",
+  "publishNotBefore": "2026-10-09",
+  "entityReleaseApproved": true,
+  "claimLevelHolds": ["plan-entitlements", "specific-model-quota", "personal-training-control", "business-training-default", "connector-memory-region"],
+  "productionWriteApproved": false,
+  "sitemapChangeApproved": false,
+  "publicationPolicy": {
+    "entityGates": {
+      "identity": "pass",
+      "uniqueCanonical": "pass",
+      "duplicateIntent": "pass",
+      "coreFunction": "pass",
+      "assetRightsAndLegalSafety": "pass",
+      "misleadingClaims": "pass",
+      "pageContentSufficiency": "pass"
+    },
+    "claims": [
+      { "id": "product-identity", "category": "identity_canonical", "status": "verified_public", "exposure": "exact", "preciseRecommendation": false, "sources": ["https://learn.chatgpt.com/docs/quickstart", "https://learn.chatgpt.com/docs/app"] },
+      { "id": "plan-entitlements", "category": "account_rights", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Features and quotas vary by plan, account, region, rollout and platform; verify the target account.", "sources": ["https://chatgpt.com/pricing/"], "nextReviewDate": "2026-10-16" },
+      { "id": "specific-model-quota", "category": "account_rights", "status": "unknown", "exposure": "omitted", "preciseRecommendation": false, "publicLimitation": "No account-specific model or exact quota was verified.", "sources": ["https://chatgpt.com/pricing/"], "nextReviewDate": "2026-10-16" },
+      { "id": "personal-training-control", "category": "privacy_rights", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Personal account training settings must be checked in the actual workspace.", "sources": ["https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt"], "nextReviewDate": "2026-10-23" },
+      { "id": "business-training-default", "category": "privacy_rights", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Business, Enterprise and Edu default is documented; specific agreements, retention and admin controls remain workspace-specific.", "sources": ["https://help.openai.com/en/articles/8983130-what-if-i-want-to-keep-my-history-on-but-disable-model-training"], "nextReviewDate": "2026-10-23" },
+      { "id": "connector-memory-region", "category": "core_capability", "status": "unknown", "exposure": "omitted", "preciseRecommendation": false, "publicLimitation": "No region, connector or memory entitlement was tested on an account.", "sources": ["https://chatgpt.com/pricing/"], "nextReviewDate": "2026-11-08" }
+    ]
+  },
+  "sources": {
+    "official": [
+      "https://learn.chatgpt.com/docs/quickstart",
+      "https://learn.chatgpt.com/docs/app",
+      "https://chatgpt.com/pricing/",
+      "https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt",
+      "https://help.openai.com/en/articles/8983130-what-if-i-want-to-keep-my-history-on-but-disable-model-training"
+    ],
+    "independent": []
+  },
+  "assetSha256": {
+    "/icons/tool-logos/chatgpt-editorial.svg": "58070b0536cb6c916bb681a0b963a369f76a614de80776bf2d4bdc309757c471",
+    "/images/tool-media/chatgpt-editorial-cover.svg": "44a4db42a97a43d206d90c7ae771521456ac2bb4c92e80e9c733cc9333b97b1c"
+  },
+  "nextSlotChecklist": [
+    "Fresh read-only production check: no chatgpt row, fixed ID collision, alias or conflicting product identity",
+    "Confirm EN/ZH/CN content and claim-level conditions against official sources",
+    "Confirm both first-party editorial assets match locked SHA-256 and deployed hashes",
+    "Rollback-transaction preflight and fresh-connection readback before any explicit commit",
+    "After approval, verify database-backed EN/CN pages are 200, self-canonical and noindex",
+    "Confirm sitemap has zero ChatGPT tool URLs and no Task/Capability/Fit or protected-row changes",
+    "Keep Mac redirect on HOLD until same-locale target-integrity review"
+  ]
+}

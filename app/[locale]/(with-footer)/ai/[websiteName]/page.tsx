@@ -791,7 +791,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Pricing, usage, and human-control boundaries',
           summary:
             'These facts come from Lindy pricing and usage documentation. Recheck the official pages before buying because prices and allowances can change.',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-10-09',
           facts: [
             { label: 'Trial and plans', value: '7-day trial; Plus $49.99/mo, Pro $99.99/mo, and Max $199.99/mo.' },
             {
@@ -1511,7 +1511,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           facts: [
             {
               label: '套餐边界',
-              value: 'Free、Go、Plus 面向个人；Business 与 Enterprise 面向组织，Business 至少需要 2 名用户。',
+              value: '官方定价页区分免费、个人付费与组织方案；具体价格、额度和功能须按目标账号及地区复核。',
             },
             {
               label: '个人数据控制',
@@ -1520,16 +1520,16 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             {
               label: '临时与商业数据',
               value:
-                'Temporary Chat 不进入历史、不创建 memory，并在 30 天后删除；Business、Enterprise、Edu 默认不使用输入输出训练模型。',
+                '官方说明 Business、Enterprise、Edu 的输入输出默认不用于训练；临时对话、记忆、保留期与工作区设置须分别核对。',
             },
           ],
           sources: [
-            { label: 'ChatGPT 官方定价', href: 'https://openai.com/business/chatgpt-pricing/' },
+            { label: 'ChatGPT 官方定价', href: 'https://chatgpt.com/pricing/' },
             {
               label: 'Data Controls',
-              href: 'https://help.openai.com/en/articles/7730893-how-chatgpt-uses-browser-history-and-data',
+              href: 'https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt',
             },
-            { label: '训练数据设置', href: 'https://help.openai.com/en/articles/8983130-how-does-chatgpt-use-my-data' },
+            { label: '训练数据设置', href: 'https://help.openai.com/en/articles/8983130-what-if-i-want-to-keep-my-history-on-but-disable-model-training' },
           ],
         }
       : {
@@ -1537,12 +1537,12 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Plan choice, data controls, and workspace boundaries',
           summary:
             'These facts come from OpenAI pricing and help documentation. Models, allowances, and features change, so recheck the options shown in your account.',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-10-09',
           facts: [
             {
               label: 'Plan boundary',
               value:
-                'Free, Go, and Plus are for individuals; Business and Enterprise serve organizations, with Business starting at two users.',
+                'Official pricing separates free, paid personal, and organizational plans; check prices, limits and features for the target account and region.',
             },
             {
               label: 'Personal data control',
@@ -1552,18 +1552,18 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             {
               label: 'Temporary and business data',
               value:
-                'Temporary Chats are not saved to history or memory and are deleted after 30 days; Business, Enterprise, and Edu inputs and outputs are not used for training by default.',
+                'OpenAI says Business, Enterprise, and Edu inputs and outputs are not used for training by default; check temporary chat, memory, retention, and workspace settings separately.',
             },
           ],
           sources: [
-            { label: 'Official ChatGPT pricing', href: 'https://openai.com/business/chatgpt-pricing/' },
+            { label: 'Official ChatGPT pricing', href: 'https://chatgpt.com/pricing/' },
             {
               label: 'Data Controls',
-              href: 'https://help.openai.com/en/articles/7730893-how-chatgpt-uses-browser-history-and-data',
+              href: 'https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt',
             },
             {
               label: 'Training-data settings',
-              href: 'https://help.openai.com/en/articles/8983130-how-does-chatgpt-use-my-data',
+              href: 'https://help.openai.com/en/articles/8983130-what-if-i-want-to-keep-my-history-on-but-disable-model-training',
             },
           ],
         };
