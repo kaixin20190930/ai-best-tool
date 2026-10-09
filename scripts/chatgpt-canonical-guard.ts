@@ -102,6 +102,19 @@ export function assertChatgptProtectedStateUnchanged(before: string, after: stri
   assert.equal(after, before, 'OpenAI family protected rows or ChatGPT ancillary state changed');
 }
 
+export function assertChatgptOnlineAsset(
+  html: string,
+  asset: { thumbnailUrl: string | null; imageUrl: string | null },
+) {
+  const expected = asset.thumbnailUrl || asset.imageUrl;
+  assert(expected?.startsWith('/') && !expected.startsWith('//'), 'ChatGPT database display asset is missing');
+  const renderedSources = [...html.matchAll(/<img\b[^>]*>/gi)]
+    .filter(([tag]) => /\balt="[^"]* interface preview"/i.test(tag))
+    .map(([tag]) => tag.match(/\bsrc="([^"]+)"/i)?.[1])
+    .filter(Boolean);
+  assert(renderedSources.includes(expected), `ChatGPT database-backed display asset is missing: ${expected}`);
+}
+
 export function assertChatgptMacRedirectTarget(
   sourcePath: string,
   status: number,

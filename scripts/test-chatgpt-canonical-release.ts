@@ -8,6 +8,7 @@ import {
   CHATGPT_CANONICAL_ID,
   assertChatgptEmptyPreimage,
   assertChatgptMacRedirectTarget,
+  assertChatgptOnlineAsset,
   assertChatgptPayload,
   assertChatgptProtectedStateUnchanged,
 } from './chatgpt-canonical-guard';
@@ -32,6 +33,19 @@ assert(chatgptOfficialSnapshot.includes('workspace settings separately'));
 assert(payload.detail.en.includes('not a second assistant tool or a promise that every web feature is present on Mac'));
 assert(payload.detail.zh.includes('不保证与网页功能完全一致'));
 assertChatgptPayload(payload, audit.assetSha256);
+assertChatgptOnlineAsset(`<img alt="ChatGPT interface preview" src="${payload.thumbnailUrl}">`, {
+  thumbnailUrl: payload.thumbnailUrl,
+  imageUrl: payload.imageUrl,
+});
+assert.throws(() => assertChatgptOnlineAsset(
+  `${payload.thumbnailUrl}<img alt="ChatGPT interface preview" src="${payload.imageUrl}">`,
+  { thumbnailUrl: payload.thumbnailUrl, imageUrl: payload.imageUrl },
+), /database-backed display asset is missing/);
+assert.throws(() => assertChatgptOnlineAsset(
+  `<img src="${payload.thumbnailUrl}">`,
+  { thumbnailUrl: payload.thumbnailUrl, imageUrl: payload.imageUrl },
+), /database-backed display asset is missing/);
+assertChatgptOnlineAsset(`<img alt="ChatGPT interface preview" src="${payload.imageUrl}">`, { thumbnailUrl: null, imageUrl: payload.imageUrl });
 assert.equal(payload.id, CHATGPT_CANONICAL_ID);
 assert.equal(audit.productionWriteApproved, false);
 assert.equal(audit.sitemapChangeApproved, false);

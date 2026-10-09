@@ -11,6 +11,7 @@ import { assertVideoReadback, validateVideoUrl } from './candidate-release-video
 import {
   CHATGPT_CANONICAL_ID,
   assertChatgptEmptyPreimage,
+  assertChatgptOnlineAsset,
   assertChatgptPayload,
   assertChatgptProtectedStateUnchanged,
   findChatgptIdentityMatches,
@@ -356,7 +357,11 @@ async function fetchPage(pathname: string) {
   return { response, html: await response.text() };
 }
 
-async function validateOnlineFallback(candidate: Candidate, expectReleased: boolean) {
+async function validateOnlineFallback(
+  candidate: Candidate,
+  expectReleased: boolean,
+  chatgptDisplayAsset?: { thumbnailUrl: string | null; imageUrl: string | null },
+) {
   const sitemap = await fetchPage('/sitemap.xml');
   assert(sitemap.response.ok, 'Unable to read production sitemap');
   const paths = [`/ai/${candidate.slug}`, `/cn/ai/${candidate.slug}`];
@@ -391,7 +396,8 @@ async function validateOnlineFallback(candidate: Candidate, expectReleased: bool
       );
       assert(html.includes('id="decision-card"'), `${candidate.slug}: released Decision Card is missing`);
       if (candidate.slug === 'chatgpt') {
-        assert(html.includes('/icons/tool-logos/chatgpt-editorial.svg'), 'ChatGPT database-backed asset is missing');
+        assert(chatgptDisplayAsset, 'ChatGPT database display asset was not read back');
+        assertChatgptOnlineAsset(html, chatgptDisplayAsset);
         const head = await fetch(`https://aibesttool.com${pathname}`, { method: 'HEAD', redirect: 'manual', signal: AbortSignal.timeout(20_000) });
         assert.equal(head.status, 200, `ChatGPT HEAD ${pathname} failed`);
         assert(!head.headers.get('location'), `ChatGPT HEAD ${pathname} redirected`);
@@ -596,6 +602,7 @@ async function main() {
       assert.equal(audit.status, 'released', `${candidate.slug}: verify requires a released audit record`);
     }
     const client = await openDatabase();
+    let chatgptDisplayAsset: { thumbnailUrl: string | null; imageUrl: string | null } | undefined;
     try {
       if (options.phase === 'preflight' || ((candidate.slug === 'pika' || candidate.slug === 'chatgpt') && options.phase === 'verify')) {
         await client.query('BEGIN READ ONLY');
@@ -647,6 +654,10 @@ async function main() {
           assert.equal(exact.rows[0].thumbnail_url, payload.thumbnailUrl);
           assert.equal(exact.rows[0].url, payload.officialUrl);
           assert.equal(exact.rows[0].next_review_date, payload.nextReviewDate);
+          chatgptDisplayAsset = {
+            thumbnailUrl: exact.rows[0].thumbnail_url,
+            imageUrl: exact.rows[0].image_url,
+          };
           await validateDeployedAssets(payload);
         }
         if (candidate.slug === 'pika') {
@@ -662,7 +673,7 @@ async function main() {
       }
       await client.end();
     }
-    if (options.online) await validateOnlineFallback(candidate, options.phase === 'verify');
+    if (options.online) await validateOnlineFallback(candidate, options.phase === 'verify', chatgptDisplayAsset);
   }
 }
 
