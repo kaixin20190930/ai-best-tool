@@ -1,42 +1,80 @@
 {
   "unit": "OPENAI-FAMILY-IDENTITY-GOVERNANCE-01",
-  "asOf": "2026-10-09 Asia/Shanghai",
+  "asOf": "2026-10-09T22:57:00+08:00",
   "productionWrites": 0,
   "method": {
-    "database": "BEGIN READ ONLY; parameterized SELECT from public.tools, tool_index_release_log and tool_index_review_runs; ROLLBACK; fresh connection",
-    "http": "GET production HTML, robots.txt and sitemap.xml",
-    "code": "static references in app, lib, middleware and sitemap"
+    "database": "Postgres BEGIN READ ONLY; parameterized SELECT of exact five slugs, row SHA-256 as encode(digest((to_jsonb(tool)-'search_vector')::text,'sha256'),'hex'), related-tool/index tables where present; ROLLBACK; ChatGPT release verifier also independently checked fixed payload and protected rows",
+    "supabase": "GET-only admin reads for profiles, sources, claims, tool relationships, tool capabilities, fits, task and evidence links",
+    "http": "Production GET and HEAD for English and Chinese paths; page HTML canonical/noindex inspected; robots.txt and sitemap fetched",
+    "code": "Static references scanned in app, lib, middleware, fallback, relationships and sitemap",
+    "officialSources": [
+      "https://help.openai.com/en/articles/12677804-what-is-chatgpt-faq",
+      "https://help.openai.com/en/articles/9275200-downloading-the-chatgpt-macos-app",
+      "https://help.openai.com/en/articles/20001276-moving-to-the-new-chatgpt-desktop-app",
+      "https://help.openai.com/en/articles/9703738-macos-app-release-notes",
+      "https://developers.openai.com/api/docs/models/gpt-4o",
+      "https://openai.com/about/",
+      "https://developers.openai.com/api/docs",
+      "https://openai.com/index/codex-now-generally-available/"
+    ]
   },
   "rows": [
-    { "slug": "chatgpt", "exists": false, "shell": true, "http": 200, "indexable": false },
-    { "slug": "chatgpt-mac", "id": "22561562-5b7e-4e32-b629-ea8626abeeda", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-06", "rowSha256": "1d68dc48bbbd3fae65231941316fdefbb10d4752b9cfcd8603413040e729fa23", "http": 200, "indexable": false },
-    { "slug": "gpt_4o", "id": "73a3ca28-707c-4460-b769-50ee47ba5e69", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-06", "rowSha256": "7639c4de3fbf9ba8de857ea3d810b053ca212b58a58dd0d28b33078fb8a209c1", "http": 200, "indexable": false },
-    { "slug": "openai", "id": "1ac05946-fab2-48bf-9c5d-6188124db8fb", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-06", "rowSha256": "eda1d65396baeb17efba9c1a43aff46289d7de297ad147abb7354ba20d3a569c", "http": 200, "indexable": false },
-    { "slug": "codex", "id": "35b7a4ae-1200-41f2-94c5-d5ba4dc98704", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-22", "rowSha256": "294dd3fa81dd6b063a2d7a246bb563baed492af7a5c9f57fb6d9696f0706a8b1", "http": 200, "indexable": false }
+    { "slug": "chatgpt", "id": "c6a77a90-0bce-4f37-a124-7600e81475a1", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-16", "url": "https://chatgpt.com/", "rowSha256": "1e35aec09c0d36a556e9ac53ad6d582ec182fb32bd99524ed4b577b576c1cdde", "http": { "en": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/ai/chatgpt", "robots": "noindex, follow" }, "cn": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/cn/ai/chatgpt", "robots": "noindex, follow" } }, "decision": "KEEP_TOOL; primary entity is live; no index approval" },
+    { "slug": "chatgpt-mac", "id": "22561562-5b7e-4e32-b629-ea8626abeeda", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-06", "url": "https://chatgpt.com/download/", "rowSha256": "23670082f01ce8bc0dfde94cc656cf696cf0f9d5670977cc2342206eb438b5dd", "http": { "en": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/ai/chatgpt-mac", "robots": "noindex, follow" }, "cn": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/cn/ai/chatgpt-mac", "robots": "noindex, follow" } }, "decision": "MERGE_REDIRECT candidate; HOLD redirect until target explains new desktop app, ChatGPT Classic, and separate Codex view and Search Console intent is reviewed" },
+    { "slug": "gpt_4o", "id": "73a3ca28-707c-4460-b769-50ee47ba5e69", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-06", "url": "https://developers.openai.com/api/docs/models/gpt-4o", "rowSha256": "f65d8a9890b370e57931bd6a2199e65b31d2179f859f42f5c0fd848b6dfe5436", "http": { "en": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/ai/gpt_4o", "robots": "noindex, follow" }, "cn": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/cn/ai/gpt_4o", "robots": "noindex, follow" } }, "decision": "ARCHIVE_NO_REDIRECT; API model remains available per official model page; retain historical noindex explanation" },
+    { "slug": "openai", "id": "1ac05946-fab2-48bf-9c5d-6188124db8fb", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-06", "url": "https://openai.com/", "rowSha256": "01c4835c872b8eb2c8af4edab7d45d0c0664b9e70f53033402b6f83d1764e00b", "http": { "en": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/ai/openai", "robots": "noindex, follow" }, "cn": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/cn/ai/openai", "robots": "noindex, follow" } }, "decision": "CONVERT_BRAND_OR_PLATFORM; build a dedicated OpenAI brand page first; any later migration may target that brand route only, never ChatGPT" },
+    { "slug": "codex", "id": "35b7a4ae-1200-41f2-94c5-d5ba4dc98704", "exists": true, "status": "published", "pageQualityStatus": "monitor", "nextReviewDate": "2026-10-22", "url": "https://chatgpt.com/codex", "rowSha256": "b898a7072769c136a8ebda183686959b92945db40c0cbec3baa6bf8e1f051797", "http": { "en": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/ai/codex", "robots": "noindex, follow" }, "cn": { "GET": 200, "HEAD": 200, "canonical": "https://aibesttool.com/cn/ai/codex", "robots": "noindex, follow" } }, "decision": "KEEP_INDEPENDENT_TOOL; separate view and workflow boundary remain distinct inside desktop app" }
   ],
   "urlState": {
-    "english": "/ai/{slug}",
-    "chinese": "/cn/ai/{slug}",
-    "explicitEnglish": "/en/ai/{slug} normalizes to /ai/{slug}",
-    "otherSupportedLocales": ["jp", "de", "es", "fr", "pt", "ru", "tw"],
-    "observedOtherLocale": "/jp/ai/chatgpt: 200, self canonical, noindex",
-    "sampledPages": "all sampled English and Chinese pages returned 200, self canonical, meta noindex, follow",
     "robotsTxt": "User-agent: *; Allow: /; Sitemap: https://aibesttool.com/sitemap.xml",
     "sitemapMatches": { "chatgpt": 0, "chatgpt-mac": 0, "gpt_4o": 0, "openai": 0, "codex": 0 },
-    "aliasesForLegacyThree": 0
+    "legacyRouteAliases": 0,
+    "sampledLocales": ["en", "cn"],
+    "otherSupportedLocales": ["jp", "de", "es", "fr", "pt", "ru", "tw"],
+    "existingMacRedirectTest": "assertChatgptMacRedirectTarget validates expected same-locale single-hop 308; no production alias exists and test does not establish Search Console intent fit"
   },
-  "indexLedger": {
-    "legacyThree": "one baseline entry each; release_day null; approval date unknown",
-    "codex": "no release entry",
-    "chatgpt": "no tool row and no release entry",
-    "reviewRunsForFive": 0
+  "productionRelations": {
+    "decisionTasksForChatgpt": 0,
+    "profiles": 0,
+    "sources": 0,
+    "claims": 0,
+    "toolCapabilities": 0,
+    "toolCapabilityClaimLinks": 0,
+    "toolTaskFits": 0,
+    "toolTaskFitClaimLinks": 0,
+    "toolRelationships": 0,
+    "indexReviewRuns": 0,
+    "chatgptIndexReleaseEntries": 0,
+    "legacyIndexBaselineEntries": { "chatgpt-mac": 1, "gpt_4o": 1, "openai": 1, "releaseDay": null },
+    "codexIndexReleaseEntries": 0
   },
   "codeEdges": [
-    "reviewedToolRelationships: claude/gemini -> gpt_4o",
-    "reviewedToolRelationships: gemini -> chatgpt-mac",
-    "reviewedToolRelationships: gpt_4o <-> chatgpt-mac",
+    "reviewedToolRelationships: claude/gemini -> gpt_4o as alternative",
+    "reviewedToolRelationships: chatgpt-mac -> gemini/claude as alternative; gpt_4o -> chatgpt-mac as complement; chatgpt-mac -> gpt_4o as complement",
     "guides/ai-tools-for-customer-support -> chatgpt-mac",
-    "guides/ai-chatbot-tools and ai-tools-for-code-review -> chatgpt shell",
-    "lib/data.ts retains legacy chatgpt-mac, gpt_4o and openai records"
-  ]
+    "guides/ai-chatbot-tools -> chatgpt canonical record",
+    "guides/ai-tools-for-code-review -> chatgpt canonical record",
+    "lib/data/topicToolSources.ts keeps codex in coding and agent topics",
+    "lib/data.ts retains legacy Mac, GPT-4o, and OpenAI entries (duplicate collections); Mac entry has an App Store URL",
+    "lib/config/legacyToolScopeReviews.ts and lib/content/publicToolScope.ts retain legacy OpenAI family copy",
+    "lib/config/priorityToolFallbacks.ts has ChatGPT fallback shell, but production ChatGPT DB row now exists",
+    "no /brands/openai application route exists"
+  ],
+  "preimages": {
+    "hashMethod": "SHA-256 of PostgreSQL JSONB text for the complete tools row, excluding search_vector",
+    "rowHashes": {
+      "chatgpt": "1e35aec09c0d36a556e9ac53ad6d582ec182fb32bd99524ed4b577b576c1cdde",
+      "chatgpt-mac": "23670082f01ce8bc0dfde94cc656cf696cf0f9d5670977cc2342206eb438b5dd",
+      "gpt_4o": "f65d8a9890b370e57931bd6a2199e65b31d2179f859f42f5c0fd848b6dfe5436",
+      "openai": "01c4835c872b8eb2c8af4edab7d45d0c0664b9e70f53033402b6f83d1764e00b",
+      "codex": "b898a7072769c136a8ebda183686959b92945db40c0cbec3baa6bf8e1f051797"
+    }
+  },
+  "rollbackBoundaries": {
+    "chatgpt": "fixed-ID row only; existing release rollback guard requires exact candidate preimage and zero dependencies; not included in this audit",
+    "chatgptMac": "remove only the new route alias to restore old 200/noindex path; keep database row and sitemap/index state",
+    "gpt4o": "restore only removed code references if review fails; retain source row and route; never delete or redirect",
+    "openai": "remove brand route/alias to restore existing 200/noindex route; do not target ChatGPT",
+    "codex": "no identity migration planned; any later copy change rolls back independently"
+  }
 }
