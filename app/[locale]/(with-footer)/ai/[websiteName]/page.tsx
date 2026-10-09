@@ -1507,7 +1507,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: '官方事实快照',
           title: '套餐选择、数据控制和工作区边界',
           summary: '以下信息来自 OpenAI 官方定价与帮助文档；模型、额度和功能会持续变化，使用前应复核当前账号显示。',
-          checkedAt: '2026-08-03',
+          checkedAt: '2026-10-09',
           facts: [
             {
               label: '套餐边界',

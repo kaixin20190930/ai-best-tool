@@ -14,6 +14,23 @@ import {
 
 const payload = JSON.parse(fs.readFileSync('data/collection/chatgpt-release.json', 'utf8'));
 const audit = JSON.parse(fs.readFileSync('data/collection/chatgpt-canonical-preaudit-2026-10-09.json', 'utf8'));
+const pageSource = fs.readFileSync('app/[locale]/(with-footer)/ai/[websiteName]/page.tsx', 'utf8');
+const chatgptOfficialSnapshot = pageSource.split("  if (key === 'chatgpt') {")[1]?.split("  if (key === 'claude') {")[0];
+assert(chatgptOfficialSnapshot, 'ChatGPT official snapshot block is missing');
+assert.deepEqual(
+  [...chatgptOfficialSnapshot.matchAll(/checkedAt: '(\d{4}-\d{2}-\d{2})'/g)].map((match) => match[1]),
+  [payload.reviewedAt, payload.reviewedAt],
+  'EN/ZH ChatGPT official snapshots must share the candidate review date',
+);
+for (const source of audit.sources.official.slice(2)) {
+  assert(chatgptOfficialSnapshot.includes(source), `ChatGPT snapshot source missing: ${source}`);
+}
+assert(chatgptOfficialSnapshot.includes('具体价格、额度和功能须按目标账号及地区复核'));
+assert(chatgptOfficialSnapshot.includes('check prices, limits and features for the target account and region'));
+assert(chatgptOfficialSnapshot.includes('工作区设置须分别核对'));
+assert(chatgptOfficialSnapshot.includes('workspace settings separately'));
+assert(payload.detail.en.includes('not a second assistant tool or a promise that every web feature is present on Mac'));
+assert(payload.detail.zh.includes('不保证与网页功能完全一致'));
 assertChatgptPayload(payload, audit.assetSha256);
 assert.equal(payload.id, CHATGPT_CANONICAL_ID);
 assert.equal(audit.productionWriteApproved, false);
