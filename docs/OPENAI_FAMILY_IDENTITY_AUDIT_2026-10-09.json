@@ -1,21 +1,27 @@
 {
   "unit": "OPENAI-FAMILY-IDENTITY-GOVERNANCE-01",
   "asOf": "2026-10-09T22:57:00+08:00",
-  "productionWrites": 0,
+  "productionBaseline": {
+    "capturedAfterPriorEvent": "CHATGPT-CANONICAL-TOOL-01 controlled release earlier on 2026-10-09",
+    "chatgptRowIsPriorReleaseState": true,
+    "thisAuditProductionWrites": 0,
+    "priorReleaseRecord": "docs/CHATGPT_CANONICAL_TOOL_CANDIDATE_2026-10-09_CN.md"
+  },
   "method": {
     "database": "Postgres BEGIN READ ONLY; parameterized SELECT of exact five slugs, row SHA-256 as encode(digest((to_jsonb(tool)-'search_vector')::text,'sha256'),'hex'), related-tool/index tables where present; ROLLBACK; ChatGPT release verifier also independently checked fixed payload and protected rows",
     "supabase": "GET-only admin reads for profiles, sources, claims, tool relationships, tool capabilities, fits, task and evidence links",
     "http": "Production GET and HEAD for English and Chinese paths; page HTML canonical/noindex inspected; robots.txt and sitemap fetched",
     "code": "Static references scanned in app, lib, middleware, fallback, relationships and sitemap",
     "officialSources": [
-      "https://help.openai.com/en/articles/12677804-what-is-chatgpt-faq",
-      "https://help.openai.com/en/articles/9275200-downloading-the-chatgpt-macos-app",
-      "https://help.openai.com/en/articles/20001276-moving-to-the-new-chatgpt-desktop-app",
-      "https://help.openai.com/en/articles/9703738-macos-app-release-notes",
-      "https://developers.openai.com/api/docs/models/gpt-4o",
-      "https://openai.com/about/",
-      "https://developers.openai.com/api/docs",
-      "https://openai.com/index/codex-now-generally-available/"
+      { "url": "https://developers.openai.com/api/docs/models/gpt-4o", "checkedAt": "2026-10-09", "supports": "GPT-4o is a model documented for OpenAI API endpoints; model lifecycle and user-specific access remain separate questions" },
+      { "url": "https://openai.com/codex/", "checkedAt": "2026-10-09", "supports": "Codex is presented as OpenAI's coding agent product" },
+      { "url": "https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan", "checkedAt": "2026-10-09", "supports": "Codex is an AI agent for writing, reviewing and shipping code, offered through Codex mode, CLI, IDE and web clients" },
+      { "url": "https://help.openai.com/en/articles/20001276-moving-to-the-new-chatgpt-desktop-app", "checkedAt": "2026-10-09", "supports": "ChatGPT desktop app includes a distinct Codex view; Codex workflow/history remain separate" },
+      { "url": "https://openai.com/about/", "checkedAt": "2026-10-09", "supports": "OpenAI's own company description; supports brand/company classification" },
+      { "url": "https://developers.openai.com/api/docs", "checkedAt": "2026-10-09", "supports": "API platform is a distinct developer product surface" },
+      { "url": "https://help.openai.com/en/articles/12677804-what-is-chatgpt-faq", "checkedAt": "2026-10-09", "supports": "ChatGPT assistant product definition" },
+      { "url": "https://help.openai.com/en/articles/9275200-downloading-the-chatgpt-macos-app", "checkedAt": "2026-10-09", "supports": "macOS product download and device requirements" },
+      { "url": "https://help.openai.com/en/articles/9703738-macos-app-release-notes", "checkedAt": "2026-10-09", "supports": "ChatGPT Classic naming and macOS app update history" }
     ]
   },
   "rows": [
@@ -29,24 +35,50 @@
     "robotsTxt": "User-agent: *; Allow: /; Sitemap: https://aibesttool.com/sitemap.xml",
     "sitemapMatches": { "chatgpt": 0, "chatgpt-mac": 0, "gpt_4o": 0, "openai": 0, "codex": 0 },
     "legacyRouteAliases": 0,
-    "sampledLocales": ["en", "cn"],
+    "routeTemplates": ["/ai/{slug}", "/en/ai/{slug} (normalizes to /ai/{slug})", "/cn/ai/{slug}", "/jp/ai/{slug}", "/de/ai/{slug}", "/es/ai/{slug}", "/fr/ai/{slug}", "/pt/ai/{slug}", "/ru/ai/{slug}", "/tw/ai/{slug}"],
+    "productionHttpSampleLocales": ["en", "cn"],
     "otherSupportedLocales": ["jp", "de", "es", "fr", "pt", "ru", "tw"],
-    "existingMacRedirectTest": "assertChatgptMacRedirectTarget validates expected same-locale single-hop 308; no production alias exists and test does not establish Search Console intent fit"
+    "futureRedirectGate": "No locale-by-locale HTTP sweep was run in this R-level identity audit. Any future redirect changes canonical/index/sitemap boundaries and must pass the H-level gate over all route templates, with GET and HEAD, same-locale single-hop 308, final target 200/self-canonical, index/noindex and sitemap checks.",
+    "existingMacRedirectTest": "assertChatgptMacRedirectTarget validates expected same-locale single-hop 308 in a test helper; no production alias exists and the helper does not establish Search Console intent fit"
   },
   "productionRelations": {
-    "decisionTasksForChatgpt": 0,
-    "profiles": 0,
-    "sources": 0,
-    "claims": 0,
-    "toolCapabilities": 0,
-    "toolCapabilityClaimLinks": 0,
-    "toolTaskFits": 0,
-    "toolTaskFitClaimLinks": 0,
-    "toolRelationships": 0,
+    "queryScope": {
+      "toolCapabilities": "all rows whose tool_id is one of the five exact production tool IDs",
+      "toolTaskFits": "all rows whose tool_id is one of the five exact production tool IDs; matched task IDs were not searched by task name/description",
+      "toolRelationships": "all rows whose tool_id OR related_tool_id is one of the five exact production tool IDs (direct inbound/outbound edges)",
+      "profiles": "product_intelligence_profiles with owner_type=tool and owner_id in the five exact IDs",
+      "sourcesAndClaims": "rows keyed by profile IDs returned from the exact-owner profile query",
+      "capabilityClaimLinksAndFitClaimLinks": "rows keyed by capability/fit IDs returned from the exact-tool ownership queries",
+      "decisionTasks": "only exact slug chatgpt",
+      "notCovered": "global semantic/text mentions of OpenAI products in unrelated Task/Capability descriptions, unattached evidence, or dynamically constructed runtime links"
+    },
+    "decisionTasksWithSlugChatgpt": 0,
+    "profilesForFiveToolOwners": 0,
+    "sourcesForReturnedProfiles": 0,
+    "claimsForReturnedProfiles": 0,
+    "toolCapabilitiesOwnedByFiveTools": 0,
+    "toolCapabilityClaimLinksForReturnedCapabilities": 0,
+    "toolTaskFitsOwnedByFiveTools": 0,
+    "toolTaskFitClaimLinksForReturnedFits": 0,
+    "toolRelationshipInboundOrOutboundForFiveIDs": 0,
     "indexReviewRuns": 0,
     "chatgptIndexReleaseEntries": 0,
     "legacyIndexBaselineEntries": { "chatgpt-mac": 1, "gpt_4o": 1, "openai": 1, "releaseDay": null },
     "codexIndexReleaseEntries": 0
+  },
+  "internalLinkScan": {
+    "method": "Reproduce with rg -n 'chatgpt-mac|gpt_4o|openai|codex|chatgpt' app lib data --glob '!**/*.test.*' --glob '!**/__tests__/**'; classify actual runtime page/config references manually and exclude external official-source URLs, examples/fixtures and archived candidate prose from the internal-navigation edge count",
+    "limitations": "Not a parsed full graph: dynamic route construction, database-rendered content and all external links were not enumerated as internal edges",
+    "runtimeFindings": [
+      "app/[locale]/(with-footer)/guides/ai-tools-for-customer-support/page.tsx -> chatgpt-mac",
+      "app/[locale]/(with-footer)/guides/ai-chatbot-tools/page.tsx -> chatgpt",
+      "app/[locale]/(with-footer)/guides/ai-tools-for-code-review/page.tsx -> chatgpt",
+      "lib/config/reviewedToolRelationships.ts: gpt_4o alternatives to claude/gemini; gpt_4o and chatgpt-mac complement edges; chatgpt-mac alternative edges to gemini/claude",
+      "lib/data/topicToolSources.ts: codex remains in coding/agent topic lists",
+      "lib/data.ts: duplicate legacy Mac/GPT-4o/OpenAI entries; Mac has an App Store URL",
+      "lib/config/legacyToolScopeReviews.ts and lib/content/publicToolScope.ts: legacy scope copy",
+      "app/[locale]/(with-footer)/ai/[websiteName]/page.tsx and lib/config/priorityToolFallbacks.ts: ChatGPT page/fallback identity handling"
+    ]
   },
   "codeEdges": [
     "reviewedToolRelationships: claude/gemini -> gpt_4o as alternative",

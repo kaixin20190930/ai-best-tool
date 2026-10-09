@@ -1,12 +1,13 @@
 # OPENAI-FAMILY-IDENTITY-GOVERNANCE-01：身份与 URL 设计门禁
 
-日期：2026-10-09（上海）。本单元只做设计与生产只读审计；没有生产写入、代码路由、索引或重定向变更。机器快照见[只读审计](./OPENAI_FAMILY_IDENTITY_AUDIT_2026-10-09.json)。第五批调查见[上一轮记录](./IDENTITY_FRESHNESS_BATCH_05_2026-10-09_CN.md)。ChatGPT 主工具于同日稍后受控发布，权威记录为[ChatGPT 主工具发布记录](./CHATGPT_CANONICAL_TOOL_CANDIDATE_2026-10-09_CN.md)；本次重新读取数据库与线上页面后，已将旧的“生产无 ChatGPT 行”基线替换为现状。任务输入指定的 `CHATGPT_CONTROLLED_RELEASE_2026-10-09_CN.md` 在工作树中不存在，不另建重复发布计划。
+日期：2026-10-09（上海）。本审计的生产快照时间为 22:57 CST，发生在同日较早完成的 ChatGPT 主工具受控发布之后；前序发布记录见[ChatGPT 主工具发布记录](./CHATGPT_CANONICAL_TOOL_CANDIDATE_2026-10-09_CN.md)。本次审计只读生产数据和页面，**本审计生产写入数为 0**；ChatGPT 行属于前序发布，不是本次审计写入。机器快照见[只读审计](./OPENAI_FAMILY_IDENTITY_AUDIT_2026-10-09.json)。此前第五批快照早于 ChatGPT 发布，故其中“生产无 ChatGPT 行”已过时。任务输入指定的 `CHATGPT_CONTROLLED_RELEASE_2026-10-09_CN.md` 在工作树中不存在，不另建重复发布计划。
 
 ## 官方身份依据与决策
 
 - [ChatGPT 官方 FAQ](https://help.openai.com/en/articles/12677804-what-is-chatgpt-faq)把 ChatGPT 定义为助手产品；[下载与迁移说明](https://help.openai.com/en/articles/20001276-moving-to-the-new-chatgpt-desktop-app)（2026-09 更新）说明新版桌面应用在 macOS/Windows 提供 Chat、Work 和 Codex 视图，旧桌面应用继续以 ChatGPT Classic 受支持，Codex 工作流与历史仍独立。因此生产 `chatgpt` 是主产品实体；`chatgpt-mac` 是有独立安装/兼容/Classic 意图的桌面历史入口，不能仅凭同品牌自动视为可重定向。
-- [GPT-4o 官方 API 模型页](https://developers.openai.com/api/docs/models/gpt-4o)仍列出模型、API 接口与 token 价格；它是 API 模型，不是可独立注册的助手产品。现有范围修正文案记载它于 2026-02-13 退出 ChatGPT；这个 ChatGPT 侧历史事件与 API 仍可用须分别叙述。价格、API 权限及模型生命周期每次公开时须重新查官方资料，不从旧工具行继承。
-- [OpenAI 开发者入口](https://developers.openai.com/)分别列出 API 平台、Codex 等产品线；`openai` 是公司/品牌及产品家族，不具有单一功能、价格或登录入口。`codex` 是独立编程智能体工具实体，应与 ChatGPT 产品页保持清晰的任务边界。
+- **核查日期：2026-10-09。**[GPT-4o 官方 API 模型页](https://developers.openai.com/api/docs/models/gpt-4o)当日列出 GPT-4o 模型名称、API endpoints、版本快照、能力与价格信息；这直接支持“GPT-4o 是 API 模型而非目录中的独立助手工具”。它不证明每个账户/区域当前都有调用权限，也不把文档列出的价目转换成购买建议。ChatGPT 产品侧下线记录与 API 模型页身份分开表述。
+- **核查日期：2026-10-09。**[OpenAI Codex 产品页](https://openai.com/codex/)与[使用 Codex 官方帮助](https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan)将 Codex 描述为编程智能体，并列出桌面 Codex mode、CLI、IDE extension 与 Web 等使用入口；[桌面迁移说明](https://help.openai.com/en/articles/20001276-moving-to-the-new-chatgpt-desktop-app)同时说明 Codex 在共享桌面应用中仍有独立视图和工作流/历史。因此目录保留 `codex` 独立工具实体；这项分类不声称它必须有独立账户或独立安装器。
+- **核查日期：2026-10-09。**[OpenAI 公司介绍](https://openai.com/about/)将 OpenAI 描述为 AI research and deployment company；[API 文档入口](https://developers.openai.com/api/docs)把 API 建设路径与产品入口分开列出。`openai` 是公司/品牌和多产品平台身份，不具有单一工具的功能、价格或登录入口。
 
 | 实体/现有 slug | 最终分类 | 搜索意图与用户价值 | 当前门禁 |
 | --- | --- | --- | --- |
@@ -20,7 +21,7 @@
 
 ## 生产只读实体与 URL 图
 
-读取方法：新 Postgres 连接执行 `BEGIN READ ONLY`、参数化 `SELECT to_jsonb(t)-'search_vector'`、`ROLLBACK`；没有写事务。完整行 SHA-256 与第五批记录一致。浏览器外部 GET 核对线上 HTML、`/robots.txt` 和 `/sitemap.xml`。本次选择的五个 slug 中，生产 `public.tools` 有四行，`chatgpt` 为零行。
+读取方法：新 Postgres 连接执行 `BEGIN READ ONLY`、参数化查询与行哈希、`ROLLBACK`；没有写事务。完整行 SHA-256 是本次新基线，不能与第五批的旧序列化 hash 作逐字比较。HTTP 抽样核对线上 HTML、`/robots.txt` 和 `/sitemap.xml`。本快照发生在前序 ChatGPT 发布后：五个 slug 均有生产行，`chatgpt` 不再是 fallback-only。
 
 | slug | 行 ID / 当前状态 | 英文 URL | 英文和中文页面 |
 | --- | --- | --- | --- |
@@ -30,19 +31,21 @@
 | `openai` | `1ac05946-fab2-48bf-9c5d-6188124db8fb`；`published/monitor`；复查日 2026-10-06（已过期）；行 SHA-256 `01c4835c872b8eb2c8af4edab7d45d0c0664b9e70f53033402b6f83d1764e00b` | `https://openai.com/` | 英/中 GET、HEAD 均 200；自指 canonical、`noindex, follow`；sitemap 0 |
 | `codex` | `35b7a4ae-1200-41f2-94c5-d5ba4dc98704`；`published/monitor`；复查日 2026-10-22；行 SHA-256 `b898a7072769c136a8ebda183686959b92945db40c0cbec3baa6bf8e1f051797` | `https://chatgpt.com/codex` | 英/中 GET、HEAD 均 200；自指 canonical、`noindex, follow`；sitemap 0 |
 
-数据库本次以 `BEGIN READ ONLY`、参数化查询五行和行哈希、关系表 SELECT 后 `ROLLBACK`；ChatGPT 受控发布记录另确认其 Task、Capability、Fit、索引账本/审查和受保护的四条旧行。生产关系只读查询本次返回五个实体均无 Product Intelligence Profile/Source/Claim、Tool Capability、Fit、Task、Tool Relationship 或 Claim link。行哈希为 `SHA-256((to_jsonb(tool)-'search_vector')::text)`，是本次后像指纹；不能直接与上一份审计用的序列化方式不同的旧 hash 比较。英、中页面的 GET/HEAD 是新鲜生产请求；`robots.txt` 为全局 Allow，所有五条页面保持 noindex，sitemap 匹配数为零。
+数据库本次以 `BEGIN READ ONLY`、参数化查询五行和行哈希、关系表 SELECT 后 `ROLLBACK`；ChatGPT 受控发布记录另确认其固定 payload 与受保护旧行。关系查询的范围与限制见下文。行哈希为 `SHA-256((to_jsonb(tool)-'search_vector')::text)`，是本次后像指纹。英、中页面 GET/HEAD 是本次生产抽样；`robots.txt` 为全局 Allow，五条页面保持 noindex，sitemap 匹配数为零。
 
 `robots.txt` 对 `User-agent: *` 为 `Allow: /` 并指向 sitemap；上述不索引由页面 meta robots 控制。`/sitemap.xml` 对这五个 slug 均无 `/ai/` 条目。`lib/seo/toolIndexing.ts` 规定只有 `published + continue_index + quality >= 80` 才能进入索引，`app/sitemap.ts` 重用此决策。目前这些页面不发 indexable hreflang。生产 `tool_index_release_log` 对三条旧行各有一条 `baseline`，日期未知；`tool_index_review_runs` 对五个 slug 无事件。baseline 不等于当前索引批准。
 
 路由图：`lib/config/toolRouteAliases.ts` 当前没有三条旧 slug 到 ChatGPT/Codex 的 alias。`middleware.ts` 在 locale 重写前处理 alias 为真实 HTTP 308；详情页还用 `permanentRedirect` 兜底。英文 canonical 为 `/ai/{slug}`，中文为 `/cn/ai/{slug}`。`i18n.ts` 还允许 `jp/de/es/fr/pt/ru/tw` 路径；这些语言受 `lib/seo/indexing.ts` 约束为 noindex，例如 `/jp/ai/chatgpt` 当前 200、自指 canonical、noindex。迁移必须在每个已接受 locale 中保持同 locale，不把 `/cn` 导向英文，也不让 `/en` 归一和 alias 形成两跳。
 
-站内边：`lib/config/reviewedToolRelationships.ts` 仍把 `gpt_4o` 与 Claude、Gemini 互列 alternative，将 `chatgpt-mac` 与 Gemini、Claude 比较，并把模型与 Mac 客户端互列 complement；这些跨层边会继续把旧实体送进工具决策。客服指南 `app/[locale]/(with-footer)/guides/ai-tools-for-customer-support/page.tsx` 仍使用 `chatgpt-mac`；Chatbot 和 Code Review 指南分别链接 ChatGPT 主实体。`lib/data/topicToolSources.ts` 将 Codex 留在 coding/agent 主题，符合其独立工具边界。静态遗留数据在 `lib/data.ts`（含重复旧对象和 Mac App Store URL）、范围说明 `lib/config/legacyToolScopeReviews.ts`、页面范围 `lib/content/publicToolScope.ts`；ChatGPT 页面和 fallback 位于 `app/[locale]/(with-footer)/ai/[websiteName]/page.tsx` 与 `lib/config/priorityToolFallbacks.ts`。`/brands/openai` 路由当前不存在。`chatgpt-alternatives-comparison` 是 unavailable 模板，不能作为主产品承接页。
+站内边盘点范围：可复核命令为 `rg -n 'chatgpt-mac|gpt_4o|openai|codex|chatgpt' app lib data --glob '!**/*.test.*' --glob '!**/__tests__/**'`，再手动把运行时页面/配置命中与官方外链、样例/fixture、历史候选正文区分开。确认的运行时入口包括客服指南 `app/[locale]/(with-footer)/guides/ai-tools-for-customer-support/page.tsx` -> `chatgpt-mac`；Chatbot 和 Code Review 指南 -> `chatgpt`；`lib/config/reviewedToolRelationships.ts` 中 `gpt_4o` 对 Claude/Gemini 的 alternative、GPT-4o 与 Mac 页双向 complement、Mac 对 Claude/Gemini alternative；`lib/data/topicToolSources.ts` 将 Codex 放在 coding/agent 主题。身份/素材命中在 `lib/data.ts`（两组重复旧对象及 Mac App Store URL）、`lib/config/legacyToolScopeReviews.ts`、`lib/content/publicToolScope.ts`；ChatGPT 渲染/fallback 命中在 `app/[locale]/(with-footer)/ai/[websiteName]/page.tsx`、`lib/config/priorityToolFallbacks.ts`。这是 slug 字面量检索，不是解析 JSX/Next 路由的全仓链接图；动态拼接、数据库正文和所有外链未计作内部边。
+
+Decision Graph 只读查询按五个生产 `tool_id` 查 `tool_capabilities`、`tool_task_fits`，按这些实体 ID 查 `tool_relationships` 的入边与出边；按五个 owner ID 查 Product Intelligence profiles，再以命中的 profile IDs 查 source/claim；以找到的 capability/fit IDs 查其 Claim link。另只按 `decision_tasks.slug='chatgpt'` 查同名 Task。结果均为零。此范围未扫描全库其他 task/capability 文案中的自然语言提及，不能解释成“所有语义上有关的 Decision Graph 节点均为零”。`/brands/openai` 路由当前不存在。
 
 ## 顺序、拥有者与回滚点
 
 1. **已完成：ChatGPT 主行发布**。保留固定 ID `c6a77a90-0bce-4f37-a124-7600e81475a1` 与当前审计行 hash，`published/monitor`、sitemap 0、无 Task/Capability/Fit。不能重放 insert 或把 monitor 改为索引批准。若明确要撤回，按 ChatGPT 发布记录的回滚器先预演；只有同一固定 ID 的候选正文仍相等且外键/依赖为空，才可单独删除该新行。此回滚不包含四条旧实体。
 2. **关系与静态身份清理**（首个实施候选）：客服指南将 `chatgpt-mac` 切换到 ChatGPT 主实体；移除 `gpt_4o` 与 Claude/Gemini 的工具替代边以及它与 Mac 的 complement 边；Mac/Claude/Gemini 也不再作为同层 alternative。为 ChatGPT 建立只比较同层助手产品的审核关系。更新 `lib/data.ts` 两处重复的 `chatgpt-mac/gpt_4o/openai` 对象、Mac App Store URL、`legacyToolScopeReviews.ts`、`publicToolScope.ts` 和 `reviewedToolRelationships.ts`。不动 `codex` 的独立指南/topic/tool identity。失败时回退单一代码提交；不触碰数据库行、URL、索引和 sitemap。
-3. **Mac 承接页与意图复核**：先更新 ChatGPT EN/ZH 页面及官方证据，把 macOS 当前新应用下载、最低系统要求、ChatGPT Classic 的持续支持/旧功能边界、Codex 是独立 view 且 workflow/history 独立讲清。核对 Mac URL 的 Search Console query/外链/流量后判断旧页的查询能否由主页完整满足。现在这步尚未满足，故 308 不适合立刻启用。通过后，在 `/ai`、`/en/ai`、`/cn/ai`、`/jp`、`/de`、`/es`、`/fr`、`/pt`、`/ru`、`/tw` 做 GET/HEAD 单跳 308 到同 locale ChatGPT 200、自指 canonical；检查无循环/两跳。使用本次旧行 hash 作 preimage；异常即撤销 alias，旧页恢复 200/noindex。若意图仍不匹配，保留 200/noindex，不转向通用助手页。
+3. **Mac 承接页与意图复核**：先更新 ChatGPT EN/ZH 页面及官方证据，把 macOS 新应用下载、最低系统要求、ChatGPT Classic 的持续支持/旧功能边界、Codex 独立 view 与 workflow/history 讲清。核对 Mac URL 的 Search Console query/外链/流量后判断旧页查询能否由主页完整满足。现在尚未满足，故不启用 308。完整路由模板为 `/ai/{slug}`、`/en/ai/{slug}`（显式英文归一到裸英文路径）、`/cn/ai/{slug}`、`/jp/ai/{slug}`、`/de/ai/{slug}`、`/es/ai/{slug}`、`/fr/ai/{slug}`、`/pt/ai/{slug}`、`/ru/ai/{slug}`、`/tw/ai/{slug}`。本轮仅抽样 EN/CN GET/HEAD，未逐 locale 重跑。真正改 redirect 时执行 H 级门禁，覆盖全部上述 locale 的 GET/HEAD、同 locale 单跳 308、目标 200、自指 canonical、noindex/index 与 sitemap，并检查无环/无两跳。使用本次 Mac 行 hash 作 preimage；异常即撤销 alias，旧页恢复 200/noindex。若意图不匹配，继续保留旧页。
 4. **OpenAI 品牌页**：新增独立 `/brands/openai` 路由与多语言导航，清晰分开 ChatGPT、Codex、API 平台及公司信息。当前没有 brands route；必须先验证页面内容、canonical/noindex 和站内品牌入口，之后才可另行启用 `/ai/openai` 到同 locale `/brands/openai` 的一跳 308。不得重定向 ChatGPT。记录现有 OpenAI 行 hash `01c4835c…`；改动失败时回退品牌路由/alias，保留 `/ai/openai` 200/noindex。
 5. **GPT-4o 工具目录归档**：先清理推荐、关系和站内工具候选，保留 `/ai/gpt_4o` 作为带官方 API 模型来源的 noindex 历史说明。现有 `tools.status` 仅有 draft/pending/published/rejected，无 archived 值；不写入不存在的状态。不得将其 308 到 ChatGPT/OpenAI/Codex。若后续模型目录 `/models/gpt-4o` 单独立项，须先核对意图并证明目标后才能评估专属迁移；回滚只恢复被删的代码边，不动该模型行和原 URL。
 6. **索引与状态单独最后审**：每条工具实体分别使用索引审查账本；ChatGPT、Mac、GPT-4o、OpenAI、Codex 当前全部 `monitor/noindex`，baseline ledger 对三条旧行的 `release_day=null` 且不代表批准。任何 redirect/品牌落地/关系清理均不构成 `continue_index` 授权。索引仅由 `tool_index_review_runs` 和 `tool_index_release_log` 的受控流程决定；发布后观察 7/14/28 天抓取、canonical、soft 404、目标查询与跳出，异常时撤回对应 alias 或退回 monitor。
