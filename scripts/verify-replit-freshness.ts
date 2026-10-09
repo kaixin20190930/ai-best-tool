@@ -5,12 +5,22 @@ import { config } from 'dotenv';
 import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
-import { buildFreshnessNext, inspectFreshnessState } from './freshness-batch-state';
+import {
+  buildFreshnessNext,
+  freshnessProductionWrites,
+  freshnessResultStatus,
+  inspectFreshnessState,
+} from './freshness-batch-state';
 import { applyCandidateDetail } from './freshness-first-batch';
 import REPLIT from './freshness-replit';
 
 const hash = (value: unknown) => crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const read = (path: string) => JSON.parse(fs.readFileSync(path, 'utf8'));
+const manifestFields = [
+  'slug', 'outcome', 'preimageSha256', 'passSnapshot', 'expectedDetailSha256', 'changedFields',
+  'nextReviewDate', 'sources', 'unresolved',
+] as const;
+const selected = (row: Record<string, any>) => Object.fromEntries(manifestFields.map((field) => [field, row[field]]));
 
 async function main() {
   const candidate = REPLIT[0];
@@ -26,8 +36,16 @@ async function main() {
   assert.equal(rollback.results.length, 1);
   assert.equal(preflight.results[0].status, 'ready');
   assert.equal(rollback.results[0].status, 'rolled_back');
-  assert.deepEqual(preflight.results[0].changedFields, ['detail', 'features', 'next_review_date']);
-  assert.equal(rollback.results[0].preimageSha256, preflight.results[0].preimageSha256);
+  const approved = preflight.results[0];
+  assert.deepEqual(selected(rollback.results[0]), selected(approved), 'rollback manifest drift');
+  assert.equal(approved.slug, candidate.slug);
+  assert.equal(approved.outcome, candidate.outcome);
+  assert.deepEqual(approved.passSnapshot, candidate.passSnapshot);
+  assert.equal(approved.expectedDetailSha256, candidate.expectedDetailSha256);
+  assert.equal(approved.nextReviewDate, candidate.nextReviewDate);
+  assert.deepEqual(approved.sources, candidate.sources);
+  assert.deepEqual(approved.unresolved, candidate.unresolved);
+  assert.deepEqual(approved.changedFields, ['detail', 'features', 'next_review_date']);
 
   config({ path: '.env.local', quiet: true });
   const client = new Client({ connectionString: getDatabaseConnectionString() });
@@ -55,6 +73,30 @@ async function main() {
     assert.deepEqual(next.features.audience, row.features.audience);
     assert.equal(next.features.maintenanceReview.checkedAt, '2026-10-09');
     assert.equal(next.next_review_date, '2026-10-16');
+
+    const replay = inspectFreshnessState(candidate, next, '2026-10-09');
+    assert.equal(replay.alreadyApplied, true);
+    assert.deepEqual(replay.passSnapshot, candidate.passSnapshot);
+    const replayNext = buildFreshnessNext(candidate, next, replay.alreadyApplied);
+    assert.deepEqual(replayNext, next, 'applied replay changed postimage');
+    const replayChangedFields = ['detail', 'features', 'next_review_date'].filter(
+      (key) => JSON.stringify(replayNext[key]) !== JSON.stringify(next[key]),
+    );
+    assert.deepEqual(replayChangedFields, []);
+    const replayStatus = freshnessResultStatus('commit', replay.alreadyApplied);
+    assert.equal(replayStatus, 'already_applied');
+    assert.equal(freshnessProductionWrites('commit', [{ status: replayStatus }]), 0);
+
+    const tamperedReview = structuredClone(next);
+    tamperedReview.features.maintenanceReview.changeSummary = 'tampered';
+    assert.throws(() => inspectFreshnessState(candidate, tamperedReview, '2026-10-09'));
+    const tamperedDetail = structuredClone(next);
+    tamperedDetail.detail.en += ' tampered';
+    assert.throws(() => inspectFreshnessState(candidate, tamperedDetail, '2026-10-09'));
+    const tamperedDate = structuredClone(next);
+    tamperedDate.next_review_date = '2026-10-17';
+    assert.throws(() => inspectFreshnessState(candidate, tamperedDate, '2026-10-09'));
+
     await client.query('ROLLBACK');
     console.log(
       JSON.stringify({
@@ -62,6 +104,8 @@ async function main() {
         slug: candidate.slug,
         preimageSha256: hash(row),
         expectedDetailSha256: candidate.expectedDetailSha256,
+        replayStatus,
+        replayChangedFields,
         productionWrites: 0,
       }),
     );
