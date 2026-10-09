@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 
-import { createReadOnlyFetch, nativeReadOnlyGet } from './pub-03-readonly-fetch-core.mjs';
+import { assertProductionOrigin, createReadOnlyFetch, nativeReadOnlyGet } from './pub-03-readonly-fetch-core.mjs';
 
 const timeout = Object.assign(new Error('fetch failed'), { cause: { code: 'UND_ERR_CONNECT_TIMEOUT' } });
 const logs = [];
@@ -23,6 +23,13 @@ for (const method of ['GET', 'HEAD']) {
 assert.equal(calls.filter((call) => call.fallback).length, 2);
 assert.equal(calls.filter((call) => !call.fallback).length, 0, 'Production host must avoid Undici connect timeout path');
 assert.equal(await (await guarded('https://example.com/other')).text(), 'original');
+const callsBeforeBadPort = calls.length;
+for (const method of ['GET', 'HEAD']) {
+  await assert.rejects(guarded('https://aibesttool.com:8443/ai/chatgpt', { method }), /exact https:\/\/aibesttool\.com origin/);
+}
+assert.equal(calls.length, callsBeforeBadPort, 'Non-default port must fail before either transport');
+assertProductionOrigin(new URL('https://aibesttool.com:443/ai/chatgpt'));
+assert.throws(() => assertProductionOrigin(new URL('https://aibesttool.com:8443/ai/chatgpt', 'https://aibesttool.com/ai/chatgpt')), /exact https:\/\/aibesttool\.com origin/, 'Redirect to a non-default port must fail');
 for (const method of ['POST', 'PUT', 'PATCH', 'DELETE']) {
   await assert.rejects(guarded('https://aibesttool.com/ai/chatgpt', { method }), /blocked an outgoing write/);
 }
@@ -46,8 +53,9 @@ assert.equal(fallbackCount, 0, 'Production transport may only run for active HTT
 for (const [url, method] of [
   ['https://aibesttool.com/rest/v1/rpc/audit', 'GET'],
   ['https://aibesttool.com/ai/chatgpt', 'POST'],
-  ['https://example.com/ai/chatgpt', 'GET'],
 ]) await assert.rejects(nativeReadOnlyGet(url, { method }), /fallback only permits/);
+await assert.rejects(nativeReadOnlyGet('https://example.com/ai/chatgpt', { method: 'GET' }), /exact https:\/\/aibesttool\.com origin/);
+await assert.rejects(nativeReadOnlyGet('https://aibesttool.com:8443/ai/chatgpt', { method: 'GET' }), /exact https:\/\/aibesttool\.com origin/);
 
 if (process.argv.includes('--online')) {
   const productionGuard = createReadOnlyFetch(async () => { throw timeout; });

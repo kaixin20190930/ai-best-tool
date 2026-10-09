@@ -2,6 +2,13 @@ import https from 'node:https';
 
 const READ_ONLY_METHODS = new Set(['GET', 'HEAD']);
 const FALLBACK_HOST = 'aibesttool.com';
+const PRODUCTION_ORIGIN = 'https://aibesttool.com';
+
+export function assertProductionOrigin(url) {
+  if (url.origin !== PRODUCTION_ORIGIN || url.username || url.password) {
+    throw new Error('PUB-03 production transport requires the exact https://aibesttool.com origin.');
+  }
+}
 
 function requestMethod(input, init) {
   return String(init?.method || (input instanceof Request ? input.method : 'GET')).toUpperCase();
@@ -19,10 +26,11 @@ export function createReadOnlyFetch(originalFetch, productionHostFetch = nativeR
       logRequest({ method, path: url.pathname, forwarded: false });
       throw new Error('PUB-03 read-only verification blocked an outgoing write request.');
     }
+    if (url.protocol === 'https:' && url.hostname === FALLBACK_HOST) assertProductionOrigin(url);
     if (url.pathname.startsWith('/rest/v1/')) logRequest({ method, path: url.pathname, forwarded: true });
     const signal = init?.signal || (input instanceof Request ? input.signal : null);
     if (signal?.aborted) throw signal.reason;
-    if (url.protocol === 'https:' && url.hostname === FALLBACK_HOST) return productionHostFetch(input, init);
+    if (url.origin === PRODUCTION_ORIGIN) return productionHostFetch(input, init);
     return originalFetch(input, init);
   };
 }
@@ -30,9 +38,10 @@ export function createReadOnlyFetch(originalFetch, productionHostFetch = nativeR
 export async function nativeReadOnlyGet(input, init, redirects = 0) {
   const method = requestMethod(input, init);
   const url = requestUrl(input);
-  if (!READ_ONLY_METHODS.has(method) || url.protocol !== 'https:' || url.hostname !== FALLBACK_HOST || url.pathname.startsWith('/rest/v1/rpc/')) {
+  if (!READ_ONLY_METHODS.has(method) || url.pathname.startsWith('/rest/v1/rpc/')) {
     throw new Error('PUB-03 fallback only permits aibesttool.com GET/HEAD outside RPC.');
   }
+  assertProductionOrigin(url);
   if (redirects > 5) throw new Error('PUB-03 fallback redirect limit exceeded.');
   const headers = new Headers(input instanceof Request ? input.headers : undefined);
   if (init?.headers) new Headers(init.headers).forEach((value, key) => headers.set(key, value));
@@ -54,7 +63,8 @@ export async function nativeReadOnlyGet(input, init, redirects = 0) {
         if (location && [301, 302, 303, 307, 308].includes(status) && init?.redirect !== 'manual') {
           if (init?.redirect === 'error') return reject(new Error('PUB-03 fallback redirect rejected'));
           const next = new URL(location, url);
-          if (next.protocol !== 'https:' || next.hostname !== FALLBACK_HOST) return reject(new Error('PUB-03 fallback cross-host redirect rejected'));
+          try { assertProductionOrigin(next); }
+          catch (error) { return reject(error); }
           try { return resolve(await nativeReadOnlyGet(next.href, { ...init, method, headers, signal }, redirects + 1)); }
           catch (error) { return reject(error); }
         }
