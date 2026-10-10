@@ -29,7 +29,7 @@ assert(page.includes("content: { kind: 'verified', comparison: researchCompariso
 assert(page.includes(`comparisonPath: '${primary}'`));
 assert(template.includes('getNoindexMetadata()'));
 assert(template.includes('generateLocalizedCanonicalUrl(comparisonPath, locale, siteUrl)'));
-assert(template.includes('faqSchema: valid && faqs.length > 0'));
+assert(/faqSchema:\s*valid && faqs\.length > 0/.test(template));
 assert(/generateLocalizedCanonicalUrl\(`\/ai\/\$\{tool\.name\}`, locale, siteUrl\)/.test(template));
 assert(guidePage.includes("path: '/guides/ai-tools-for-research'"));
 assert(!registry.includes(`href: '${alias}'`));
