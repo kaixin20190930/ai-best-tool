@@ -1,0 +1,42 @@
+{
+  "unit": "SCITE-FAST-CONTROLLED-RELEASE-01",
+  "state": "LOCAL_READY_MONITOR_CANDIDATE",
+  "releasePayload": "data/collection/scite-release.json",
+  "gateManifest": "data/collection/scite-controlled-release-preaudit-2026-10-10.json",
+  "fixedId": "13aa730f-4a82-4fc6-b9fa-93855aa8d921",
+  "canonical": ["/ai/scite", "/cn/ai/scite", "/tw/ai/scite"],
+  "target": "published + monitor/noindex",
+  "productionEntityCreated": false,
+  "productionWrites": 0,
+  "indexReleaseApproved": false,
+  "sitemapEligible": false,
+  "taskCapabilityFitCreationApproved": false,
+  "claimLevelHolds": [
+    "checkout-price",
+    "api-mcp-entitlements",
+    "export-redistribution",
+    "discipline-coverage",
+    "data-retention-account"
+  ],
+  "nextReviewDate": "2026-10-17",
+  "readonlyIdentityCheck": {
+    "checkedAt": "2026-10-10T02:30:46.207Z",
+    "toolMatches": 0,
+    "contextualMatches": 0,
+    "profileMatches": 0,
+    "reservedRoutes": "nine EN/CN/TW canonical and spelling routes returned 200/self-canonical/noindex",
+    "sitemapLocCount": 126,
+    "sciteSitemapMatches": 0,
+    "productionWrites": 0
+  },
+  "pipeline": {
+    "validate": "PASS",
+    "readonlyPreflightOnline": "PASS",
+    "transactionRollback": "PASS; trilingual readback; transaction=ROLLBACK",
+    "postRollbackReadonly": "PASS; zero matches",
+    "explicitCommit": "NOT_RUN",
+    "verifyOnline": "PENDING_AFTER_SEPARATE_PRODUCTION_RELEASE"
+  },
+  "rollback": "Development dry run used PostgreSQL ROLLBACK. Any later committed release requires fixed-ID read-only verification and a separately reviewed controlled withdrawal.",
+  "nextControllerCommand": "pnpm exec tsx scripts/test-scite-controlled-release.ts"
+}

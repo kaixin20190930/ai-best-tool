@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "kind": "current_operational_overlay",
+  "asOf": "2026-10-10",
+  "historicalSnapshot": "data/collection/mature-candidate-buffer-2026-10-06.json",
+  "released": {
+    "elicit": { "status": "released_monitor_noindex", "evidence": "data/collection/elicit-release.json" },
+    "murf": { "status": "released_monitor_noindex", "evidence": "data/collection/murf-release.json" },
+    "pika": { "status": "released_monitor_noindex", "evidence": "data/collection/pika-release.json" }
+  },
+  "independentReleasesOutsideSnapshot": {
+    "chatgpt": { "status": "released_monitor_noindex", "evidence": "data/collection/chatgpt-release.json" }
+  },
+  "developmentCandidates": {
+    "scite": {
+      "status": "ready_monitor_local_only",
+      "evidence": "data/collection/scite-controlled-release-preaudit-2026-10-10.json"
+    }
+  }
+}

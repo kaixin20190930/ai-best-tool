@@ -9,11 +9,11 @@ import { getDatabaseConnectionString } from '../lib/database/connection';
 import { createAdminClient } from '../lib/supabase/admin';
 import { assertVideoReadback, validateVideoUrl } from './candidate-release-video';
 import {
-  CHATGPT_CANONICAL_ID,
   assertChatgptEmptyPreimage,
   assertChatgptOnlineAsset,
   assertChatgptPayload,
   assertChatgptProtectedStateUnchanged,
+  CHATGPT_CANONICAL_ID,
   findChatgptIdentityMatches,
   readChatgptProtectedState,
 } from './chatgpt-canonical-guard';
@@ -25,6 +25,7 @@ import {
   assertPikaPostcheck,
   assertPikaSingleInsert,
 } from './pika-release-guard';
+import { assertSciteAsset, assertSciteEmptyPreimage, assertSciteProtectedRowsUnchanged } from './scite-release-guard';
 
 type Candidate = {
   slug: string;
@@ -86,7 +87,12 @@ type ReleasePayload = {
 
 const root = process.cwd();
 const candidates: Candidate[] = [
-  { slug: 'chatgpt', aliases: ['chatgpt'], domain: 'chatgpt.com', preauditFile: 'chatgpt-canonical-preaudit-2026-10-09.json' },
+  {
+    slug: 'chatgpt',
+    aliases: ['chatgpt'],
+    domain: 'chatgpt.com',
+    preauditFile: 'chatgpt-canonical-preaudit-2026-10-09.json',
+  },
   {
     slug: 'synthesia',
     aliases: ['synthesia'],
@@ -173,6 +179,12 @@ const candidates: Candidate[] = [
     domain: 'pika.art',
     preauditFile: 'pika-controlled-release-preaudit-2026-10-08.json',
   },
+  {
+    slug: 'scite',
+    aliases: ['scite', 'scite.ai', 'scite-ai', 'sciteai'],
+    domain: 'scite.ai',
+    preauditFile: 'scite-controlled-release-preaudit-2026-10-10.json',
+  },
 ];
 
 function parseArgs(args: string[]) {
@@ -191,6 +203,13 @@ function parseArgs(args: string[]) {
 
 function readJson<T>(filePath: string): T {
   return JSON.parse(fs.readFileSync(filePath, 'utf8')) as T;
+}
+
+function releaseNotBefore(candidate: Candidate, audit: Preaudit) {
+  const override = audit.ownerEarlyReleaseOverride;
+  return override && override.candidate === candidate.slug
+    ? override.effectiveReleaseNotBefore
+    : audit.publishNotBefore;
 }
 
 function loadPreaudit(candidate: Candidate): Preaudit {
@@ -266,13 +285,6 @@ function loadPreaudit(candidate: Candidate): Preaudit {
   return audit;
 }
 
-function releaseNotBefore(candidate: Candidate, audit: Preaudit) {
-  const override = audit.ownerEarlyReleaseOverride;
-  return override && override.candidate === candidate.slug
-    ? override.effectiveReleaseNotBefore
-    : audit.publishNotBefore;
-}
-
 function validatePublicAsset(assetPath: string) {
   assert(assetPath.startsWith('/') && !assetPath.startsWith('//'), `Asset must be a local public path: ${assetPath}`);
   assert(fs.existsSync(path.join(root, 'public', assetPath.slice(1))), `Missing public asset: ${assetPath}`);
@@ -309,6 +321,10 @@ function loadPayload(candidate: Candidate, audit: Preaudit, asOf: string): Relea
   if (candidate.slug === 'chatgpt') {
     assert(audit.assetSha256, 'ChatGPT asset hash manifest missing');
     assertChatgptPayload(payload, audit.assetSha256);
+  }
+  if (candidate.slug === 'scite') {
+    assert(audit.assetSha256, 'Scite asset hash manifest missing');
+    assertSciteAsset(payload, audit.assetSha256, root);
   }
   validateVideoUrl(candidate.slug, payload.videoUrl);
   return payload;
@@ -398,7 +414,11 @@ async function validateOnlineFallback(
       if (candidate.slug === 'chatgpt') {
         assert(chatgptDisplayAsset, 'ChatGPT database display asset was not read back');
         assertChatgptOnlineAsset(html, chatgptDisplayAsset);
-        const head = await fetch(`https://aibesttool.com${pathname}`, { method: 'HEAD', redirect: 'manual', signal: AbortSignal.timeout(20_000) });
+        const head = await fetch(`https://aibesttool.com${pathname}`, {
+          method: 'HEAD',
+          redirect: 'manual',
+          signal: AbortSignal.timeout(20_000),
+        });
         assert.equal(head.status, 200, `ChatGPT HEAD ${pathname} failed`);
         assert(!head.headers.get('location'), `ChatGPT HEAD ${pathname} redirected`);
       }
@@ -462,16 +482,30 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
     await client.query('BEGIN');
     await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`directory:${candidate.slug}`]);
     const protectedBefore = candidate.slug === 'chatgpt' ? await readChatgptProtectedState(client) : null;
+    const sciteProtectedBefore =
+      candidate.slug === 'scite'
+        ? (
+            await client.query('SELECT id,name,url,status,page_quality_status FROM tools WHERE id <> $1 ORDER BY id', [
+              payload.id,
+            ])
+          ).rows
+        : null;
     const matches = await findMatches(client, candidate);
     assert(
       matches.rows.every((row) => row.id === payload.id && row.name === candidate.slug),
       `${candidate.slug}: conflicting entity exists`,
     );
-    if (candidate.slug === 'murf' || candidate.slug === 'pika' || candidate.slug === 'chatgpt') {
+    if (
+      candidate.slug === 'murf' ||
+      candidate.slug === 'pika' ||
+      candidate.slug === 'chatgpt' ||
+      candidate.slug === 'scite'
+    ) {
       const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
       if (candidate.slug === 'murf') assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
       else if (candidate.slug === 'pika') assertPikaEmptyPreimage(matches.rows, existingId.rows, payload.id);
-      else assertChatgptEmptyPreimage(matches.rows, existingId.rows);
+      else if (candidate.slug === 'chatgpt') assertChatgptEmptyPreimage(matches.rows, existingId.rows);
+      else assertSciteEmptyPreimage(matches.rows, existingId.rows);
     }
     const category = await client.query('SELECT id FROM categories WHERE slug = $1', [payload.categorySlug]);
     assert.equal(category.rowCount, 1, `${candidate.slug}: storage category must exist exactly once`);
@@ -504,12 +538,16 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
         payload.features,
         useCases,
         payload.nextReviewDate,
-        candidate.slug === 'murf' || candidate.slug === 'pika' || candidate.slug === 'chatgpt',
+        candidate.slug === 'murf' ||
+          candidate.slug === 'pika' ||
+          candidate.slug === 'chatgpt' ||
+          candidate.slug === 'scite',
       ],
     );
     if (candidate.slug === 'murf') assertMurfSingleInsert(insert.rowCount);
     if (candidate.slug === 'pika') assertPikaSingleInsert(insert.rowCount);
     if (candidate.slug === 'chatgpt') assert.equal(insert.rowCount, 1, 'ChatGPT must insert exactly one new row');
+    if (candidate.slug === 'scite') assert.equal(insert.rowCount, 1, 'Scite must insert exactly one new row');
     const row = await client.query(
       'SELECT id, name, url, status, page_quality_status, features, title, content, detail, use_cases, image_url, thumbnail_url, video_url, next_review_date::text AS next_review_date FROM tools WHERE id = $1',
       [payload.id],
@@ -533,6 +571,13 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       assert.equal(row.rows[0].id, CHATGPT_CANONICAL_ID);
       assertChatgptProtectedStateUnchanged(protectedBefore, await readChatgptProtectedState(client));
     }
+    if (sciteProtectedBefore) {
+      const sciteProtectedAfter = await client.query(
+        'SELECT id,name,url,status,page_quality_status FROM tools WHERE id <> $1 ORDER BY id',
+        [payload.id],
+      );
+      assertSciteProtectedRowsUnchanged(sciteProtectedBefore, sciteProtectedAfter.rows);
+    }
     await client.query(commit ? 'COMMIT' : 'ROLLBACK');
     if (candidate.slug === 'chatgpt') {
       const readback = await openDatabase();
@@ -543,7 +588,9 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
         if (commit) assert.equal(found.rows[0].id, CHATGPT_CANONICAL_ID);
         assertChatgptProtectedStateUnchanged(protectedBefore!, await readChatgptProtectedState(readback));
         await readback.query('ROLLBACK');
-      } finally { await readback.end(); }
+      } finally {
+        await readback.end();
+      }
     }
     console.log(`✅ ${candidate.slug}: ${commit ? 'committed' : 'rollback verified'} as published + monitor`);
     console.log(
@@ -597,14 +644,20 @@ async function main() {
       );
     } else if (candidate.slug === 'pika' || candidate.slug === 'chatgpt') {
       assert(options.online, `${candidate.slug}: verify requires --online after a real commit`);
-      assert(['ready_for_next_slot', 'released'].includes(audit.status), `${candidate.slug}: invalid postcommit audit status`);
+      assert(
+        ['ready_for_next_slot', 'released'].includes(audit.status),
+        `${candidate.slug}: invalid postcommit audit status`,
+      );
     } else {
       assert.equal(audit.status, 'released', `${candidate.slug}: verify requires a released audit record`);
     }
     const client = await openDatabase();
     let chatgptDisplayAsset: { thumbnailUrl: string | null; imageUrl: string | null } | undefined;
     try {
-      if (options.phase === 'preflight' || ((candidate.slug === 'pika' || candidate.slug === 'chatgpt') && options.phase === 'verify')) {
+      if (
+        options.phase === 'preflight' ||
+        ((candidate.slug === 'pika' || candidate.slug === 'chatgpt') && options.phase === 'verify')
+      ) {
         await client.query('BEGIN READ ONLY');
       }
       if (candidate.slug === 'chatgpt') await readChatgptProtectedState(client);
@@ -623,12 +676,18 @@ async function main() {
           );
         } else {
           assert.equal(matches.rowCount, 0, `${candidate.slug}: existing entity requires manual review`);
-          if (candidate.slug === 'murf' || candidate.slug === 'pika' || candidate.slug === 'chatgpt') {
+          if (
+            candidate.slug === 'murf' ||
+            candidate.slug === 'pika' ||
+            candidate.slug === 'chatgpt' ||
+            candidate.slug === 'scite'
+          ) {
             const payload = loadPayload(candidate, audit, options.asOf);
             const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
             if (candidate.slug === 'murf') assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
             else if (candidate.slug === 'pika') assertPikaEmptyPreimage(matches.rows, existingId.rows, payload.id);
-            else assertChatgptEmptyPreimage(matches.rows, existingId.rows);
+            else if (candidate.slug === 'chatgpt') assertChatgptEmptyPreimage(matches.rows, existingId.rows);
+            else assertSciteEmptyPreimage(matches.rows, existingId.rows);
           }
         }
       }
@@ -668,7 +727,10 @@ async function main() {
       }
       console.log(`✅ ${candidate.slug}: database ${options.phase} passed`);
     } finally {
-      if (options.phase === 'preflight' || ((candidate.slug === 'pika' || candidate.slug === 'chatgpt') && options.phase === 'verify')) {
+      if (
+        options.phase === 'preflight' ||
+        ((candidate.slug === 'pika' || candidate.slug === 'chatgpt') && options.phase === 'verify')
+      ) {
         await client.query('ROLLBACK');
       }
       await client.end();

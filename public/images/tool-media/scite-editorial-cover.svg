@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Citation context research</title>
+  <desc id="desc">An original abstract illustration of three paper cards connected by citation lines.</desc>
+  <rect width="1200" height="630" fill="#f3f7f5"/>
+  <circle cx="1020" cy="95" r="220" fill="#deebe4"/>
+  <circle cx="145" cy="560" r="170" fill="#e4eaf5"/>
+  <path d="M355 305 550 217M635 217l200 105M550 250l-3 158" fill="none" stroke="#7a9a91" stroke-width="12" stroke-linecap="round"/>
+  <g fill="#fff" stroke="#365c55" stroke-width="7">
+    <rect x="100" y="218" width="260" height="225" rx="19"/>
+    <rect x="455" y="105" width="280" height="225" rx="19"/>
+    <rect x="805" y="245" width="280" height="225" rx="19"/>
+  </g>
+  <g fill="#47776b">
+    <rect x="139" y="264" width="155" height="14" rx="7"/><rect x="139" y="301" width="185" height="10" rx="5" opacity=".5"/><rect x="139" y="329" width="145" height="10" rx="5" opacity=".5"/>
+    <rect x="495" y="151" width="175" height="14" rx="7"/><rect x="495" y="188" width="195" height="10" rx="5" opacity=".5"/><rect x="495" y="216" width="155" height="10" rx="5" opacity=".5"/>
+    <rect x="845" y="291" width="175" height="14" rx="7"/><rect x="845" y="328" width="195" height="10" rx="5" opacity=".5"/><rect x="845" y="356" width="155" height="10" rx="5" opacity=".5"/>
+  </g>
+  <text x="100" y="543" font-family="Arial,sans-serif" font-size="38" font-weight="700" fill="#214b43">Citation context</text>
+  <text x="101" y="580" font-family="Arial,sans-serif" font-size="22" fill="#365c55">AI Best Tool editorial illustration · not a product screenshot</text>
+</svg>

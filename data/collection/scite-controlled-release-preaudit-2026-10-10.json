@@ -1,0 +1,109 @@
+{
+  "slug": "scite",
+  "existingRoute": "/ai/scite",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-10-10",
+  "publishNotBefore": "2026-10-10",
+  "releaseIndexState": "monitor",
+  "entityReleaseApproved": true,
+  "claimLevelHolds": [
+    "checkout-price",
+    "api-mcp-entitlements",
+    "export-redistribution",
+    "discipline-coverage",
+    "data-retention-account"
+  ],
+  "publicationPolicy": {
+    "entityGates": {
+      "identity": "pass",
+      "uniqueCanonical": "pass",
+      "duplicateIntent": "pass",
+      "coreFunction": "pass",
+      "assetRightsAndLegalSafety": "pass",
+      "misleadingClaims": "pass",
+      "pageContentSufficiency": "pass"
+    },
+    "claims": [
+      {
+        "id": "checkout-price",
+        "category": "price",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Displayed plans are a dated public-page observation; actual checkout, billing interval, tax, institutional terms and discounts require the target account.",
+        "sources": ["https://scite.ai/pricing"],
+        "nextReviewDate": "2026-10-17"
+      },
+      {
+        "id": "api-mcp-entitlements",
+        "category": "account_rights",
+        "status": "unknown",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "API and MCP are documented integrations, but plan-specific access, credit metering and overages were not tested for an account.",
+        "sources": ["https://scite.ai/pricing", "https://scite.ai/api"],
+        "nextReviewDate": "2026-10-24"
+      },
+      {
+        "id": "export-redistribution",
+        "category": "account_rights",
+        "status": "unknown",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Export format and quotas are untested; source-content reuse and redistribution are governed by third-party and service terms.",
+        "sources": ["https://scite.ai/api", "https://scite.ai/terms"],
+        "nextReviewDate": "2026-10-24"
+      },
+      {
+        "id": "discipline-coverage",
+        "category": "core_capability",
+        "status": "unknown",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Vendor corpus counts do not establish completeness in a target discipline or reliable classification for every citation.",
+        "sources": ["https://scite.ai/features"],
+        "nextReviewDate": "2026-11-09"
+      },
+      {
+        "id": "data-retention-account",
+        "category": "privacy_rights",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Published policy and terms have different data scopes; account-specific retention, backup purge and contract terms need confirmation.",
+        "sources": ["https://scite.ai/policy", "https://scite.ai/terms"],
+        "nextReviewDate": "2026-10-24"
+      }
+    ]
+  },
+  "productionWriteApproved": false,
+  "sitemapChangeApproved": false,
+  "sources": {
+    "official": [
+      "https://scite.ai/",
+      "https://scite.ai/features",
+      "https://scite.ai/pricing",
+      "https://scite.ai/api",
+      "https://scite.ai/policy",
+      "https://scite.ai/terms"
+    ],
+    "independent": [
+      "https://www.lib.polyu.edu.hk/databases/scite",
+      "https://www.mff.cuni.cz/en/library/news/permanent-access-to-scite",
+      "https://journals.indianapolis.iu.edu/index.php/hypothesis/article/download/26528/25101/54274"
+    ]
+  },
+  "assetSha256": {
+    "/images/tool-media/scite-editorial-cover.svg": "44664ec8708652df3a03ef9ef514506879d4232dd15127e3cb1ad8e2d0b882a2"
+  },
+  "nextSlotChecklist": [
+    "Inherit scoped prerelease identity, function and market PASS where unchanged",
+    "Recheck official features, pricing, API, privacy and terms on release day",
+    "Confirm production tool/profile/alias identity and sitemap with read-only preflight",
+    "Use only the original AI Best Tool editorial illustration with locked hash",
+    "Inspect EN/ZH/CN Best for, Not ideal, limitations, correction and owner entry, Claim boundaries and review dates",
+    "Run transaction rollback and independent QA before controller authorizes any production commit",
+    "After a separately authorized release, verify one published monitor entity, three locale canonical/noindex pages, sitemap zero and no Task/Capability/Fit"
+  ]
+}

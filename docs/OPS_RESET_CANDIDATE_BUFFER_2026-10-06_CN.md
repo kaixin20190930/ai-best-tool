@@ -1,6 +1,6 @@
 # 运营重启：成熟候选缓冲与七个运营日排期
 
-> 2026-10-08 状态更新：Elicit 已解除素材/内容门禁并按受控流程发布为 `published + monitor/noindex`；不进入 sitemap，关系仍未批准。其余候选状态沿用本文，下一候选转为 Murf Studio。
+> 2026-10-10 状态更新：本文件及 10-06 JSON 是历史审计快照。当前运营读取请使用[状态覆盖层](../data/collection/mature-candidate-current-state-2026-10-10.json)和 `readCurrentCandidateQueue()`：Elicit、Murf、Pika 已发布 monitor/noindex；ChatGPT 是快照外独立发布实体；Scite 仅为本地受控发布候选。
 
 核查日：2026-10-06（Asia/Shanghai）。单元：`OPS-RESET-01-CANDIDATE-BUFFER-AND-TASK-AUDIT`。基
 线：`main@e938d1c61d0ddb8d9ebfcbafdb5768781f300060`。
@@ -10,7 +10,7 @@ Studio、Pika、Canva、Bolt。唯一下一发布候选为 Elicit，先解除素
 产品和采用线索，不表示这 15 项已全部通过市场验证。10-07 深审后市场门槛通过 4 项：Elicit、Murf、Pika、Scite；其余缺项照实
 HOLD。没有为了达到每日数量制造合格状态。
 
-本文件与[机器候选清单](../data/collection/mature-candidate-buffer-2026-10-06.json)共同构成当前运营实例台账；旧
+本文件与[机器候选清单](../data/collection/mature-candidate-buffer-2026-10-06.json)共同构成 10-06 历史台账；旧
 [09-20 候选池](./MATURE_CANDIDATE_BUFFER_2026-09-20_CN.md)及专项包保持历史原文，不覆盖其当时结论。治理只引
 用[收录宪法与唯一 Cluster 组合规则](./BEST_DIRECTORY_POSITIONING_AND_INTAKE_CN.md)、[索引政策](./TOOL_INDEX_RELEASE_POLICY_CN.md)及[主追踪](./MASTER_OPTIMIZATION_TRACKER_CN.md)，
 不增加第二套准入规则。产品身份继续是 AI 工具目录，用户价值是可核验的任务差异、限制和变化，

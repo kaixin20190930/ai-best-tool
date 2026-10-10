@@ -1,0 +1,175 @@
+{
+  "id": "13aa730f-4a82-4fc6-b9fa-93855aa8d921",
+  "slug": "scite",
+  "officialUrl": "https://scite.ai/",
+  "reviewedAt": "2026-10-10",
+  "nextReviewDate": "2026-10-17",
+  "categorySlug": "productivity",
+  "pricing": "paid",
+  "title": {
+    "en": "Scite: inspect citation context",
+    "zh": "Scite：核查引文语境",
+    "cn": "Scite：檢視引用脈絡"
+  },
+  "content": {
+    "en": "Scite helps researchers inspect how indexed papers cite a work and find citation statements in scholarly full text. Its labels are useful leads for review, not verdicts on whether a paper or claim is true.",
+    "zh": "Scite 帮助研究者查看已收录论文如何引用某项研究，并在学术全文中查找引文陈述。分类标签只能作为回查线索，不能判定论文或结论真伪。",
+    "cn": "Scite 協助研究者查看已收錄論文如何引用某項研究，並在學術全文中搜尋引文陳述。分類標籤是供查核的線索，不能判定論文或主張真偽。"
+  },
+  "detail": {
+    "en": "Use Scite when you already have a paper, claim or reference list and want to inspect citation context, locate later supporting or contrasting discussion, or flag retractions and editorial notices. Search and Assistant can help surface relevant passages; open the cited work and judge its methods and context yourself. Coverage depends on available and licensed full text, and some citations may be absent or unclassified. This review used public documents and independent institutional/evaluation sources; it did not test a paid account, target discipline, export, API or live classification workflow.\n\nBest for: Researchers checking how indexed literature discusses a known paper or claim.; Authors and librarians seeking another signal for reference-list review, with source-level verification.\n\nNot ideal for: Systematic reviews that need a complete, reproducible search from one database alone.; High-stakes evidence decisions based only on supporting/contrasting counts or AI answers.; Users needing verified account-level pricing, API/export rights or contractual protections before procurement.\n\nLimitations: Coverage is licensed and incomplete; missing or unclassified citations do not mean no evidence exists.; Citation labels classify local context and can miss nuance or be wrong; read the source paper.; A supporting/contrasting label does not establish truth, replication, quality or consensus.; Current target-account billing, API/export limits, and backup/deletion timing remain unknown.\n\nPricing and account rights: The public page lists Basic, Pro, Team and Enterprise, but this review makes no exact price, credit, export or API allowance promise. Check the target account and billing screen before purchase.\n\nPrivacy and data: Published terms distinguish Customer Data from service-use analytics. Verify the intended workspace, manuscript sensitivity, retention and contract before upload.\n\nDecision: Try a known DOI in your field, compare its citation passages with original papers and another database, and record missing or unclassified citations. Use Scite as a supervised lead for citation review, not as a truth or completeness test.\n\nSources and review: https://scite.ai/features https://scite.ai/pricing https://scite.ai/api https://scite.ai/policy https://scite.ai/terms; https://www.lib.polyu.edu.hk/databases/scite; https://www.mff.cuni.cz/en/library/news/permanent-access-to-scite; https://journals.indianapolis.iu.edu/index.php/hypothesis/article/download/26528/25101/54274. 2026-10-10; next review 2026-10-17 (price), 2026-10-24 (account and privacy), 2026-11-09 (coverage).\n\nCorrection and owner update: The listing has a visible owner claim/update entry and a comment path for corrections. No vendor contact has been made.",
+    "zh": "当你已有论文、论点或参考文献表，想查看引用语境、寻找后续支持或对照讨论，或发现撤稿与编辑告示时，可考虑 Scite。Search 和 Assistant 可帮助定位相关段落；仍需打开原文，自行判断研究方法与上下文。覆盖取决于可获取且获许可的全文，部分引用可能缺失或未分类。本次核读公开资料、独立机构采用与评估来源；没有测试付费账户、目标学科、导出、API 或实时分类流程。\n\n适合: 需要检查已收录文献如何讨论某篇已知论文或论点的研究者。; 希望为参考文献审阅增加一项线索、并会逐篇核对来源的作者与图书馆员。\n\n不适合: 要求单一数据库提供完整、可复现系统检索的综述项目。; 只凭支持/对照数量或 AI 回答做高风险证据判断的人。; 采购前必须确认账户级价格、API/导出权益或合同保护的用户。\n\n限制: 覆盖受许可与可用全文限制，且并不完整；未显示或未分类不代表不存在证据。; 标签针对局部语境，可能遗漏细节或分类错误；应阅读原文。; 支持/对照标签不能证明真伪、重复验证、研究质量或共识。; 目标账户账单、API/导出限额与备份/删除时间仍未知。\n\n价格与账户权益: 公开页列出 Basic、Pro、Team 和 Enterprise，但本稿不承诺精确价格、credits、导出或 API 额度。购买前核对目标账户与结账页面。\n\n隐私与数据: 公开条款将 Customer Data 与服务使用分析区分；上传稿件前核对目标工作区、敏感性、保留期限和合同。\n\n决策: 在目标学科用已知 DOI 试查，对照原文及另一数据库，记录缺失或未分类引文。只把 Scite 当作有人监督的引文审阅线索，不当作真伪或完整性检验。\n\n来源与复核: https://scite.ai/features https://scite.ai/pricing https://scite.ai/api https://scite.ai/policy https://scite.ai/terms; https://www.lib.polyu.edu.hk/databases/scite; https://www.mff.cuni.cz/en/library/news/permanent-access-to-scite; https://journals.indianapolis.iu.edu/index.php/hypothesis/article/download/26528/25101/54274. 2026-10-10; next review 2026-10-17 (price), 2026-10-24 (account and privacy), 2026-11-09 (coverage).\n\n纠错与 Owner 更新: 本条目展示 Owner 认领/维护入口和评论纠错路径；本站未联系厂商。",
+    "cn": "若你已有論文、主張或參考文獻清單，想檢視引用脈絡、尋找後續支持或對照討論，或查看撤稿與編輯公告，可考慮 Scite。Search 和 Assistant 可協助找出相關段落；仍須開啟原文，自行判斷研究方法與脈絡。涵蓋範圍受可取得且獲授權的全文限制，部分引用可能缺漏或未分類。本次檢視公開資料、獨立機構採用與評估來源；未測試付費帳戶、目標學科、匯出、API 或即時分類流程。\n\n適合: 需要檢查已收錄文獻如何討論某篇已知論文或主張的研究者。; 想為參考文獻審查增加一項線索，並會逐篇核對來源的作者與圖書館員。\n\n不適合: 要求單一資料庫提供完整且可重現系統檢索的綜述計畫。; 只依支持/對照數量或 AI 回答進行高風險證據判斷的人。; 採購前必須確認帳戶層級價格、API/匯出權益或合約保障的使用者。\n\n限制: 涵蓋範圍受授權與全文可用性限制，並不完整；未顯示或未分類不代表沒有證據。; 標籤判讀的是局部脈絡，可能漏掉細節或分類錯誤；應閱讀原文。; 支持/對照標籤不能證明真偽、重複驗證、研究品質或共識。; 目標帳戶計費、API/匯出限制及備份/刪除時間仍未知。\n\n價格與帳戶權益: 公開頁列出 Basic、Pro、Team 與 Enterprise，但本稿不承諾精確價格、點數、匯出或 API 額度。購買前確認目標帳戶與結帳頁面。\n\n隱私與資料: 公開條款區分 Customer Data 與服務使用分析；上傳稿件前確認目標工作區、敏感性、保留期限及合約。\n\n決策: 在目標學科以已知 DOI 試查，對照原文及另一資料庫，記錄缺漏或未分類引用。只把 Scite 當作有人監督的引用審查線索，不當作真偽或完整性檢驗。\n\n來源與複核: https://scite.ai/features https://scite.ai/pricing https://scite.ai/api https://scite.ai/policy https://scite.ai/terms; https://www.lib.polyu.edu.hk/databases/scite; https://www.mff.cuni.cz/en/library/news/permanent-access-to-scite; https://journals.indianapolis.iu.edu/index.php/hypothesis/article/download/26528/25101/54274. 2026-10-10; next review 2026-10-17 (price), 2026-10-24 (account and privacy), 2026-11-09 (coverage).\n\n更正與 Owner 更新: 本條目顯示 Owner 認領/維護入口與留言更正路徑；本站未聯絡廠商。"
+  },
+  "imageUrl": "/images/tool-media/scite-editorial-cover.svg",
+  "thumbnailUrl": "/images/tool-media/scite-editorial-cover.svg",
+  "tags": ["research", "citations", "literature-review"],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": [
+          "Researchers checking how indexed literature discusses a known paper or claim.",
+          "Authors and librarians seeking another signal for reference-list review, with source-level verification."
+        ],
+        "zh": [
+          "需要检查已收录文献如何讨论某篇已知论文或论点的研究者。",
+          "希望为参考文献审阅增加一项线索、并会逐篇核对来源的作者与图书馆员。"
+        ],
+        "cn": [
+          "需要檢查已收錄文獻如何討論某篇已知論文或主張的研究者。",
+          "想為參考文獻審查增加一項線索，並會逐篇核對來源的作者與圖書館員。"
+        ]
+      },
+      "notIdealFor": {
+        "en": [
+          "Systematic reviews that need a complete, reproducible search from one database alone.",
+          "High-stakes evidence decisions based only on supporting/contrasting counts or AI answers.",
+          "Users needing verified account-level pricing, API/export rights or contractual protections before procurement."
+        ],
+        "zh": [
+          "要求单一数据库提供完整、可复现系统检索的综述项目。",
+          "只凭支持/对照数量或 AI 回答做高风险证据判断的人。",
+          "采购前必须确认账户级价格、API/导出权益或合同保护的用户。"
+        ],
+        "cn": [
+          "要求單一資料庫提供完整且可重現系統檢索的綜述計畫。",
+          "只依支持/對照數量或 AI 回答進行高風險證據判斷的人。",
+          "採購前必須確認帳戶層級價格、API/匯出權益或合約保障的使用者。"
+        ]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-10-10",
+      "reviewedBy": "AI Best Tool editorial; prerelease scoped PASS inherited",
+      "sourceUrl": "https://scite.ai/",
+      "trustNote": {
+        "en": "Public-source and independent library evidence; no account-level or discipline-wide performance test.",
+        "zh": "公开来源与独立图书馆证据；未测试账户或目标学科整体表现。",
+        "cn": "公開來源與獨立圖書館證據；未測試帳戶或目標學科整體表現。"
+      }
+    },
+    "evidence": {
+      "official": [
+        "https://scite.ai/",
+        "https://scite.ai/features",
+        "https://scite.ai/pricing",
+        "https://scite.ai/api",
+        "https://scite.ai/policy",
+        "https://scite.ai/terms"
+      ],
+      "independent": [
+        "https://www.lib.polyu.edu.hk/databases/scite",
+        "https://www.mff.cuni.cz/en/library/news/permanent-access-to-scite",
+        "https://journals.indianapolis.iu.edu/index.php/hypothesis/article/download/26528/25101/54274"
+      ]
+    },
+    "publicationPolicy": {
+      "entityGates": {
+        "identity": "pass",
+        "uniqueCanonical": "pass",
+        "duplicateIntent": "pass",
+        "coreFunction": "pass",
+        "assetRightsAndLegalSafety": "pass",
+        "misleadingClaims": "pass",
+        "pageContentSufficiency": "pass"
+      },
+      "claims": [
+        {
+          "id": "checkout-price",
+          "category": "price",
+          "status": "conditional",
+          "exposure": "boundary",
+          "preciseRecommendation": false,
+          "publicLimitation": "Displayed plans are a dated public-page observation; actual checkout, billing interval, tax, institutional terms and discounts require the target account.",
+          "sources": ["https://scite.ai/pricing"],
+          "nextReviewDate": "2026-10-17"
+        },
+        {
+          "id": "api-mcp-entitlements",
+          "category": "account_rights",
+          "status": "unknown",
+          "exposure": "boundary",
+          "preciseRecommendation": false,
+          "publicLimitation": "API and MCP are documented integrations, but plan-specific access, credit metering and overages were not tested for an account.",
+          "sources": ["https://scite.ai/pricing", "https://scite.ai/api"],
+          "nextReviewDate": "2026-10-24"
+        },
+        {
+          "id": "export-redistribution",
+          "category": "account_rights",
+          "status": "unknown",
+          "exposure": "boundary",
+          "preciseRecommendation": false,
+          "publicLimitation": "Export format and quotas are untested; source-content reuse and redistribution are governed by third-party and service terms.",
+          "sources": ["https://scite.ai/api", "https://scite.ai/terms"],
+          "nextReviewDate": "2026-10-24"
+        },
+        {
+          "id": "discipline-coverage",
+          "category": "core_capability",
+          "status": "unknown",
+          "exposure": "boundary",
+          "preciseRecommendation": false,
+          "publicLimitation": "Vendor corpus counts do not establish completeness in a target discipline or reliable classification for every citation.",
+          "sources": ["https://scite.ai/features"],
+          "nextReviewDate": "2026-11-09"
+        },
+        {
+          "id": "data-retention-account",
+          "category": "privacy_rights",
+          "status": "conditional",
+          "exposure": "boundary",
+          "preciseRecommendation": false,
+          "publicLimitation": "Published policy and terms have different data scopes; account-specific retention, backup purge and contract terms need confirmation.",
+          "sources": ["https://scite.ai/policy", "https://scite.ai/terms"],
+          "nextReviewDate": "2026-10-24"
+        }
+      ]
+    },
+    "media": {
+      "kind": "first_party_editorial",
+      "asset": "/images/tool-media/scite-editorial-cover.svg",
+      "sha256": "44664ec8708652df3a03ef9ef514506879d4232dd15127e3cb1ad8e2d0b882a2",
+      "productScreenshot": false
+    },
+    "release": {
+      "target": "published_monitor_noindex",
+      "sitemapEligible": false,
+      "relationshipCreationApproved": false
+    }
+  },
+  "useCases": {
+    "en": [
+      "Researchers checking how indexed literature discusses a known paper or claim.",
+      "Authors and librarians seeking another signal for reference-list review, with source-level verification."
+    ],
+    "zh": [
+      "需要检查已收录文献如何讨论某篇已知论文或论点的研究者。",
+      "希望为参考文献审阅增加一项线索、并会逐篇核对来源的作者与图书馆员。"
+    ],
+    "cn": [
+      "需要檢查已收錄文獻如何討論某篇已知論文或主張的研究者。",
+      "想為參考文獻審查增加一項線索，並會逐篇核對來源的作者與圖書館員。"
+    ]
+  }
+}
