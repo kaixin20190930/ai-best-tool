@@ -1,6 +1,6 @@
 # 运营重启：成熟候选缓冲与七个运营日排期
 
-> 2026-10-10 状态更新：本文件及 10-06 JSON 是历史审计快照。当前成熟新工具候选的运营读取入口为 `pnpm run collection:current-mature-queue`，由[状态覆盖层](../data/collection/mature-candidate-current-state-2026-10-10.json)生成：Elicit、Murf、Pika 已发布 monitor/noindex；ChatGPT 是快照外独立发布实体；Scite 仅为本地受控发布候选。
+> 2026-10-10 状态更新：本文件及 10-06 JSON 是历史审计快照。当前成熟新工具候选的运营读取入口为 `pnpm run collection:current-mature-queue`，由[状态覆盖层](../data/collection/mature-candidate-current-state-2026-10-10.json)生成：Elicit、Murf、Pika、Scite 已发布 monitor/noindex，ChatGPT 是快照外独立发布实体。当前没有下一合格发布候选，选择器返回 `null`；其余 HOLD 项不被自动升级。
 
 核查日：2026-10-06（Asia/Shanghai）。单元：`OPS-RESET-01-CANDIDATE-BUFFER-AND-TASK-AUDIT`。基
 线：`main@e938d1c61d0ddb8d9ebfcbafdb5768781f300060`。

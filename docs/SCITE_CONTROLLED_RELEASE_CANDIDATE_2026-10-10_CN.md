@@ -1,15 +1,15 @@
-# SCITE-FAST-CONTROLLED-RELEASE-01：本地受控发布候选
+# SCITE-FAST-CONTROLLED-RELEASE-01：生产受控发布记录
 
-核验日：2026-10-10（Asia/Shanghai）。状态：**本地 READY_MONITOR 候选；生产未发布，productionWrites=0**。唯一拟发布实体为
+核验日：2026-10-10（Asia/Shanghai）。状态：**生产已发布并验证，published + monitor/noindex**。唯一已发布实体为
 Scite，固定 ID `13aa730f-4a82-4fc6-b9fa-93855aa8d921`，canonical `/ai/scite`（CN `/cn/ai/scite`，TW `/tw/ai/scite`）。目
-标仅为 `published + monitor/noindex`；sitemap、Task、Capability、Fit 与 `continue_index` 均不获批准。
+标为 `published + monitor/noindex`；sitemap 匹配 0，Task、Capability、Fit 均为 0，`continue_index` 未获批准。生产基线为远端 `main@9cfa0d723de75479fac606f94afad05c5535440c`；本次文档收口 `productionWrites=0`。
 
 ## 候选队列与继承边界
 
 `mature-candidate-buffer-2026-10-06.json` 是审计历史快照，其 15 项和当日 HOLD 不改写。当前读取方应使用
 `mature-candidate-current-state-2026-10-10.json` 及 `readCurrentCandidateQueue()`：Elicit、Murf、Pika 为已发布
 monitor/noindex，不再进入新工具队列；ChatGPT 为快照外的独立后续发布实体。Scite 在当前层仅为本地开发候选，未伪装为生产已
-发布。
+发布。生产收口后，当前覆盖层已将 Scite 标为 `released_monitor_noindex` 并移出新工具候选队列；选择器没有下一合格候选时返回 `null`。
 
 继承 10-07 prerelease 对身份、核心功能、实际可用、独立市场、决策价值和可维护性的范围限定 PASS；没有重跑其历史研究。今日
 重新阅读
@@ -43,10 +43,11 @@ ID 占用，预留 EN/CN/TW 路由仍 self-canonical/noindex 且 sitemap 0。随
 体/profile 零匹配、sitemap Scite 零匹配。[发布 manifest](../data/collection/scite-release-manifest-2026-10-10.json)记录
 四步和未执行的生产提交；本地源码提交不会发布数据库实体或部署 SVG。
 
-发布前剩余动作：独立 QA 检查精确差分；将本站 SVG 部署至线上并验证 200/hash；总控再跑 fresh preflight 与回滚，并确认实体
-/alias 无变化；只有总控明确授权时才可用统一发布器显式 `--commit`。生产提交后另跑 `verify --online`，检查三语真实正文、唯
-一 ID、monitor/noindex、sitemap 0 与 Task/Capability/Fit 0。**本交付没有生产 commit、push、deploy 或 production
-smoke。**
+总控完成独立 QA 后，远端 `main` 到达 `9cfa0d72`；本站中性 SVG 线上返回 200。最终生产只读 preflight PASS；统一发布器显式
+`--commit` 创建固定 ID `13aa730f-4a82-4fc6-b9fa-93855aa8d921`，三语 en/zh/cn 读回，`reviewedAt=2026-10-10`、
+`nextReviewDate=2026-10-17`。`verify --online` PASS：唯一实体为 published + monitor，三语 canonical/noindex 正确，
+sitemap Scite 0，Task/Capability/Fit 0。生产 SEO smoke 已执行且全部检查 PASS。生产提交写入 1 条；本次文档收口没有再次写生产，也
+没有 push。
 
 ## 验证与回滚
 
@@ -56,3 +57,6 @@ smoke。**
 - 完整 `pnpm run build`：PASS；因新公开实体和发布路径执行一次。
 - 数据库回滚为事务 `ROLLBACK`；未来若总控提交后需要撤回，先用固定 ID、slug 与状态做只读核验，再经独立决策执行受控撤稿/回
   滚，绝不复用此开发命令直接改生产。
+- 五条 Claim HOLD 继续有效：结账价格、API/MCP 账户权益、导出/再分发、目标学科覆盖、账户数据保留。首次常规复核
+  `2026-10-17`；其余 Claim 复核日按 [门禁 manifest](../data/collection/scite-controlled-release-preaudit-2026-10-10.json) 执行。这
+  些日期不构成索引批准或发布等待期。
