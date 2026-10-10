@@ -8,8 +8,8 @@ Scite，固定 ID `13aa730f-4a82-4fc6-b9fa-93855aa8d921`，canonical `/ai/scite`
 
 `mature-candidate-buffer-2026-10-06.json` 是审计历史快照，其 15 项和当日 HOLD 不改写。当前读取方应使用
 `mature-candidate-current-state-2026-10-10.json` 及 `readCurrentCandidateQueue()`：Elicit、Murf、Pika 为已发布
-monitor/noindex，不再进入新工具队列；ChatGPT 为快照外的独立后续发布实体。Scite 在当前层仅为本地开发候选，未伪装为生产已
-发布。生产收口后，当前覆盖层已将 Scite 标为 `released_monitor_noindex` 并移出新工具候选队列；选择器没有下一合格候选时返回 `null`。
+monitor/noindex，不再进入新工具队列；ChatGPT 为快照外的独立后续发布实体。Scite 已在生产发布为 `published + monitor/noindex`。
+生产收口后，当前覆盖层已将 Scite 标为 `released_monitor_noindex` 并移出新工具候选队列；选择器没有下一合格候选时返回 `null`。
 
 继承 10-07 prerelease 对身份、核心功能、实际可用、独立市场、决策价值和可维护性的范围限定 PASS；没有重跑其历史研究。今日
 重新阅读
