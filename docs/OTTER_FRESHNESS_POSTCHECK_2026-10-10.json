@@ -1,0 +1,33 @@
+{
+  "mode": "preflight",
+  "batch": "otter",
+  "productionWrites": 0,
+  "results": [
+    {
+      "slug": "otter-ai",
+      "outcome": "reviewed_no_change",
+      "preimageSha256": "bec2e6ea38e5373ef00fab423df1ea979d542a59c0edaa03d5dc5c1e0c3336a6",
+      "passSnapshot": {
+        "id": "release-2026-09-10:otter-ai",
+        "source": "data/collection/otter-ai-release.json",
+        "sha256": "771fa3416a09e8205775f179185edf969154728965b6030f665b9958e9548170",
+        "reviewedAt": "2026-09-10",
+        "validThrough": "2026-12-09",
+        "claimDueAt": "2026-10-10",
+        "scope": "entity_baseline_only"
+      },
+      "expectedDetailSha256": "d90fffffb03cc8f3eb830bb858ec4cff5fcaf6081bc9c561ca40395fed91f658",
+      "changedFields": [],
+      "nextReviewDate": "2026-10-24",
+      "sources": [
+        "https://otter.ai/pricing",
+        "https://help.otter.ai/hc/en-us/articles/360047538094-Conversation-import-and-app-limits-on-the-Basic-free-plan",
+        "https://help.otter.ai/hc/en-us/articles/25205539848343-When-will-my-monthly-minutes-reset"
+      ],
+      "unresolved": [
+        "Checkout, taxes, regional pricing, promotional eligibility and target-account minute meter were not tested."
+      ],
+      "status": "already_applied"
+    }
+  ]
+}

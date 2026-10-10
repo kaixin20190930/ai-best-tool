@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-09
+更新时间：2026-10-10
+
+2026-10-10 **OTTER-FRESHNESS-01 单项 Claim 复核与生产收口完成**：当日全量只读 selector 显示 77 个工具、58 个 published、13 个到期项，Otter.ai 是唯一 `claim_due`。官方价格和套餐限额复核为 `reviewed_no_change`；独立 QA 后，Owner 按精确 preflight 执行[受控提交](./OTTER_FRESHNESS_COMMIT_2026-10-10.json)，仅写 Otter 的维护记录和 `next_review_date`（`productionWrites=1`），没有修改正文、pricingSnapshot、status 或索引状态。[只读 postcheck](./OTTER_FRESHNESS_POSTCHECK_2026-10-10.json)为 `already_applied`、`changedFields=[]`、`productionWrites=0`；[提交后 backlog](./FRESHNESS_BACKLOG_AFTER_OTTER_2026-10-10.json)为 77 个工具、58 个 published、12 个到期项，`claim_due=0`、`entity_due=5`、`manual_archive_review=7`。Otter.ai 始终为 published；2026-10-24 仅是下一次常规 Claim 复核日，不是发布等待或索引门槛。详见[交付记录](./OTTER_FRESHNESS_REVIEW_2026-10-10.md)。
 
 2026-10-09 **REPLIT-FRESHNESS-01 单项生产更新完成**：ChatGPT 发布后的生产只读 selector 回读 77 个工具、58 个 published、13 个到期项；Replit 是唯一 `claim_due`，故没有把身份/归档项混入 freshness。本次撤回公开页面无法重新证明的 Core/Pro 精确价格与包含 credits，保留官方套餐能力、effort-based Agent 计费、部署/云消耗和 spend controls，并将结账、地区税费、Enterprise 与实际 burn 限定为账号级复核。独立 QA 要求补齐专属 manifest 与已应用重放；返工后最终 `QA_PASS`。生产仅写 Replit 一条，postcheck 为 `already_applied`、空变更、零写入；状态、canonical、索引、sitemap 和关系均未变化。提交后 `claim_due=0`，剩余 5 个 `entity_due` 与 7 个 `manual_archive_review`。详见[交付记录](./REPLIT_FRESHNESS_2026-10-09_CN.md)。
 
