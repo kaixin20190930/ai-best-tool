@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-10-10",
+  "readIsolation": "new_connection_read_only_transaction",
+  "slug": "otter-ai",
+  "status": "matched",
+  "preimageSha256": "58dc8fed10838c5361177cc5206c16a28a351724f6d9729e66edc365f87b2697",
+  "candidateDetailSha256": "d90fffffb03cc8f3eb830bb858ec4cff5fcaf6081bc9c561ca40395fed91f658",
+  "candidateChangedFields": [
+    "features",
+    "next_review_date"
+  ],
+  "replayStatus": "already_applied",
+  "replayChangedFields": [],
+  "productionWrites": 0
+}

@@ -14,6 +14,7 @@ const allowedSources = new Set([
   'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json',
   'docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json',
   'data/collection/replit-release.json',
+  'data/collection/otter-ai-release.json',
 ]);
 
 // eslint-disable-next-line import/prefer-default-export
@@ -120,6 +121,7 @@ export function verifyFreshnessPassSnapshot(
       'docs/FRESHNESS_BACKLOG_AFTER_BATCH3_2026-10-08.json': 'docs/FRESHNESS_FOURTH_BATCH_PREFLIGHT_2026-10-08.json',
       'docs/FRESHNESS_BACKLOG_AFTER_BATCH4_2026-10-08.json': 'docs/FRESHNESS_FIFTH_BATCH_PREFLIGHT_2026-10-09.json',
       'data/collection/replit-release.json': 'docs/REPLIT_FRESHNESS_PREFLIGHT_2026-10-09.json',
+      'data/collection/otter-ai-release.json': 'docs/OTTER_FRESHNESS_PREFLIGHT_2026-10-10.json',
       'docs/FRESHNESS_BACKLOG_AFTER_BATCH2_2026-10-08.json': 'docs/FRESHNESS_THIRD_BATCH_PREFLIGHT_2026-10-08.json',
       'docs/FRESHNESS_BACKLOG_POSTCOMMIT_2026-10-08.json': 'docs/FRESHNESS_SECOND_BATCH_PREFLIGHT_2026-10-08.json',
     };
