@@ -1,6 +1,6 @@
 # RESEARCH-COMPARISON-CONSOLIDATION-01 · 研究类指南与对比收口
 
-日期：2026-10-10。范围仅含三条既有 Guide URL、研究比较内容、共用比较模板中直接暴露的标签/面包屑与对应测试。没有创建新 URL、数据库写入、部署或推送。
+日期：2026-10-10。状态：**生产已部署，`QA_PASS_CONTROLLER_RELEASE`，定向验证通过**。范围仅含三条既有 Guide URL、研究比较内容、共用比较模板中直接暴露的标签/面包屑与对应测试；没有创建新 URL 或写入数据库。代码交付为 `d3c863c4` 与测试修正 `d9bbd9f9`，远端 `main` 已到达 `d9bbd9f98bca7adf4b60059965fc93ac775f82d0`。
 
 ## 现状审计与意图
 
@@ -24,6 +24,10 @@ primary 由真实内链、既有页面复用关系、正文意图和索引位置
 
 专项测试覆盖三语别名 308/query、primary/guide/index 白名单、候选和证据完整性、breadcrumb canonical helper、页面 noindex 契约与内部文案。`test-research-comparison-consolidation`、`test:public-content-boundary`、`test:seo-architecture`、`test:localized-metadata`、`test:guide-link-boundaries`、`test:notebooklm-pages`、`tsc --noEmit`、`git diff --check` 均 PASS；一次完整 `pnpm run build` PASS。NotebookLM 旧测试曾要求 primary 空壳直接提及它；新比较仅列证据完整的三个候选，该测试已保留对 NotebookLM 实际指南数据入口的检查。
 
-本地 build 后实际响应：EN/CN/TW primary 均 `200 + noindex, follow`，渲染 verified 比较和三候选；同语别名均 308，query 保留；EN/CN 指南 200、自指 canonical、仅 en/zh-CN/x-default hreflang。比较页原本无显式 canonical/hreflang，现保持不变；未将 noindex 页纳入 sitemap。此后仅作 lint 规范化和 FAQ/ItemList 语言路径修正，专项测试与 TypeScript 再次通过；遵循本单元“一次完整 build”约束，没有重复 build。线上只读基线在 TLS 握手阶段超时，因此本交付不把线上状态称为已确认；部署后应由总控按独立 QA 结果核对真实 head、redirect、页面、sitemap 和 hreflang。
+本地 build 后实际响应：EN/CN/TW primary 均 `200 + noindex, follow`，渲染 verified 比较和三候选；同语别名均 308，query 保留；EN/CN 指南 200、自指 canonical、仅 en/zh-CN/x-default hreflang。比较页原本无显式 canonical/hreflang，现保持不变；未将 noindex 页纳入 sitemap。此后仅作 lint 规范化和 FAQ/ItemList 语言路径修正，专项测试与 TypeScript 再次通过；遵循本单元“一次完整 build”约束，没有重复 build。开发阶段的线上只读基线曾在 TLS 握手阶段超时；总控部署后已完成下述生产定向验证。
+
+## 生产收口
+
+总控确认远端 `main=d9bbd9f98bca7adf4b60059965fc93ac775f82d0`，独立 QA 结论为 `QA_PASS_CONTROLLER_RELEASE`。部署后定向回验结果：EN/CN/TW primary 均返回 `200` 与 `X-Robots-Tag: noindex, follow`，页面可见 Perplexity、Consensus、Scite；EN/CN/TW alias 均返回 `308` 到同语 primary，并保留 query；`/guides/ai-tools-for-research` 返回 `200` 且 self-canonical；sitemap 仅包含 EN/CN research guide，不包含任何 comparison URL。生产验证未批准新的索引资格、Capability/Task Fit 关系或数据库写入。本次仅作本地文档收口，不再部署或推送。
 
 回滚：撤销本单元提交即可恢复两个 comparison 原页面及注册表；若上线后发现某候选事实不再成立，先将 primary 恢复为 noindex 的 fail-closed unavailable 内容，再修订证据；若别名 308 与真实独立意图冲突，移除 middleware 精确规则并重新审计，不能把它指向研究指南。

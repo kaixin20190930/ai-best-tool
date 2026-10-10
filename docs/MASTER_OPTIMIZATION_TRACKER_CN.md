@@ -2,7 +2,7 @@
 
 更新时间：2026-10-10
 
-2026-10-10 **RESEARCH-COMPARISON-CONSOLIDATION-01 本地候选**：三条既有研究 Guide/Comparison 路由完成意图与 SEO 契约审计；研究指南保留独立可索引，`ai-tools-for-research-comparison` 保持 noindex 作为 Structured Comparison primary，完全复用内容的 `ai-research-tools-comparison` 别名改为三语保留的 308。Perplexity、Consensus、Scite 仅用已记录的一手证据作任务差异和限制判断，不发布新的 Task/Capability/Fit 关系，不增加 URL、索引或 sitemap。专项测试、TypeScript、一次 build 和本地三语响应均 PASS；结果见[唯一交付记录](./RESEARCH_COMPARISON_CONSOLIDATION_2026-10-10_CN.md)。待独立 QA，未部署/推送/写生产。
+2026-10-10 **RESEARCH-COMPARISON-CONSOLIDATION-01 生产已部署，`QA_PASS_CONTROLLER_RELEASE`，定向验证通过**：远端 `main=d9bbd9f98bca7adf4b60059965fc93ac775f82d0`。研究指南保持独立可索引和 self-canonical；`ai-tools-for-research-comparison` 为三候选 Structured Comparison primary，EN/CN/TW 均 `200 + noindex, follow` 且可见 Perplexity、Consensus、Scite；完全复用内容的 `ai-research-tools-comparison` 在三语均 308 到同语 primary，query 保留。sitemap 仅包含 EN/CN research guide，不包含 comparison。专项测试、TypeScript 与一次完整 build 已通过；未增加 URL、索引资格、Task/Capability/Fit 关系或数据库写入。本次仅作本地文档收口，不再部署或推送。审计、回滚及生产结果见[唯一交付记录](./RESEARCH_COMPARISON_CONSOLIDATION_2026-10-10_CN.md)。
 
 2026-10-10 **SCITE-FAST-CONTROLLED-RELEASE-01 生产受控发布完成**：10-06 候选文件保留历史快照，运营覆盖层排除已发布的 Elicit、Murf、Pika、Scite 与快照外独立发布的 ChatGPT；Scite 的身份、canonical、核心功能、素材/法律与内容实体门禁通过，结账价格、API/MCP 权益、导出/再分发、学科覆盖和账户数据保留五条 Claim 继续 conditional/unknown HOLD。总控在远端 `main@9cfa0d72`、中性素材线上 200、最终只读 preflight PASS 后显式提交唯一 Scite 实体 `13aa730f-4a82-4fc6-b9fa-93855aa8d921`；三语 readback 与 online verify PASS，状态 `published + monitor/noindex`，sitemap 0，Task/Capability/Fit 0，`nextReviewDate=2026-10-17`。生产 SEO smoke 全部 PASS；未批准 index。本次只做文档收口，`productionWrites=0`、未 push。当前运营选择器无下一合格候选时返回 `null`，不会将 HOLD 项自动升级。详见[唯一交付记录](./SCITE_CONTROLLED_RELEASE_CANDIDATE_2026-10-10_CN.md)。
 
