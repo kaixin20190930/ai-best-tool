@@ -183,6 +183,17 @@ export async function middleware(request: NextRequest) {
   }
   const { locale, pathWithoutLocale } = getPathParts(pathname);
 
+  // This legacy comparison slug renders the same research intent as the
+  // canonical comparison route. Preserve the visitor's language and query.
+  if (
+    (request.method === 'GET' || request.method === 'HEAD') &&
+    pathWithoutLocale === '/guides/ai-research-tools-comparison'
+  ) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = getLocalizedPath(pathname, '/guides/ai-tools-for-research-comparison');
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+
   // next-intl rewrites the bare /tasks path to its default English locale.
   // Close unapproved Task paths before the locale loading boundary can stream.
   if (request.method === 'GET' || request.method === 'HEAD') {

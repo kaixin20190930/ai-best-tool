@@ -434,19 +434,6 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
-    href: '/guides/ai-research-tools-comparison',
-    priority: 0.76,
-    changeFrequency: 'weekly',
-    title: {
-      cn: 'AI 研究工具对比',
-      en: 'AI research tools comparison',
-    },
-    desc: {
-      cn: '把常见研究工具放在一起快速对照。',
-      en: 'Compare common research tools side by side.',
-    },
-  },
-  {
     href: '/guides/ai-tools-for-developers',
     priority: 0.75,
     changeFrequency: 'monthly',

@@ -1,11 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-const linkedPages = [
-  'app/[locale]/(with-footer)/guides/ai-tools-for-research-comparison/page.tsx',
-  'lib/content/guideTaskChecks.ts',
-  'lib/data/topicToolSources.ts',
-];
+const linkedPages = ['lib/content/guideTaskChecks.ts', 'lib/data/topicToolSources.ts'];
 const researchGuide = 'app/[locale]/(with-footer)/guides/ai-tools-for-research/page.tsx';
 const perplexityComparison = 'app/[locale]/(with-footer)/guides/perplexity-alternatives-comparison/page.tsx';
 

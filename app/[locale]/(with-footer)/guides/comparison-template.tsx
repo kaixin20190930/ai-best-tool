@@ -9,6 +9,7 @@ import {
 } from '@/lib/content/verifiedComparison';
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
 import { loadPublicComparisonCapabilityRows } from '@/lib/services/decision/capabilityReadModel';
 import { getToolByNameCached } from '@/lib/services/tools';
@@ -22,6 +23,7 @@ export type ComparisonConfig = {
   comparisonLabel: BilingualCopy;
   breadcrumbLabel: BilingualCopy;
   guideHref: string;
+  comparisonPath?: string;
   content:
     | { kind: 'verified'; comparison: VerifiedComparison; faqs: { question: BilingualCopy; answer: BilingualCopy }[] }
     | { kind: 'unavailable'; guideLabel: BilingualCopy };
@@ -43,13 +45,15 @@ export async function buildComparisonMetadata(locale: string, title: string, des
 export async function buildComparisonPageData(locale: string, config: ComparisonConfig) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const siteUrl = BASE_URL;
-  const comparisonPath = config.guideHref.endsWith('-comparison') ? config.guideHref : `${config.guideHref}-comparison`;
+  const comparisonPath =
+    config.comparisonPath ||
+    (config.guideHref.endsWith('-comparison') ? config.guideHref : `${config.guideHref}-comparison`);
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: 'Home', url: `${siteUrl}/${locale}` },
-    { name: isChinese ? '指南' : 'Guides', url: `${siteUrl}/${locale}/guides` },
+    { name: 'Home', url: generateLocalizedCanonicalUrl('/', locale, siteUrl) },
+    { name: isChinese ? '指南' : 'Guides', url: generateLocalizedCanonicalUrl('/guides', locale, siteUrl) },
     {
       name: isChinese ? config.breadcrumbLabel.cn : config.breadcrumbLabel.en,
-      url: `${siteUrl}/${locale}${comparisonPath}`,
+      url: generateLocalizedCanonicalUrl(comparisonPath, locale, siteUrl),
     },
   ]);
   // Unavailable pages never query search/popularity or emit unsupported optional schemas.
@@ -81,17 +85,21 @@ export async function buildComparisonPageData(locale: string, config: Comparison
     breadcrumbSchema,
     tools,
     capabilityRows,
-    faqSchema: valid
-      ? generateFAQSchema(
-          faqs.map((faq) => ({
-            question: faq.question[isChinese ? 'cn' : 'en'],
-            answer: faq.answer[isChinese ? 'cn' : 'en'],
-          })),
-        )
-      : null,
+    faqSchema:
+      valid && faqs.length > 0
+        ? generateFAQSchema(
+            faqs.map((faq) => ({
+              question: faq.question[isChinese ? 'cn' : 'en'],
+              answer: faq.answer[isChinese ? 'cn' : 'en'],
+            })),
+          )
+        : null,
     itemListSchema: valid
       ? generateItemListSchema(
-          tools.map((tool) => ({ name: tool.title, url: `${siteUrl}/${locale}/ai/${tool.name}` })),
+          tools.map((tool) => ({
+            name: tool.title,
+            url: generateLocalizedCanonicalUrl(`/ai/${tool.name}`, locale, siteUrl),
+          })),
           `${config.comparisonLabel[isChinese ? 'cn' : 'en']} comparison`,
         )
       : null,

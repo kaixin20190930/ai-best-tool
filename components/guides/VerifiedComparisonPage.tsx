@@ -25,11 +25,12 @@ type Props = {
 function detailText(value: unknown, locale: string): string {
   if (typeof value === 'string') return value.trim();
   if (typeof value === 'number' || typeof value === 'boolean') return String(value);
-  if (Array.isArray(value))
+  if (Array.isArray(value)) {
     return value
       .map((item) => detailText(item, locale))
       .filter(Boolean)
       .join('; ');
+  }
   if (!value || typeof value !== 'object') return '';
   const record = value as Record<string, unknown>;
   const localized = record[locale] || record[locale === 'tw' ? 'cn' : 'en'] || record.en;
@@ -75,14 +76,14 @@ export default function VerifiedComparisonPage({
   if (!valid) {
     return (
       <div data-public-comparison='unavailable' className='theme-page mx-auto w-full min-w-0 max-w-6xl px-4 py-8'>
-        <h1 className='text-3xl font-bold'>{cn ? 'Web3 工具选择' : 'Choosing Web3 tools'}</h1>
+        <h1 className='text-3xl font-bold'>{copy(comparison.title)}</h1>
         <p className='mt-4'>
           {cn
-            ? '暂时无法提供这组工具的完整比较。你可以从 Web3 指南按任务选择工具。'
-            : 'This comparison is currently unavailable. Use the Web3 guide to choose tools by task.'}
+            ? '暂时无法提供这组工具的完整比较。你可以从指南按任务选择工具。'
+            : 'This comparison is currently unavailable. Use the guide to choose tools by task.'}
         </p>
         <a href={generateLocalizedPath(guideHref, locale)} className='mt-4 inline-block text-cyan-800 underline'>
-          {cn ? '查看 Web3 指南' : 'Read the Web3 guide'}
+          {cn ? '查看选型指南' : 'Read the selection guide'}
         </a>
       </div>
     );
@@ -106,8 +107,22 @@ export default function VerifiedComparisonPage({
       data-public-comparison='verified'
       className='theme-page mx-auto w-full min-w-0 max-w-6xl space-y-6 px-4 py-6 lg:px-6 lg:py-10'
     >
+      <nav
+        aria-label={cn ? '面包屑' : 'Breadcrumb'}
+        className='flex flex-wrap items-center gap-2 text-sm text-slate-600'
+      >
+        <a href={generateLocalizedPath('/', locale)} className='hover:text-cyan-800'>
+          {cn ? '首页' : 'Home'}
+        </a>
+        <span aria-hidden='true'>/</span>
+        <a href={generateLocalizedPath('/guides', locale)} className='hover:text-cyan-800'>
+          {cn ? '指南' : 'Guides'}
+        </a>
+        <span aria-hidden='true'>/</span>
+        <span aria-current='page'>{copy(comparison.title)}</span>
+      </nav>
       <section data-comparison-section='scope' className={sectionClass}>
-        <p className='text-sm font-semibold text-cyan-800'>{cn ? 'Web3 数据工具对比' : 'Web3 data tools compared'}</p>
+        <p className='text-sm font-semibold text-cyan-800'>{cn ? '工具对比' : 'Tool comparison'}</p>
         <h1 className='mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl'>{copy(comparison.title)}</h1>
         <p className='mt-4 max-w-4xl text-base leading-7 text-slate-600'>{copy(comparison.scope)}</p>
       </section>
@@ -172,7 +187,7 @@ export default function VerifiedComparisonPage({
           </table>
         </div>
         <p className='mt-3 text-xs text-slate-500 md:hidden'>
-          {cn ? '左右滑动查看两款工具与选择结论。' : 'Swipe across to read both tools and the decision.'}
+          {cn ? '左右滑动查看工具与选择结论。' : 'Swipe across to read the tools and the decision.'}
         </p>
       </section>
       {capabilityRows.length > 0 && (
@@ -309,14 +324,16 @@ export default function VerifiedComparisonPage({
             </div>
           ))}
         </dl>
-        <div data-comparison-faq className='mt-6 border-t border-slate-200 pt-4'>
-          {faqs.map((faq) => (
-            <details key={faq.question.en} className='py-2'>
-              <summary className='cursor-pointer text-sm font-semibold text-slate-800'>{copy(faq.question)}</summary>
-              <p className='mt-2 text-sm leading-6 text-slate-600'>{copy(faq.answer)}</p>
-            </details>
-          ))}
-        </div>
+        {faqs.length > 0 && (
+          <div data-comparison-faq className='mt-6 border-t border-slate-200 pt-4'>
+            {faqs.map((faq) => (
+              <details key={faq.question.en} className='py-2'>
+                <summary className='cursor-pointer text-sm font-semibold text-slate-800'>{copy(faq.question)}</summary>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{copy(faq.answer)}</p>
+              </details>
+            ))}
+          </div>
+        )}
       </section>
       <section data-comparison-section='sources' className={sectionClass}>
         <GuideEvidencePanel locale={locale} variant='verified' evidence={comparison.evidence} />
