@@ -18,6 +18,37 @@ export type GoogleSearchConsoleUrlInspectionResult = {
   raw: unknown;
 };
 
+export type GoogleSearchConsoleProperty = {
+  siteUrl: string;
+  permissionLevel: string;
+};
+
+export type SearchAnalyticsDimension = 'date' | 'page' | 'query';
+
+export type SearchAnalyticsRequest = {
+  startDate: string;
+  endDate: string;
+  type?: 'web';
+  dimensions?: SearchAnalyticsDimension[];
+  dataState?: 'all' | 'final';
+  rowLimit?: number;
+  startRow?: number;
+};
+
+export type SearchAnalyticsRow = {
+  keys?: string[];
+  clicks: number;
+  impressions: number;
+  ctr: number;
+  position: number;
+};
+
+export type SearchAnalyticsResponse = {
+  rows?: SearchAnalyticsRow[];
+  responseAggregationType?: string;
+  metadata?: { first_incomplete_date?: string };
+};
+
 export function createRefreshTokenAccessTokenProvider(input: {
   clientId: string;
   clientSecret: string;
@@ -40,8 +71,7 @@ export function createRefreshTokenAccessTokenProvider(input: {
     });
 
     if (!tokenResponse.ok) {
-      const errorText = await tokenResponse.text();
-      throw new Error(`Failed to refresh Google access token: ${errorText}`);
+      throw new Error(`Failed to refresh Google access token (${tokenResponse.status}).`);
     }
 
     const data = (await tokenResponse.json()) as { access_token?: string };
@@ -73,7 +103,7 @@ function resolveAbsoluteUrl(input: string, siteOrigin?: string) {
 async function authorizedJsonRequest(
   accessTokenProvider: GoogleAccessTokenProvider,
   url: string,
-  init: RequestInit = {}
+  init: RequestInit = {},
 ) {
   const accessToken = await accessTokenProvider();
   return fetch(url, {
@@ -92,6 +122,44 @@ export function createGoogleSearchConsoleClient(config: GoogleSearchConsoleClien
   }
 
   return {
+    async getProperty(): Promise<GoogleSearchConsoleProperty> {
+      const endpoint = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(propertyUrl)}`;
+      const response = await authorizedJsonRequest(config.accessTokenProvider, endpoint);
+      if (!response.ok) {
+        throw new Error(`Google Search Console property access check failed (${response.status}).`);
+      }
+      const property = (await response.json()) as GoogleSearchConsoleProperty;
+      if (
+        property.siteUrl !== propertyUrl ||
+        !['siteOwner', 'siteFullUser', 'siteRestrictedUser'].includes(property.permissionLevel)
+      ) {
+        throw new Error('Google Search Console property is not readable by this account.');
+      }
+      return property;
+    },
+
+    async querySearchAnalytics(request: SearchAnalyticsRequest): Promise<SearchAnalyticsResponse> {
+      if (
+        request.rowLimit !== undefined &&
+        (!Number.isInteger(request.rowLimit) || request.rowLimit < 1 || request.rowLimit > 25_000)
+      ) {
+        throw new Error('Search Analytics rowLimit must be between 1 and 25000.');
+      }
+      if (request.startRow !== undefined && (!Number.isInteger(request.startRow) || request.startRow < 0)) {
+        throw new Error('Search Analytics startRow must be a non-negative integer.');
+      }
+      const endpoint = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(propertyUrl)}/searchAnalytics/query`;
+      const response = await authorizedJsonRequest(config.accessTokenProvider, endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(request),
+      });
+      if (!response.ok) {
+        throw new Error(`Google Search Console Search Analytics query failed (${response.status}).`);
+      }
+      return (await response.json()) as SearchAnalyticsResponse;
+    },
+
     async submitSitemap(sitemapUrl: string): Promise<GoogleSearchConsoleSitemapResult> {
       const resolvedSitemapUrl = resolveAbsoluteUrl(sitemapUrl, config.siteOrigin);
       const endpoint = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(propertyUrl)}/sitemaps/${encodeURIComponent(resolvedSitemapUrl)}`;
@@ -125,7 +193,7 @@ export function createGoogleSearchConsoleClient(config: GoogleSearchConsoleClien
             inspectionUrl: resolvedInspectionUrl,
             siteUrl: propertyUrl,
           }),
-        }
+        },
       );
 
       const raw = await response.json().catch(async () => ({
@@ -135,8 +203,10 @@ export function createGoogleSearchConsoleClient(config: GoogleSearchConsoleClien
       if (!response.ok) {
         throw new Error(
           `Google Search Console URL inspection failed: ${
-            typeof raw === 'object' && raw && 'message' in raw ? String((raw as { message?: string }).message || '') : response.statusText
-          }`
+            typeof raw === 'object' && raw && 'message' in raw
+              ? String((raw as { message?: string }).message || '')
+              : response.statusText
+          }`,
         );
       }
 
@@ -148,4 +218,3 @@ export function createGoogleSearchConsoleClient(config: GoogleSearchConsoleClien
     },
   };
 }
-
