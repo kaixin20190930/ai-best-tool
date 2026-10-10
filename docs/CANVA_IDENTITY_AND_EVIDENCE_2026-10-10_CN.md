@@ -3,7 +3,7 @@
 单元：`CANVA-IDENTITY-AND-EVIDENCE-01`
 
 核验日期：2026-10-10（UTC 页面检查；生产库只读）
-结论：`READY_MONITOR_CANDIDATE`。候选已获独立 QA PASS，并接入现有受控发布器；本地集成与事务回滚验证完成。控制器已授权一次仅限实体的 monitor/noindex 写入；授权已记录，但尚未执行，Canva 仍不是生产实体。
+结论：`RELEASED_MONITOR_NOINDEX`。Canva 已按独立 QA、最终线上 preflight 与控制器授权完成一次生产实体写入；生产状态 `published + monitor`，索引及 sitemap 未批准。
 
 ## 结论
 
@@ -21,7 +21,7 @@ Canva 是成熟的视觉设计产品，具有真实且可用的 AI 功能；适�
 - `toolRouteAliases.ts` 未发现 Canva 或 Magic Studio alias。
 - 线上 `/ai/canva`、`/cn/ai/canva`、`/tw/ai/canva` 和对应 `/canva-magic-studio` 路径均为 `200 + self-canonical + noindex, follow`，内容是动态不可用壳，不是产品实体。
 - 线上 sitemap 为 126 个 `<loc>`，Canva 匹配 0。
-- 本次 production writes：`0`。
+- 上述身份/路由 preflight 为只读检查，`productionWrites=0`；后续独立受控发布写入见下方 closeout 记录。
 
 因此，历史上“没有 Canva entity”的结论在本次只读检查中仍成立；新结论不是 freshness 更新，而是一个待新建的单一 Canva 候选。只保留 `/ai/canva`；未来发布时要核对旧 Magic Studio 壳并收口，绝不创建第二个实体。
 
@@ -71,21 +71,22 @@ Canva 是成熟的视觉设计产品，具有真实且可用的 AI 功能；适�
 
 ## 状态、范围与下一步
 
-当前 operational overlay 将 Canva 标为 `ready_monitor_local_only`，因此选择器将它列为下一个待独立 QA 的新工具候选。10-06 历史缓冲 JSON/MD 保持原样，不回写历史结论。
+10-06 历史缓冲 JSON/MD 保持原样，不回写历史结论。当前 operational overlay 已将 Canva 记入 `released_monitor_noindex`，从开发候选队列排除。
 
-本单没有修改生产、push 或 deploy，也没有批准索引/sitemap/Task/Capability/Fit。QA PASS 后仅将 Canva manifest 和候选内容投影接入现有发布器，未另建通用框架。Canva 固定发布 ID 为 `7f37933d-7e61-4a47-bc6e-85bc1bc224c4`，canonical 唯一为 `/ai/canva`；Magic Studio alias 已接入通用 308 规则，部署后将按同语言跳转并保留 query。数据库 preflight 对产品身份及 fixed ID 执行只读查重；事务回滚先写入候选后显式 `ROLLBACK`，再用新只读连接确认仍为 0 匹配。
+候选及本地发布集成阶段未修改生产或 push/deploy；随后控制器授权并完成一次生产实体写入。Canva 固定 ID 为 `7f37933d-7e61-4a47-bc6e-85bc1bc224c4`，canonical 唯一为 `/ai/canva`；Magic Studio alias 使用同语言 308 并保留 query。发布前数据库 preflight 与事务 rollback 的零写入记录仍作为历史验收证据保留。
 
-当前 release manifest 保持 `productionWriteApproved=false`，并新增 `controllerWriteAuthorization`，由 `AI Best Tool Controller` 授权候选 `canva` 一次 `entity_only_monitor_noindex` 写入（authorizedAt `2026-10-10`）；`indexApproved=false`、`sitemapEligible=false`、`taskCapabilityFitCreationApproved=false` 均保持关闭。pre-release 授权对象已在 preaudit 与 manifest 一致记录；只有候选、日期、精确 scope 和全部保留门禁均通过时，显式 `--commit` 才可继续。授权尚未执行，状态仍为 `ready_for_next_slot`，不能表述为已发布；此次变更不批准索引、sitemap 或关系写入。
+preaudit 与 release manifest 保留 `controllerWriteAuthorization` 审计对象。生产 closeout 后 `productionWriteApproved=true` 仅表示该次实体写入已完成；状态为 `released`，事务 `COMMIT`，`reviewedAt=2026-10-10`、`nextReviewDate=2026-10-17`，本地化 payload `en/zh/cn` 均完成 readback。`indexApproved=false`、`sitemapEligible=false`、`taskCapabilityFitCreationApproved=false` 保持关闭；Task、Capability、Fit 关系数均为 0。Canva 不再作为开发候选重复入队。
 
 ## 验收记录
 
-- `pnpm run collection:current-mature-queue`：PASS，Canva 位于唯一下一开发候选，已发布实体未回流。
-- `pnpm exec tsx scripts/test-mature-candidate-current-state.ts`：PASS；历史 10-06 快照未改。
+- `pnpm run collection:current-mature-queue`：发布前曾将 Canva 列为候选；发布后 overlay 已更新为 `released_monitor_noindex`，不再回流。
+- `pnpm exec tsx scripts/test-mature-candidate-current-state.ts`：发布前结果 PASS；本次 closeout 重验 overlay 排除及 10-06 历史快照不变。
 - `pnpm exec tsx scripts/test-canva-controlled-release.ts`：PASS，覆盖 fixed ID、素材 hash、en/cn/tw copy、Claim 边界、重复身份负例、通用 SVG canvas 负例、Magic Studio localized alias 和 sitemap/index/关系关闭。
 - `pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=canva --phase=validate --as-of=2026-10-10`：PASS。
-- 生产数据库只读 preflight：工具身份 alias/domain/title 匹配 0、fixed ID 匹配 0；交易回滚及新连接 postcheck 均为 0。线上 sitemap 保持 126 URL、Canva 0，reserved canonical 和旧 Magic Studio shell 仍为 200/self-canonical/noindex。未执行生产写入。
-- 单一阻塞/未完成项：本次 `--online` 发布器在数据库只读 preflight 通过后，Node `fetch` 请求 `/sitemap.xml` 返回 `fetch failed`，因此发布器级 production route/SEO preflight 记为 N/A/未通过；独立 `curl` 对 sitemap 返回 200，但不替代该门禁。既有 2026-10-10 只读审计快照仍记录旧壳的 self-canonical/noindex；本地改动尚未部署，不能据此声称新 alias 已在生产生效。无需重跑已完成的本地测试/build；控制器在实际发布前需解决或明确豁免该 transport 检查并执行一次在线 preflight。
+- 发布前生产数据库只读 preflight：工具身份 alias/domain/title 匹配 0、fixed ID 匹配 0；dry-run 事务回滚及新连接 postcheck 均为 0。该基线只读检查不代表后续 release 状态。
+- 生产 closeout（控制器确认）：固定 ID `7f37933d-7e61-4a47-bc6e-85bc1bc224c4` 单实体事务 `COMMIT`；状态 `published + monitor`；`reviewedAt=2026-10-10`、`nextReviewDate=2026-10-17`；`en/zh/cn` payload readback 完成。Index、sitemap、Task/Capability/Fit 未批准；三类关系数均为 0。
+- 线上检查记录：首次 Node fetch transport 失败及随后 alias query 编码差异均已修复；控制器确认最终线上 preflight 通过后才执行生产 commit。本次 closeout 不重跑网络检查。
 - `./node_modules/.bin/tsc --noEmit` 与单次完整 build：通过（见交付 commit 验证记录）。
 - 生产只读身份/路由核验：PASS，`productionWrites=0`。
 - 官方来源及独立采用范围：已逐条记录 URL、核查日及限制。
-- 当前状态：固定 ID 已分配给唯一候选但生产尚不存在；控制器实体写入授权已记录，等待后续显式生产 commit。部署时 Magic Studio 旧壳将以同语言 308 收口，不能在部署前宣称重定向已生效。生产发布前的唯一待处理检查为上列 Node fetch 线上 transport blocker。
+- 当前状态：Canva 已是唯一生产实体，状态 `published + monitor`；固定 ID、复核日期和零关系数见上方 closeout。当前队列不再选择 Canva，10-06 历史候选快照保持未改。

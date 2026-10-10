@@ -3,9 +3,15 @@
   "slug": "canva",
   "existingRoute": "/ai/canva",
   "action": "migrate_existing_fallback",
-  "status": "ready_for_next_slot",
+  "status": "released",
   "reviewedAt": "2026-10-10",
   "publishNotBefore": "2026-10-10",
+  "releasedAt": "2026-10-10",
+  "releaseTransaction": "COMMIT",
+  "productionStatus": "published + monitor",
+  "productionEntityWrites": 1,
+  "localizedPayloadReadback": ["en", "zh", "cn"],
+  "releasedRelations": { "tasks": 0, "capabilities": 0, "fits": 0 },
   "releaseIndexState": "monitor",
   "entityReleaseApproved": true,
   "claimLevelHolds": [
@@ -36,7 +42,7 @@
       { "id": "output-accuracy-and-legal-suitability", "category": "core_capability", "status": "verified_public", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Canva disclaims accuracy, completeness and reliability guarantees; users must review outputs and rights.", "sources": ["https://www.canva.com/policies/ai-product-terms/"], "nextReviewDate": "2026-11-09" }
     ]
   },
-  "productionWriteApproved": false,
+  "productionWriteApproved": true,
   "controllerWriteAuthorization": {
     "candidateSlug": "canva",
     "approved": true,
@@ -73,7 +79,7 @@
     "Preserve conditional and unknown Claims as boundary-only; do not add exact account promises.",
     "Use the reviewed neutral local SVG and verify its SHA-256.",
     "Keep published + monitor/noindex; no index, sitemap or Task/Capability/Fit approval.",
-    "Require a separate controller authorization before any production write."
+    "Controller authorization and the single production entity commit were recorded on 2026-10-10; retain monitor/noindex and closed index/sitemap/relationship gates."
   ],
   "assetSha256": {
     "/images/tool-media/canva-editorial-cover.svg": "e535dfccedfda11ed83c6cef372701056c3c2f816b8059c5cc162fa60a3ec436"
@@ -95,6 +101,6 @@
     "localizedAliasRedirect": "308 to same-locale canonical; query retained",
     "existingProductionAliasShell": "200 + self-canonical + noindex; must have no entity match"
   },
-  "rollback": "Local release rehearsal uses one database transaction and explicit ROLLBACK; no production commit in this delivery.",
-  "nextControllerCommand": "pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=canva --phase=preflight --online --as-of=2026-10-10"
+  "rollback": "Local release rehearsal used an explicit ROLLBACK; the subsequent authorized production entity write completed with COMMIT on 2026-10-10.",
+  "nextControllerCommand": "No release command: Canva is released as published + monitor/noindex; next review is 2026-10-17."
 }

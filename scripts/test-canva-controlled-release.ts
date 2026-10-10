@@ -24,12 +24,25 @@ const policy = evaluatePublicationPolicy(audit.publicationPolicy);
 assert.equal(candidate.candidateStatus, 'ready_monitor_local_only');
 assert.equal(manifest.id, CANVA_RELEASE_ID);
 assert.equal(manifest.canonical, '/ai/canva');
-assert.equal(manifest.release.productionWriteApproved, false);
+assert.equal(manifest.release.status, 'released');
+assert.equal(manifest.release.productionWriteApproved, true);
+assert.equal(manifest.release.releasedAt, '2026-10-10');
+assert.equal(manifest.release.releaseTransaction, 'COMMIT');
+assert.equal(manifest.release.productionStatus, 'published + monitor');
+assert.equal(manifest.release.productionEntityWrites, 1);
+assert.deepEqual(manifest.release.localizedPayloadReadback, ['en', 'zh', 'cn']);
+assert.deepEqual(manifest.release.releasedRelations, { tasks: 0, capabilities: 0, fits: 0 });
 assert.equal(manifest.release.indexApproved, false);
 assert.equal(manifest.release.sitemapEligible, false);
 assert.equal(manifest.release.taskCapabilityFitCreationApproved, false);
-assert.equal(audit.status, 'ready_for_next_slot');
-assert.equal(audit.productionWriteApproved, false);
+assert.equal(audit.status, 'released');
+assert.equal(audit.productionWriteApproved, true);
+assert.equal(audit.releasedAt, '2026-10-10');
+assert.equal(audit.releaseTransaction, 'COMMIT');
+assert.equal(audit.productionStatus, 'published + monitor');
+assert.equal(audit.productionEntityWrites, 1);
+assert.deepEqual(audit.localizedPayloadReadback, ['en', 'zh', 'cn']);
+assert.deepEqual(audit.releasedRelations, { tasks: 0, capabilities: 0, fits: 0 });
 const controllerWriteAuthorization = {
   candidateSlug: 'canva',
   approved: true,

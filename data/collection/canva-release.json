@@ -29,7 +29,14 @@
     "exactPriceQuotaAccountPrivacyOrLicensePromises": false
   },
   "release": {
-    "productionWriteApproved": false,
+    "status": "released",
+    "productionWriteApproved": true,
+    "releasedAt": "2026-10-10",
+    "releaseTransaction": "COMMIT",
+    "productionStatus": "published + monitor",
+    "productionEntityWrites": 1,
+    "localizedPayloadReadback": ["en", "zh", "cn"],
+    "releasedRelations": { "tasks": 0, "capabilities": 0, "fits": 0 },
     "controllerWriteAuthorization": {
       "candidateSlug": "canva",
       "approved": true,

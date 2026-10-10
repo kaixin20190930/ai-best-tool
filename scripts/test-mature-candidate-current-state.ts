@@ -8,11 +8,11 @@ const queue = readCurrentCandidateQueue();
 const snapshot = JSON.parse(fs.readFileSync('data/collection/mature-candidate-buffer-2026-10-06.json', 'utf8'));
 const state = JSON.parse(fs.readFileSync('data/collection/mature-candidate-current-state-2026-10-10.json', 'utf8'));
 assert.equal(snapshot.candidates.length, 15);
-assert.equal(queue.length, 11);
-for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt']) {
+assert.equal(queue.length, 10);
+for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva']) {
   assert(!queue.some((candidate) => candidate.slug === slug), `${slug} reentered new-tool queue`);
 }
-assert.deepEqual(Object.keys(state.released).sort(), ['elicit', 'murf', 'pika', 'scite']);
+assert.deepEqual(Object.keys(state.released).sort(), ['canva', 'elicit', 'murf', 'pika', 'scite']);
 assert.deepEqual(Object.keys(state.independentReleasesOutsideSnapshot), ['chatgpt']);
 assert.equal(
   queue.find((candidate) => candidate.slug === 'scite'),
@@ -28,15 +28,15 @@ const operational = JSON.parse(command.stdout);
 assert.equal(operational.source, 'current_operational_overlay');
 assert.equal(
   operational.nextDevelopmentCandidate,
-  'canva',
-  'Canva remains the first local candidate; production release still requires controller authorization',
+  null,
+  'No current development candidate should be inferred after Canva release',
 );
 assert.deepEqual(operational.newToolCandidates, queue);
 assert.equal(
   operational.newToolCandidates.find((candidate: { slug: string }) => candidate.slug === 'canva')?.status,
-  'ready_monitor_local_only',
+  undefined,
 );
-for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt']) {
+for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva']) {
   assert(!operational.newToolCandidates.some((candidate: { slug: string }) => candidate.slug === slug));
 }
 console.log('PASS current candidate overlay preserves historical snapshot and excludes released entities');
