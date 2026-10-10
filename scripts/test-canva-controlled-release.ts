@@ -203,6 +203,30 @@ for (const [aliasPath, targetPath, locale] of [
     /leaked into sitemap/,
   );
 }
+const cnAlias = '/cn/ai/canva-magic-studio';
+const cnTarget = '/cn/ai/canva';
+const cnRedirect = (query: string, expectedQuery: string) =>
+  assertCanvaAliasPreflight({
+    aliasPath: cnAlias,
+    targetPath: cnTarget,
+    query: expectedQuery,
+    status: 308,
+    location: `https://aibesttool.com${cnTarget}${query}`,
+    canonical: null,
+    noindex: false,
+    sitemapContainsAlias: false,
+    allowExistingShell: false,
+  });
+
+assert.equal(cnRedirect('?canva_alias_check=1&locale=%2Fcn', '?canva_alias_check=1&locale=/cn'), 'canonical-redirect');
+assert.equal(cnRedirect('?locale=%2Fcn&canva_alias_check=1', '?canva_alias_check=1&locale=/cn'), 'canonical-redirect');
+assert.equal(cnRedirect('?locale=%2Fcn&tag=a&tag=a', '?tag=a&locale=/cn&tag=a'), 'canonical-redirect');
+assert.throws(() => cnRedirect('?locale=%2Fcn&tag=a', '?locale=/cn&tag=a&tag=a'), /query was dropped or changed/);
+assert.throws(() => cnRedirect('?locale=%2Fcn&tag=b', '?locale=/cn&tag=a'), /query was dropped or changed/);
+assert.throws(
+  () => cnRedirect('?locale=%2Ftw&canva_alias_check=1', '?locale=/cn&canva_alias_check=1'),
+  /query was dropped or changed/,
+);
 const middleware = fs.readFileSync('middleware.ts', 'utf8');
 assert(middleware.includes("redirectUrl.pathname = getLocalizedToolPath(toolSlug, locale || 'en')"));
 assert(

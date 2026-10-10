@@ -6,6 +6,13 @@ import path from 'node:path';
 export const CANVA_RELEASE_ID = '7f37933d-7e61-4a47-bc6e-85bc1bc224c4';
 export const CANVA_EDITORIAL_ASSET = '/images/tool-media/canva-editorial-cover.svg';
 
+function normalizedQueryEntries(query: string) {
+  return [...new URLSearchParams(query).entries()].sort(([leftKey, leftValue], [rightKey, rightValue]) => {
+    const keyOrder = leftKey.localeCompare(rightKey);
+    return keyOrder || leftValue.localeCompare(rightValue);
+  });
+}
+
 export function assertCanvaAliasPreflight(input: {
   aliasPath: string;
   targetPath: string;
@@ -36,7 +43,11 @@ export function assertCanvaAliasPreflight(input: {
   const location = new URL(input.location, origin);
   assert.equal(location.origin, origin, `${input.aliasPath}: alias target changed origin`);
   assert.equal(location.pathname, input.targetPath, `${input.aliasPath}: alias crossed locale or missed canonical`);
-  assert.equal(location.search, input.query, `${input.aliasPath}: query was dropped or changed`);
+  assert.deepEqual(
+    normalizedQueryEntries(location.search),
+    normalizedQueryEntries(input.query),
+    `${input.aliasPath}: query was dropped or changed`,
+  );
   assert.equal(location.hash, '', `${input.aliasPath}: unexpected fragment in alias target`);
   assert.equal(location.username, '', `${input.aliasPath}: unexpected credentials in alias target`);
   assert.equal(location.password, '', `${input.aliasPath}: unexpected credentials in alias target`);
