@@ -31,7 +31,7 @@
   },
   "pipeline": {
     "validate": "PASS",
-    "readonlyPreflightOnline": "PASS",
+    "readonlyPreflightOnline": "PASS; EN/CN/TW reserved routes self-canonical/noindex",
     "transactionRollback": "PASS; trilingual readback; transaction=ROLLBACK",
     "postRollbackReadonly": "PASS; zero matches",
     "explicitCommit": "NOT_RUN",

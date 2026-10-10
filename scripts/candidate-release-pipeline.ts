@@ -381,7 +381,8 @@ async function validateOnlineFallback(
   const sitemap = await fetchPage('/sitemap.xml');
   assert(sitemap.response.ok, 'Unable to read production sitemap');
   const paths = [`/ai/${candidate.slug}`, `/cn/ai/${candidate.slug}`];
-  if (candidate.slug === 'pika' && expectReleased) paths.push(`/tw/ai/${candidate.slug}`);
+  if (candidate.slug === 'scite' || (candidate.slug === 'pika' && expectReleased))
+    paths.push(`/tw/ai/${candidate.slug}`);
   for (const pathname of paths) {
     const { response, html } = await fetchPage(pathname);
     assert(response.ok, `${candidate.slug}: ${pathname} returned ${response.status}`);
@@ -433,10 +434,10 @@ async function validateOnlineFallback(
   }
 }
 
-async function validatePikaRelations(toolId: string) {
+async function validateCandidateRelations(slug: string, toolId: string) {
   const db = createAdminClient();
   const [tasks, capabilities, fits] = await Promise.all([
-    db.from('decision_tasks').select('id', { count: 'exact', head: true }).eq('slug', 'pika'),
+    db.from('decision_tasks').select('id', { count: 'exact', head: true }).eq('slug', slug),
     db.from('tool_capabilities').select('id', { count: 'exact', head: true }).eq('tool_id', toolId),
     db.from('tool_task_fits').select('id', { count: 'exact', head: true }).eq('tool_id', toolId),
   ]);
@@ -446,7 +447,7 @@ async function validatePikaRelations(toolId: string) {
     ['fits', fits],
   ] as const) {
     if (result.error || result.count === null)
-      throw new Error(`pika: ${label} postcheck unreadable: ${result.error?.message || 'no count'}`);
+      throw new Error(`${slug}: ${label} postcheck unreadable: ${result.error?.message || 'no count'}`);
   }
   return { tasks: tasks.count!, capabilities: capabilities.count!, fits: fits.count! };
 }
@@ -642,7 +643,7 @@ async function main() {
         'ready_for_next_slot',
         `${candidate.slug}: preflight only accepts an unreleased candidate`,
       );
-    } else if (candidate.slug === 'pika' || candidate.slug === 'chatgpt') {
+    } else if (candidate.slug === 'pika' || candidate.slug === 'chatgpt' || candidate.slug === 'scite') {
       assert(options.online, `${candidate.slug}: verify requires --online after a real commit`);
       assert(
         ['ready_for_next_slot', 'released'].includes(audit.status),
@@ -656,7 +657,8 @@ async function main() {
     try {
       if (
         options.phase === 'preflight' ||
-        ((candidate.slug === 'pika' || candidate.slug === 'chatgpt') && options.phase === 'verify')
+        ((candidate.slug === 'pika' || candidate.slug === 'chatgpt' || candidate.slug === 'scite') &&
+          options.phase === 'verify')
       ) {
         await client.query('BEGIN READ ONLY');
       }
@@ -721,15 +723,37 @@ async function main() {
         }
         if (candidate.slug === 'pika') {
           const payload = loadPayload(candidate, audit, options.asOf);
-          const relations = await validatePikaRelations(payload.id);
+          const relations = await validateCandidateRelations('pika', payload.id);
           assertPikaPostcheck(matches.rows, payload.id, relations);
+        }
+        if (candidate.slug === 'scite') {
+          const payload = loadPayload(candidate, audit, options.asOf);
+          assert.equal(matches.rows[0].id, payload.id, 'Scite fixed ID mismatch');
+          const exact = await client.query(
+            'SELECT title,content,detail,features,use_cases,image_url,thumbnail_url,url,next_review_date::text AS next_review_date FROM tools WHERE id=$1',
+            [payload.id],
+          );
+          assert.equal(exact.rowCount, 1);
+          assert.deepEqual(exact.rows[0].title, payload.title);
+          assert.deepEqual(exact.rows[0].content, payload.content);
+          assert.deepEqual(exact.rows[0].detail, payload.detail);
+          assert.deepEqual(exact.rows[0].features, payload.features);
+          assert.deepEqual(exact.rows[0].use_cases, payload.useCases);
+          assert.equal(exact.rows[0].image_url, payload.imageUrl);
+          assert.equal(exact.rows[0].thumbnail_url, payload.thumbnailUrl);
+          assert.equal(exact.rows[0].url, payload.officialUrl);
+          assert.equal(exact.rows[0].next_review_date, payload.nextReviewDate);
+          const relations = await validateCandidateRelations('scite', payload.id);
+          assert.deepEqual(relations, { tasks: 0, capabilities: 0, fits: 0 }, 'Scite relations must remain empty');
+          await validateDeployedAssets(payload);
         }
       }
       console.log(`✅ ${candidate.slug}: database ${options.phase} passed`);
     } finally {
       if (
         options.phase === 'preflight' ||
-        ((candidate.slug === 'pika' || candidate.slug === 'chatgpt') && options.phase === 'verify')
+        ((candidate.slug === 'pika' || candidate.slug === 'chatgpt' || candidate.slug === 'scite') &&
+          options.phase === 'verify')
       ) {
         await client.query('ROLLBACK');
       }

@@ -38,7 +38,7 @@ monitor/noindex，不再进入新工具队列；ChatGPT 为快照外的独立后
 由与 sitemap，不代表全站无任何文本提及。
 
 统一发布器 `--candidate=scite --phase=validate` 已通过。生产只读 `--phase=preflight --online` 已通过：无重复实体或固定
-ID 占用，预留 EN/CN 路由仍 self-canonical/noindex 且 sitemap 0。随后 `--phase=release` **未带 `--commit`** 的事务插入、
+ID 占用，预留 EN/CN/TW 路由仍 self-canonical/noindex 且 sitemap 0。随后 `--phase=release` **未带 `--commit`** 的事务插入、
 三语读回、受保护旧行比较和 `ROLLBACK` 通过；返回 `transaction=ROLLBACK`，`productionWrites=0`。回滚后再次只读核查仍为实
 体/profile 零匹配、sitemap Scite 零匹配。[发布 manifest](../data/collection/scite-release-manifest-2026-10-10.json)记录
 四步和未执行的生产提交；本地源码提交不会发布数据库实体或部署 SVG。
