@@ -85,7 +85,7 @@ preaudit 与 release manifest 保留 `controllerWriteAuthorization` 审计对象
 - `pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=canva --phase=validate --as-of=2026-10-10`：PASS。
 - 发布前生产数据库只读 preflight：工具身份 alias/domain/title 匹配 0、fixed ID 匹配 0；dry-run 事务回滚及新连接 postcheck 均为 0。该基线只读检查不代表后续 release 状态。
 - 生产 closeout（控制器确认）：固定 ID `7f37933d-7e61-4a47-bc6e-85bc1bc224c4` 单实体事务 `COMMIT`；状态 `published + monitor`；`reviewedAt=2026-10-10`、`nextReviewDate=2026-10-17`；`en/zh/cn` payload readback 完成。Index、sitemap、Task/Capability/Fit 未批准；三类关系数均为 0。
-- 线上检查记录：首次 Node fetch transport 失败及随后 alias query 编码差异均已修复；控制器确认最终线上 preflight 通过后才执行生产 commit。本次 closeout 不重跑网络检查。
+- 线上检查记录：首次 Node fetch transport 失败及随后 alias query 编码差异均已修复。生产提交后，`pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=canva --phase=verify --online`：PASS；`pnpm run seo:production-smoke`：PASS（exit 0），sitemap 报告 126 个 URL，且不含内部路径或 comparison 路径。本次文档收口仅记录控制器确认结果，不重跑验证或网络检查。
 - `./node_modules/.bin/tsc --noEmit` 与单次完整 build：通过（见交付 commit 验证记录）。
 - 生产只读身份/路由核验：PASS，`productionWrites=0`。
 - 官方来源及独立采用范围：已逐条记录 URL、核查日及限制。
