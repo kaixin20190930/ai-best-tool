@@ -1,0 +1,38 @@
+{
+  "unit": "CANVA-IDENTITY-AND-EVIDENCE-01",
+  "slug": "canva",
+  "id": "7f37933d-7e61-4a47-bc6e-85bc1bc224c4",
+  "sourceCandidate": "data/collection/canva-evidence-candidate-2026-10-10.json",
+  "sourceCandidateSha256": "afec6af1969cc1fe04566f13f0f0ad70e070e5d9747b72166eea06c7d20fbf0e",
+  "reviewedAt": "2026-10-10",
+  "nextReviewDate": "2026-10-17",
+  "target": "published + monitor/noindex",
+  "canonical": "/ai/canva",
+  "categorySlug": "design-art",
+  "pricing": "freemium",
+  "officialUrl": "https://www.canva.com/",
+  "media": {
+    "kind": "first_party_editorial",
+    "asset": "/images/tool-media/canva-editorial-cover.svg",
+    "sha256": "e535dfccedfda11ed83c6cef372701056c3c2f816b8059c5cc162fa60a3ec436",
+    "productScreenshot": false
+  },
+  "routes": {
+    "aliases": ["canva-magic-studio"],
+    "locales": ["en", "cn", "tw"],
+    "queryPreserved": true,
+    "negativeDuplicateChecks": ["canva", "canva ai", "magic studio", "magic write"]
+  },
+  "claims": {
+    "source": "data/collection/canva-evidence-candidate-2026-10-10.json#claimLevelHolds",
+    "allUnresolvedAreBoundaryOnly": true,
+    "exactPriceQuotaAccountPrivacyOrLicensePromises": false
+  },
+  "release": {
+    "productionWriteApproved": false,
+    "indexApproved": false,
+    "sitemapEligible": false,
+    "taskCapabilityFitCreationApproved": false,
+    "productionWrites": 0
+  }
+}

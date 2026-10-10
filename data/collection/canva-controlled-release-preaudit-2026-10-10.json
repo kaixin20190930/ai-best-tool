@@ -1,0 +1,87 @@
+{
+  "unit": "CANVA-IDENTITY-AND-EVIDENCE-01",
+  "slug": "canva",
+  "existingRoute": "/ai/canva",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-10-10",
+  "publishNotBefore": "2026-10-10",
+  "releaseIndexState": "monitor",
+  "entityReleaseApproved": true,
+  "claimLevelHolds": [
+    "plan-price-and-trial",
+    "ai-allowance-and-feature-access",
+    "brand-voice-role-plan-boundary",
+    "canva-ai-2-preview-availability",
+    "output-rights-and-library-content",
+    "privacy-and-training-controls"
+  ],
+  "publicationPolicy": {
+    "entityGates": {
+      "identity": "pass",
+      "uniqueCanonical": "pass",
+      "duplicateIntent": "pass",
+      "coreFunction": "pass",
+      "assetRightsAndLegalSafety": "pass",
+      "misleadingClaims": "pass",
+      "pageContentSufficiency": "pass"
+    },
+    "claims": [
+      { "id": "plan-price-and-trial", "category": "price", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Exact public prices, trials, billing terms and account eligibility are omitted; confirm the target account before purchase.", "sources": ["https://www.canva.com/help/upgrade-to-canva-pro-or-business/", "https://www.canva.com/pricing/"], "nextReviewDate": "2026-10-17" },
+      { "id": "ai-allowance-and-feature-access", "category": "account_rights", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "AI allowances and feature access vary by plan, feature and account; no exact guaranteed use count is stated.", "sources": ["https://www.canva.com/help/ai-access/", "https://www.canva.com/help/using-canva-ai/"], "nextReviewDate": "2026-10-17" },
+      { "id": "brand-voice-role-plan-boundary", "category": "account_rights", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Brand Voice and advanced brand controls have plan, role and administrator boundaries; account entitlement is not verified.", "sources": ["https://www.canva.com/help/brand-voice/", "https://www.canva.com/help/brand-kit/"], "nextReviewDate": "2026-10-24" },
+      { "id": "canva-ai-2-preview-availability", "category": "core_capability", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Canva AI 2.0 is described as a research preview; announced workflows are not represented as generally available.", "sources": ["https://www.canva.com/newsroom/news/canva-create-2026-ai/", "https://www.canva.com/help/using-canva-ai/"], "nextReviewDate": "2026-10-17" },
+      { "id": "output-rights-and-library-content", "category": "privacy_rights", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Output rights are subject to stated legal limits; generated output may be non-unique and licensed library content remains under its license.", "sources": ["https://www.canva.com/policies/ai-product-terms/", "https://www.canva.com/policies/content-license-agreement/"], "nextReviewDate": "2026-10-24" },
+      { "id": "privacy-and-training-controls", "category": "privacy_rights", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "AI improvement use depends on privacy settings/account type; third-party Canva apps have separate terms and no authenticated account was inspected.", "sources": ["https://www.canva.com/trust/privacy/", "https://www.canva.com/policies/ai-product-terms/"], "nextReviewDate": "2026-10-24" },
+      { "id": "output-accuracy-and-legal-suitability", "category": "core_capability", "status": "verified_public", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Canva disclaims accuracy, completeness and reliability guarantees; users must review outputs and rights.", "sources": ["https://www.canva.com/policies/ai-product-terms/"], "nextReviewDate": "2026-11-09" }
+    ]
+  },
+  "productionWriteApproved": false,
+  "sitemapChangeApproved": false,
+  "sources": {
+    "official": [
+      "https://www.canva.com/",
+      "https://www.canva.com/help/using-canva-ai/",
+      "https://www.canva.com/help/ai-access/",
+      "https://www.canva.com/help/brand-voice/",
+      "https://www.canva.com/help/brand-kit/",
+      "https://www.canva.com/policies/ai-product-terms/"
+    ],
+    "independent": [
+      "https://www.g2.com/products/canva/reviews",
+      "https://www.g2.com/compare/canva-vs-magic-studio-magic-studio",
+      "https://www.techradar.com/best/best-ai-tools",
+      "https://bccampus.ca/wp-content/uploads/2024/07/2024-11-06-EdTech-Sandbox-Canva-AI-Slides.pdf"
+    ]
+  },
+  "nextSlotChecklist": [
+    "Use exactly one fixed Canva identity and canonical /ai/canva.",
+    "Keep Magic Studio, Magic Write and Canva AI as Canva surfaces, not entities.",
+    "Preserve conditional and unknown Claims as boundary-only; do not add exact account promises.",
+    "Use the reviewed neutral local SVG and verify its SHA-256.",
+    "Keep published + monitor/noindex; no index, sitemap or Task/Capability/Fit approval.",
+    "Require a separate controller authorization before any production write."
+  ],
+  "assetSha256": {
+    "/images/tool-media/canva-editorial-cover.svg": "e535dfccedfda11ed83c6cef372701056c3c2f816b8059c5cc162fa60a3ec436"
+  },
+  "readonlyIdentityCheck": {
+    "checkedAt": "2026-10-10T05:32:23.785Z",
+    "toolExactMatches": 0,
+    "profileExactMatches": 0,
+    "sourceExactMatches": 0,
+    "claimExactMatches": 0,
+    "genericSvgCanvasTextMatches": 3,
+    "sitemapLocCount": 126,
+    "sitemapCanvaMatches": 0,
+    "productionWrites": 0
+  },
+  "routeContract": {
+    "canonical": "/ai/canva",
+    "magicStudioAlias": "/ai/canva-magic-studio",
+    "localizedAliasRedirect": "308 to same-locale canonical; query retained",
+    "existingProductionAliasShell": "200 + self-canonical + noindex; must have no entity match"
+  },
+  "rollback": "Local release rehearsal uses one database transaction and explicit ROLLBACK; no production commit in this delivery.",
+  "nextControllerCommand": "pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=canva --phase=preflight --online --as-of=2026-10-10"
+}

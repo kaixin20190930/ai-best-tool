@@ -41,10 +41,27 @@ const assertions: Array<[boolean, string]> = [
   ],
   [isLegacyToolSlug('murf-ai'), 'Murf AI must be recognized as a legacy slug.'],
   [!isLegacyToolSlug('murf'), 'Murf must remain the canonical slug.'],
+  [getCanonicalToolSlug('canva-magic-studio') === 'canva', 'Magic Studio must resolve to the single Canva identity.'],
+  [getLocalizedToolPath('canva-magic-studio', 'en') === '/ai/canva', 'English Magic Studio alias path is invalid.'],
+  [getLocalizedToolPath('canva-magic-studio', 'cn') === '/cn/ai/canva', 'Chinese Magic Studio alias path is invalid.'],
+  [
+    getLocalizedToolPath('canva-magic-studio', 'tw') === '/tw/ai/canva',
+    'Traditional Chinese Magic Studio alias path is invalid.',
+  ],
+  [isLegacyToolSlug('canva-magic-studio'), 'Magic Studio must be recognized as a legacy surface route.'],
+  [!isLegacyToolSlug('canva'), 'Canva must remain the canonical slug.'],
   [shouldRedirectExplicitEnglishToolPath('fathom'), 'The explicit /en Fathom path must redirect.'],
   [!shouldRedirectExplicitEnglishToolPath('claude'), 'Claude does not need the explicit-English exception.'],
   [middleware.includes('isLegacyToolSlug(toolSlug)'), 'Middleware must redirect aliases generically.'],
   [middleware.includes('NextResponse.redirect(redirectUrl, 308)'), 'Tool aliases must use a permanent 308 redirect.'],
+  [
+    middleware.includes("redirectUrl.pathname = getLocalizedToolPath(toolSlug, locale || 'en')"),
+    'Localized aliases must retain locale while redirecting.',
+  ],
+  [
+    middleware.includes('const redirectUrl = request.nextUrl.clone()'),
+    'Alias redirects must clone the request URL and preserve its query.',
+  ],
 ];
 
 for (const [condition, message] of assertions) {

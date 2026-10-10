@@ -29,7 +29,7 @@ assert.equal(operational.source, 'current_operational_overlay');
 assert.equal(
   operational.nextDevelopmentCandidate,
   'canva',
-  'Canva is the first locally prepared candidate awaiting independent QA',
+  'Canva remains the first local candidate; production release still requires controller authorization',
 );
 assert.deepEqual(operational.newToolCandidates, queue);
 assert.equal(

@@ -1,5 +1,6 @@
 const TOOL_ROUTE_ALIASES: Record<string, string> = {
   anthropic: 'claude',
+  'canva-magic-studio': 'canva',
   'fireflies-ai': 'fireflies',
   'murf-ai': 'murf',
   otter: 'otter-ai',

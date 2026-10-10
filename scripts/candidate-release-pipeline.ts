@@ -9,6 +9,13 @@ import { getDatabaseConnectionString } from '../lib/database/connection';
 import { createAdminClient } from '../lib/supabase/admin';
 import { assertVideoReadback, validateVideoUrl } from './candidate-release-video';
 import {
+  assertCanvaAsset,
+  assertCanvaEmptyPreimage,
+  assertCanvaProtectedRowsUnchanged,
+  assertCanvaReleasePayload,
+  CANVA_RELEASE_ID,
+} from './canva-release-guard';
+import {
   assertChatgptEmptyPreimage,
   assertChatgptOnlineAsset,
   assertChatgptPayload,
@@ -185,6 +192,12 @@ const candidates: Candidate[] = [
     domain: 'scite.ai',
     preauditFile: 'scite-controlled-release-preaudit-2026-10-10.json',
   },
+  {
+    slug: 'canva',
+    aliases: ['canva', 'canva ai', 'canva magic studio', 'magic studio', 'magic write'],
+    domain: 'canva.com',
+    preauditFile: 'canva-controlled-release-preaudit-2026-10-10.json',
+  },
 ];
 
 function parseArgs(args: string[]) {
@@ -295,7 +308,95 @@ function loadPayload(candidate: Candidate, audit: Preaudit, asOf: string): Relea
   assert(asOf >= notBefore, `${candidate.slug}: release window opens ${notBefore}`);
   const payloadPath = path.join(root, 'data', 'collection', `${candidate.slug}-release.json`);
   assert(fs.existsSync(payloadPath), `${candidate.slug}: release payload is not ready`);
-  const payload = readJson<ReleasePayload>(payloadPath);
+  let payload: ReleasePayload;
+  if (candidate.slug === 'canva') {
+    const manifest = readJson<any>(payloadPath);
+    const evidence = readJson<any>(path.join(root, manifest.sourceCandidate));
+    const copy = evidence.candidateCopy;
+    const candidateHash = createHash('sha256')
+      .update(fs.readFileSync(path.join(root, manifest.sourceCandidate)))
+      .digest('hex');
+    assert.equal(manifest.unit, evidence.unit);
+    assert.equal(candidateHash, manifest.sourceCandidateSha256, 'Canva approved candidate copy changed after QA');
+    assert.equal(manifest.id, CANVA_RELEASE_ID);
+    assert.equal(manifest.canonical, '/ai/canva');
+    assert.equal(manifest.release.productionWriteApproved, audit.productionWriteApproved);
+    assert.equal(manifest.release.indexApproved, false);
+    assert.equal(manifest.release.sitemapEligible, false);
+    assert.equal(manifest.release.taskCapabilityFitCreationApproved, false);
+    const bestFor = (locale: 'en' | 'zh' | 'cn') => {
+      const marker = locale === 'en' ? 'Best for:' : '适合谁：';
+      const next = locale === 'en' ? '\n\nNot ideal for:' : '\n\n不适合谁：';
+      const part = copy.detail[locale].split(marker)[1]?.split(next)[0] || '';
+      return part
+        .split(';')
+        .map((item: string) => item.trim())
+        .filter(Boolean);
+    };
+    const notIdeal = (locale: 'en' | 'zh' | 'cn') => {
+      const marker = locale === 'en' ? 'Not ideal for:' : '不适合谁：';
+      const next = locale === 'en' ? '\n\nLimitations:' : '\n\n限制：';
+      const part = copy.detail[locale].split(marker)[1]?.split(next)[0] || '';
+      return part
+        .split(';')
+        .map((item: string) => item.trim())
+        .filter(Boolean);
+    };
+    const detail = { ...copy.detail };
+    detail.en +=
+      '\n\nCorrection and owner updates: Owners can claim this listing and request updates; users can submit corrections for editorial review.';
+    detail.zh += '\n\n纠错与 Owner 更新：产品所有者可认领条目并申请更新；用户可提交资料纠错，由编辑审核。';
+    detail.cn += '\n\n更正與 Owner 更新：產品所有者可認領條目並申請更新；使用者可提交資料更正，由編輯審核。';
+    payload = {
+      id: manifest.id,
+      slug: manifest.slug,
+      officialUrl: manifest.officialUrl,
+      reviewedAt: manifest.reviewedAt,
+      nextReviewDate: manifest.nextReviewDate,
+      categorySlug: manifest.categorySlug,
+      pricing: manifest.pricing,
+      title: copy.title,
+      content: copy.content,
+      detail,
+      imageUrl: manifest.media.asset,
+      thumbnailUrl: manifest.media.asset,
+      tags: ['design', 'marketing', 'ai-design'],
+      features: {
+        audience: {
+          bestFit: { en: bestFor('en'), zh: bestFor('zh'), cn: bestFor('cn') },
+          notIdealFor: { en: notIdeal('en'), zh: notIdeal('zh'), cn: notIdeal('cn') },
+        },
+        editorial: {
+          reviewedAt: manifest.reviewedAt,
+          nextReviewDate: manifest.nextReviewDate,
+          reviewedBy: 'AI Best Tool editorial; independent QA PASS inherited',
+          sourceUrl: manifest.officialUrl,
+          trustNote: {
+            en: 'Official product documentation and independent market signals; no authenticated account trial or output benchmark was performed.',
+            zh: '官方产品资料与独立市场信号；本站未进行登录账户试用或输出基准测试。',
+            cn: '官方產品資料與獨立市場訊號；本站未進行登入帳戶試用或輸出基準測試。',
+          },
+        },
+        evidence: {
+          official: evidence.officialSources.map((source: { url: string }) => source.url),
+          independent: evidence.independentSources.map((source: { url: string }) => source.url),
+        },
+        publicationPolicy: audit.publicationPolicy,
+        media: manifest.media,
+        release: {
+          target: 'published_monitor_noindex',
+          canonical: manifest.canonical,
+          indexApproved: false,
+          sitemapEligible: false,
+          relationshipCreationApproved: false,
+        },
+      },
+      useCases: { en: bestFor('en'), zh: bestFor('zh'), cn: bestFor('cn') },
+    };
+    assertCanvaReleasePayload(payload);
+  } else {
+    payload = readJson<ReleasePayload>(payloadPath);
+  }
   assert.equal(payload.slug, candidate.slug);
   assert.match(payload.id, /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
   assert.equal(new URL(payload.officialUrl).hostname.replace(/^www\./, ''), candidate.domain);
@@ -326,6 +427,10 @@ function loadPayload(candidate: Candidate, audit: Preaudit, asOf: string): Relea
     assert(audit.assetSha256, 'Scite asset hash manifest missing');
     assertSciteAsset(payload, audit.assetSha256, root);
   }
+  if (candidate.slug === 'canva') {
+    assert(audit.assetSha256, 'Canva asset hash manifest missing');
+    assertCanvaAsset(payload, audit.assetSha256, root);
+  }
   validateVideoUrl(candidate.slug, payload.videoUrl);
   return payload;
 }
@@ -339,6 +444,21 @@ async function openDatabase() {
 
 async function findMatches(client: Client, candidate: Candidate) {
   if (candidate.slug === 'chatgpt') return findChatgptIdentityMatches(client);
+  if (candidate.slug === 'canva') {
+    return client.query(
+      `SELECT id, name, url, status, page_quality_status
+         FROM tools
+        WHERE lower(btrim(name)) = ANY($1::text[])
+           OR url ~* $2
+           OR lower(title::text) ~ $3
+        ORDER BY name`,
+      [
+        candidate.aliases,
+        '^https?://(www\\.)?canva\\.com([/:?#]|$)',
+        '(^|[^a-z])(canva|magic[[:space:]]+studio|magic[[:space:]]+write)([^a-z]|$)',
+      ],
+    );
+  }
   const escapedDomain = candidate.domain.replaceAll('.', '\\.');
   return client.query(
     `SELECT id, name, url, status, page_quality_status
@@ -366,11 +486,15 @@ function isNoindex(headers: Headers, html: string) {
 }
 
 async function fetchPage(pathname: string) {
-  const response = await fetch(`https://aibesttool.com${pathname}`, {
-    headers: { 'user-agent': 'ai-best-tool-candidate-release/1.0' },
-    signal: AbortSignal.timeout(20_000),
-  });
-  return { response, html: await response.text() };
+  try {
+    const response = await fetch(`https://aibesttool.com${pathname}`, {
+      headers: { 'user-agent': 'ai-best-tool-candidate-release/1.0' },
+      signal: AbortSignal.timeout(20_000),
+    });
+    return { response, html: await response.text() };
+  } catch (error) {
+    throw new Error(`${pathname}: production fetch failed: ${error instanceof Error ? error.message : String(error)}`);
+  }
 }
 
 async function validateOnlineFallback(
@@ -383,6 +507,55 @@ async function validateOnlineFallback(
   const paths = [`/ai/${candidate.slug}`, `/cn/ai/${candidate.slug}`];
   if (candidate.slug === 'scite' || (candidate.slug === 'pika' && expectReleased))
     paths.push(`/tw/ai/${candidate.slug}`);
+  if (candidate.slug === 'canva') {
+    paths.push('/tw/ai/canva');
+  }
+  if (candidate.slug === 'canva') {
+    for (const [localePrefix, target] of [
+      ['', '/ai/canva'],
+      ['/cn', '/cn/ai/canva'],
+      ['/tw', '/tw/ai/canva'],
+    ] as const) {
+      const aliasPath = `${localePrefix}/ai/canva-magic-studio`;
+      const aliasUrl = `https://aibesttool.com${aliasPath}?canva_alias_check=1&locale=${localePrefix || 'en'}`;
+      const aliasResponse = await fetch(aliasUrl, {
+        redirect: 'manual',
+        headers: { 'user-agent': 'ai-best-tool-candidate-release/1.0' },
+        signal: AbortSignal.timeout(20_000),
+      }).catch((error) => {
+        throw new Error(
+          `${aliasPath}: production alias fetch failed: ${error instanceof Error ? error.message : String(error)}`,
+        );
+      });
+      if (expectReleased) {
+        assert.equal(aliasResponse.status, 308, `${aliasPath}: released alias must use HTTP 308`);
+        const location = new URL(aliasResponse.headers.get('location') || '', 'https://aibesttool.com');
+        assert.equal(location.pathname, target, `${aliasPath}: alias crossed locale or missed canonical`);
+        assert.equal(location.searchParams.get('canva_alias_check'), '1', `${aliasPath}: query marker was dropped`);
+        assert.equal(
+          location.searchParams.get('locale'),
+          localePrefix || 'en',
+          `${aliasPath}: locale query was changed`,
+        );
+      } else {
+        assert.equal(aliasResponse.status, 200, `${aliasPath}: current reserved alias shell changed before release`);
+        const html = await aliasResponse.text();
+        assert.equal(
+          canonicalFromHtml(html),
+          `https://aibesttool.com${aliasPath}`,
+          `${aliasPath}: existing shell canonical mismatch`,
+        );
+        assert(
+          isNoindex(aliasResponse.headers, html),
+          `${aliasPath}: existing shell must remain noindex before deployment`,
+        );
+        assert(
+          !sitemap.html.includes(`<loc>https://aibesttool.com${aliasPath}</loc>`),
+          `${aliasPath}: shell leaked into sitemap`,
+        );
+      }
+    }
+  }
   for (const pathname of paths) {
     const { response, html } = await fetchPage(pathname);
     assert(response.ok, `${candidate.slug}: ${pathname} returned ${response.status}`);
@@ -471,6 +644,13 @@ async function validateDeployedAssets(payload: ReleasePayload) {
 
 async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, commit: boolean) {
   assert.equal(audit.status, 'ready_for_next_slot', `${candidate.slug}: candidate is already released`);
+  if (candidate.slug === 'canva' && commit) {
+    assert.equal(
+      audit.productionWriteApproved,
+      true,
+      'Canva production write requires separate controller authorization',
+    );
+  }
   const payload = loadPayload(candidate, audit, asOf);
   // A database insert cannot deploy new /public files. Fail before opening a write transaction.
   if (commit) await validateDeployedAssets(payload);
@@ -485,6 +665,14 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
     const protectedBefore = candidate.slug === 'chatgpt' ? await readChatgptProtectedState(client) : null;
     const sciteProtectedBefore =
       candidate.slug === 'scite'
+        ? (
+            await client.query('SELECT id,name,url,status,page_quality_status FROM tools WHERE id <> $1 ORDER BY id', [
+              payload.id,
+            ])
+          ).rows
+        : null;
+    const canvaProtectedBefore =
+      candidate.slug === 'canva'
         ? (
             await client.query('SELECT id,name,url,status,page_quality_status FROM tools WHERE id <> $1 ORDER BY id', [
               payload.id,
@@ -507,6 +695,10 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       else if (candidate.slug === 'pika') assertPikaEmptyPreimage(matches.rows, existingId.rows, payload.id);
       else if (candidate.slug === 'chatgpt') assertChatgptEmptyPreimage(matches.rows, existingId.rows);
       else assertSciteEmptyPreimage(matches.rows, existingId.rows);
+    }
+    if (candidate.slug === 'canva') {
+      const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
+      assertCanvaEmptyPreimage(matches.rows, existingId.rows);
     }
     const category = await client.query('SELECT id FROM categories WHERE slug = $1', [payload.categorySlug]);
     assert.equal(category.rowCount, 1, `${candidate.slug}: storage category must exist exactly once`);
@@ -542,13 +734,15 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
         candidate.slug === 'murf' ||
           candidate.slug === 'pika' ||
           candidate.slug === 'chatgpt' ||
-          candidate.slug === 'scite',
+          candidate.slug === 'scite' ||
+          candidate.slug === 'canva',
       ],
     );
     if (candidate.slug === 'murf') assertMurfSingleInsert(insert.rowCount);
     if (candidate.slug === 'pika') assertPikaSingleInsert(insert.rowCount);
     if (candidate.slug === 'chatgpt') assert.equal(insert.rowCount, 1, 'ChatGPT must insert exactly one new row');
     if (candidate.slug === 'scite') assert.equal(insert.rowCount, 1, 'Scite must insert exactly one new row');
+    if (candidate.slug === 'canva') assert.equal(insert.rowCount, 1, 'Canva must insert exactly one new row');
     const row = await client.query(
       'SELECT id, name, url, status, page_quality_status, features, title, content, detail, use_cases, image_url, thumbnail_url, video_url, next_review_date::text AS next_review_date FROM tools WHERE id = $1',
       [payload.id],
@@ -579,7 +773,26 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       );
       assertSciteProtectedRowsUnchanged(sciteProtectedBefore, sciteProtectedAfter.rows);
     }
+    if (canvaProtectedBefore) {
+      const canvaProtectedAfter = await client.query(
+        'SELECT id,name,url,status,page_quality_status FROM tools WHERE id <> $1 ORDER BY id',
+        [payload.id],
+      );
+      assertCanvaProtectedRowsUnchanged(canvaProtectedBefore, canvaProtectedAfter.rows);
+    }
     await client.query(commit ? 'COMMIT' : 'ROLLBACK');
+    if (candidate.slug === 'canva' && !commit) {
+      const readback = await openDatabase();
+      try {
+        await readback.query('BEGIN READ ONLY');
+        const found = await findMatches(readback, candidate);
+        const fixedId = await readback.query('SELECT id FROM tools WHERE id=$1', [payload.id]);
+        assertCanvaEmptyPreimage(found.rows, fixedId.rows);
+        await readback.query('ROLLBACK');
+      } finally {
+        await readback.end();
+      }
+    }
     if (candidate.slug === 'chatgpt') {
       const readback = await openDatabase();
       try {
@@ -657,7 +870,10 @@ async function main() {
     try {
       if (
         options.phase === 'preflight' ||
-        ((candidate.slug === 'pika' || candidate.slug === 'chatgpt' || candidate.slug === 'scite') &&
+        ((candidate.slug === 'pika' ||
+          candidate.slug === 'chatgpt' ||
+          candidate.slug === 'scite' ||
+          candidate.slug === 'canva') &&
           options.phase === 'verify')
       ) {
         await client.query('BEGIN READ ONLY');
@@ -682,14 +898,16 @@ async function main() {
             candidate.slug === 'murf' ||
             candidate.slug === 'pika' ||
             candidate.slug === 'chatgpt' ||
-            candidate.slug === 'scite'
+            candidate.slug === 'scite' ||
+            candidate.slug === 'canva'
           ) {
             const payload = loadPayload(candidate, audit, options.asOf);
             const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
             if (candidate.slug === 'murf') assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
             else if (candidate.slug === 'pika') assertPikaEmptyPreimage(matches.rows, existingId.rows, payload.id);
             else if (candidate.slug === 'chatgpt') assertChatgptEmptyPreimage(matches.rows, existingId.rows);
-            else assertSciteEmptyPreimage(matches.rows, existingId.rows);
+            else if (candidate.slug === 'scite') assertSciteEmptyPreimage(matches.rows, existingId.rows);
+            else assertCanvaEmptyPreimage(matches.rows, existingId.rows);
           }
         }
       }
@@ -747,12 +965,36 @@ async function main() {
           assert.deepEqual(relations, { tasks: 0, capabilities: 0, fits: 0 }, 'Scite relations must remain empty');
           await validateDeployedAssets(payload);
         }
+        if (candidate.slug === 'canva') {
+          const payload = loadPayload(candidate, audit, options.asOf);
+          assert.equal(matches.rows[0].id, CANVA_RELEASE_ID, 'Canva fixed ID mismatch');
+          const exact = await client.query(
+            'SELECT title,content,detail,features,use_cases,image_url,thumbnail_url,url,next_review_date::text AS next_review_date FROM public.tools WHERE id=$1',
+            [CANVA_RELEASE_ID],
+          );
+          assert.equal(exact.rowCount, 1);
+          assert.deepEqual(exact.rows[0].title, payload.title);
+          assert.deepEqual(exact.rows[0].content, payload.content);
+          assert.deepEqual(exact.rows[0].detail, payload.detail);
+          assert.deepEqual(exact.rows[0].features, payload.features);
+          assert.deepEqual(exact.rows[0].use_cases, payload.useCases);
+          assert.equal(exact.rows[0].image_url, payload.imageUrl);
+          assert.equal(exact.rows[0].thumbnail_url, payload.thumbnailUrl);
+          assert.equal(exact.rows[0].url, payload.officialUrl);
+          assert.equal(exact.rows[0].next_review_date, payload.nextReviewDate);
+          const relations = await validateCandidateRelations('canva', CANVA_RELEASE_ID);
+          assert.deepEqual(relations, { tasks: 0, capabilities: 0, fits: 0 }, 'Canva relations must remain empty');
+          await validateDeployedAssets(payload);
+        }
       }
       console.log(`✅ ${candidate.slug}: database ${options.phase} passed`);
     } finally {
       if (
         options.phase === 'preflight' ||
-        ((candidate.slug === 'pika' || candidate.slug === 'chatgpt' || candidate.slug === 'scite') &&
+        ((candidate.slug === 'pika' ||
+          candidate.slug === 'chatgpt' ||
+          candidate.slug === 'scite' ||
+          candidate.slug === 'canva') &&
           options.phase === 'verify')
       ) {
         await client.query('ROLLBACK');

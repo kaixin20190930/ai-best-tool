@@ -62,6 +62,7 @@
     "test:next-tool-preaudit": "tsx scripts/test-next-tool-preaudit.ts",
     "tools:candidate-release": "tsx scripts/candidate-release-pipeline.ts",
     "test:candidate-release": "tsx scripts/test-candidate-release-pipeline.ts",
+    "test:canva-release": "tsx scripts/test-canva-controlled-release.ts",
     "test:chatgpt-canonical-release": "tsx scripts/test-chatgpt-canonical-release.ts",
     "test:pub-03-readonly-fetch": "node scripts/test-pub-03-readonly-fetch.mjs",
     "tools:rollback-chatgpt-canonical": "tsx scripts/rollback-chatgpt-canonical.ts",
