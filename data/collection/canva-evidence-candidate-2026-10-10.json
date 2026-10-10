@@ -1,0 +1,177 @@
+{
+  "unit": "CANVA-IDENTITY-AND-EVIDENCE-01",
+  "asOf": "2026-10-10",
+  "candidateStatus": "ready_monitor_local_only",
+  "productionWrites": 0,
+  "identity": {
+    "product": "Canva",
+    "officialDomain": "canva.com",
+    "officialUrl": "https://www.canva.com/",
+    "proposedSlug": "canva",
+    "proposedCanonical": "/ai/canva",
+    "fixedProductionId": null,
+    "magicStudioIsSeparateEntity": false,
+    "productionToolsExactMatches": 0,
+    "productionContextualMatches": 3,
+    "contextualMatchesAreOtherToolsMentioningCanva": true,
+    "decisionGraphProfiles": 0,
+    "routeShells": [
+      "/ai/canva",
+      "/cn/ai/canva",
+      "/tw/ai/canva",
+      "/ai/canva-magic-studio",
+      "/cn/ai/canva-magic-studio",
+      "/tw/ai/canva-magic-studio"
+    ],
+    "routeShellState": "200 + self-canonical + noindex, follow; no public tool entity rendered",
+    "sitemapLocCount": 126,
+    "sitemapCanvaMatches": 0,
+    "routePolicy": "Only /ai/canva is the product identity. Keep Magic Studio inside Canva; route cleanup for the legacy noindex shell must be explicitly handled at release, never create another entity."
+  },
+  "cluster": {
+    "primary": "brand-constrained-marketing-content",
+    "role": "Anchor + Gap-filler",
+    "scope": "AI-assisted design and repeat visual production with optional brand context; Brand Kit itself is not represented as an AI feature."
+  },
+  "marketValidation": {
+    "status": "pass_with_scope_limits",
+    "strongProductAdoption": {
+      "source": "https://www.g2.com/products/canva/reviews",
+      "checkedAt": "2026-10-10",
+      "observation": "G2 page reports 7,726 Canva reviews. This supports broad Canva product adoption, not AI-feature adoption or a controlled quality result."
+    },
+    "aiSpecificCorroboration": [
+      {
+        "source": "https://www.g2.com/compare/canva-vs-magic-studio-magic-studio",
+        "checkedAt": "2026-10-10",
+        "observation": "G2 comparison shows 12 Magic Studio reviews and a 4.0/5 score; small sample, not a separate product identity and not generalized to Canva overall."
+      },
+      {
+        "source": "https://www.techradar.com/best/best-ai-tools",
+        "checkedAt": "2026-10-10",
+        "observation": "TechRadar's hands-on roundup says it tested 70+ AI tools and describes Canva Magic Studio image-editing workflows. This is independent hands-on corroboration, not representative adoption measurement."
+      },
+      {
+        "source": "https://bccampus.ca/wp-content/uploads/2024/07/2024-11-06-EdTech-Sandbox-Canva-AI-Slides.pdf",
+        "checkedAt": "2026-10-10",
+        "observation": "BCcampus workshop material demonstrates Canva Magic Studio in an education session; auxiliary evidence only, not evidence of institutional procurement or outcomes."
+      }
+    ],
+    "notEstablished": [
+      "No independent evidence quantifies broad Canva AI or Brand Voice usage.",
+      "No measured improvement in conversion, brand consistency, or content quality is claimed.",
+      "No site-run account trial or output-quality benchmark was performed."
+    ]
+  },
+  "entityGates": {
+    "identity": "pass",
+    "uniqueCanonical": "pass_with_release_route_cleanup",
+    "duplicateIntent": "pass_with_release_route_cleanup",
+    "coreFunction": "pass",
+    "assetRightsAndLegalSafety": "pass_neutral_original_editorial_art",
+    "misleadingClaims": "pass_if_claim_boundaries_are_preserved",
+    "pageContentSufficiency": "pass_candidate_copy_prepared"
+  },
+  "candidateCopy": {
+    "reviewedAt": "2026-10-10",
+    "nextReviewDate": "2026-10-17",
+    "officialUrl": "https://www.canva.com/",
+    "pricingClass": "freemium",
+    "categorySlug": "design-art",
+    "imageUrl": "/images/tool-media/canva-editorial-cover.svg",
+    "thumbnailUrl": "/images/tool-media/canva-editorial-cover.svg",
+    "title": {
+      "en": "Canva AI-assisted design and brand content",
+      "zh": "Canva AI 辅助设计与品牌内容",
+      "cn": "Canva AI 輔助設計與品牌內容"
+    },
+    "content": {
+      "en": "Canva combines a visual design workspace with AI features for creating and editing designs, images, video and text. Brand voice and brand-kit context can help teams create on-brand drafts, but access and usage depend on plan, feature and account settings.",
+      "zh": "Canva 将视觉设计工作区与 AI 设计、图像、视频和文字生成及编辑功能结合。品牌语气和 Brand Kit 上下文可辅助团队制作符合品牌规范的草稿，但功能开放与用量取决于套餐、具体功能和账号设置。",
+      "cn": "Canva 將視覺設計工作區與 AI 設計、圖片、影片及文字生成和編輯功能結合。品牌語氣與 Brand Kit 脈絡可協助團隊製作符合品牌規範的草稿，但功能開放與用量取決於方案、具體功能及帳戶設定。"
+    },
+    "detail": {
+      "en": "Canva is a broad visual communication workspace, not a standalone image model. Its AI features can draft or refine text, generate or edit visual assets, and help adapt designs inside the same editor. Canva documents Brand Voice for eligible plans and roles; Brand Kit templates can provide context for AI-generated designs. These brand controls guide drafts and do not guarantee factual accuracy or automatic approval.\n\nBest for: Small marketing teams and solo creators who need to turn a brief into editable campaign visuals and then adapt them across formats.; Teams that can supply approved brand assets and review AI-generated copy, imagery and layouts before publishing.\n\nNot ideal for: Buyers seeking a specialist model for maximum image-generation control or professional-grade compositing.; Organizations that require exact, automatically enforced brand or legal compliance without human review.; Users who need a guaranteed feature allowance, plan entitlement, or region-wide availability before checking their own account.\n\nLimitations: Canva AI features are split across Standard, Premium and Ultra usage tiers; consumption varies with task complexity, plan and account state.; Canva AI 2.0 was announced as a research preview; do not assume every announced workflow is generally available.; Brand Voice and advanced brand controls have plan, role and administrator boundaries.; AI output may be inaccurate or non-unique; licensed Canva library content remains governed by its own license.; Canva says user-content use to improve AI features depends on privacy settings; third-party Canva apps have separate privacy terms.\n\nPricing and access: Canva offers Free and paid plans. Current AI access and allowances vary by plan and feature; exact amounts and account eligibility are omitted because they change and were not checked in an authenticated account. Canva says Canva Teams is no longer available for new sign-ups or upgrades; do not present it as an open purchase option.\n\nDecision: Consider Canva when the job includes both AI-assisted drafting and finishing editable visual assets in a shared design workspace. Compare with Jasper when governed marketing copy and reusable brand context are primary; compare with a specialist image generator when model controls or image-only generation matter more. Review the actual plan, AI allowance, licensed assets, privacy settings and admin permissions before relying on a workflow.\n\nEvidence and review: Official sources include Canva AI help, AI usage limits, Brand Voice, Brand Kit, current plan guidance, AI Product Terms and Privacy Center. Market evidence supports Canva product adoption and independent hands-on exposure to Magic Studio, but does not establish broad AI feature adoption or a site-run quality ranking. Next review: 2026-10-17 for plan/AI preview changes; 2026-10-24 for output rights and privacy scope.",
+      "zh": "Canva 是综合视觉传播工作区，不是单一图像模型。其 AI 功能可在同一编辑器中起草或润色文字、生成或编辑视觉素材，并协助调整设计。Canva 文档说明 Brand Voice 仅对符合条件的套餐和角色开放；Brand Kit 模板可为 AI 生成设计提供上下文。这些品牌控制只能指导草稿，不能保证事实准确或自动审批。\n\n适合谁：需要把 brief 转成可编辑营销视觉并适配多种格式的小型营销团队和个人创作者。; 能提供已批准品牌素材，并会在发布前审查 AI 文案、图像和布局的团队。\n\n不适合谁：追求图像模型精细控制或专业合成能力的买家。; 要求品牌或法律合规自动且精确执行、无需人工复核的组织。; 尚未核对自己账号，却需要保证功能额度、套餐权益或所在地区可用的用户。\n\n限制：Canva AI 分为 Standard、Premium、Ultra 使用层级，消耗会随任务复杂度、套餐和账号状态变化。; Canva AI 2.0 公告称为 research preview，不应假设所有已公布流程都已普遍开放。; Brand Voice 和高级品牌控制受套餐、角色与管理员权限限制。; AI 输出可能不准确或不唯一；使用 Canva 素材库内容时仍受对应素材许可约束。; Canva 表示用户内容是否用于改进 AI 功能取决于隐私设置；Canva 内第三方应用另有隐私条款。\n\n价格与开放权限：Canva 提供免费和付费套餐。AI 功能与用量因套餐和具体功能而异；由于权益会变动且本站未登录账号核验，省略精确额度和账号资格。Canva 表示 Teams 已不再接受新注册或升级，不应把它写成可公开新购的方案。\n\n怎么选：当工作同时需要 AI 辅助起草和在共享设计工作区内完成可编辑视觉素材时，可以评估 Canva。若重点是受治理的营销文案和可复用品牌上下文，可与 Jasper 比较；若更看重模型控制或纯图像生成，可比较专业图像生成器。依赖流程前，先确认自己的套餐、AI 用量、素材许可、隐私设置和管理员权限。\n\n证据与复查：官方来源包括 Canva AI 帮助、AI 用量、Brand Voice、Brand Kit、现行套餐说明、AI 产品条款及隐私中心。市场证据支持 Canva 产品整体采用，并有独立媒体上手体验 Magic Studio；但不足以证明 AI 功能被广泛采用，也不是本站质量排名。2026-10-17 复核套餐和 AI 预览变化；2026-10-24 复核输出权利与隐私范围。",
+      "cn": "Canva 是綜合視覺傳播工作區，不是單一圖片模型。其 AI 功能可在同一編輯器中起草或潤飾文字、生成或編輯視覺素材，並協助調整設計。Canva 文件說明 Brand Voice 僅對符合條件的方案與角色開放；Brand Kit 範本可為 AI 生成設計提供脈絡。這些品牌控制只能引導草稿，不能保證事實正確或自動審批。\n\n適合誰：需要把 brief 轉成可編輯行銷視覺並調整為多種格式的小型行銷團隊和個人創作者。; 能提供已核准品牌素材，並在發布前審查 AI 文案、圖片及版面的團隊。\n\n不適合誰：追求圖像模型精細控制或專業合成能力的買家。; 要求品牌或法律合規自動且精確執行、無須人工審核的組織。; 尚未核對自身帳戶，卻需要保證功能額度、方案權益或所在地區可用的使用者。\n\n限制：Canva AI 分為 Standard、Premium、Ultra 使用層級，消耗會隨任務複雜度、方案和帳戶狀態變化。; Canva AI 2.0 公告稱為 research preview，不應假設所有已公布流程均已普遍開放。; Brand Voice 和進階品牌控制受方案、角色及管理員權限限制。; AI 輸出可能不準確或不唯一；使用 Canva 素材庫內容時仍受對應素材授權約束。; Canva 表示使用者內容是否用於改善 AI 功能取決於隱私設定；Canva 內第三方應用另有隱私條款。\n\n價格與開放權限：Canva 提供免費和付費方案。AI 功能與用量因方案及具體功能而異；權益會變動且本站未登入帳戶核驗，因此省略精確額度與帳戶資格。Canva 表示 Teams 已不再接受新註冊或升級，不應將其描述為可公開新購的方案。\n\n怎麼選：當工作同時需要 AI 輔助起草，並在共享設計工作區內完成可編輯視覺素材時，可評估 Canva。若重點是受治理的行銷文案與可重用品牌脈絡，可和 Jasper 比較；若更重視模型控制或純圖像生成，可比較專業圖像生成器。依賴工作流程前，先確認自己的方案、AI 用量、素材授權、隱私設定與管理員權限。\n\n證據與複查：官方來源包括 Canva AI 說明、AI 用量、Brand Voice、Brand Kit、現行方案說明、AI 產品條款及隱私中心。市場證據支持 Canva 整體產品採用，並有獨立媒體實際試用 Magic Studio；但不足以證明 AI 功能已廣泛採用，也不是本站品質排名。2026-10-17 複核方案和 AI 預覽變化；2026-10-24 複核輸出權利及隱私範圍。"
+    }
+  },
+  "claimLevelHolds": [
+    {
+      "id": "plan-price-and-trial",
+      "status": "conditional",
+      "publicTreatment": "Omit exact price, trial eligibility and account-specific purchase terms.",
+      "sources": ["https://www.canva.com/help/upgrade-to-canva-pro-or-business/", "https://www.canva.com/pricing/"],
+      "nextReviewDate": "2026-10-17"
+    },
+    {
+      "id": "ai-allowance-and-feature-access",
+      "status": "conditional",
+      "publicTreatment": "Describe shared allowance and plan/feature variability; omit exact guaranteed use counts and account eligibility.",
+      "sources": ["https://www.canva.com/help/ai-access/", "https://www.canva.com/help/using-canva-ai/"],
+      "nextReviewDate": "2026-10-17"
+    },
+    {
+      "id": "brand-voice-role-plan-boundary",
+      "status": "conditional",
+      "publicTreatment": "State eligible plan and administrator/role boundaries; do not promise access on a specific unverified account.",
+      "sources": ["https://www.canva.com/help/brand-voice/", "https://www.canva.com/help/brand-kit/"],
+      "nextReviewDate": "2026-10-24"
+    },
+    {
+      "id": "canva-ai-2-preview-availability",
+      "status": "conditional",
+      "publicTreatment": "Identify AI 2.0 as research preview; do not present announced workflows as universally released.",
+      "sources": ["https://www.canva.com/newsroom/news/canva-create-2026-ai/", "https://www.canva.com/help/using-canva-ai/"],
+      "nextReviewDate": "2026-10-17"
+    },
+    {
+      "id": "output-rights-and-library-content",
+      "status": "conditional",
+      "publicTreatment": "Users retain input rights and own output within stated legal limits; outputs may be non-unique and licensed Canva assets remain under their license.",
+      "sources": ["https://www.canva.com/policies/ai-product-terms/", "https://www.canva.com/policies/content-license-agreement/"],
+      "nextReviewDate": "2026-10-24"
+    },
+    {
+      "id": "privacy-and-training-controls",
+      "status": "conditional",
+      "publicTreatment": "Content use for AI improvement depends on privacy settings/account type; Canva third-party apps have separate policies. No authenticated account state was inspected.",
+      "sources": ["https://www.canva.com/trust/privacy/", "https://www.canva.com/policies/ai-product-terms/"],
+      "nextReviewDate": "2026-10-24"
+    },
+    {
+      "id": "output-accuracy-and-legal-suitability",
+      "status": "verified_public",
+      "publicTreatment": "Canva disclaims accuracy/completeness/reliability guarantees; user remains responsible for checking output and rights.",
+      "sources": ["https://www.canva.com/policies/ai-product-terms/"],
+      "nextReviewDate": "2026-11-09"
+    }
+  ],
+  "officialSources": [
+    {"url":"https://www.canva.com/","scope":"Product identity and official site","checkedAt":"2026-10-10"},
+    {"url":"https://www.canva.com/help/using-canva-ai/","scope":"AI use, plan eligibility and AI 2.0 workflow","checkedAt":"2026-10-10"},
+    {"url":"https://www.canva.com/help/ai-access/","scope":"AI tiers, shared allowance and variable use","checkedAt":"2026-10-10"},
+    {"url":"https://www.canva.com/help/brand-voice/","scope":"Brand Voice availability and team roles","checkedAt":"2026-10-10"},
+    {"url":"https://www.canva.com/help/brand-kit/","scope":"Brand Kit templates as AI context","checkedAt":"2026-10-10"},
+    {"url":"https://www.canva.com/help/upgrade-to-canva-pro-or-business/","scope":"Current Free/Pro/Business purchase surface and Teams signup status","checkedAt":"2026-10-10"},
+    {"url":"https://www.canva.com/policies/ai-product-terms/","scope":"Input rights, output rights, licensed content, accuracy disclaimer and usage limits","checkedAt":"2026-10-10"},
+    {"url":"https://www.canva.com/trust/privacy/","scope":"Privacy settings, AI improvement use, Education/Business scope and third-party apps","checkedAt":"2026-10-10"},
+    {"url":"https://www.canva.com/newsroom/news/canva-create-2026-ai/","scope":"Canva AI 2.0 announcement and research-preview status","checkedAt":"2026-10-10"}
+  ],
+  "independentSources": [
+    {"url":"https://www.g2.com/products/canva/reviews","scope":"7,726 general Canva product reviews; broad product adoption only","checkedAt":"2026-10-10"},
+    {"url":"https://www.g2.com/compare/canva-vs-magic-studio-magic-studio","scope":"12 Magic Studio reviews, 4.0/5; small sample and not a separate entity","checkedAt":"2026-10-10"},
+    {"url":"https://www.techradar.com/best/best-ai-tools","scope":"Independent hands-on assessment of Canva Magic Studio among 70+ AI tools","checkedAt":"2026-10-10"},
+    {"url":"https://bccampus.ca/wp-content/uploads/2024/07/2024-11-06-EdTech-Sandbox-Canva-AI-Slides.pdf","scope":"Auxiliary education workshop demonstration of Canva AI/Magic Studio","checkedAt":"2026-10-10"}
+  ],
+  "releaseBoundaries": {
+    "target": "published + monitor/noindex",
+    "indexApproved": false,
+    "sitemapExpansionApproved": false,
+    "taskCapabilityFitCreationApproved": false,
+    "productionWriteApproved": false,
+    "releasePipelineRegistration": "Not included in this evidence-only unit; controller must add/validate Canva in the controlled release registry in its next implementation unit.",
+    "legacyRouteCleanup": "At release, verify /ai/canva-magic-studio and localized shells do not expose a competing page; consolidate to /ai/canva without creating a second entity.",
+    "assetRights": "Original AI Best Tool editorial SVG; no Canva logo, screenshot or copied brand artwork."
+  }
+}

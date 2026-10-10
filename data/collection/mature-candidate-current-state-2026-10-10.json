@@ -12,5 +12,10 @@
   "independentReleasesOutsideSnapshot": {
     "chatgpt": { "status": "released_monitor_noindex", "evidence": "data/collection/chatgpt-release.json" }
   },
-  "developmentCandidates": {}
+  "developmentCandidates": {
+    "canva": {
+      "status": "ready_monitor_local_only",
+      "evidence": "docs/CANVA_IDENTITY_AND_EVIDENCE_2026-10-10_CN.md"
+    }
+  }
 }

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="800" viewBox="0 0 1400 800" role="img" aria-labelledby="title desc">
+  <title id="title">AI Best Tool editorial illustration for Canva</title>
+  <desc id="desc">An original abstract visual-design workspace with editable cards, color swatches, and a generated image tile. Not a Canva logo or product screenshot.</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff8e9"/>
+      <stop offset="1" stop-color="#e9f3f2"/>
+    </linearGradient>
+    <linearGradient id="art" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e97755"/>
+      <stop offset="1" stop-color="#f4bd55"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="800" rx="44" fill="url(#paper)"/>
+  <rect x="112" y="108" width="1176" height="584" rx="30" fill="#fffdf8" stroke="#193b43" stroke-opacity=".12" stroke-width="3"/>
+  <rect x="112" y="108" width="1176" height="76" rx="30" fill="#173d45"/>
+  <circle cx="160" cy="146" r="10" fill="#f4bd55"/>
+  <circle cx="194" cy="146" r="10" fill="#e97755"/>
+  <circle cx="228" cy="146" r="10" fill="#b5d9d0"/>
+  <rect x="160" y="228" width="236" height="408" rx="18" fill="#f3f0e7"/>
+  <rect x="186" y="256" width="138" height="16" rx="8" fill="#173d45" opacity=".78"/>
+  <rect x="186" y="296" width="184" height="11" rx="5.5" fill="#173d45" opacity=".2"/>
+  <rect x="186" y="324" width="168" height="11" rx="5.5" fill="#173d45" opacity=".2"/>
+  <rect x="186" y="376" width="54" height="54" rx="12" fill="#e97755"/>
+  <rect x="252" y="376" width="54" height="54" rx="12" fill="#f4bd55"/>
+  <rect x="318" y="376" width="54" height="54" rx="12" fill="#86b9ac"/>
+  <rect x="186" y="462" width="184" height="48" rx="14" fill="#173d45"/>
+  <rect x="186" y="536" width="184" height="11" rx="5.5" fill="#173d45" opacity=".2"/>
+  <rect x="186" y="562" width="146" height="11" rx="5.5" fill="#173d45" opacity=".2"/>
+  <rect x="430" y="228" width="814" height="408" rx="18" fill="#e5efeb"/>
+  <rect x="466" y="264" width="742" height="338" rx="14" fill="url(#art)"/>
+  <path d="M466 510c92-104 162-129 251-64 70 51 115 36 190-54 84-100 191-106 301-18v228H466z" fill="#28666a" opacity=".94"/>
+  <circle cx="1058" cy="354" r="54" fill="#fff1c9"/>
+  <path d="M466 550c120-53 213-60 303-9 96 55 208 44 439-66v127H466z" fill="#173d45" opacity=".9"/>
+  <rect x="512" y="322" width="236" height="20" rx="10" fill="#fffdf8" opacity=".9"/>
+  <rect x="512" y="360" width="158" height="12" rx="6" fill="#fffdf8" opacity=".65"/>
+  <rect x="1090" y="232" width="118" height="28" rx="14" fill="#f8eee0"/>
+  <circle cx="1120" cy="246" r="7" fill="#e97755"/>
+</svg>

@@ -26,8 +26,16 @@ const command = spawnSync('pnpm', ['--silent', 'run', 'collection:current-mature
 assert.equal(command.status, 0, command.stderr || command.stdout);
 const operational = JSON.parse(command.stdout);
 assert.equal(operational.source, 'current_operational_overlay');
-assert.equal(operational.nextDevelopmentCandidate, null, 'no remaining candidate has passed the current release gate');
+assert.equal(
+  operational.nextDevelopmentCandidate,
+  'canva',
+  'Canva is the first locally prepared candidate awaiting independent QA',
+);
 assert.deepEqual(operational.newToolCandidates, queue);
+assert.equal(
+  operational.newToolCandidates.find((candidate: { slug: string }) => candidate.slug === 'canva')?.status,
+  'ready_monitor_local_only',
+);
 for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt']) {
   assert(!operational.newToolCandidates.some((candidate: { slug: string }) => candidate.slug === slug));
 }
