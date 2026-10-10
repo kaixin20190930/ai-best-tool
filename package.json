@@ -161,6 +161,7 @@
     "test:public-tool-detail-access": "tsx scripts/test-public-tool-detail-access.ts",
     "test:sitemap": "tsx scripts/test-sitemap.ts",
     "collection:plan-three-days": "tsx scripts/plan-three-day-candidate-pool.ts",
+    "collection:current-mature-queue": "tsx scripts/select-current-mature-candidates.ts",
     "intelligence:discover-pages": "tsx scripts/discover-product-intelligence-pages.ts",
     "intelligence:classify-page": "tsx scripts/classify-product-intelligence-page.ts",
     "intelligence:sync": "tsx scripts/sync-product-intelligence.ts",

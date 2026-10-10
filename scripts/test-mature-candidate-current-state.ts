@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 
 import readCurrentCandidateQueue from './mature-candidate-current-state';
@@ -18,4 +19,13 @@ assert.equal(
   snapshot.candidates.find((candidate: { slug: string }) => candidate.slug === 'scite')?.verdict,
   'HOLD_EVIDENCE',
 );
+const command = spawnSync('pnpm', ['--silent', 'run', 'collection:current-mature-queue'], { encoding: 'utf8' });
+assert.equal(command.status, 0, command.stderr || command.stdout);
+const operational = JSON.parse(command.stdout);
+assert.equal(operational.source, 'current_operational_overlay');
+assert.equal(operational.nextDevelopmentCandidate, 'scite');
+assert.deepEqual(operational.newToolCandidates, queue);
+for (const slug of ['elicit', 'murf', 'pika', 'chatgpt']) {
+  assert(!operational.newToolCandidates.some((candidate: { slug: string }) => candidate.slug === slug));
+}
 console.log('PASS current candidate overlay preserves historical snapshot and excludes released entities');
