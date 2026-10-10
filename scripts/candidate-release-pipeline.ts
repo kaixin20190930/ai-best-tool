@@ -11,6 +11,7 @@ import { assertVideoReadback, validateVideoUrl } from './candidate-release-video
 import {
   assertCanvaAliasPreflight,
   assertCanvaAsset,
+  assertCanvaControllerWriteAuthorization,
   assertCanvaEmptyPreimage,
   assertCanvaProtectedRowsUnchanged,
   assertCanvaReleasePayload,
@@ -68,6 +69,17 @@ type Preaudit = {
     scope: string;
     authorization: string;
     preservedGates: string[];
+  };
+  controllerWriteAuthorization?: {
+    candidateSlug: string;
+    approved: boolean;
+    authorizedAt: string;
+    scope: string;
+    preservedGates: {
+      indexApproved: boolean;
+      sitemapEligible: boolean;
+      taskCapabilityFitCreationApproved: boolean;
+    };
   };
 };
 
@@ -322,6 +334,9 @@ function loadPayload(candidate: Candidate, audit: Preaudit, asOf: string): Relea
     assert.equal(manifest.id, CANVA_RELEASE_ID);
     assert.equal(manifest.canonical, '/ai/canva');
     assert.equal(manifest.release.productionWriteApproved, audit.productionWriteApproved);
+    assertCanvaControllerWriteAuthorization(audit.controllerWriteAuthorization);
+    assertCanvaControllerWriteAuthorization(manifest.release.controllerWriteAuthorization);
+    assert.deepEqual(manifest.release.controllerWriteAuthorization, audit.controllerWriteAuthorization);
     assert.equal(manifest.release.indexApproved, false);
     assert.equal(manifest.release.sitemapEligible, false);
     assert.equal(manifest.release.taskCapabilityFitCreationApproved, false);
@@ -631,11 +646,7 @@ async function validateDeployedAssets(payload: ReleasePayload) {
 async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, commit: boolean) {
   assert.equal(audit.status, 'ready_for_next_slot', `${candidate.slug}: candidate is already released`);
   if (candidate.slug === 'canva' && commit) {
-    assert.equal(
-      audit.productionWriteApproved,
-      true,
-      'Canva production write requires separate controller authorization',
-    );
+    assertCanvaControllerWriteAuthorization(audit.controllerWriteAuthorization);
   }
   const payload = loadPayload(candidate, audit, asOf);
   // A database insert cannot deploy new /public files. Fail before opening a write transaction.

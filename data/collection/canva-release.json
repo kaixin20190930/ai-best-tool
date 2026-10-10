@@ -30,6 +30,19 @@
   },
   "release": {
     "productionWriteApproved": false,
+    "controllerWriteAuthorization": {
+      "candidateSlug": "canva",
+      "approved": true,
+      "approver": "AI Best Tool Controller",
+      "authorizedAt": "2026-10-10",
+      "reason": "Authorize one Canva entity write only; retain monitor/noindex and keep index, sitemap, and relationship gates closed.",
+      "scope": "entity_only_monitor_noindex",
+      "preservedGates": {
+        "indexApproved": false,
+        "sitemapEligible": false,
+        "taskCapabilityFitCreationApproved": false
+      }
+    },
     "indexApproved": false,
     "sitemapEligible": false,
     "taskCapabilityFitCreationApproved": false,

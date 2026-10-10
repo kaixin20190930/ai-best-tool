@@ -6,6 +6,7 @@ import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '..
 import {
   assertCanvaAliasPreflight,
   assertCanvaAsset,
+  assertCanvaControllerWriteAuthorization,
   assertCanvaEmptyPreimage,
   assertCanvaProtectedRowsUnchanged,
   assertCanvaReleasePayload,
@@ -27,7 +28,48 @@ assert.equal(manifest.release.productionWriteApproved, false);
 assert.equal(manifest.release.indexApproved, false);
 assert.equal(manifest.release.sitemapEligible, false);
 assert.equal(manifest.release.taskCapabilityFitCreationApproved, false);
+assert.equal(audit.status, 'ready_for_next_slot');
 assert.equal(audit.productionWriteApproved, false);
+const controllerWriteAuthorization = {
+  candidateSlug: 'canva',
+  approved: true,
+  approver: 'AI Best Tool Controller',
+  authorizedAt: '2026-10-10',
+  reason:
+    'Authorize one Canva entity write only; retain monitor/noindex and keep index, sitemap, and relationship gates closed.',
+  scope: 'entity_only_monitor_noindex',
+  preservedGates: {
+    indexApproved: false,
+    sitemapEligible: false,
+    taskCapabilityFitCreationApproved: false,
+  },
+};
+assert.deepEqual(audit.controllerWriteAuthorization, controllerWriteAuthorization);
+assert.deepEqual(manifest.release.controllerWriteAuthorization, controllerWriteAuthorization);
+assertCanvaControllerWriteAuthorization(controllerWriteAuthorization);
+for (const invalidAuthorization of [
+  undefined,
+  { ...controllerWriteAuthorization, candidateSlug: 'another-tool' },
+  { ...controllerWriteAuthorization, authorizedAt: '2026-10-11' },
+  { ...controllerWriteAuthorization, scope: 'all_changes' },
+  {
+    ...controllerWriteAuthorization,
+    preservedGates: { ...controllerWriteAuthorization.preservedGates, indexApproved: true },
+  },
+  {
+    ...controllerWriteAuthorization,
+    preservedGates: { ...controllerWriteAuthorization.preservedGates, sitemapEligible: true },
+  },
+  {
+    ...controllerWriteAuthorization,
+    preservedGates: {
+      ...controllerWriteAuthorization.preservedGates,
+      taskCapabilityFitCreationApproved: true,
+    },
+  },
+]) {
+  assert.throws(() => assertCanvaControllerWriteAuthorization(invalidAuthorization));
+}
 assert.equal(audit.sitemapChangeApproved, false);
 assert.equal(policy.releaseState, 'READY_MONITOR');
 assert.equal(policy.indexReleaseApproved, false);

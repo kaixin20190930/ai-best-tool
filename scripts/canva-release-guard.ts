@@ -6,6 +6,23 @@ import path from 'node:path';
 export const CANVA_RELEASE_ID = '7f37933d-7e61-4a47-bc6e-85bc1bc224c4';
 export const CANVA_EDITORIAL_ASSET = '/images/tool-media/canva-editorial-cover.svg';
 
+export function assertCanvaControllerWriteAuthorization(authorization: unknown) {
+  assert.deepEqual(authorization, {
+    candidateSlug: 'canva',
+    approved: true,
+    approver: 'AI Best Tool Controller',
+    authorizedAt: '2026-10-10',
+    reason:
+      'Authorize one Canva entity write only; retain monitor/noindex and keep index, sitemap, and relationship gates closed.',
+    scope: 'entity_only_monitor_noindex',
+    preservedGates: {
+      indexApproved: false,
+      sitemapEligible: false,
+      taskCapabilityFitCreationApproved: false,
+    },
+  });
+}
+
 function normalizedQueryEntries(query: string) {
   return [...new URLSearchParams(query).entries()].sort(([leftKey, leftValue], [rightKey, rightValue]) => {
     const keyOrder = leftKey.localeCompare(rightKey);

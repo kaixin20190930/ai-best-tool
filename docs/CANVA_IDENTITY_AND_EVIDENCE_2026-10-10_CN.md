@@ -3,7 +3,7 @@
 单元：`CANVA-IDENTITY-AND-EVIDENCE-01`
 
 核验日期：2026-10-10（UTC 页面检查；生产库只读）
-结论：`READY_MONITOR_CANDIDATE`。候选已获独立 QA PASS，并接入现有受控发布器；本地集成与事务回滚验证完成，但生产写入未授权，Canva 仍不是生产实体。
+结论：`READY_MONITOR_CANDIDATE`。候选已获独立 QA PASS，并接入现有受控发布器；本地集成与事务回滚验证完成。控制器已授权一次仅限实体的 monitor/noindex 写入；授权已记录，但尚未执行，Canva 仍不是生产实体。
 
 ## 结论
 
@@ -75,7 +75,7 @@ Canva 是成熟的视觉设计产品，具有真实且可用的 AI 功能；适�
 
 本单没有修改生产、push 或 deploy，也没有批准索引/sitemap/Task/Capability/Fit。QA PASS 后仅将 Canva manifest 和候选内容投影接入现有发布器，未另建通用框架。Canva 固定发布 ID 为 `7f37933d-7e61-4a47-bc6e-85bc1bc224c4`，canonical 唯一为 `/ai/canva`；Magic Studio alias 已接入通用 308 规则，部署后将按同语言跳转并保留 query。数据库 preflight 对产品身份及 fixed ID 执行只读查重；事务回滚先写入候选后显式 `ROLLBACK`，再用新只读连接确认仍为 0 匹配。
 
-当前 release manifest 仍设置 `productionWriteApproved=false`、`indexApproved=false`、`sitemapEligible=false`、`taskCapabilityFitCreationApproved=false`。因此 release 的默认命令只做事务回滚；带 `--commit` 会在连接数据库前因缺少独立 Owner/Controller 写入授权而失败。后续要公开生产条目，必须由控制器另行批准并更新发布授权后再执行受控 release 与部署，不能把本地候选集成误报成生产发布。
+当前 release manifest 保持 `productionWriteApproved=false`，并新增 `controllerWriteAuthorization`，由 `AI Best Tool Controller` 授权候选 `canva` 一次 `entity_only_monitor_noindex` 写入（authorizedAt `2026-10-10`）；`indexApproved=false`、`sitemapEligible=false`、`taskCapabilityFitCreationApproved=false` 均保持关闭。pre-release 授权对象已在 preaudit 与 manifest 一致记录；只有候选、日期、精确 scope 和全部保留门禁均通过时，显式 `--commit` 才可继续。授权尚未执行，状态仍为 `ready_for_next_slot`，不能表述为已发布；此次变更不批准索引、sitemap 或关系写入。
 
 ## 验收记录
 
@@ -88,4 +88,4 @@ Canva 是成熟的视觉设计产品，具有真实且可用的 AI 功能；适�
 - `./node_modules/.bin/tsc --noEmit` 与单次完整 build：通过（见交付 commit 验证记录）。
 - 生产只读身份/路由核验：PASS，`productionWrites=0`。
 - 官方来源及独立采用范围：已逐条记录 URL、核查日及限制。
-- 当前状态：固定 ID 已分配给唯一候选但生产尚不存在；Canva release commit 仍受独立写入授权门禁保护。部署时 Magic Studio 旧壳将以同语言 308 收口，不能在部署前宣称重定向已生效。生产发布前的唯一待处理检查为上列 Node fetch 线上 transport blocker。
+- 当前状态：固定 ID 已分配给唯一候选但生产尚不存在；控制器实体写入授权已记录，等待后续显式生产 commit。部署时 Magic Studio 旧壳将以同语言 308 收口，不能在部署前宣称重定向已生效。生产发布前的唯一待处理检查为上列 Node fetch 线上 transport blocker。
