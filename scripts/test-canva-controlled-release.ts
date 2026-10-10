@@ -4,6 +4,7 @@ import fs from 'node:fs';
 
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '../lib/config/toolRouteAliases';
 import {
+  assertCanvaAliasPreflight,
   assertCanvaAsset,
   assertCanvaEmptyPreimage,
   assertCanvaProtectedRowsUnchanged,
@@ -110,6 +111,98 @@ assert.equal(getLocalizedToolPath('canva-magic-studio', 'cn'), '/cn/ai/canva');
 assert.equal(getLocalizedToolPath('canva-magic-studio', 'tw'), '/tw/ai/canva');
 assert(isLegacyToolSlug('canva-magic-studio'));
 assert(!isLegacyToolSlug('canva'));
+for (const [aliasPath, targetPath, locale] of [
+  ['/ai/canva-magic-studio', '/ai/canva', 'en'],
+  ['/cn/ai/canva-magic-studio', '/cn/ai/canva', 'cn'],
+  ['/tw/ai/canva-magic-studio', '/tw/ai/canva', 'tw'],
+] as const) {
+  const query = `?canva_alias_check=1&locale=${locale}`;
+  assert.equal(
+    assertCanvaAliasPreflight({
+      aliasPath,
+      targetPath,
+      query,
+      status: 200,
+      location: null,
+      canonical: `https://aibesttool.com${aliasPath}`,
+      noindex: true,
+      sitemapContainsAlias: false,
+      allowExistingShell: true,
+    }),
+    'reserved-shell',
+  );
+  assert.equal(
+    assertCanvaAliasPreflight({
+      aliasPath,
+      targetPath,
+      query,
+      status: 308,
+      location: `https://aibesttool.com${targetPath}${query}`,
+      canonical: null,
+      noindex: false,
+      sitemapContainsAlias: false,
+      allowExistingShell: true,
+    }),
+    'canonical-redirect',
+  );
+  for (const rejected of [
+    { status: 302, location: `https://aibesttool.com${targetPath}${query}` },
+    {
+      status: 308,
+      location: `https://aibesttool.com${locale === 'en' ? '/cn/ai/canva' : '/ai/canva'}${query}`,
+    },
+    { status: 308, location: `https://aibesttool.com${targetPath}` },
+    { status: 308, location: `https://aibesttool.com${targetPath}-unexpected${query}` },
+    { status: 200, location: null, canonical: `https://aibesttool.com${targetPath}` },
+  ]) {
+    assert.throws(
+      () =>
+        assertCanvaAliasPreflight({
+          aliasPath,
+          targetPath,
+          query,
+          status: rejected.status,
+          location: rejected.location,
+          canonical: 'canonical' in rejected ? rejected.canonical : null,
+          noindex: rejected.status === 200,
+          sitemapContainsAlias: false,
+          allowExistingShell: true,
+        }),
+      undefined,
+      `${aliasPath}: unexpected alias state must be rejected`,
+    );
+  }
+  assert.throws(
+    () =>
+      assertCanvaAliasPreflight({
+        aliasPath,
+        targetPath,
+        query,
+        status: 200,
+        location: null,
+        canonical: `https://aibesttool.com${aliasPath}`,
+        noindex: true,
+        sitemapContainsAlias: true,
+        allowExistingShell: true,
+      }),
+    /leaked into sitemap/,
+  );
+  assert.throws(
+    () =>
+      assertCanvaAliasPreflight({
+        aliasPath,
+        targetPath,
+        query,
+        status: 308,
+        location: `https://aibesttool.com${targetPath}${query}`,
+        canonical: null,
+        noindex: false,
+        sitemapContainsAlias: true,
+        allowExistingShell: true,
+      }),
+    /leaked into sitemap/,
+  );
+}
 const middleware = fs.readFileSync('middleware.ts', 'utf8');
 assert(middleware.includes("redirectUrl.pathname = getLocalizedToolPath(toolSlug, locale || 'en')"));
 assert(

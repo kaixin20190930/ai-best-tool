@@ -9,6 +9,7 @@ import { getDatabaseConnectionString } from '../lib/database/connection';
 import { createAdminClient } from '../lib/supabase/admin';
 import { assertVideoReadback, validateVideoUrl } from './candidate-release-video';
 import {
+  assertCanvaAliasPreflight,
   assertCanvaAsset,
   assertCanvaEmptyPreimage,
   assertCanvaProtectedRowsUnchanged,
@@ -527,33 +528,18 @@ async function validateOnlineFallback(
           `${aliasPath}: production alias fetch failed: ${error instanceof Error ? error.message : String(error)}`,
         );
       });
-      if (expectReleased) {
-        assert.equal(aliasResponse.status, 308, `${aliasPath}: released alias must use HTTP 308`);
-        const location = new URL(aliasResponse.headers.get('location') || '', 'https://aibesttool.com');
-        assert.equal(location.pathname, target, `${aliasPath}: alias crossed locale or missed canonical`);
-        assert.equal(location.searchParams.get('canva_alias_check'), '1', `${aliasPath}: query marker was dropped`);
-        assert.equal(
-          location.searchParams.get('locale'),
-          localePrefix || 'en',
-          `${aliasPath}: locale query was changed`,
-        );
-      } else {
-        assert.equal(aliasResponse.status, 200, `${aliasPath}: current reserved alias shell changed before release`);
-        const html = await aliasResponse.text();
-        assert.equal(
-          canonicalFromHtml(html),
-          `https://aibesttool.com${aliasPath}`,
-          `${aliasPath}: existing shell canonical mismatch`,
-        );
-        assert(
-          isNoindex(aliasResponse.headers, html),
-          `${aliasPath}: existing shell must remain noindex before deployment`,
-        );
-        assert(
-          !sitemap.html.includes(`<loc>https://aibesttool.com${aliasPath}</loc>`),
-          `${aliasPath}: shell leaked into sitemap`,
-        );
-      }
+      const html = aliasResponse.status === 200 ? await aliasResponse.text() : '';
+      assertCanvaAliasPreflight({
+        aliasPath,
+        targetPath: target,
+        query: new URL(aliasUrl).search,
+        status: aliasResponse.status,
+        location: aliasResponse.headers.get('location'),
+        canonical: html ? canonicalFromHtml(html) : null,
+        noindex: isNoindex(aliasResponse.headers, html),
+        sitemapContainsAlias: sitemap.html.includes(`<loc>https://aibesttool.com${aliasPath}</loc>`),
+        allowExistingShell: !expectReleased,
+      });
     }
   }
   for (const pathname of paths) {

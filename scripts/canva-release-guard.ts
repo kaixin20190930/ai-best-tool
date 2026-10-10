@@ -6,6 +6,43 @@ import path from 'node:path';
 export const CANVA_RELEASE_ID = '7f37933d-7e61-4a47-bc6e-85bc1bc224c4';
 export const CANVA_EDITORIAL_ASSET = '/images/tool-media/canva-editorial-cover.svg';
 
+export function assertCanvaAliasPreflight(input: {
+  aliasPath: string;
+  targetPath: string;
+  query: string;
+  status: number;
+  location: string | null;
+  canonical: string | null;
+  noindex: boolean;
+  sitemapContainsAlias: boolean;
+  allowExistingShell: boolean;
+}) {
+  const origin = 'https://aibesttool.com';
+  assert(!input.sitemapContainsAlias, `${input.aliasPath}: shell leaked into sitemap`);
+
+  if (input.status === 200 && input.allowExistingShell) {
+    assert.equal(input.location, null, `${input.aliasPath}: reserved shell must not redirect`);
+    assert.equal(
+      input.canonical,
+      `${origin}${input.aliasPath}`,
+      `${input.aliasPath}: existing shell canonical mismatch`,
+    );
+    assert(input.noindex, `${input.aliasPath}: existing shell must remain noindex before deployment`);
+    return 'reserved-shell';
+  }
+
+  assert.equal(input.status, 308, `${input.aliasPath}: alias must be reserved 200 or expected HTTP 308`);
+  assert(input.location, `${input.aliasPath}: HTTP 308 is missing Location`);
+  const location = new URL(input.location, origin);
+  assert.equal(location.origin, origin, `${input.aliasPath}: alias target changed origin`);
+  assert.equal(location.pathname, input.targetPath, `${input.aliasPath}: alias crossed locale or missed canonical`);
+  assert.equal(location.search, input.query, `${input.aliasPath}: query was dropped or changed`);
+  assert.equal(location.hash, '', `${input.aliasPath}: unexpected fragment in alias target`);
+  assert.equal(location.username, '', `${input.aliasPath}: unexpected credentials in alias target`);
+  assert.equal(location.password, '', `${input.aliasPath}: unexpected credentials in alias target`);
+  return 'canonical-redirect';
+}
+
 export function assertCanvaEmptyPreimage(matches: { id: string }[], fixedIdRows: { id: string }[]) {
   assert.equal(matches.length, 0, 'Canva: exact product/surface identity match requires manual review');
   assert.equal(fixedIdRows.length, 0, 'Canva: fixed ID is occupied');
