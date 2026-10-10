@@ -16,8 +16,8 @@ Canva 是成熟的视觉设计产品，具有真实且可用的 AI 功能；适�
 检查时间：`2026-10-10T05:32:23.785Z`。
 
 - Neon 使用 `BEGIN READ ONLY → SELECT → ROLLBACK`，工具表精确身份条件为 name、URL 主机/路径、标题中的 Canva/Magic Studio；匹配 0 行。固定生产 ID：无。
-- 较宽上下文检索命中 3 个其他工具记录中的 Canva 提及，均不是 Canva 主实体；不得因文本提及去重误判。
-- Supabase `product_intelligence_profiles` 按 product name / canonical domain 匹配 0 行。
+- 较宽上下文检索命中 3 处通用 `SVG canvas` 文本，是表达式误命中，不是 Canva 品牌/产品提及，也不构成实体重复。
+- Supabase `product_intelligence_profiles`、关联 Canva 的 sources 和 claims 精确匹配均为 0 行。
 - `toolRouteAliases.ts` 未发现 Canva 或 Magic Studio alias。
 - 线上 `/ai/canva`、`/cn/ai/canva`、`/tw/ai/canva` 和对应 `/canva-magic-studio` 路径均为 `200 + self-canonical + noindex, follow`，内容是动态不可用壳，不是产品实体。
 - 线上 sitemap 为 126 个 `<loc>`，Canva 匹配 0。

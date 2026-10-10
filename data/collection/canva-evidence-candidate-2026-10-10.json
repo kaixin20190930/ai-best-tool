@@ -12,9 +12,11 @@
     "fixedProductionId": null,
     "magicStudioIsSeparateEntity": false,
     "productionToolsExactMatches": 0,
-    "productionContextualMatches": 3,
-    "contextualMatchesAreOtherToolsMentioningCanva": true,
+    "genericSvgCanvasTextMatches": 3,
+    "genericSvgCanvasMatchesAreCanvaEvidence": false,
     "decisionGraphProfiles": 0,
+    "decisionGraphSourcesExactMatches": 0,
+    "decisionGraphClaimsExactMatches": 0,
     "routeShells": [
       "/ai/canva",
       "/cn/ai/canva",
