@@ -1,6 +1,12 @@
-# Anyword 单项受控发布候选
+# Anyword 单项受控发布与语言修正交付
 
-核验日：2026-10-11（Asia/Shanghai）。状态：**QA_PASS；总控已授权单项 READY_MONITOR 写入，但尚未生产提交**。本单元 `productionWrites=0`，不含 commit、push、部署、索引、sitemap 或 Task/Capability/Fit 关系批准。固定 ID 为 `4555627d-2de9-4614-a850-fa073388f869`，唯一拟用 canonical 为 `/ai/anyword`，CN/TW 保持各自语言路径。
+核验日：2026-10-11（Asia/Shanghai）。状态：**RELEASED_PRODUCTION_VERIFIED**。Anyword 初次受控提交后为唯一 `published + monitor/noindex` 实体；针对性回读发现 `/cn/ai/anyword` 显示繁体、`/tw/ai/anyword` 回退英文，随后完成单项受控语言修正。固定 ID 为 `4555627d-2de9-4614-a850-fa073388f869`，canonical 为 `/ai/anyword`。最终两页均 200、自指 canonical、`noindex, follow`：CN 显示简体，TW 显示繁体。完整 production SEO smoke PASS；sitemap 共 126 条、Anyword 0 条。索引与 Task/Capability/Fit 关系未批准。本次 closeout 只改仓库记录，不再写生产、push 或部署。
+
+## 生产语言异常与修复
+
+根因：原载荷将简体放在 `zh`、繁体放在 `cn` 且缺少 `tw`，而运行时 `toolPresenter` 对 CN 优先选 `cn`、对 TW 优先选 `tw/zh-TW/zh`。现将 `title/content/detail/useCases` 和 `features.audience.bestFit/notIdealFor`、`features.editorial.trustNote` 统一为 `en/cn(简体)/tw(繁体)`；其他事实和页面代码不变。
+
+[一次性修正器](../scripts/correct-anyword-locales.ts)锁定固定 ID、原始整行前像 `c28bd4dda38fdfb6eeb7965512b47a7d` 和受保护字段哈希 `d4d319fccdc5545755043504b8fe5a14`，仅更新 `title/content/detail/use_cases/features` 中指定本地化值。先执行生产只读 preflight 和事务 rollback（持久写入 0），再经授权显式 COMMIT：整行哈希从 `c28bd4dda38fdfb6eeb7965512b47a7d` 变为 `9283fee0c6acc144162f49e7c81db67b`，受保护字段哈希不变。随后只读 postcheck 返回 `alreadyApplied=true`、`productionWrites=0`。未删除重建实体，也未重复写入。
 
 ## 证据与范围
 
@@ -13,23 +19,24 @@
 
 ## 身份、素材、内容
 
-生产只读审计 `2026-10-11T01:14:59Z`：`tools` 的 Anyword/any-word/Keywee 名称、标题、URL 及上下文字段匹配均为 0，固定 ID 匹配 0，`product_intelligence_profiles` 匹配 0。`/ai/anyword`、`/cn/ai/anyword`、`/tw/ai/anyword` 均是 200/self-canonical/noindex 占位壳；`/ai/any-word` 与 `/ai/keywee` 也是单独的 noindex 壳，不是已证同一实体，也未获重定向批准。sitemap 共 126 loc，Anyword/Keywee 匹配 0。Guide 提及或旧别名壳不在本单元合并。
+发布前只读审计 `2026-10-11T01:14:59Z`：当时 `tools` 的 Anyword/any-word/Keywee 名称、标题、URL 及上下文字段匹配均为 0，固定 ID 匹配 0，`product_intelligence_profiles` 匹配 0。当时 `/ai/anyword`、`/cn/ai/anyword`、`/tw/ai/anyword` 均是 200/self-canonical/noindex 占位壳；`/ai/any-word` 与 `/ai/keywee` 也是单独的 noindex 壳，不是已证同一实体，也未获重定向批准。该记录是发布前历史快照，不代表当前生产实体不存在。
 
 素材为本站原创的[中性文案审阅示意图](../public/images/tool-media/anyword-editorial-cover.svg)，SHA-256 `8e5f033358bb8ff4db35219a68da28e6d0dad27179c8350ed16d41fb11d11e3a`。不是 Anyword logo、截图、官方 UI 或实测结果，不复用厂商媒体。三语言候选内容在[发布载荷](../data/collection/anyword-release.json)，含 Best for、Not ideal、真实限制、Jasper/Grammarly/Canva 比较路径、官方与独立来源、核验日、下次复核和纠错/Owner 入口说明；展示不包含内部门禁状态。
 
 ## 执行和回滚边界
 
-[门禁 manifest](../data/collection/anyword-controlled-release-preaudit-2026-10-11.json)的七项实体门禁通过，四条可变 Claim 分别维持限制。最早发布日为 2026-10-11；现已取得独立 QA PASS 和总控单项生产写入授权，但授权不等于已经执行。`text-writing` 复用 Jasper/Grammarly 既有存储分类，不建新分类；`pricing=paid` 仅表达存在付费套餐，不承诺具体结账价。
+[门禁 manifest](../data/collection/anyword-controlled-release-preaudit-2026-10-11.json)的七项实体门禁通过，四条可变 Claim 分别维持限制。初次发布已完成独立 QA、总控单项授权与生产提交。`text-writing` 复用 Jasper/Grammarly 既有存储分类，不建新分类；`pricing=paid` 仅表达存在付费套餐，不承诺具体结账价。
 
-发布器沿用 `validate → preflight --online → release(默认 ROLLBACK) → verify --online`。固定 ID、产品名称/官网域名/别名、既有实体空前像、全部旧 `tools` 行哈希、唯一插入数、三语正文与素材、nextReviewDate、monitor 状态由代码断言。没有 `--commit` 时事务内插入并读回后回滚；回滚后独立只读连接再次断言产品匹配 0、固定 ID 0。显式 `--commit` 前还会要求已部署自有素材的 HTTP、MIME 和 SHA-256 与本地一致。提交后的只读 verify 要求唯一固定 ID、完整三语后像、零关系、三语 200/self-canonical/noindex、sitemap 0；这是后续总控步骤，不是开发已执行的步骤。
+原发布器沿用 `validate → preflight --online → release(默认 ROLLBACK) → verify --online`。该段描述原始受控发布，不用于当前已存在实体的语言修复；本次只使用上面的固定 ID 修正器。
 
-当前 manifest 已记录候选专属 `controllerWriteAuthorization`：总控于 2026-10-11 确认独立 QA PASS，只批准一次 `published + monitor/noindex` 插入，index、sitemap、Task/Capability/Fit 均保持 false。专项测试覆盖当前授权正例及缺授权、QA 未通过、候选不匹配和高风险门禁开启负例；本次不启动提交模式、不写生产。
+原 manifest 的 `controllerWriteAuthorization` 只批准初次 `published + monitor/noindex` 插入；语言修正另按精确前像执行。index、sitemap、Task/Capability/Fit 均保持 false；本次 closeout 不再启动提交模式。
 
-开发执行了 `validate`、生产只读 `preflight --online`、默认 `release` 事务回滚，以及回滚后独立只读身份复核；均通过。初次回滚演练在写入前发现 `marketing` 分类不存在，改为既有 `text-writing` 后重跑通过。末次回读 `2026-10-11T01:17:26Z` 仍为实体/profile/固定 ID 0，sitemap 126 且 Anyword 匹配 0，持久 `productionWrites=0`。专项测试、通用发布器契约、`tsc --noEmit` 和一次完整 build 均通过。若未来提交后需撤销，先按固定 ID、slug 与受保护字段只读核验，再经单独授权做受控撤稿；本开发分支不提供自动删除或重定向。
+原发布前开发曾执行 `validate`、生产只读 `preflight --online`、默认 `release` 事务回滚，以及回滚后独立只读身份复核；均通过。初次回滚演练在写入前发现 `marketing` 分类不存在，改为既有 `text-writing` 后重跑通过。末次发布前回读 `2026-10-11T01:17:26Z` 仍为实体/profile/固定 ID 0，sitemap 126 且 Anyword 匹配 0；这些均为历史快照。原专项测试、通用发布器契约、`tsc --noEmit` 和一次完整 build 均通过。
 
-## QA 重点
+## 已验收边界
 
 1. 复核 G2 有机 verified-current-user 与 Trustpilot 非邀请评论确实属于两种直接可读、互补的实际使用信号；不要把站方/厂商汇总评分当成效果证据。
 2. 核对公开稿绝无 `76%`、精确账户价格/额度或“预测必胜”的断言；四条 Claim 限制与日期必须能被读到。
 3. 对固定 ID 占用、重复实体、旧行哈希变化、素材 SHA 篡改、实体门禁失败和 Claim 精确曝光做负例；确认 `release` 默认永不持久写入。
-4. 后续总控若准备发布，先部署 SVG 再运行新的生产只读 preflight；QA PASS 前不得使用 `--commit`、push 或部署。
+4. 本次语言修复重点核对 CN 简体和 TW 繁体的四个顶层字段及 `features` 三处文案；任何修改都不得触及其他工具、状态、索引、素材、复核日或关系。
+5. 语言修正的整行前像、受保护字段哈希、后像、回滚独立回读与幂等 postcheck 均已留痕；后续不应重放 `--commit`。

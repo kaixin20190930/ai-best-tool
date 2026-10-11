@@ -8,11 +8,15 @@ const queue = readCurrentCandidateQueue();
 const snapshot = JSON.parse(fs.readFileSync('data/collection/mature-candidate-buffer-2026-10-06.json', 'utf8'));
 const state = JSON.parse(fs.readFileSync('data/collection/mature-candidate-current-state-2026-10-10.json', 'utf8'));
 assert.equal(snapshot.candidates.length, 15);
-assert.equal(queue.length, 10);
-for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva']) {
+assert.equal(queue.length, 9);
+for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva', 'anyword']) {
   assert(!queue.some((candidate) => candidate.slug === slug), `${slug} reentered new-tool queue`);
 }
-assert.deepEqual(Object.keys(state.released).sort(), ['canva', 'elicit', 'murf', 'pika', 'scite']);
+assert.deepEqual(Object.keys(state.released).sort(), ['anyword', 'canva', 'elicit', 'murf', 'pika', 'scite']);
+assert.deepEqual(state.released.anyword, {
+  status: 'released_monitor_noindex',
+  evidence: 'data/collection/anyword-release.json',
+});
 assert.deepEqual(Object.keys(state.independentReleasesOutsideSnapshot), ['chatgpt']);
 assert.equal(
   queue.find((candidate) => candidate.slug === 'scite'),
@@ -36,7 +40,7 @@ assert.equal(
   operational.newToolCandidates.find((candidate: { slug: string }) => candidate.slug === 'canva')?.status,
   undefined,
 );
-for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva']) {
+for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva', 'anyword']) {
   assert(!operational.newToolCandidates.some((candidate: { slug: string }) => candidate.slug === slug));
 }
 console.log('PASS current candidate overlay preserves historical snapshot and excludes released entities');

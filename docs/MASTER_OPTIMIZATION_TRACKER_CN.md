@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-10
+更新时间：2026-10-11
+
+2026-10-11 **ANYWORD-FAST-CONTROLLED-RELEASE-2026-10-11 已生产验证**：唯一 Anyword 实体 `4555627d-2de9-4614-a850-fa073388f869` 为 `published + monitor/noindex`。初次发布后发现 CN/TW 语言键错位，已按固定前像受控修正并完成幂等 postcheck；CN 简体、TW 繁体均为 200/self-canonical/noindex，完整 production SEO smoke PASS。sitemap 126 条、Anyword 0 条；当前候选覆盖层已排除 Anyword，不批准索引或 Task/Capability/Fit。详见[交付记录](./ANYWORD_FAST_CONTROLLED_RELEASE_2026-10-11_CN.md)。
 
 2026-10-10 **CANVA-IDENTITY-AND-EVIDENCE-01 已受控发布**：生产固定 ID `7f37933d-7e61-4a47-bc6e-85bc1bc224c4` 已以 `published + monitor` 完成事务 `COMMIT`；`reviewedAt=2026-10-10`、`nextReviewDate=2026-10-17`，localized payload `en/zh/cn` readback 完成。Index、sitemap、Task/Capability/Fit 均未批准且关系数为 0；只允许 canonical `/ai/canva`，Magic Studio、Magic Write、Canva AI 仍是产品内表面，不另建实体。Controller 单项 `entity_only_monitor_noindex` 授权留存于 preaudit/manifest，10-06 历史快照未改。当前 operational overlay 已将 Canva 标记 `released_monitor_noindex` 并从开发候选队列排除。生产后 `candidate-release-pipeline --candidate=canva --phase=verify --online` PASS；`pnpm run seo:production-smoke` PASS（exit 0），sitemap 报告 126 个 URL且无内部/comparison 路径。详见[Canva 身份、证据与受控发布交付记录](./CANVA_IDENTITY_AND_EVIDENCE_2026-10-10_CN.md)。
 
