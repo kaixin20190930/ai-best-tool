@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Editorial illustration for marketing copy review</title>
+  <desc id="description">Original AI Best Tool diagram of draft variations and a human review step; not an Anyword product image.</desc>
+  <rect width="1200" height="630" fill="#f2eee5"/>
+  <path d="M0 520 C250 430 360 590 610 500 S960 430 1200 540 L1200 630 L0 630Z" fill="#d9e6de"/>
+  <text x="90" y="108" font-family="Georgia, serif" font-size="32" fill="#253d3a">Compare the message, not just the score.</text>
+  <g fill="#fffdf8" stroke="#78968a" stroke-width="3">
+    <rect x="88" y="170" width="285" height="238" rx="18"/>
+    <rect x="457" y="170" width="285" height="238" rx="18"/>
+    <rect x="826" y="170" width="285" height="238" rx="18"/>
+  </g>
+  <g font-family="Georgia, serif" fill="#253d3a">
+    <text x="120" y="226" font-size="27">Draft A</text>
+    <text x="489" y="226" font-size="27">Draft B</text>
+    <text x="858" y="226" font-size="27">Human review</text>
+  </g>
+  <g stroke="#b4c7bb" stroke-width="9" stroke-linecap="round">
+    <path d="M121 266h204M121 303h170M121 340h190"/>
+    <path d="M490 266h204M490 303h170M490 340h190"/>
+    <path d="M859 267h203M859 305h157"/>
+  </g>
+  <path d="m894 354 31 31 66-75" fill="none" stroke="#cf6d4d" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="89" y="470" font-family="Georgia, serif" font-size="24" fill="#4b6861">First-party editorial art · no product UI shown</text>
+</svg>

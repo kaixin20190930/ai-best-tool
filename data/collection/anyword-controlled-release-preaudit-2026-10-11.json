@@ -1,0 +1,111 @@
+{
+  "slug": "anyword",
+  "existingRoute": "/ai/anyword",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-10-11",
+  "publishNotBefore": "2026-10-11",
+  "releaseIndexState": "monitor",
+  "entityReleaseApproved": true,
+  "claimLevelHolds": [
+    "checkout-price-and-allowances",
+    "prediction-effectiveness",
+    "connected-channel-rights",
+    "account-data-and-privacy"
+  ],
+  "publicationPolicy": {
+    "entityGates": {
+      "identity": "pass",
+      "uniqueCanonical": "pass",
+      "duplicateIntent": "pass",
+      "coreFunction": "pass",
+      "assetRightsAndLegalSafety": "pass",
+      "misleadingClaims": "pass",
+      "pageContentSufficiency": "pass"
+    },
+    "claims": [
+      {
+        "id": "checkout-price-and-allowances",
+        "category": "price",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "The public pricing page lists Starter, Data-Driven, Business and Enterprise across different billing intervals. Checkout price, seats and prediction allowances must be confirmed in the target account.",
+        "sources": ["https://www.anyword.com/pricing"],
+        "nextReviewDate": "2026-10-18"
+      },
+      {
+        "id": "prediction-effectiveness",
+        "category": "core_capability",
+        "status": "unknown",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Predictive scores rank proposed copy variations, but vendor performance percentages have not been independently reproduced for a target campaign.",
+        "sources": ["https://www.anyword.com/", "https://www.anyword.com/data-driven-editor"],
+        "nextReviewDate": "2026-11-10"
+      },
+      {
+        "id": "connected-channel-rights",
+        "category": "account_rights",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "The integrations page describes available surfaces; exact connector access, historical-data volume and export rights vary by plan and target account.",
+        "sources": ["https://www.anyword.com/integrations", "https://www.anyword.com/pricing"],
+        "nextReviewDate": "2026-10-25"
+      },
+      {
+        "id": "account-data-and-privacy",
+        "category": "privacy_rights",
+        "status": "unknown",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Do not assume a public security statement applies to a specific workspace, integration, data-retention or deletion contract; verify before connecting sensitive customer data.",
+        "sources": ["https://www.anyword.com/", "https://www.anyword.com/pricing"],
+        "nextReviewDate": "2026-10-25"
+      }
+    ]
+  },
+  "productionWriteApproved": true,
+  "controllerWriteAuthorization": {
+    "candidateSlug": "anyword",
+    "approved": true,
+    "independentQaPass": true,
+    "approver": "AI Best Tool controller",
+    "authorizedAt": "2026-10-11",
+    "reason": "Independent QA passed; authorize only the single Anyword published + monitor/noindex production insert.",
+    "scope": "single published + monitor/noindex insert",
+    "preservedGates": {
+      "indexApproved": false,
+      "sitemapEligible": false,
+      "taskCapabilityFitCreationApproved": false
+    }
+  },
+  "sitemapChangeApproved": false,
+  "sources": {
+    "official": [
+      "https://www.anyword.com/",
+      "https://www.anyword.com/pricing",
+      "https://www.anyword.com/data-driven-editor",
+      "https://www.anyword.com/integrations",
+      "https://support.anyword.com/"
+    ],
+    "independent": [
+      "https://www.g2.com/sellers/anyword",
+      "https://www.trustpilot.com/review/anyword.com",
+      "https://www.techradar.com/pro/anyword-review-is-this-the-ai-writing-solution-for-you"
+    ]
+  },
+  "assetSha256": {
+    "/images/tool-media/anyword-editorial-cover.svg": "8e5f033358bb8ff4db35219a68da28e6d0dad27179c8350ed16d41fb11d11e3a"
+  },
+  "nextSlotChecklist": [
+    "Recheck official identity, editor, pricing and integrations on release day",
+    "Confirm one Anyword product and no old-domain or same-intent duplicate in production",
+    "Keep vendor performance percentages out of AI Best Tool verified results",
+    "Use only the SHA-locked original editorial SVG; never present it as a product screenshot",
+    "Check EN/ZH/CN decision copy and all four bounded Claims",
+    "Run read-only preflight and transaction rollback before independent QA",
+    "After controller authorization verify one published monitor entity, noindex canonical and zero sitemap or Decision Graph relations"
+  ]
+}
