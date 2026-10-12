@@ -32,7 +32,7 @@ export default function GuideDecisionPath({ locale, guideId, title, description,
       <h2 className='mt-2 max-w-3xl text-2xl font-bold tracking-tight lg:text-3xl'>{title}</h2>
       <p className='mt-3 max-w-3xl text-sm leading-6 text-slate-300 lg:text-base'>{description}</p>
 
-      <div className='mt-6 grid gap-4 lg:grid-cols-3'>
+      <div className={`mt-6 grid gap-4 ${tasks.length === 4 ? 'md:grid-cols-2 xl:grid-cols-4' : 'lg:grid-cols-3'}`}>
         {tasks.map((item, index) => (
           <article
             key={`${item.toolName}-${item.task}`}

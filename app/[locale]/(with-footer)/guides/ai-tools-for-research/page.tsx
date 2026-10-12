@@ -86,7 +86,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     {
       href: '/guides/ai-tools-for-research-comparison',
       title: isChinese ? '研究对比页' : 'Research comparison',
-      desc: isChinese ? '资料发现、来源和证据核对。' : 'Discovery, sources, and evidence-checking.',
+      desc: isChinese ? '按四种资料起点比较工具与核验方法。' : 'Compare four source starting points and how to verify them.',
     },
     {
       href: '/ai/perplexity',
@@ -224,7 +224,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Whether citations support the claim and key facts trace to originals.',
             },
             {
-              task: isChinese ? '学术证据与共识核对' : 'Academic evidence and consensus checking',
+              task: isChinese ? '论文发现与证据摘要' : 'Paper discovery and evidence synthesis',
               toolName: 'consensus',
               toolLabel: 'Consensus',
               bestFor: isChinese
@@ -235,7 +235,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Search scope, study quality, and omitted contradictory evidence.',
             },
             {
-              task: isChinese ? '论文引用与可信度检查' : 'Citation and credibility checking',
+              task: isChinese ? '核对论文引用语境' : 'Check paper citation context',
               toolName: 'scite',
               toolLabel: 'scite',
               bestFor: isChinese
@@ -244,6 +244,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               verifyFirst: isChinese
                 ? '学科覆盖、引用语境和原始论文访问权限。'
                 : 'Discipline coverage, citation context, and paper access.',
+            },
+            {
+              task: isChinese ? '综合自己选定的资料' : 'Synthesize sources you selected',
+              toolName: 'notebooklm',
+              toolLabel: 'Gemini Notebook',
+              bestFor: isChinese
+                ? '汇总导入 notebook 的文档、网页和其他支持的资料，并追溯引用。'
+                : 'Synthesizing imported documents, web pages and other supported sources with citations.',
+              verifyFirst: isChinese
+                ? '实际导入了哪些内容；网页嵌入内容和付费网页不会随 URL 一起导入。'
+                : 'What was actually imported; embedded web content and paywalled pages are not included from a URL.',
             },
           ]}
         />

@@ -1,15 +1,16 @@
 import type { VerifiedComparison } from './verifiedComparison';
 
 // Source reviews: CL-02 research editorial packet (Consensus), Perplexity Stage 2
-// audit, and Scite controlled release. No independent accuracy test is asserted.
+// audit, Scite controlled release, and current Google Notebook help. No independent
+// accuracy test is asserted.
 const researchComparison: VerifiedComparison = {
   title: {
-    cn: 'Perplexity、Consensus 与 Scite：研究任务怎么选？',
-    en: 'Perplexity, Consensus and Scite: which research task fits?',
+    cn: 'Perplexity、Consensus、Scite 与 Gemini Notebook：研究任务怎么选？',
+    en: 'Perplexity, Consensus, Scite and Gemini Notebook: which research task fits?',
   },
   scope: {
-    cn: '比较开放网页发现、学术论文检索与论文引用语境核对。依据已核验的官方功能说明；本站没有独立测试准确率或覆盖率。',
-    en: 'Compare open-web discovery, scholarly search and citation-context checks. Based on reviewed official documentation; we have not independently measured accuracy or coverage.',
+    cn: '先确定资料从哪里来：开放网页、学术论文、论文引用语境，还是自己选定的资料。依据已核验的官方功能说明；本站没有独立测试准确率或覆盖率。',
+    en: 'Start with the source universe: open web, scholarly papers, citation context, or sources you select. Based on reviewed official documentation; we have not independently measured accuracy or coverage.',
   },
   candidates: [
     {
@@ -81,6 +82,31 @@ const researchComparison: VerifiedComparison = {
       },
       evidenceRefs: ['scite-features'],
     },
+    {
+      slug: 'notebooklm',
+      name: 'Gemini Notebook',
+      chooseWhen: {
+        cn: '已有资料，需要对选入 notebook 的来源做综合。',
+        en: 'You have sources and need to synthesize those selected for a notebook.',
+      },
+      strength: {
+        cn: '可导入或发现来源供选择，并针对 notebook 内资料给出带引用的回答。',
+        en: 'Lets you import or discover sources for selection, then answers with citations grounded in the notebook.',
+      },
+      limitation: {
+        cn: '回答取决于实际导入的资料；网页仅导入 HTML 文本，不包含嵌入内容或付费网页。',
+        en: 'Answers depend on what was imported; web URLs import HTML text, not embedded content or paywalled pages.',
+      },
+      fit: {
+        cn: '适合综合自己选定的文档、网页和其他支持的资料。',
+        en: 'Best for synthesizing documents, web pages and other supported sources you select.',
+      },
+      notFor: {
+        cn: '不适合把 notebook 的引用当成资料完整或结论正确的证明。',
+        en: 'Not ideal for treating notebook citations as proof that sources are complete or conclusions correct.',
+      },
+      evidenceRefs: ['notebook-grounding', 'notebook-import'],
+    },
   ],
   comparisonRows: [
     {
@@ -89,10 +115,11 @@ const researchComparison: VerifiedComparison = {
         perplexity: { cn: '开放网页与主题问题。', en: 'Open-web pages and topic questions.' },
         consensus: { cn: '已收录的学术论文。', en: 'Indexed scholarly papers.' },
         scite: { cn: '论文及其引用记录。', en: 'Papers and their citation records.' },
+        notebooklm: { cn: '用户选择并导入 notebook 的资料。', en: 'Sources selected and imported into a notebook.' },
       },
       fit: { cn: '先确定资料范围，再选工具。', en: 'Choose based on the source universe first.' },
-      reason: { cn: '三者检索对象和研究任务不同。', en: 'The tools address different sources and research tasks.' },
-      evidenceRefs: ['perplexity-search', 'consensus-search', 'scite-features'],
+      reason: { cn: '开放网页、论文、引文语境和选定资料是不同的研究起点。', en: 'Open web, papers, citation context and selected sources are different starting points.' },
+      evidenceRefs: ['perplexity-search', 'consensus-search', 'scite-features', 'notebook-import'],
     },
     {
       dimension: { cn: '如何核对', en: 'How to check' },
@@ -103,16 +130,17 @@ const researchComparison: VerifiedComparison = {
           en: 'Inspect cited papers and available supporting passages.',
         },
         scite: { cn: '阅读论文被引用时的上下文。', en: 'Read the context in which a paper was cited.' },
+        notebooklm: { cn: '打开 notebook 引用，并核对实际导入的原始资料。', en: 'Open notebook citations and check the material actually imported.' },
       },
       fit: {
-        cn: '网页发现、论文证据、引用语境各有对应工具。',
-        en: 'Use the tool that matches web discovery, paper evidence or citation context.',
+        cn: '按网页、论文、引文语境或自己的资料集选择核验路径。',
+        en: 'Choose a check path for web pages, papers, citation context or your own source set.',
       },
       reason: {
         cn: '链接、论文摘要与引文标签均不能单独证明结论。',
         en: 'Links, paper summaries and citation labels alone cannot prove a conclusion.',
       },
-      evidenceRefs: ['perplexity-search', 'consensus-limits', 'scite-features'],
+      evidenceRefs: ['perplexity-search', 'consensus-limits', 'scite-features', 'notebook-grounding'],
     },
   ],
   evidence: [
@@ -165,13 +193,45 @@ const researchComparison: VerifiedComparison = {
         en: 'Helps trace citation context, without replacing quality assessment.',
       },
     },
+    {
+      id: 'notebook-grounding',
+      checkedAt: '2026-10-12',
+      source: {
+        label: 'Google · Learn about Gemini Notebook',
+        url: 'https://support.google.com/gemininotebook/answer/16164461?hl=en',
+      },
+      claim: {
+        cn: 'Gemini Notebook 基于 notebook 的资料回答，并提供行内引用。',
+        en: 'Gemini Notebook answers from notebook sources with inline citations.',
+      },
+      impact: {
+        cn: '适合对选定资料做综合；引用仍要回原始资料核查。',
+        en: 'Fits synthesis over selected sources; citations still need source checks.',
+      },
+    },
+    {
+      id: 'notebook-import',
+      checkedAt: '2026-10-12',
+      source: {
+        label: 'Google · Add or discover new sources',
+        url: 'https://support.google.com/gemininotebook/answer/16215270?hl=en',
+      },
+      claim: {
+        cn: '用户可发现并选择导入资料；网页来源只导入 HTML 文本，不含嵌入内容或付费网页。',
+        en: 'Users can discover and select sources; web URLs import HTML text, not embedded content or paywalled pages.',
+      },
+      impact: {
+        cn: '先核对实际进入 notebook 的资料范围。',
+        en: 'Check what actually entered the notebook before relying on an answer.',
+      },
+    },
   ],
   next: {
     href: '/guides/ai-tools-for-research',
     label: { cn: '查看研究选型指南', en: 'Read the research selection guide' },
     description: {
-      cn: '用上方工具链接查看决策卡；任务还不明确时，先按指南区分资料发现、论文检索和引用核对。',
-      en: 'Use the tool links above to inspect decision cards. If the job is still unclear, use the guide to distinguish discovery, paper search and citation checks.',
+      cn: '从上方工具链接查看决策卡；若任务还不明确，先按指南区分网页发现、论文检索、引文核对与选定资料综合。',
+      en: 'Open a decision card using the tool links above. If the job is unclear, use the guide to separate web discovery, paper search, citation checks and selected-source synthesis.',
     },
   },
 };

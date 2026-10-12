@@ -208,11 +208,22 @@ async function main() {
   const rows = derivePublicComparisonCapabilityRows(model, candidates.slice(0, 2));
   const html = renderToStaticMarkup(React.createElement(VerifiedComparisonPage, { ...props, capabilityRows: rows }));
   const document = new JSDOM(html).window.document;
-  assert.equal(document.querySelectorAll('[data-comparison-section="capabilities"]').length, 1);
-  assert.equal(document.querySelectorAll('[data-comparison-section]').length, 7);
-  assert.match(document.querySelector('[data-comparison-section="capabilities"]')?.textContent || '', /Unknown/);
-  assert.match(document.querySelector('[data-comparison-section="capabilities"]')?.textContent || '', /Strong/);
-  assert.ok(document.querySelector('a[href="https://example.com/capabilities"]'));
+  assert.equal(document.querySelectorAll('[data-comparison-section="capabilities"]').length, 0);
+  assert.equal(document.querySelectorAll('[data-comparison-section]').length, 6);
+  assert.ok(document.querySelector('[data-comparison-capability-gap]'));
+  assert.match(document.querySelector('[data-comparison-capability-gap]')?.textContent || '', /two tools in the same dimension/);
+  const unknownRows = structuredClone(rows);
+  unknownRows[0].cells['the-graph'] = { ...unknownRows[0].cells.dune!, supportLevel: 'unknown' };
+  const unknownHtml = renderToStaticMarkup(React.createElement(VerifiedComparisonPage, { ...props, capabilityRows: unknownRows }));
+  assert.ok(new JSDOM(unknownHtml).window.document.querySelector('[data-comparison-capability-gap]'));
+  const comparableRows = structuredClone(rows);
+  comparableRows[0].cells['the-graph'] = { ...comparableRows[0].cells.dune! };
+  const comparableHtml = renderToStaticMarkup(React.createElement(VerifiedComparisonPage, { ...props, capabilityRows: comparableRows }));
+  const comparableDocument = new JSDOM(comparableHtml).window.document;
+  assert.equal(comparableDocument.querySelectorAll('[data-comparison-section="capabilities"]').length, 1);
+  assert.equal(comparableDocument.querySelectorAll('[data-comparison-section]').length, 7);
+  assert.ok(comparableDocument.querySelector('a[href="https://example.com/capabilities"]'));
+  assert.equal(comparableDocument.querySelector('[data-comparison-capability-gap]'), null);
   for (const privateValue of [
     secretClaimId,
     secretProfileId,
@@ -221,7 +232,7 @@ async function main() {
     'raw-source-excerpt',
     ids[0],
   ])
-    assert.equal(html.includes(privateValue), false);
+    assert.equal(comparableHtml.includes(privateValue), false);
   for (const preserved of ['decision', 'matrix', 'candidates', 'fit', 'sources'])
     assert.ok(document.querySelector(`[data-comparison-section="${preserved}"]`));
   assert.ok(document.querySelector('[data-comparison-primary-cta]'));

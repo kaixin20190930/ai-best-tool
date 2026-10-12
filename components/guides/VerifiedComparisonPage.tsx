@@ -70,7 +70,13 @@ export default function VerifiedComparisonPage({
       </div>
     );
   }
-  const capabilitySources = Array.from(new Set(capabilityRows.flatMap((row) =>
+  const comparableCapabilityRows = capabilityRows.filter((row) =>
+    comparison.candidates.filter((candidate) => {
+      const cell = row.cells[candidate.slug];
+      return cell && cell.supportLevel !== 'unknown' && cell.evidence.length > 0;
+    }).length >= 2,
+  );
+  const capabilitySources = Array.from(new Set(comparableCapabilityRows.flatMap((row) =>
     comparison.candidates.flatMap((candidate) => row.cells[candidate.slug]?.evidence.map((item) => item.sourceUrl) || []),
   )));
   const references = (refs: string[]) => (
@@ -132,7 +138,7 @@ export default function VerifiedComparisonPage({
           role='region'
           aria-label={cn ? '工具比较表，可横向滚动' : 'Tool comparison table, scroll horizontally'}
         >
-          <table className='w-full min-w-[680px] border-collapse text-left text-sm leading-6'>
+          <table className={`w-full ${comparison.candidates.length === 4 ? 'min-w-[960px]' : 'min-w-[680px]'} border-collapse text-left text-sm leading-6`}>
             <caption className='sr-only'>{copy(comparison.title)}</caption>
             <thead>
               <tr className='bg-slate-100'>
@@ -175,7 +181,7 @@ export default function VerifiedComparisonPage({
           {cn ? '左右滑动查看工具与选择结论。' : 'Swipe across to read the tools and the decision.'}
         </p>
       </section>
-      {capabilityRows.length > 0 && (
+      {comparableCapabilityRows.length > 0 && (
         <section data-comparison-section='capabilities' className={sectionClass}>
           <h2 className='text-2xl font-bold text-slate-950'>
             {cn ? '已核验能力差异' : 'Verified capability differences'}
@@ -208,7 +214,7 @@ export default function VerifiedComparisonPage({
                 </tr>
               </thead>
               <tbody>
-                {capabilityRows.map((row) => (
+                {comparableCapabilityRows.map((row) => (
                   <tr key={`${row.group}-${row.name.en}`} className='border-b border-slate-200 align-top'>
                     <th scope='row' className='p-3 font-semibold text-slate-950'>
                       {row.name[locale] || row.name[language] || row.name.en}
@@ -277,6 +283,13 @@ export default function VerifiedComparisonPage({
             </details>
           )}
         </section>
+      )}
+      {capabilityRows.length > 0 && comparableCapabilityRows.length === 0 && (
+        <p data-comparison-capability-gap className='rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-950'>
+          {cn
+            ? '结构化能力数据目前不足以对比至少两个工具。上方按任务角色的对比依据已列出的官方来源；请勿把缺失的能力关系理解为工具不支持。'
+            : 'Published capability data does not yet cover two tools in the same dimension. The role comparison above uses the listed official sources; missing capability relations do not mean a tool lacks a feature.'}
+        </p>
       )}
       <section data-comparison-section='candidates' className={sectionClass}>
         <h2 className='text-2xl font-bold text-slate-950'>{cn ? '优势与关键限制' : 'Strengths and limits'}</h2>

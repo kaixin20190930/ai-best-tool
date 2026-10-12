@@ -7,8 +7,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     locale,
     locale === 'cn' || locale === 'tw' ? 'AI 研究工具对比' : 'AI research tools compared',
     locale === 'cn' || locale === 'tw'
-      ? '按开放网页发现、学术论文检索和引用语境核对比较 Perplexity、Consensus 与 Scite；查看限制、官方证据与核验日期。'
-      : 'Compare Perplexity, Consensus and Scite for web discovery, scholarly search and citation context, with limits and dated official evidence.',
+      ? '按开放网页发现、学术论文检索、引用语境核对和选定资料综合比较 Perplexity、Consensus、Scite 与 Gemini Notebook；查看限制与官方证据。'
+      : 'Compare Perplexity, Consensus, Scite and Gemini Notebook for web discovery, scholarly search, citation context and selected-source synthesis with official evidence.',
   );
 }
 
