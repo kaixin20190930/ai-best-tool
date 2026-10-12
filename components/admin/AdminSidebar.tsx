@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   BadgeCheck,
   BarChart3,
+  ChevronDown,
   ClipboardList,
   GitCompareArrows,
   Home,
@@ -24,30 +25,39 @@ import { useTranslations } from 'next-intl';
 
 import NotificationBell from '@/components/NotificationBell';
 
-const navigation = [
+const primaryNavigation = [
   { name: 'dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-  { name: 'claims', href: '/admin/claims', icon: BadgeCheck },
-  { name: 'owners', href: '/admin/owners', icon: Users },
-  { name: 'cleanup', href: '/admin/cleanup', icon: AlertTriangle },
-  { name: 'analytics', href: '/admin/analytics', icon: BarChart3 },
-  { name: 'collection', href: '/admin/collection', icon: ClipboardList },
   { name: 'tools', href: '/admin/tools', icon: Wrench },
-  { name: 'comments', href: '/admin/comments', icon: MessageSquare },
-  { name: 'emailTest', href: '/admin/email-test', icon: Mail },
-  { name: 'emailOps', href: '/admin/email-ops', icon: Mail },
-  { name: 'outreach', href: '/admin/outreach', icon: Mail },
   { name: 'intelligence', href: '/admin/intelligence', icon: Sparkles },
   { name: 'decision', href: '/admin/decision', icon: GitCompareArrows, label: 'Decision review' },
   { name: 'indexReviews', href: '/admin/index-reviews', icon: ShieldCheck, label: 'Index reviews' },
+  { name: 'analytics', href: '/admin/analytics', icon: BarChart3 },
+];
+
+const supportingNavigation = [
+  { name: 'claims', href: '/admin/claims', icon: BadgeCheck },
+  { name: 'owners', href: '/admin/owners', icon: Users },
+  { name: 'cleanup', href: '/admin/cleanup', icon: AlertTriangle },
+  { name: 'collection', href: '/admin/collection', icon: ClipboardList },
   { name: 'searchConsole', href: '/admin/search-console', icon: Search },
+  { name: 'comments', href: '/admin/comments', icon: MessageSquare },
+  { name: 'outreach', href: '/admin/outreach', icon: Mail },
+  { name: 'emailOps', href: '/admin/email-ops', icon: Mail },
   { name: 'paymentCallbacks', href: '/admin/payment-callbacks', icon: ReceiptText },
+  { name: 'emailTest', href: '/admin/email-test', icon: Mail },
   { name: 'users', href: '/admin/users', icon: Users },
   { name: 'settings', href: '/admin/settings', icon: Settings },
 ];
 
+function isActivePath(pathname: string, href: string) {
+  return pathname.includes(href);
+}
+
 export default function AdminSidebar({ userId }: { userId?: string }) {
   const t = useTranslations('admin');
   const pathname = usePathname();
+  const supportingActive = supportingNavigation.some((item) => isActivePath(pathname, item.href));
+  const moreLabel = /^\/(cn|tw)(\/|$)/.test(pathname) ? '更多管理工具' : 'More tools';
 
   return (
     <aside className='theme-surface hidden w-64 rounded-none border-r border-slate-200 lg:block'>
@@ -67,12 +77,12 @@ export default function AdminSidebar({ userId }: { userId?: string }) {
 
         <div className='my-4 border-t border-slate-200' />
 
-        {navigation.map((item) => (
+        {primaryNavigation.map((item) => (
           <Link
             key={item.name}
             href={item.href}
             className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              pathname.includes(item.href)
+              isActivePath(pathname, item.href)
                 ? 'bg-cyan-50 text-cyan-700'
                 : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
             }`}
@@ -81,6 +91,29 @@ export default function AdminSidebar({ userId }: { userId?: string }) {
             {'label' in item ? item.label : t(`nav.${item.name}`)}
           </Link>
         ))}
+
+        <details className='group mt-3 border-t border-slate-200 pt-3' open={supportingActive || undefined}>
+          <summary className='flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-2 text-sm font-semibold text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900'>
+            <span>{moreLabel}</span>
+            <ChevronDown className='h-4 w-4 transition-transform group-open:rotate-180' />
+          </summary>
+          <div className='mt-1 space-y-1 border-l border-slate-200 pl-2'>
+            {supportingNavigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  isActivePath(pathname, item.href)
+                    ? 'bg-cyan-50 text-cyan-700'
+                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                }`}
+              >
+                <item.icon className='h-4 w-4' />
+                {t(`nav.${item.name}`)}
+              </Link>
+            ))}
+          </div>
+        </details>
       </nav>
     </aside>
   );
