@@ -1,12 +1,14 @@
 import assert from 'node:assert/strict';
-import { randomUUID } from 'node:crypto';
-import { userInfo } from 'node:os';
+import { createHash, randomUUID } from 'node:crypto';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir, userInfo } from 'node:os';
+import { join } from 'node:path';
 import { Client, type PoolClient } from 'pg';
 
 import { parseOps2Selection, selectionHash, selectionRawPayload } from '../lib/services/admin/ops2Selection';
 import { evidenceReadyDraftSql } from '../lib/services/admin/draftPublicationSql';
 import { importCollectionCandidateToDraft } from '../lib/services/admin/collection';
-import { parseOptions, parseQaReport, qaReportHash, run } from './run-ops2-candidate-enqueue';
+import { parseOptions, parseQaReport, qaReportHash, run, verifyPlatformOwnedMedia } from './run-ops2-candidate-enqueue';
 
 const today = new Date().toISOString().slice(0, 10);
 const future = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10);
@@ -22,9 +24,11 @@ const content = Object.fromEntries((['en', 'zh', 'cn'] as const).map((locale) =>
 const fixture = {
   id: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', name: 'Fixture AI Research',
   officialUrl: 'https://fixture.example/', categorySlug: 'productivity',
+  officialDomainGroup: { canonicalProductDomain: 'fixture.example', parentBrandDomains: [],
+    identitySourceIds: ['features'] },
   cluster: { taskSlug: 'research-with-citations', role: 'alternative' },
   officialSources: [
-    { id: 'features', url: 'https://fixture.example/features', claimKeys: ['core'] },
+    { id: 'features', url: 'https://fixture.example/features', claimKeys: ['core', 'identity'] },
     { id: 'rights', url: 'https://fixture.example/rights', claimKeys: ['rights'] },
   ],
   entityGate: { status: 'PASS', aiCoreCapability: { status: 'PASS', sourceIds: ['features'],
@@ -34,7 +38,7 @@ const fixture = {
     duplicateIntent: { status: 'PASS', checkedToolIds: [],
       rationale: 'Compared existing Research cluster tools and found no matching intent.' } },
   reviewedAt: today, nextReviewDate: future,
-  media: { url: 'https://fixture.example/media/logo.png', sourceUrl: 'https://fixture.example/brand',
+  media: { mode: 'official_licensed', url: 'https://fixture.example/media/logo.png', sourceUrl: 'https://fixture.example/brand',
     rightsSourceUrl: 'https://fixture.example/rights', license: 'Official brand asset permission', verifiedAt: today,
     rightsStatus: 'PASS', rightsSourceIds: ['rights'],
     rightsEvidenceExcerpt: 'The official rights page permits display of the published brand asset in directories.' },
@@ -48,6 +52,13 @@ assert.equal(selectionRawPayload(selection).sourceType, 'ops2_selection');
 assert.match(evidenceReadyDraftSql, /features->'marketValidation'->>'verdict' = 'validated'/);
 assert.doesNotMatch(evidenceReadyDraftSql, /ops2_selection|ops2Selection/);
 assert.throws(() => parseOps2Selection({ ...fixture, officialSources: fixture.officialSources.slice(0, 1) }));
+assert.throws(() => parseOps2Selection({ ...fixture, officialDomainGroup: {
+  ...fixture.officialDomainGroup, canonicalProductDomain: 'other.example' } }));
+assert.throws(() => parseOps2Selection({ ...fixture, officialDomainGroup: {
+  ...fixture.officialDomainGroup, parentBrandDomains: ['fixture.example'] } }));
+assert.throws(() => parseOps2Selection({ ...fixture, officialSources: [
+  ...fixture.officialSources, { id: 'alias', url: 'https://alias.example/about', claimKeys: ['identity'] },
+] }));
 assert.throws(() => parseOps2Selection({ ...fixture, media: { ...fixture.media, rightsSourceUrl: 'https://other.example/rights' } }));
 assert.throws(() => parseOps2Selection({ ...fixture, media: { ...fixture.media, rightsStatus: 'unknown' } }));
 assert.throws(() => parseOps2Selection({ ...fixture, media: { ...fixture.media, rightsEvidenceExcerpt: 'looks fine' } }));
@@ -58,6 +69,45 @@ assert.throws(() => parseOps2Selection({ ...fixture, claimGate: { status: 'PASS'
   { ...fixture.claimGate.items[0], sourceIds: ['missing'] }] } }));
 assert.throws(() => parseOps2Selection({ ...fixture, localized: { ...fixture.localized, cn: null } }));
 assert.throws(() => parseOptions(['--mode=commit']));
+
+const parentBrandFixture = {
+  ...fixture,
+  officialUrl: 'https://product.example/',
+  officialDomainGroup: { canonicalProductDomain: 'product.example', parentBrandDomains: ['brand.example'],
+    identitySourceIds: ['owner'] },
+  officialSources: [
+    { id: 'features', url: 'https://product.example/features', claimKeys: ['core'] },
+    { id: 'owner', url: 'https://brand.example/products/fixture', claimKeys: ['identity', 'brand_relationship'] },
+    { id: 'rights', url: 'https://brand.example/brand', claimKeys: ['rights'] },
+  ],
+  entityGate: { ...fixture.entityGate, identityCanonical: { ...fixture.entityGate.identityCanonical,
+    sourceIds: ['owner'] } },
+  media: { ...fixture.media, sourceUrl: 'https://brand.example/brand',
+    rightsSourceUrl: 'https://brand.example/brand' },
+};
+assert.equal(parseOps2Selection(parentBrandFixture).officialDomainGroup?.parentBrandDomains[0], 'brand.example');
+assert.throws(() => parseOps2Selection({ ...parentBrandFixture,
+  officialSources: parentBrandFixture.officialSources.map((source) => source.id === 'owner'
+    ? { ...source, claimKeys: ['identity'] } : source) }), /brand-relationship/);
+assert.throws(() => parseOps2Selection({ ...parentBrandFixture, entityGate: {
+  ...parentBrandFixture.entityGate, identityCanonical: { ...parentBrandFixture.entityGate.identityCanonical,
+    sourceIds: ['features'] } } }), /identity source/);
+
+const platformSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+  <defs><linearGradient id="local-gradient"><stop offset="0"/><stop offset="1"/></linearGradient></defs>
+  <path fill="url(#local-gradient)" d="M1 5h8"/>
+</svg>\n`;
+const platformFixture = parseOps2Selection({ ...fixture, media: {
+  mode: 'platform_owned_editorial', assetPath: '/images/tool-media/fixture-neutral.svg',
+  sha256: createHash('sha256').update(platformSvg).digest('hex'), creator: 'AI Best Tool editorial',
+  createdAt: today, noVendorMarks: true,
+} });
+assert.equal(selectionRawPayload(platformFixture).detailMetadata.imageUrl,
+  '/images/tool-media/fixture-neutral.svg');
+assert.throws(() => parseOps2Selection({ ...fixture, media: {
+  ...platformFixture.media, noVendorMarks: false } }));
+assert.throws(() => parseOps2Selection({ ...fixture, media: {
+  ...platformFixture.media, assetPath: '/../fixture.svg' } }));
 
 type Candidate = { id: string; status: string; title: string; summary: string; url: string;
   relevance_score: number; quality_score: number; score_reason: string; tool_id: null;
@@ -107,11 +157,45 @@ const client = {
   },
   release() {},
 } as unknown as PoolClient;
-const deps = { connect: async () => client, assertReviewer: async () => undefined };
+const deps = { connect: async () => client, assertReviewer: async () => undefined,
+  readTaskFitToolIds: async (target: PoolClient, taskSlug: string) => {
+    const task = await target.query('SELECT id FROM decision_tasks WHERE slug=$1 AND status=$2', [taskSlug, 'active']);
+    assert.equal(task.rowCount, 1, 'Selected Task cluster is not active');
+    const fits = await target.query(`SELECT DISTINCT tool_id FROM tool_task_fits
+      WHERE task_id=$1 AND status IN ('reviewed','published') ORDER BY tool_id`, [task.rows[0].id]);
+    return fits.rows.map((row) => String(row.tool_id));
+  } };
 
 async function main() {
   const original = { ...process.env };
   try {
+    const assetRoot = mkdtempSync(join(tmpdir(), 'ops2-media-'));
+    try {
+      const mediaRoot = join(assetRoot, 'public/images/tool-media');
+      mkdirSync(mediaRoot, { recursive: true });
+      const verifySvg = async (name: string, value: string) => {
+        const assetPath = `/images/tool-media/${name}.svg`;
+        writeFileSync(join(mediaRoot, `${name}.svg`), value);
+        return verifyPlatformOwnedMedia(parseOps2Selection({ ...fixture, media: {
+          ...platformFixture.media, assetPath,
+          sha256: createHash('sha256').update(value).digest('hex'),
+        } }), assetRoot);
+      };
+      writeFileSync(join(mediaRoot, 'fixture-neutral.svg'), platformSvg);
+      await verifyPlatformOwnedMedia(platformFixture, assetRoot);
+      await verifySvg('local-gradient', platformSvg);
+      for (const [name, unsafeSvg] of [
+        ['style-import', '<svg xmlns="http://www.w3.org/2000/svg"><style>@import url("https://evil.example/a.css");</style></svg>'],
+        ['external-fill', '<svg xmlns="http://www.w3.org/2000/svg"><path style="fill:url(https://evil.example/a.svg#x)"/></svg>'],
+        ['doctype-entity', '<!DOCTYPE svg [<!ENTITY payload SYSTEM "file:///etc/passwd">]><svg xmlns="http://www.w3.org/2000/svg"><text>&payload;</text></svg>'],
+        ['data-url', '<svg xmlns="http://www.w3.org/2000/svg"><path style="fill:url(data:image/svg+xml;base64,AAAA)"/></svg>'],
+        ['external-scheme', '<svg xmlns="http://www.w3.org/2000/svg"><use src="custom-scheme://evil.example/shape"/></svg>'],
+      ] as const) await assert.rejects(verifySvg(name, unsafeSvg), /self-contained/);
+      await assert.rejects(verifyPlatformOwnedMedia(parseOps2Selection({ ...fixture, media: {
+        ...platformFixture.media, sha256: '0'.repeat(64) } }), assetRoot), /sha256 differs/);
+    } finally {
+      rmSync(assetRoot, { recursive: true, force: true });
+    }
     process.env.OPS2_REVIEWER_ID = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
     const report = { status: 'PASS', selectionHash: preflightSelectionHash(),
       reviewer: process.env.OPS2_REVIEWER_ID,
@@ -230,7 +314,7 @@ async function runLocalDb() {
       INSERT INTO categories VALUES ('11111111-1111-4111-8111-111111111111','productivity');
       INSERT INTO decision_tasks VALUES ('22222222-2222-4222-8222-222222222222','research-with-citations','active');`);
     const localClient = Object.assign(db, { release() {} }) as unknown as PoolClient;
-    const localDeps = { connect: async () => localClient, assertReviewer: async () => undefined };
+    const localDeps = { ...deps, connect: async () => localClient };
     await db.query(`INSERT INTO tool_task_fits VALUES
       ('22222222-2222-4222-8222-222222222222',$1,'reviewed'),
       ('22222222-2222-4222-8222-222222222222',$2,'published'),

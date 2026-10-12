@@ -8,6 +8,8 @@ export type Ops2Selection = {
   id: string;
   name: string;
   officialUrl: string;
+  officialDomainGroup?: { canonicalProductDomain: string; parentBrandDomains: string[];
+    identitySourceIds: string[] };
   categorySlug: string;
   cluster: { taskSlug: string; role: 'anchor' | 'alternative' | 'gap_filler' };
   officialSources: { id: string; url: string; claimKeys: string[] }[];
@@ -16,8 +18,10 @@ export type Ops2Selection = {
     duplicateIntent: { status: 'PASS'; checkedToolIds: string[]; rationale: string } };
   reviewedAt: string;
   nextReviewDate: string;
-  media: { url: string; sourceUrl: string; rightsSourceUrl: string; license: string; verifiedAt: string;
-    rightsStatus: 'PASS'; rightsSourceIds: string[]; rightsEvidenceExcerpt: string };
+  media: ({ mode?: 'official_licensed'; url: string; sourceUrl: string; rightsSourceUrl: string;
+    license: string; verifiedAt: string; rightsStatus: 'PASS'; rightsSourceIds: string[];
+    rightsEvidenceExcerpt: string } | { mode: 'platform_owned_editorial'; assetPath: string; sha256: string;
+    creator: 'AI Best Tool editorial'; createdAt: string; noVendorMarks: true });
   pricing: 'free' | 'freemium' | 'paid';
   tags: string[];
   localized: Record<Locale, {
@@ -50,10 +54,16 @@ function url(value: unknown, label: string): string {
   return result.toString();
 }
 
-function officialHost(value: string, officialUrl: string): boolean {
-  const host = new URL(value).hostname.replace(/^www\./, '');
-  const root = new URL(officialUrl).hostname.replace(/^www\./, '');
-  return host === root || host.endsWith(`.${root}`);
+function normalizedDomain(value: unknown, label: string): string {
+  const result = text(value, label).toLowerCase().replace(/^www\./, '');
+  if (!/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(result))
+    throw new Error(`Invalid ${label}`);
+  return result;
+}
+
+function officialHost(value: string, domains: string[]): boolean {
+  const host = new URL(value).hostname.replace(/^www\./, '').toLowerCase();
+  return domains.some((domain) => host === domain || host.endsWith(`.${domain}`));
 }
 
 function list(value: unknown, label: string, minLength = 1): string[] {
@@ -74,6 +84,27 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
   const id = text(raw.id, 'id');
   if (!uuid.test(id)) throw new Error('Invalid id');
   const officialUrl = url(raw.officialUrl, 'officialUrl');
+  const canonicalHost = new URL(officialUrl).hostname.replace(/^www\./, '').toLowerCase();
+  let officialDomainGroup: Ops2Selection['officialDomainGroup'];
+  if (raw.officialDomainGroup !== undefined) {
+    const canonicalProductDomain = normalizedDomain(raw.officialDomainGroup?.canonicalProductDomain,
+      'officialDomainGroup.canonicalProductDomain');
+    if (canonicalProductDomain !== canonicalHost)
+      throw new Error('Official domain group canonical must match officialUrl');
+    if (!Array.isArray(raw.officialDomainGroup?.parentBrandDomains))
+      throw new Error('Parent brand domains are required');
+    const parentBrandDomains = raw.officialDomainGroup.parentBrandDomains.map((value: unknown, index: number) =>
+      normalizedDomain(value, `officialDomainGroup.parentBrandDomains[${index}]`));
+    const domains = [canonicalProductDomain, ...parentBrandDomains];
+    if (new Set(domains).size !== domains.length)
+      throw new Error('Official domain group domains must be unique');
+    officialDomainGroup = { canonicalProductDomain, parentBrandDomains,
+      identitySourceIds: list(raw.officialDomainGroup?.identitySourceIds,
+        'officialDomainGroup.identitySourceIds') };
+  }
+  const officialDomains = officialDomainGroup
+    ? [officialDomainGroup.canonicalProductDomain, ...officialDomainGroup.parentBrandDomains]
+    : [canonicalHost];
   const categorySlug = text(raw.categorySlug, 'categorySlug');
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(categorySlug)) throw new Error('Invalid categorySlug');
   const taskSlug = text(raw.cluster?.taskSlug, 'cluster.taskSlug');
@@ -87,10 +118,10 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
     url: url(source?.url, `officialSources[${index}].url`),
     claimKeys: list(source?.claimKeys, `officialSources[${index}].claimKeys`),
   }));
-  if (sources.some((source) => !officialHost(source.url, officialUrl)) ||
+  if (sources.some((source) => !officialHost(source.url, officialDomains)) ||
       new Set(sources.map((source) => source.url)).size !== sources.length ||
       new Set(sources.map((source) => source.id)).size !== sources.length)
-    throw new Error('Official sources must be distinct URLs on the official domain');
+    throw new Error('Official sources must be distinct URLs in the declared official domain group');
   if (new Set(sources.flatMap((source) => source.claimKeys)).size < 2)
     throw new Error('Official sources must cover complementary facts');
   const availableSourceIds = new Set(sources.map((source) => source.id));
@@ -120,27 +151,58 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
   if (new Set(parsedEntityGate.duplicateIntent.checkedToolIds.map((id) => id.toLowerCase())).size !==
       parsedEntityGate.duplicateIntent.checkedToolIds.length)
     throw new Error('Duplicate checkedToolIds are not allowed');
-  const media = {
-    url: url(raw.media?.url, 'media.url'),
-    sourceUrl: url(raw.media?.sourceUrl, 'media.sourceUrl'),
-    rightsSourceUrl: url(raw.media?.rightsSourceUrl, 'media.rightsSourceUrl'),
-    license: text(raw.media?.license, 'media.license', 8),
-    verifiedAt: date(raw.media?.verifiedAt, 'media.verifiedAt'),
-    rightsStatus: raw.media?.rightsStatus,
-    rightsSourceIds: sourceIds(raw.media?.rightsSourceIds, 'media.rightsSourceIds', availableSourceIds),
-    rightsEvidenceExcerpt: text(raw.media?.rightsEvidenceExcerpt, 'media.rightsEvidenceExcerpt', 30),
-  };
-  if (media.rightsStatus !== 'PASS' ||
-      !media.rightsSourceIds.some((id) => sources.some((source) => source.id === id && source.url === media.rightsSourceUrl)))
-    throw new Error('Media rights must PASS with matching official evidence');
-  if (!officialHost(media.sourceUrl, officialUrl) || !officialHost(media.rightsSourceUrl, officialUrl) ||
-      !sources.some((source) => source.url === media.rightsSourceUrl))
-    throw new Error('Media provenance must be on the official domain');
+  if (officialDomainGroup) {
+    const identitySourceIds = sourceIds(officialDomainGroup.identitySourceIds,
+      'officialDomainGroup.identitySourceIds', availableSourceIds);
+    const identitySources = sources.filter((source) => identitySourceIds.includes(source.id));
+    if (!identitySourceIds.every((sourceId) => parsedEntityGate.identityCanonical.sourceIds.includes(sourceId)) ||
+        !identitySources.some((source) => source.claimKeys.includes('identity')))
+      throw new Error('Official domain group needs an identity source used by the identity gate');
+    if (officialDomainGroup.parentBrandDomains.length > 0 && !identitySources.some((source) =>
+      officialHost(source.url, officialDomainGroup!.parentBrandDomains) &&
+      source.claimKeys.includes('brand_relationship')))
+      throw new Error('Parent brand domain needs an official brand-relationship identity source');
+    officialDomainGroup = { ...officialDomainGroup, identitySourceIds };
+  }
+  let media: Ops2Selection['media'];
+  if (raw.media?.mode === 'platform_owned_editorial') {
+    const assetPath = text(raw.media?.assetPath, 'media.assetPath');
+    if (!/^\/images\/tool-media\/[a-z0-9][a-z0-9._-]*\.(?:svg|png|jpe?g|webp)$/.test(assetPath))
+      throw new Error('Platform-owned media must use a normalized tool-media asset path');
+    const sha256 = text(raw.media?.sha256, 'media.sha256').toLowerCase();
+    if (!/^[a-f0-9]{64}$/.test(sha256)) throw new Error('Invalid platform-owned media sha256');
+    if (raw.media?.creator !== 'AI Best Tool editorial' || raw.media?.noVendorMarks !== true)
+      throw new Error('Platform-owned media needs editorial ownership and noVendorMarks=true');
+    media = { mode: 'platform_owned_editorial', assetPath, sha256,
+      creator: 'AI Best Tool editorial', createdAt: date(raw.media?.createdAt, 'media.createdAt'),
+      noVendorMarks: true };
+  } else {
+    const officialMedia = {
+      ...(raw.media?.mode === 'official_licensed' ? { mode: 'official_licensed' as const } : {}),
+      url: url(raw.media?.url, 'media.url'),
+      sourceUrl: url(raw.media?.sourceUrl, 'media.sourceUrl'),
+      rightsSourceUrl: url(raw.media?.rightsSourceUrl, 'media.rightsSourceUrl'),
+      license: text(raw.media?.license, 'media.license', 8),
+      verifiedAt: date(raw.media?.verifiedAt, 'media.verifiedAt'),
+      rightsStatus: raw.media?.rightsStatus,
+      rightsSourceIds: sourceIds(raw.media?.rightsSourceIds, 'media.rightsSourceIds', availableSourceIds),
+      rightsEvidenceExcerpt: text(raw.media?.rightsEvidenceExcerpt, 'media.rightsEvidenceExcerpt', 30),
+    };
+    if (officialMedia.rightsStatus !== 'PASS' || !officialMedia.rightsSourceIds.some((sourceId) =>
+      sources.some((source) => source.id === sourceId && source.url === officialMedia.rightsSourceUrl)))
+      throw new Error('Media rights must PASS with matching official evidence');
+    if (!officialHost(officialMedia.sourceUrl, officialDomains) ||
+        !officialHost(officialMedia.rightsSourceUrl, officialDomains) ||
+        !sources.some((source) => source.url === officialMedia.rightsSourceUrl))
+      throw new Error('Media provenance must be in the declared official domain group');
+    media = { ...officialMedia, rightsStatus: 'PASS' };
+  }
   const reviewedAt = date(raw.reviewedAt, 'reviewedAt');
   const nextReviewDate = date(raw.nextReviewDate, 'nextReviewDate');
   if (nextReviewDate <= reviewedAt) throw new Error('Next review must follow review date');
   const today = new Date().toISOString().slice(0, 10);
-  if (reviewedAt > today || media.verifiedAt > today || nextReviewDate <= today)
+  const mediaDate = media.mode === 'platform_owned_editorial' ? media.createdAt : media.verifiedAt;
+  if (reviewedAt > today || mediaDate > today || nextReviewDate <= today)
     throw new Error('Review dates must describe a current, future-due snapshot');
   const pricing = raw.pricing;
   if (!['free', 'freemium', 'paid'].includes(pricing)) throw new Error('Invalid pricing');
@@ -178,9 +240,10 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
   });
   if (new Set(parsedClaims.map((claim) => claim.key)).size !== parsedClaims.length)
     throw new Error('Duplicate claim key');
-  return { id, name: text(raw.name, 'name', 4), officialUrl, categorySlug,
+  return { id, name: text(raw.name, 'name', 4), officialUrl,
+    ...(officialDomainGroup ? { officialDomainGroup } : {}), categorySlug,
     cluster: { taskSlug, role }, officialSources: sources, entityGate: parsedEntityGate,
-    reviewedAt, nextReviewDate, media: { ...media, rightsStatus: 'PASS' },
+    reviewedAt, nextReviewDate, media,
     pricing, tags: list(raw.tags, 'tags'), localized, claimGate: { status: 'PASS', items: parsedClaims } };
 }
 
@@ -190,10 +253,12 @@ export function selectionHash(selection: Ops2Selection): string {
 
 export function selectionRawPayload(selection: Ops2Selection) {
   const summary = selection.localized.en.summary;
+  const imageUrl = selection.media.mode === 'platform_owned_editorial'
+    ? selection.media.assetPath : selection.media.url;
   return {
     sourceType: 'ops2_selection',
     detailMetadata: { title: selection.name, description: summary,
-      canonicalUrl: selection.officialUrl, externalUrl: selection.officialUrl, imageUrl: selection.media.url },
+      canonicalUrl: selection.officialUrl, externalUrl: selection.officialUrl, imageUrl },
     categorySlug: selection.categorySlug, tags: selection.tags, pricing: selection.pricing,
     useCases: selection.localized.en.bestFor,
     intakePlan: { evidenceUrls: selection.officialSources.map((source) => source.url), reviewedAt: selection.reviewedAt },

@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { readFile } from 'node:fs/promises';
+import { resolve, sep } from 'node:path';
 import { loadEnvConfig } from '@next/env';
 import type { PoolClient } from 'pg';
 
@@ -14,7 +16,8 @@ loadEnvConfig(process.cwd());
 type Mode = 'preflight' | 'rollback' | 'commit' | 'postcheck';
 type Options = { mode: Mode; expectedHash?: string; expectedPostHash?: string };
 type Existing = Record<string, unknown> | null;
-type Dependencies = { connect: () => Promise<PoolClient>; assertReviewer: (id: string) => Promise<void> };
+type Dependencies = { connect: () => Promise<PoolClient>; assertReviewer: (id: string) => Promise<void>;
+  readTaskFitToolIds: (client: PoolClient, taskSlug: string) => Promise<string[]> };
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export function parseOptions(args: string[]): Options {
@@ -68,6 +71,35 @@ export function parseQaReport(value: unknown, selection: Ops2Selection): QaRepor
 
 export function qaReportHash(report: QaReport): string {
   return sha256(report);
+}
+
+export async function verifyPlatformOwnedMedia(selection: Ops2Selection, workspaceRoot = process.cwd()): Promise<void> {
+  if (selection.media.mode !== 'platform_owned_editorial') return;
+  const publicRoot = resolve(workspaceRoot, 'public');
+  const assetFile = resolve(publicRoot, `.${selection.media.assetPath}`);
+  assert.ok(assetFile.startsWith(`${publicRoot}${sep}`), 'Platform-owned media escapes the public directory');
+  const asset = await readFile(assetFile);
+  assert.equal(createHash('sha256').update(asset).digest('hex'), selection.media.sha256,
+    'Platform-owned media sha256 differs from the selection');
+  if (selection.media.assetPath.endsWith('.svg')) {
+    const svg = asset.toString('utf8');
+    const svgWithoutNamespaces = svg.replace(/\s+xmlns(?::[\w.-]+)?\s*=\s*(['"])[^'"]*\1/gi, '');
+    const svgWithoutLocalPaintReferences = svgWithoutNamespaces.replace(
+      /url\(\s*(?:(['"])#[A-Za-z_][\w:.-]*\1|#[A-Za-z_][\w:.-]*)\s*\)/gi, '');
+    const hasExternalAttributeScheme = [...svgWithoutNamespaces.matchAll(
+      /([:\w.-]+)\s*=\s*(['"])(.*?)\2/gs,
+    )].some(([, name, , value]) => name.toLowerCase() !== 'style' &&
+      /^(?:[A-Za-z][A-Za-z0-9+.-]*:|\/\/)/.test(value.trim()));
+    assert.ok(svg.toLowerCase().includes('<svg') &&
+      !/<(?:script|image|foreignobject)\b/i.test(svg) &&
+      !/(?:href|xlink:href)\s*=/i.test(svg) &&
+      !/<!doctype\b|<!entity\b/i.test(svg) &&
+      !/@import\b/i.test(svg) &&
+      !/\b(?:https?|ftp|file|javascript|vbscript|data):/i.test(svgWithoutNamespaces) &&
+      !hasExternalAttributeScheme &&
+      !/url\s*\(/i.test(svgWithoutLocalPaintReferences),
+    'Platform-owned SVG must be self-contained; only local url(#id) paint references are allowed');
+  }
 }
 
 function qaContext(selection: Ops2Selection, env = process.env) {
@@ -128,18 +160,24 @@ async function assertNoDuplicateTool(client: PoolClient, selection: Ops2Selectio
   }
 }
 
-async function assertValidClusterAndCategory(client: PoolClient, selection: Ops2Selection): Promise<void> {
+async function assertValidClusterAndCategory(client: PoolClient, selection: Ops2Selection,
+  deps: Dependencies): Promise<void> {
   const category = await client.query('SELECT id FROM categories WHERE slug=$1',
     [resolveCollectionCategorySlug(selection.categorySlug)]);
   assert.equal(category.rowCount, 1, 'Selected category is not available');
+  const actual = (await deps.readTaskFitToolIds(client, selection.cluster.taskSlug))
+    .map((id) => id.toLowerCase()).sort();
+  const checked = selection.entityGate.duplicateIntent.checkedToolIds.map((id) => id.toLowerCase()).sort();
+  assert.deepEqual(checked, actual, 'Task duplicate-intent comparison must cover every reviewed/published Fit tool');
+}
+
+async function readTaskFitToolIdsFromClient(client: PoolClient, taskSlug: string): Promise<string[]> {
   const task = await client.query('SELECT id FROM decision_tasks WHERE slug=$1 AND status=$2',
-    [selection.cluster.taskSlug, 'active']);
+    [taskSlug, 'active']);
   assert.equal(task.rowCount, 1, 'Selected Task cluster is not active');
   const fits = await client.query(`SELECT DISTINCT tool_id FROM tool_task_fits
     WHERE task_id=$1 AND status IN ('reviewed','published') ORDER BY tool_id`, [task.rows[0].id]);
-  const actual = fits.rows.map((row) => String(row.tool_id).toLowerCase()).sort();
-  const checked = selection.entityGate.duplicateIntent.checkedToolIds.map((id) => id.toLowerCase()).sort();
-  assert.deepEqual(checked, actual, 'Task duplicate-intent comparison must cover every reviewed/published Fit tool');
+  return fits.rows.map((row) => String(row.tool_id));
 }
 
 async function readCandidate(client: PoolClient, selection: Ops2Selection, lock: boolean): Promise<Existing> {
@@ -176,9 +214,23 @@ async function assertAdminReviewer(reviewerId: string): Promise<void> {
   assert.ok(isAdminUser(data.user), 'Reviewer is not an approved administrator');
 }
 
-const productionDeps: Dependencies = { connect: () => getPool().connect(), assertReviewer: assertAdminReviewer };
+async function readProductionTaskFitToolIds(_client: PoolClient, taskSlug: string): Promise<string[]> {
+  const supabase = createAdminClient();
+  const { data: task, error: taskError } = await supabase.from('decision_tasks').select('id')
+    .eq('slug', taskSlug).eq('status', 'active').maybeSingle();
+  if (taskError) throw new Error(`Task cluster lookup failed: ${taskError.message}`);
+  assert.ok(task, 'Selected Task cluster is not active');
+  const { data: fits, error: fitsError } = await supabase.from('tool_task_fits').select('tool_id')
+    .eq('task_id', task.id).in('status', ['reviewed', 'published']).order('tool_id');
+  if (fitsError) throw new Error(`Task Fit lookup failed: ${fitsError.message}`);
+  return [...new Set((fits || []).map((row) => String(row.tool_id)))].sort();
+}
+
+const productionDeps: Dependencies = { connect: () => getPool().connect(), assertReviewer: assertAdminReviewer,
+  readTaskFitToolIds: readProductionTaskFitToolIds };
 
 export async function run(selection: Ops2Selection, options: Options, deps = productionDeps) {
+  await verifyPlatformOwnedMedia(selection);
   const client = await deps.connect();
   let transaction = false;
   try {
@@ -198,7 +250,7 @@ export async function run(selection: Ops2Selection, options: Options, deps = pro
         postimageHash, productionWrites: 0 };
     }
     await assertNoDuplicateTool(client, selection);
-    await assertValidClusterAndCategory(client, selection);
+    await assertValidClusterAndCategory(client, selection, deps);
     if (applied) {
       const audit = (existing!.raw_payload as Record<string, any>).ops2EnqueueAudit;
       if (options.mode === 'preflight') {
