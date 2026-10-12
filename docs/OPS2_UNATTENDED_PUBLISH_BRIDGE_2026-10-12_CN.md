@@ -4,7 +4,7 @@
 
 ## 范围
 
-`pnpm run ops2:publish-bridge -- --kind=<candidate|tool|relation> --mode=<preflight|rollback|commit|postcheck> --id=<UUID>`
+`pnpm run ops2:publish-bridge --kind=<candidate|tool|relation> --mode=<preflight|rollback|commit|postcheck> --id=<UUID>`
 
 - `candidate` 只调用现有 `importCollectionCandidateToDraft`，结果最多为 draft，不会公开。
 - `tool` 复用 Admin 的 evidence-ready SQL、媒体/付款门禁和原子批量发布 SQL；成功后固定 `published + monitor/noindex`，不改变 index/sitemap 决策。
