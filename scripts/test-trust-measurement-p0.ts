@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 import publicDetailText from '../lib/content/publicDetailText';
+import { generateLocalizedPath } from '../lib/seo/metadata';
 
 const read = (path: string) => readFileSync(path, 'utf8');
 const home = read('app/[locale]/(with-footer)/(home)/page.tsx');
@@ -11,6 +12,17 @@ const comparison = read('components/guides/VerifiedComparisonPage.tsx');
 const ads = read('components/ad/GoogleAdSense.tsx');
 const toolTracker = read('components/analytics/DecisionToolInteractionTracker.tsx');
 const toolPage = read('app/[locale]/(with-footer)/ai/[websiteName]/page.tsx');
+const webNavCard = read('components/webNav/WebNavCard.tsx');
+
+assert.match(webNavCard, /href=\{generateLocalizedPath\(compareHref, locale\)\}/);
+for (const [locale, expected] of [
+  ['cn', '/cn/guides/ai-tools-comparison'],
+  ['tw', '/tw/guides/ai-tools-comparison'],
+  ['en', '/guides/ai-tools-comparison'],
+]) {
+  assert.equal(generateLocalizedPath('/guides/ai-tools-comparison', locale), expected);
+  assert.equal(generateLocalizedPath('/cn/guides/ai-tools-comparison', locale), expected);
+}
 
 assert.equal(publicDetailText('EN: Paid plan; CN: 付费套餐; TW: 付費方案', 'cn'), '付费套餐');
 assert.equal(publicDetailText('EN: Paid plan CN: 付费套餐 TW: 付費方案', 'en'), 'Paid plan');

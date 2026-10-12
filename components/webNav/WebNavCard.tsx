@@ -4,6 +4,7 @@ import { Flame, Megaphone, Sparkles } from 'lucide-react';
 import { getLocalizedToolPath } from '@/lib/config/toolRouteAliases';
 import { getPublicToolSummary } from '@/lib/content/publicToolScope';
 import { WebNavigationListRow } from '@/lib/data';
+import { generateLocalizedPath } from '@/lib/seo/metadata';
 
 import FavoriteButton from '../FavoriteButton';
 import RatingStars from '../RatingStars';
@@ -150,7 +151,7 @@ export default function WebNavCard({
           )}
           {compareHref && compareLabel && (
             <TrackableCompareLink
-              href={compareHref}
+              href={generateLocalizedPath(compareHref, locale)}
               toolId={toolId || name}
               className={`inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950 ${
                 isCompact ? 'py-1' : 'py-1.5'
