@@ -9,19 +9,21 @@ interface TrackableLinkProps {
   userId?: string;
   children: ReactNode;
   className?: string;
+  decisionVisit?: boolean;
 }
 
-export default function TrackableLink({ 
-  href, 
-  toolId, 
-  userId, 
-  children, 
-  className 
+export default function TrackableLink({
+  href,
+  toolId,
+  userId,
+  children,
+  className,
+  decisionVisit = false,
 }: TrackableLinkProps) {
   const handleClick = async () => {
     // Track the click (fire and forget)
-    trackToolClick(toolId, userId).catch(err => 
-      console.error('Failed to track tool click:', err)
+    trackToolClick(toolId, userId).catch((err) =>
+      console.error('Failed to track tool click:', err),
     );
   };
 
@@ -31,6 +33,7 @@ export default function TrackableLink({
       target='_blank'
       rel='noreferrer'
       className={className}
+      data-decision-official-visit={decisionVisit ? 'true' : undefined}
       onClick={handleClick}
     >
       {children}

@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
-import { getWebNavigationList } from '@/network/webNavigation';
 import { ArrowRight, BadgeCheck, Clock3, Compass, FolderOpen, Search as SearchIcon, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -12,6 +11,8 @@ import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
 import { getCommunityHighlights, getRecentDiscussions, getRisingTools } from '@/lib/services/community';
+import { toolToListRow } from '@/lib/services/toolPresenter';
+import { getTools } from '@/lib/services/tools';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import Faq from '@/components/Faq';
 import CommunityPulse from '@/components/home/CommunityPulse';
@@ -61,18 +62,16 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const t = await getTranslations('Home');
   const isChinese = locale === 'cn' || locale === 'tw';
   const [latestToolsResult, popularCategoriesResult] = await Promise.allSettled([
-    getWebNavigationList({ locale, pageNum: 1, pageSize: 12 }),
+    getTools({ status: 'published' }, { page: 1, pageSize: 12 }, 'recent'),
     getPopularCategories(8),
   ]);
-  const latestTools =
-    latestToolsResult.status === 'fulfilled'
-      ? latestToolsResult.value
-      : { code: 200, msg: 'success', rows: [], total: 0 };
+  const latestTools = latestToolsResult.status === 'fulfilled' ? latestToolsResult.value : null;
   const popularCategories = popularCategoriesResult.status === 'fulfilled' ? popularCategoriesResult.value : [];
   const communityHighlights = await getCommunityHighlights(3).catch(() => []);
   const recentDiscussions = await getRecentDiscussions(3).catch(() => []);
   const risingTools = await getRisingTools(3).catch(() => []);
-  const totalVisibleTools = latestTools.total || latestTools.rows.length;
+  const latestRows = latestTools?.data.map((tool) => toolToListRow(tool, locale)) || [];
+  const totalVisibleTools = latestTools?.total;
   const heroTitle = isChinese
     ? '用证据、限制和真实变化比较 AI 工具'
     : 'Compare AI tools with evidence, limits, and real changes';
@@ -80,11 +79,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     ? '先确认要解决的任务，再查看官方来源、适用边界、最后核查和下一步比较。这里不替所有人选唯一第一名，而是帮助你排除不合适的选择。'
     : 'Start with the task, then inspect official sources, fit boundaries, last-checked dates, and what to compare next. We help you rule out poor fits rather than name one winner for everyone.';
   const stats = [
-    {
-      label: isChinese ? '公开工具' : 'Published tools',
-      value: `${totalVisibleTools}`,
-      icon: Compass,
-    },
+    ...(totalVisibleTools === undefined
+      ? []
+      : [{ label: isChinese ? '公开工具' : 'Published tools', value: `${totalVisibleTools}`, icon: Compass }]),
     {
       label: isChinese ? '决策信号' : 'Decision signals',
       value: isChinese ? '来源 + 限制' : 'Sources + limits',
@@ -278,7 +275,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 <Clock3 className='size-4' />
               </Link>
             </div>
-            <WebNavCardList locale={locale} dataList={latestTools.rows.slice(0, 6)} contextLabel='latest' />
+            <WebNavCardList locale={locale} dataList={latestRows.slice(0, 6)} contextLabel='latest' />
           </section>
         </div>
 

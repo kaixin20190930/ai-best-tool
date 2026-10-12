@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex -- The labeled overflow region must support keyboard scrolling. */
 import React from 'react';
+import publicDetailText from '@/lib/content/publicDetailText';
 
 import {
   validateVerifiedComparison,
@@ -21,25 +22,6 @@ type Props = {
   guideHref: string;
   faqs: { question: BilingualCopy; answer: BilingualCopy }[];
 };
-
-function detailText(value: unknown, locale: string): string {
-  if (typeof value === 'string') return value.trim();
-  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
-  if (Array.isArray(value)) {
-    return value
-      .map((item) => detailText(item, locale))
-      .filter(Boolean)
-      .join('; ');
-  }
-  if (!value || typeof value !== 'object') return '';
-  const record = value as Record<string, unknown>;
-  const localized = record[locale] || record[locale === 'tw' ? 'cn' : 'en'] || record.en;
-  if (typeof localized === 'string') return localized.trim();
-  return Object.entries(record)
-    .map(([key, item]) => `${key.replace(/[_-]/g, ' ')}: ${detailText(item, locale)}`)
-    .filter((item) => !item.endsWith(': '))
-    .join('; ');
-}
 
 const supportLabels: Record<PublicToolCapabilitySummary['supportLevel'], BilingualCopy> = {
   strong: { cn: '强支持', en: 'Strong' },
@@ -88,6 +70,9 @@ export default function VerifiedComparisonPage({
       </div>
     );
   }
+  const capabilitySources = Array.from(new Set(capabilityRows.flatMap((row) =>
+    comparison.candidates.flatMap((candidate) => row.cells[candidate.slug]?.evidence.map((item) => item.sourceUrl) || []),
+  )));
   const references = (refs: string[]) => (
     <span className='ml-1 inline-flex flex-wrap gap-1'>
       {refs.map((ref) => (
@@ -249,34 +234,24 @@ export default function VerifiedComparisonPage({
                               {Object.keys(capability.planRequirement).length > 0 && (
                                 <p>
                                   {cn ? '套餐要求' : 'Plan requirement'}:{' '}
-                                  {detailText(capability.planRequirement, locale)}
+                                  {publicDetailText(capability.planRequirement, locale)}
                                 </p>
                               )}
                               {capability.limitations.length > 0 && (
                                 <p>
-                                  {cn ? '限制' : 'Limitations'}: {detailText(capability.limitations, locale)}
+                                  {cn ? '限制' : 'Limitations'}: {publicDetailText(capability.limitations, locale)}
                                 </p>
                               )}
-                              <ul className='mt-2 space-y-1 text-xs'>
-                                {capability.evidence.map((item) => (
-                                  <li key={`${item.sourceUrl}:${item.verifiedAt}`}>
-                                    <a
-                                      href={item.sourceUrl}
-                                      target='_blank'
-                                      rel='noopener noreferrer'
-                                      className='break-all text-cyan-800 underline'
-                                    >
-                                      {item.sourceUrl}
+                              {capability.evidence.length > 0 && (
+                                <p className='mt-2 text-xs text-slate-600'>
+                                  {cn ? '来源' : 'Sources'}:{' '}
+                                  {Array.from(new Set(capability.evidence.map((item) => item.sourceUrl))).map((url) => (
+                                    <a key={url} href={`#capability-source-${capabilitySources.indexOf(url) + 1}`} className='mr-1 text-cyan-800 underline'>
+                                      [{capabilitySources.indexOf(url) + 1}]
                                     </a>
-                                    {item.verifiedAt
-                                      ? ` · ${cn ? '核验' : 'Verified'} ${item.verifiedAt.slice(0, 10)}`
-                                      : ''}
-                                    {item.reviewDueAt
-                                      ? ` · ${cn ? '复查期限' : 'Review due'} ${item.reviewDueAt.slice(0, 10)}`
-                                      : ''}
-                                  </li>
-                                ))}
-                              </ul>
+                                  ))}
+                                </p>
+                              )}
                             </>
                           ) : (
                             <span>{cn ? '未知' : 'Unknown'}</span>
@@ -289,6 +264,18 @@ export default function VerifiedComparisonPage({
               </tbody>
             </table>
           </div>
+          {capabilitySources.length > 0 && (
+            <details className='mt-4 text-sm text-slate-600'>
+              <summary className='cursor-pointer font-semibold text-cyan-800'>{cn ? '查看能力证据来源' : 'View capability sources'}</summary>
+              <ol className='mt-3 space-y-2'>
+                {capabilitySources.map((url, index) => (
+                  <li key={url} id={`capability-source-${index + 1}`} className='break-all'>
+                    [{index + 1}] <a href={url} target='_blank' rel='noopener noreferrer' className='text-cyan-800 underline'>{url}</a>
+                  </li>
+                ))}
+              </ol>
+            </details>
+          )}
         </section>
       )}
       <section data-comparison-section='candidates' className={sectionClass}>

@@ -1,5 +1,5 @@
 import type { DecisionEvent } from './contract';
-import { createDecisionFlowController, type DecisionFlowController } from './flow';
+import { sharedDecisionFlow, type DecisionFlowController } from './flow';
 
 type DecisionEventFactory = (flowInstanceId: string) => DecisionEvent;
 type DecisionEventSender = (event: DecisionEvent) => Promise<unknown>;
@@ -13,7 +13,7 @@ export function createDecisionEventDispatcher(input: {
   send: DecisionEventSender;
   flow?: DecisionFlowController;
 }): DecisionEventDispatcher {
-  const flow = input.flow || createDecisionFlowController();
+  const flow = input.flow || sharedDecisionFlow;
 
   return {
     track(factory) {

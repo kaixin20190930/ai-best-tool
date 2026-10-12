@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { publicToolNarrative } from '@/lib/content/publicToolScope';
+import publicDetailText from '@/lib/content/publicDetailText';
 import type { PublicToolCapabilitySummary } from '@/lib/services/decision/capabilityReadModel';
 import type { DecisionCardV2Model } from '@/lib/services/decision/card';
 import type { PublicToolEvidenceSummary } from '@/lib/services/intelligence/publicEvidence';
@@ -10,25 +11,6 @@ import PublicModuleArea, { type PublicModuleAreaProps } from '@/components/publi
 
 function localText(value: Record<string, string>, locale: string): string {
   return value[locale] || value[locale === 'tw' ? 'cn' : 'en'] || value.en || '';
-}
-
-function detailText(value: unknown, locale: string): string {
-  if (typeof value === 'string') return value.trim();
-  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
-  if (Array.isArray(value)) {
-    return value
-      .map((item) => detailText(item, locale))
-      .filter(Boolean)
-      .join('; ');
-  }
-  if (!value || typeof value !== 'object') return '';
-  const record = value as Record<string, unknown>;
-  const localized = record[locale] || record[locale === 'tw' ? 'cn' : 'en'] || record.en;
-  if (typeof localized === 'string') return localized.trim();
-  return Object.entries(record)
-    .map(([key, item]) => `${key.replace(/[_-]/g, ' ')}: ${detailText(item, locale)}`)
-    .filter((item) => !item.endsWith(': '))
-    .join('; ');
 }
 
 function dateLabel(value: string, locale: string): string {
@@ -196,12 +178,12 @@ export default function PublicToolDecision({
                 </p>
                 {Object.keys(capability.planRequirement).length > 0 && (
                   <p className='mt-1'>
-                    {cn ? '套餐要求' : 'Plan requirement'}: {detailText(capability.planRequirement, locale)}
+                    {cn ? '套餐要求' : 'Plan requirement'}: {publicDetailText(capability.planRequirement, locale)}
                   </p>
                 )}
                 {capability.limitations.length > 0 && (
                   <p className='mt-1'>
-                    {cn ? '限制' : 'Limitations'}: {detailText(capability.limitations, locale)}
+                    {cn ? '限制' : 'Limitations'}: {publicDetailText(capability.limitations, locale)}
                   </p>
                 )}
                 <ul className='mt-3 space-y-1 border-t border-slate-200 pt-2 text-xs'>

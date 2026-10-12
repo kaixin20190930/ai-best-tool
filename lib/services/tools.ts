@@ -55,7 +55,7 @@ export interface ToolFilters {
 /**
  * 排序选项
  */
-export type SortBy = 'latest' | 'popular' | 'rating' | 'views' | 'clicks';
+export type SortBy = 'latest' | 'recent' | 'popular' | 'rating' | 'views' | 'clicks';
 
 const featuredActiveCondition = `
   COALESCE(features->'submission'->'commercial'->>'isSponsoredPlacement', 'false') = 'true'
@@ -182,6 +182,8 @@ function buildOrderByClause(sortBy: SortBy): string {
   `;
 
   switch (sortBy) {
+    case 'recent':
+      return 'ORDER BY created_at DESC, id DESC';
     case 'latest':
       return `ORDER BY ${featuredPriority}, created_at DESC`;
     case 'popular':
@@ -546,7 +548,7 @@ export async function getLatestTools(limit: number = 10): Promise<Tool[]> {
       const result = await getTools(
         { status: 'published' },
         { page: 1, pageSize: limit },
-        'latest'
+        'recent'
       );
       return result.data;
     },

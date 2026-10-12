@@ -46,8 +46,11 @@ export async function getCommunityHighlights(limit = 3): Promise<CommunityHighli
         LEFT JOIN comments c ON c.tool_id = t.id AND COALESCE(c.is_hidden, false) = false
         WHERE t.status = 'published'
         GROUP BY t.id
+        HAVING COUNT(DISTINCT f.user_id) > 0
+          OR COUNT(DISTINCT c.id) > 0
+          OR COALESCE(t.share_count, 0) > 0
         ORDER BY
-          (COUNT(DISTINCT f.user_id) * 4 + COUNT(DISTINCT c.id) * 5 + COALESCE(t.share_count, 0) * 2 + COALESCE(t.view_count, 0) / 100) DESC,
+          (COUNT(DISTINCT f.user_id) * 4 + COUNT(DISTINCT c.id) * 5 + COALESCE(t.share_count, 0) * 2) DESC,
           t.updated_at DESC
         LIMIT $1
       `,

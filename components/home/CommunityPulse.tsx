@@ -49,6 +49,7 @@ function getActiveContent(
 
 function CardActions({
   toolId,
+  locale,
   detailHref,
   detailLabel,
   compareHref,
@@ -56,6 +57,7 @@ function CardActions({
   compareFallbackLabel,
 }: {
   toolId: string;
+  locale: string;
   detailHref: string;
   detailLabel: string;
   compareHref?: string;
@@ -73,7 +75,7 @@ function CardActions({
       </Link>
       {compareHref && compareLabel && (
         <TrackableCompareLink
-          href={compareHref}
+          href={`/${locale}${compareHref}`}
           toolId={toolId}
           className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950'
         >
@@ -92,14 +94,17 @@ export default function CommunityPulse({
   risingTools,
   isChinese,
 }: CommunityPulseProps) {
-  const [mode, setMode] = useState<ViewMode>('hot');
+  let initialMode: ViewMode = 'rising';
+  if (highlights.length) initialMode = 'hot';
+  else if (discussions.length) initialMode = 'recent';
+  const [mode, setMode] = useState<ViewMode>(initialMode);
 
-  const hotLabel = isChinese ? '本周热度' : 'Trending now';
+  const hotLabel = isChinese ? '社区关注' : 'Community interest';
   const recentLabel = isChinese ? '最近讨论' : 'Recent discussions';
   const risingLabel = isChinese ? '上升最快' : 'Rising fast';
   const hotDescription = isChinese
-    ? '收藏、评论和分享最高的工具，看看大家最近在关注什么。'
-    : 'Tools getting the most saves, comments, and shares right now.';
+    ? '按真实收藏、评论和分享排序，不把浏览量冒充互动。'
+    : 'Ranked by actual saves, comments, and shares, not page views.';
   const recentDescription = isChinese
     ? '看一看工具页里最新的真实讨论，快速找到值得跟进的产品。'
     : 'Read the latest real discussion on tool pages and spot tools worth a closer look.';
@@ -137,7 +142,7 @@ export default function CommunityPulse({
                     <p className='mt-1 line-clamp-2 text-sm leading-6 text-slate-600'>{content}</p>
                   </div>
                   <span className='rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700'>
-                    {isChinese ? '热度' : 'Hot'}
+                    {isChinese ? '有互动' : 'Engaged'}
                   </span>
                 </div>
                 <div className='mt-4 flex flex-wrap gap-2 text-xs font-medium text-slate-600'>
@@ -156,7 +161,8 @@ export default function CommunityPulse({
                 </div>
                 <CardActions
                   toolId={tool.id}
-                  detailHref={`/ai/${tool.name}`}
+                  locale={locale}
+                  detailHref={`/${locale}/ai/${tool.name}`}
                   detailLabel={isChinese ? '看工具详情' : 'View tool'}
                   compareHref={tool.compareHref}
                   compareLabel={tool.compareLabel}
@@ -206,7 +212,8 @@ export default function CommunityPulse({
                 </div>
                 <CardActions
                   toolId={item.id}
-                  detailHref={`/ai/${toolName}#comments`}
+                  locale={locale}
+                  detailHref={`/${locale}/ai/${toolName}#comments`}
                   detailLabel={isChinese ? '看讨论' : 'Read discussion'}
                   compareHref={compareHref}
                   compareLabel={compareLabel}
@@ -256,7 +263,8 @@ export default function CommunityPulse({
                 </div>
                 <CardActions
                   toolId={tool.id}
-                  detailHref={`/ai/${tool.name}`}
+                  locale={locale}
+                  detailHref={`/${locale}/ai/${tool.name}`}
                   detailLabel={isChinese ? '看工具详情' : 'View tool'}
                   compareHref={tool.compareHref}
                   compareLabel={tool.compareLabel}
@@ -273,41 +281,40 @@ export default function CommunityPulse({
       );
   }
 
+  if (!highlights.length && !discussions.length && !risingTools.length) return null;
+
   return (
     <section className='mx-auto w-full max-w-7xl px-4 py-8 lg:px-6 lg:py-10'>
       <SectionTitle title={activeContent.title} description={activeContent.description} />
 
       <div className='mb-5 inline-flex rounded-full bg-slate-100 p-1 text-sm shadow-sm ring-1 ring-slate-200'>
-        <button
-          type='button'
-          onClick={() => setMode('hot')}
-          className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold transition-colors ${
-            mode === 'hot' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-          }`}
-        >
-          <TrendingUp className='size-4' />
-          {hotLabel}
-        </button>
-        <button
-          type='button'
-          onClick={() => setMode('recent')}
-          className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold transition-colors ${
-            mode === 'recent' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-          }`}
-        >
-          <MessageSquare className='size-4' />
-          {recentLabel}
-        </button>
-        <button
-          type='button'
-          onClick={() => setMode('rising')}
-          className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold transition-colors ${
-            mode === 'rising' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-          }`}
-        >
-          <Clock3 className='size-4' />
-          {risingLabel}
-        </button>
+        {highlights.length > 0 && (
+          <button
+            type='button'
+            onClick={() => setMode('hot')}
+            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold transition-colors ${mode === 'hot' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+          >
+            <TrendingUp className='size-4' /> {hotLabel}
+          </button>
+        )}
+        {discussions.length > 0 && (
+          <button
+            type='button'
+            onClick={() => setMode('recent')}
+            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold transition-colors ${mode === 'recent' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+          >
+            <MessageSquare className='size-4' /> {recentLabel}
+          </button>
+        )}
+        {risingTools.length > 0 && (
+          <button
+            type='button'
+            onClick={() => setMode('rising')}
+            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 font-semibold transition-colors ${mode === 'rising' ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+          >
+            <Clock3 className='size-4' /> {risingLabel}
+          </button>
+        )}
       </div>
 
       {contentBlock}

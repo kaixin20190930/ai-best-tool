@@ -65,6 +65,7 @@ import FavoriteButton from '@/components/FavoriteButton';
 import BaseImage from '@/components/image/BaseImage';
 import ChangeTimelinePanel from '@/components/intelligence/ChangeTimelinePanel';
 import EvidenceLedgerPanel from '@/components/intelligence/EvidenceLedgerPanel';
+import DecisionToolInteractionTracker from '@/components/analytics/DecisionToolInteractionTracker';
 import MarkdownProse from '@/components/MarkdownProse';
 import MediaGallery from '@/components/MediaGallery';
 import RatingStars from '@/components/RatingStars';
@@ -3264,6 +3265,7 @@ export default async function Page({
             href={data.url}
             toolId={toolId}
             userId={user?.id}
+            decisionVisit
             className='group relative block aspect-video w-full overflow-hidden bg-slate-100'
           >
             {heroImageNode}
@@ -3286,10 +3288,11 @@ export default async function Page({
     return (
       <>
         <PageViewTracker toolId={toolId} />
+        {toolId && <DecisionToolInteractionTracker toolId={toolId} locale={locale} enabled={process.env.DECISION_EVENT_COLLECTION_ENABLED === 'true'} />}
         {/* Structured Data for SEO */}
         {softwareSchema && <StructuredDataServer data={softwareSchema} />}
 
-        <div className='w-full bg-slate-50'>
+        <div data-tool-detail-page className='w-full bg-slate-50'>
           <div className='mx-auto max-w-7xl px-4 py-8 lg:px-6 lg:py-12'>
             <SeoBreadcrumbs
               locale={locale}
@@ -3329,6 +3332,7 @@ export default async function Page({
                       href={data.url}
                       toolId={toolId}
                       userId={user?.id}
+                      decisionVisit
                       className='inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50'
                     >
                       {t('visitWebsite')} <ArrowUpRight className='size-4' />

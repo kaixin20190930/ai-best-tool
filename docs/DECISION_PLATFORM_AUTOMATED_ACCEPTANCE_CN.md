@@ -1,5 +1,14 @@
 # 决策平台自动化测试与发布验收方案
 
+## 2026-10-12 TRUST-MEASUREMENT-P0 信任与测量收口
+
+- 首页“公开工具”与“最新收录”统一读取 `published` 实体；新增顺序按 `created_at DESC`，不再使用热度排序或静态目录回退伪装生产数量。读取失败时不显示猜测的数量。社区关注只消费真实收藏、评论、分享；零互动时不显示“热度”，没有社区数据时不显示空的社区模块。工具链接保持当前 locale。
+- 工具页与 Structured Comparison 的直接加载不注入全站 Auto ads 脚本，其他页面继续保留广告。由于 AdSense Auto ads 脚本在同一浏览器文档内可跨客户端导航保留，此代码门禁不是绝对的广告位置保证。要保证已加载脚本后的移动端首屏不抢占 Decision Card，Owner 还须在 AdSense 的 Excluded areas/Page exclusions 中配置并做真实设备验收；不得用 CSS 隐藏已投放广告。
+- 公开对比和工具能力文本按 `EN/CN/TW/ZH` 选择语言；未知维度保持 Unknown，不补造证据。能力来源在对比页合并为编号清单，避免每个单元格重复铺设 URL。
+- 复用既有、默认关闭的 Decision Event allowlist，不增加数据库字段或迁移。`find_tools_view` 在 Finder 打开时触发；`task_start` 在选择任务时触发；`task_results_shown`/`task_zero_result` 在 Finder 返回后触发；`comparison_open` 仅在工具详情主体实际点击 comparison 链接时触发；`evidence_open` 在工具页展开一条 Evidence Ledger claim 时触发；`official_site_click` 在工具详情点击平台官方访问入口时触发。既有 `TrackableCompareLink` 仍单独记录卡片比较点击，不能混称为新的 Decision Event。所有 Decision Event 沿用 30 分钟易失 flow，locale 只发 `en/cn`，不传原始 URL、搜索词或账户标识；关闭采集时零事件请求。
+- 现有数据库契约不支持“用户从搜索直接进入对比页”的 `comparison_open` 来源，不能把它伪装成 `tool_detail`。此缺口留待单独的数据契约变更，不属于本交付单元。事件接入不代表生产采集已开启。
+- C 级验收：`pnpm exec tsx scripts/test-trust-measurement-p0.ts`、既有 Finder 事件专项、结构化比较专项、`tsc --noEmit`；因涉及渲染与路由组件，完整 build 只运行一次。部署与 AdSense 实机位置验收由总控后续完成。
+
 创建日期：2026-09-02
 
 状态：最终方案

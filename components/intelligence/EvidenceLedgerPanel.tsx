@@ -121,7 +121,7 @@ export default function EvidenceLedgerPanel({ ledger, locale }: { ledger: Public
           );
 
           return (
-            <details key={entry.claimId} className='group rounded-lg border border-slate-200 bg-slate-50 open:bg-white'>
+            <details key={entry.claimId} data-claim-type={entry.claimType} className='group rounded-lg border border-slate-200 bg-slate-50 open:bg-white'>
               <summary className='cursor-pointer list-none p-4 marker:hidden sm:p-5'>
                 <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
                   <div className='min-w-0'>

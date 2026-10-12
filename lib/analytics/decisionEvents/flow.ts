@@ -28,3 +28,4 @@ export function createDecisionFlowController(
 }
 
 export const DECISION_FLOW_WINDOW_MS = FLOW_WINDOW_MS;
+export const sharedDecisionFlow = createDecisionFlowController();
