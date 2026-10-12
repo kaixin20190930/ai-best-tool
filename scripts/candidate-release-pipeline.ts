@@ -13,6 +13,12 @@ import {
   assertAnywordEmptyPreimage,
   assertAnywordProtectedRowsUnchanged,
 } from './anyword-release-guard';
+import {
+  assertBoltAsset,
+  assertBoltControllerAuthorization,
+  assertBoltEmptyPreimage,
+  assertBoltProtectedRowsUnchanged,
+} from './bolt-release-guard';
 import { assertVideoReadback, validateVideoUrl } from './candidate-release-video';
 import {
   assertCanvaAliasPreflight,
@@ -92,8 +98,8 @@ type Preaudit = {
   };
 };
 
-type Localized = { en: string; zh: string; cn?: string };
-type LocalizedList = { en: string[]; zh: string[]; cn?: string[] };
+type Localized = { en: string; zh: string; cn?: string; tw?: string };
+type LocalizedList = { en: string[]; zh: string[]; cn?: string[]; tw?: string[] };
 
 type ReleasePayload = {
   id: string;
@@ -226,6 +232,12 @@ const candidates: Candidate[] = [
     domain: 'anyword.com',
     preauditFile: 'anyword-controlled-release-preaudit-2026-10-11.json',
   },
+  {
+    slug: 'bolt',
+    aliases: ['bolt', 'bolt.new'],
+    domain: 'bolt.new',
+    preauditFile: 'bolt-controlled-release-preaudit-2026-10-12.json',
+  },
 ];
 
 function parseArgs(args: string[]) {
@@ -271,8 +283,9 @@ function loadPreaudit(candidate: Candidate): Preaudit {
   );
   assert(['ready_for_next_slot', 'released'].includes(audit.status), `${candidate.slug}: unsupported release status`);
   if (audit.status === 'ready_for_next_slot') {
-    if (candidate.slug === 'anyword' && audit.productionWriteApproved) {
-      assertAnywordControllerAuthorization(audit.controllerWriteAuthorization);
+    if ((candidate.slug === 'anyword' || candidate.slug === 'bolt') && audit.productionWriteApproved) {
+      if (candidate.slug === 'anyword') assertAnywordControllerAuthorization(audit.controllerWriteAuthorization);
+      else assertBoltControllerAuthorization(audit.controllerWriteAuthorization);
     } else {
       assert.equal(audit.productionWriteApproved, false);
     }
@@ -466,6 +479,10 @@ function loadPayload(candidate: Candidate, audit: Preaudit, asOf: string): Relea
     assert(audit.assetSha256, 'Anyword asset hash manifest missing');
     assertAnywordAsset(payload, audit.assetSha256, root);
   }
+  if (candidate.slug === 'bolt') {
+    assert(audit.assetSha256, 'Bolt asset hash manifest missing');
+    assertBoltAsset(payload, audit.assetSha256, root);
+  }
   if (candidate.slug === 'canva') {
     assert(audit.assetSha256, 'Canva asset hash manifest missing');
     assertCanvaAsset(payload, audit.assetSha256, root);
@@ -544,7 +561,12 @@ async function validateOnlineFallback(
   const sitemap = await fetchPage('/sitemap.xml');
   assert(sitemap.response.ok, 'Unable to read production sitemap');
   const paths = [`/ai/${candidate.slug}`, `/cn/ai/${candidate.slug}`];
-  if (candidate.slug === 'scite' || candidate.slug === 'anyword' || (candidate.slug === 'pika' && expectReleased))
+  if (
+    candidate.slug === 'scite' ||
+    candidate.slug === 'anyword' ||
+    candidate.slug === 'bolt' ||
+    (candidate.slug === 'pika' && expectReleased)
+  )
     paths.push(`/tw/ai/${candidate.slug}`);
   if (candidate.slug === 'canva') {
     paths.push('/tw/ai/canva');
@@ -674,6 +696,10 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
   if (candidate.slug === 'anyword' && commit) {
     assertAnywordControllerAuthorization(audit.controllerWriteAuthorization);
   }
+  if (candidate.slug === 'bolt' && commit) {
+    assert.equal(audit.productionWriteApproved, true, 'bolt: production write approval missing');
+    assertBoltControllerAuthorization(audit.controllerWriteAuthorization);
+  }
   const payload = loadPayload(candidate, audit, asOf);
   // A database insert cannot deploy new /public files. Fail before opening a write transaction.
   if (commit) await validateDeployedAssets(payload);
@@ -698,6 +724,10 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       candidate.slug === 'anyword'
         ? (await client.query('SELECT id, md5(row_to_json(t)::text) AS row_md5 FROM tools t WHERE id <> $1 ORDER BY id', [payload.id])).rows
         : null;
+    const boltProtectedBefore =
+      candidate.slug === 'bolt'
+        ? (await client.query('SELECT id, md5(row_to_json(t)::text) AS row_md5 FROM tools t WHERE id <> $1 ORDER BY id', [payload.id])).rows
+        : null;
     const canvaProtectedBefore =
       candidate.slug === 'canva'
         ? (
@@ -716,14 +746,16 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       candidate.slug === 'pika' ||
       candidate.slug === 'chatgpt' ||
       candidate.slug === 'scite' ||
-      candidate.slug === 'anyword'
+      candidate.slug === 'anyword' ||
+      candidate.slug === 'bolt'
     ) {
       const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
       if (candidate.slug === 'murf') assertMurfEmptyPreimage(matches.rows, existingId.rows, payload.id);
       else if (candidate.slug === 'pika') assertPikaEmptyPreimage(matches.rows, existingId.rows, payload.id);
       else if (candidate.slug === 'chatgpt') assertChatgptEmptyPreimage(matches.rows, existingId.rows);
       else if (candidate.slug === 'scite') assertSciteEmptyPreimage(matches.rows, existingId.rows);
-      else assertAnywordEmptyPreimage(matches.rows, existingId.rows);
+      else if (candidate.slug === 'anyword') assertAnywordEmptyPreimage(matches.rows, existingId.rows);
+      else assertBoltEmptyPreimage(matches.rows, existingId.rows);
     }
     if (candidate.slug === 'canva') {
       const existingId = await client.query('SELECT id FROM tools WHERE id = $1', [payload.id]);
@@ -765,6 +797,7 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
           candidate.slug === 'chatgpt' ||
           candidate.slug === 'scite' ||
           candidate.slug === 'anyword' ||
+          candidate.slug === 'bolt' ||
           candidate.slug === 'canva',
       ],
     );
@@ -773,6 +806,7 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
     if (candidate.slug === 'chatgpt') assert.equal(insert.rowCount, 1, 'ChatGPT must insert exactly one new row');
     if (candidate.slug === 'scite') assert.equal(insert.rowCount, 1, 'Scite must insert exactly one new row');
     if (candidate.slug === 'anyword') assert.equal(insert.rowCount, 1, 'Anyword must insert exactly one new row');
+    if (candidate.slug === 'bolt') assert.equal(insert.rowCount, 1, 'Bolt must insert exactly one new row');
     if (candidate.slug === 'canva') assert.equal(insert.rowCount, 1, 'Canva must insert exactly one new row');
     const row = await client.query(
       'SELECT id, name, url, status, page_quality_status, features, title, content, detail, use_cases, image_url, thumbnail_url, video_url, next_review_date::text AS next_review_date FROM tools WHERE id = $1',
@@ -811,6 +845,13 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       );
       assertAnywordProtectedRowsUnchanged(anywordProtectedBefore, anywordProtectedAfter.rows);
     }
+    if (boltProtectedBefore) {
+      const boltProtectedAfter = await client.query(
+        'SELECT id, md5(row_to_json(t)::text) AS row_md5 FROM tools t WHERE id <> $1 ORDER BY id',
+        [payload.id],
+      );
+      assertBoltProtectedRowsUnchanged(boltProtectedBefore, boltProtectedAfter.rows);
+    }
     if (canvaProtectedBefore) {
       const canvaProtectedAfter = await client.query(
         'SELECT id,name,url,status,page_quality_status FROM tools WHERE id <> $1 ORDER BY id',
@@ -819,13 +860,14 @@ async function runRelease(candidate: Candidate, audit: Preaudit, asOf: string, c
       assertCanvaProtectedRowsUnchanged(canvaProtectedBefore, canvaProtectedAfter.rows);
     }
     await client.query(commit ? 'COMMIT' : 'ROLLBACK');
-    if ((candidate.slug === 'canva' || candidate.slug === 'anyword') && !commit) {
+    if ((candidate.slug === 'canva' || candidate.slug === 'anyword' || candidate.slug === 'bolt') && !commit) {
       const readback = await openDatabase();
       try {
         await readback.query('BEGIN READ ONLY');
         const found = await findMatches(readback, candidate);
         const fixedId = await readback.query('SELECT id FROM tools WHERE id=$1', [payload.id]);
         if (candidate.slug === 'anyword') assertAnywordEmptyPreimage(found.rows, fixedId.rows);
+        else if (candidate.slug === 'bolt') assertBoltEmptyPreimage(found.rows, fixedId.rows);
         else assertCanvaEmptyPreimage(found.rows, fixedId.rows);
         await readback.query('ROLLBACK');
       } finally {
@@ -895,7 +937,13 @@ async function main() {
         'ready_for_next_slot',
         `${candidate.slug}: preflight only accepts an unreleased candidate`,
       );
-    } else if (candidate.slug === 'pika' || candidate.slug === 'chatgpt' || candidate.slug === 'scite' || candidate.slug === 'anyword') {
+    } else if (
+      candidate.slug === 'pika' ||
+      candidate.slug === 'chatgpt' ||
+      candidate.slug === 'scite' ||
+      candidate.slug === 'anyword' ||
+      candidate.slug === 'bolt'
+    ) {
       assert(options.online, `${candidate.slug}: verify requires --online after a real commit`);
       assert(
         ['ready_for_next_slot', 'released'].includes(audit.status),
@@ -913,6 +961,7 @@ async function main() {
           candidate.slug === 'chatgpt' ||
           candidate.slug === 'scite' ||
           candidate.slug === 'anyword' ||
+          candidate.slug === 'bolt' ||
           candidate.slug === 'canva') &&
           options.phase === 'verify')
       ) {
@@ -940,6 +989,7 @@ async function main() {
             candidate.slug === 'chatgpt' ||
             candidate.slug === 'scite' ||
             candidate.slug === 'anyword' ||
+            candidate.slug === 'bolt' ||
             candidate.slug === 'canva'
           ) {
             const payload = loadPayload(candidate, audit, options.asOf);
@@ -949,6 +999,7 @@ async function main() {
             else if (candidate.slug === 'chatgpt') assertChatgptEmptyPreimage(matches.rows, existingId.rows);
             else if (candidate.slug === 'scite') assertSciteEmptyPreimage(matches.rows, existingId.rows);
             else if (candidate.slug === 'anyword') assertAnywordEmptyPreimage(matches.rows, existingId.rows);
+            else if (candidate.slug === 'bolt') assertBoltEmptyPreimage(matches.rows, existingId.rows);
             else assertCanvaEmptyPreimage(matches.rows, existingId.rows);
           }
         }
@@ -1028,6 +1079,27 @@ async function main() {
           assert.deepEqual(relations, { tasks: 0, capabilities: 0, fits: 0 }, 'Anyword relations must remain empty');
           await validateDeployedAssets(payload);
         }
+        if (candidate.slug === 'bolt') {
+          const payload = loadPayload(candidate, audit, options.asOf);
+          assert.equal(matches.rows[0].id, payload.id, 'Bolt fixed ID mismatch');
+          const exact = await client.query(
+            'SELECT title,content,detail,features,use_cases,image_url,thumbnail_url,url,next_review_date::text AS next_review_date FROM tools WHERE id=$1',
+            [payload.id],
+          );
+          assert.equal(exact.rowCount, 1);
+          assert.deepEqual(exact.rows[0].title, payload.title);
+          assert.deepEqual(exact.rows[0].content, payload.content);
+          assert.deepEqual(exact.rows[0].detail, payload.detail);
+          assert.deepEqual(exact.rows[0].features, payload.features);
+          assert.deepEqual(exact.rows[0].use_cases, payload.useCases);
+          assert.equal(exact.rows[0].image_url, payload.imageUrl);
+          assert.equal(exact.rows[0].thumbnail_url, payload.thumbnailUrl);
+          assert.equal(exact.rows[0].url, payload.officialUrl);
+          assert.equal(exact.rows[0].next_review_date, payload.nextReviewDate);
+          const relations = await validateCandidateRelations('bolt', payload.id);
+          assert.deepEqual(relations, { tasks: 0, capabilities: 0, fits: 0 }, 'Bolt relations must remain empty');
+          await validateDeployedAssets(payload);
+        }
         if (candidate.slug === 'canva') {
           const payload = loadPayload(candidate, audit, options.asOf);
           assert.equal(matches.rows[0].id, CANVA_RELEASE_ID, 'Canva fixed ID mismatch');
@@ -1058,6 +1130,7 @@ async function main() {
           candidate.slug === 'chatgpt' ||
           candidate.slug === 'scite' ||
           candidate.slug === 'anyword' ||
+          candidate.slug === 'bolt' ||
           candidate.slug === 'canva') &&
           options.phase === 'verify')
       ) {

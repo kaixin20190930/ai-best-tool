@@ -1,0 +1,121 @@
+{
+  "slug": "bolt",
+  "existingRoute": "/ai/bolt",
+  "action": "migrate_existing_fallback",
+  "status": "ready_for_next_slot",
+  "reviewedAt": "2026-10-12",
+  "publishNotBefore": "2026-10-12",
+  "releaseIndexState": "monitor",
+  "entityReleaseApproved": true,
+  "claimLevelHolds": [
+    "checkout-and-token-allowance",
+    "code-export-and-hosting-handoff",
+    "organization-content-license",
+    "production-readiness"
+  ],
+  "publicationPolicy": {
+    "entityGates": {
+      "identity": "pass",
+      "uniqueCanonical": "pass",
+      "duplicateIntent": "pass",
+      "coreFunction": "pass",
+      "assetRightsAndLegalSafety": "pass",
+      "misleadingClaims": "pass",
+      "pageContentSufficiency": "pass"
+    },
+    "claims": [
+      {
+        "id": "checkout-and-token-allowance",
+        "category": "price",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Plan prices, billing intervals, regions and account entitlements must be checked at checkout; AI-token and hosting usage are separate.",
+        "sources": ["https://bolt.new/pricing"],
+        "nextReviewDate": "2026-10-19"
+      },
+      {
+        "id": "code-export-and-hosting-handoff",
+        "category": "account_rights",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Project download and GitHub sync do not prove transfer of managed data, secrets, domains or hosting; verify the target workspace.",
+        "sources": [
+          "https://support.bolt.new/faqs/troubleshooting/webcontainer",
+          "https://support.bolt.new/get-started/intro-bolt"
+        ],
+        "nextReviewDate": "2026-10-26"
+      },
+      {
+        "id": "organization-content-license",
+        "category": "privacy_rights",
+        "status": "conditional",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "Terms 3.5(g) gives the Privacy Policy precedence for personal-information conflicts; organization-managed non-personal content and license scope still require account/agreement review.",
+        "sources": [
+          "https://stackblitz.com/terms-of-service",
+          "https://stackblitz.com/privacy-policy"
+        ],
+        "nextReviewDate": "2026-10-26"
+      },
+      {
+        "id": "production-readiness",
+        "category": "core_capability",
+        "status": "unknown",
+        "exposure": "boundary",
+        "preciseRecommendation": false,
+        "publicLimitation": "A prompt-generated preview does not establish safe production operation, correct access control or maintainable code.",
+        "sources": [
+          "https://support.bolt.new/get-started/intro-bolt",
+          "https://support.bolt.new/building/using-bolt/browser-support"
+        ],
+        "nextReviewDate": "2026-11-11"
+      }
+    ]
+  },
+  "productionWriteApproved": true,
+  "controllerWriteAuthorization": {
+    "candidateSlug": "bolt",
+    "approved": true,
+    "independentQaPass": true,
+    "approver": "AI Best Tool controller",
+    "authorizedAt": "2026-10-12",
+    "reason": "QA_PASS_CONTROLLER_RELEASE received; authorize only the single Bolt published + monitor/noindex production insert.",
+    "scope": "single published + monitor/noindex insert",
+    "preservedGates": {
+      "indexApproved": false,
+      "sitemapEligible": false,
+      "taskCapabilityFitCreationApproved": false
+    }
+  },
+  "sitemapChangeApproved": false,
+  "sources": {
+    "official": [
+      "https://bolt.new/",
+      "https://bolt.new/pricing",
+      "https://support.bolt.new/get-started/intro-bolt",
+      "https://support.bolt.new/building/using-bolt/browser-support",
+      "https://support.bolt.new/faqs/troubleshooting/webcontainer",
+      "https://stackblitz.com/terms-of-service",
+      "https://stackblitz.com/privacy-policy"
+    ],
+    "independent": [
+      "https://allaboutcookies.org/bolt-new-review",
+      "https://www.g2.com/products/bolt-new/reviews"
+    ]
+  },
+  "assetSha256": {
+    "/images/tool-media/bolt-editorial-cover.svg": "e52024706e1fbcb60b11a3079e36d07f5678ea8db1a7e7eff30c6d4555b97432"
+  },
+  "nextSlotChecklist": [
+    "Independent QA must re-read both direct-use sources and preserve their time and incentive boundaries",
+    "Recheck one Bolt product, bolt.new canonical and no StackBlitz or bolt.diy identity collision",
+    "Keep checkout, token, handoff, organization-content and production-readiness Claims conditional",
+    "Use only the SHA-locked original editorial SVG and never label it as a product screenshot",
+    "Check EN/CN/TW copy, Best for, Not ideal, limitations and comparison path",
+    "Run production read-only preflight and transaction rollback before any controller authorization",
+    "Never approve index, sitemap or Task-Capability-Fit relations through this release unit"
+  ]
+}

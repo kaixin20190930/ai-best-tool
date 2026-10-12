@@ -32,9 +32,10 @@ const operational = JSON.parse(command.stdout);
 assert.equal(operational.source, 'current_operational_overlay');
 assert.equal(
   operational.nextDevelopmentCandidate,
-  null,
-  'No current development candidate should be inferred after Canva release',
+  'bolt',
+  'Bolt should be the only current READY_MONITOR development candidate',
 );
+assert.equal(operational.newToolCandidates.find((candidate: { slug: string }) => candidate.slug === 'bolt')?.status, 'ready_monitor_local_only');
 assert.deepEqual(operational.newToolCandidates, queue);
 assert.equal(
   operational.newToolCandidates.find((candidate: { slug: string }) => candidate.slug === 'canva')?.status,

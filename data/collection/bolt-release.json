@@ -1,0 +1,78 @@
+{
+  "id": "04570837-c50d-4aa2-b8aa-a11738046fe5",
+  "slug": "bolt",
+  "officialUrl": "https://bolt.new/",
+  "reviewedAt": "2026-10-12",
+  "nextReviewDate": "2026-10-19",
+  "categorySlug": "productivity",
+  "pricing": "freemium",
+  "title": {
+    "en": "Bolt: browser-first AI app builder",
+    "zh": "Bolt：浏览器内 AI 应用构建",
+    "cn": "Bolt：浏览器内 AI 应用构建",
+    "tw": "Bolt：瀏覽器內 AI 應用建構"
+  },
+  "content": {
+    "en": "Bolt turns a described idea into an editable web-app prototype in the browser. Compare its fast first draft with token spending, generated-code review, hosting limits and the work of maintaining the result.",
+    "zh": "Bolt 能在浏览器里把文字需求变成可编辑的 Web 应用原型。选择前应同时比较初稿速度、token 消耗、生成代码审查、托管限制和后续维护责任。",
+    "cn": "Bolt 能在浏览器里把文字需求变成可编辑的 Web 应用原型。选择前应同时比较初稿速度、token 消耗、生成代码审查、托管限制和后续维护责任。",
+    "tw": "Bolt 能在瀏覽器裡把文字需求變成可編輯的 Web 應用原型。選擇前應一併比較初稿速度、token 消耗、生成程式碼審查、託管限制和後續維護責任。"
+  },
+  "detail": {
+    "en": "Bolt is StackBlitz's AI application builder at bolt.new, not the StackBlitz company listing or the separate bolt.diy community project. Official documentation describes prompting for websites and JavaScript-based web apps, editing generated code, an in-browser preview, Bolt Cloud databases and hosting, and GitHub source control. These are documented capabilities, not our own account-level test or a guarantee that every generated app works safely. A downloaded project or GitHub handoff may still need separate handling for data, secrets, domain and deployment services.\n\nBest for: A founder or developer testing a bounded web-app idea and able to review the resulting code.; A team showing stakeholders a clickable prototype before deciding whether to fund a maintained implementation.\n\nNot ideal for: An unattended production application processing sensitive records or payments.; A fixed-price project that cannot monitor token use or allocate engineering review.; A team assuming source export transfers hosted databases, credentials and operations automatically.\n\nLimitations: Public Free, Pro and Teams plan displays vary by billing interval, region and account; check the live checkout before relying on a price or allowance.; The official pricing page currently shows separate AI-token and hosting/request limits. Large projects and debugging loops can consume more tokens; a prompt is not a fixed-price finished app.; Bolt focuses on JavaScript-based web backends and works best in Chromium-based desktop browsers. PHP or Python backend parity is not documented.; Preview, AI-generated code and one-click publishing do not replace authorization tests, dependency review, backups, secret handling or a maintenance owner.; GitHub sync and project download address source handoff, not an automatic migration of every managed cloud resource.\n\nComparison path: Compare Bolt with Lovable for a similar prompt-to-app task and with Replit for a more developer-owned build workflow. Give each the same non-sensitive brief, then record preview quality, correction effort, source access, ongoing usage and security checks. No equal plan entitlements or production outcomes are assumed.\n\nPrivacy and rights: StackBlitz's Terms and Privacy Policy describe model-development uses and opt-out rules subject to date, region and account exceptions. Terms section 3.5(g) makes the Privacy Policy control conflicts concerning personal information. The exact treatment of organization-managed non-personal content and its license scope remains account/agreement dependent; this listing makes no precise recommendation for that use. Do not upload confidential client material until the relevant workspace and agreement are checked.\n\nEvidence boundary: An independent editor documented building and debugging a test membership app on 2026-03-31; this historical hands-on test is not a current entitlement check. G2's 2026-09-19 current-user review describes QA prototypes and the need for refactoring; it is user self-report, marked incentivized, not an audited usage log or a guarantee of business results. This directory did not log in to Bolt or reproduce either result.\n\nOfficial sources: https://bolt.new/ https://bolt.new/pricing https://support.bolt.new/get-started/intro-bolt https://support.bolt.new/building/using-bolt/browser-support https://support.bolt.new/faqs/troubleshooting/webcontainer https://stackblitz.com/terms-of-service https://stackblitz.com/privacy-policy . Independent direct-read evidence: https://allaboutcookies.org/bolt-new-review https://www.g2.com/products/bolt-new/reviews . Reviewed 2026-10-12; next price review 2026-10-19, organization-content review 2026-10-26 and core-capability review 2026-11-11.\n\nCorrection and owner updates: Owners may claim this listing and request updates; users may submit corrections for editorial review. The image is original directory artwork, not a Bolt logo or product screenshot.",
+    "zh": "Bolt 是 StackBlitz 提供、入口为 bolt.new 的 AI 应用构建产品，不等于 StackBlitz 公司条目，也不等于独立的 bolt.diy 社区项目。官方文档介绍了通过提示构建网站及 JavaScript Web 应用、编辑生成代码、浏览器预览、Bolt Cloud 数据库与托管，以及 GitHub 源码管理。这些是官方描述的能力，不是本站在特定账户的实测，也不保证每个生成应用都安全可用。下载项目或交接 GitHub 源码之后，数据、密钥、域名与部署服务仍可能需要单独迁移。\n\n适合：有开发者审查代码、需要验证边界明确的 Web 应用创意的团队；想先给利益相关者展示可点击原型，再决定是否投入长期维护的团队。\n\n不适合：无人维护却处理敏感资料或支付的生产应用；无法监控 token 消耗或安排工程审查的固定预算项目；以为源码导出会自动搬走托管数据库、凭据与运维配置的团队。\n\n限制：官方 Free、Pro、Teams 的价格与额度受账期、地区和账户影响，应核对实时结账。定价页把 AI token 和托管请求额度分别列出；项目扩大或调试循环可能持续消耗 token，不能把一次提示当成固定价成品。Bolt 重点支持 JavaScript Web 后端，在 Chromium 系桌面浏览器效果较好；不能推定 PHP 或 Python 后端等价支持。预览、生成代码及快速发布不能替代权限测试、依赖审查、备份、密钥保护和维护责任人。GitHub 同步与项目下载解决源码交接，不代表托管资源会自动迁移。\n\n比较路径：针对同一个非敏感任务，把 Bolt 与 Lovable 的提示构建流程比较，也与 Replit 的开发者主导流程比较。分别记录预览质量、修正成本、源码可得性、持续用量及安全检查；不推定套餐权益或生产结果等价。\n\n隐私与权利：StackBlitz 的服务条款和隐私政策规定了附带日期、地区及账户例外的模型开发用途与退出规则。条款第 3.5(g) 节规定，涉及个人信息的冲突以隐私政策为准；组织管理账户中非个人内容的精确许可用途仍需按具体账户和协议核查，本页不作精确推荐。核清工作区与协议前，不要上传客户机密资料。\n\n证据边界：独立编辑在 2026-03-31 实际搭建并调试过会员应用；这是历史动手测试，不证明当前账户权益。G2 上 2026-09-19 的当前用户评论介绍了 QA 原型用途及代码需重构的限制；它是带激励标记的用户自述，不是账户审计或效果保证。本站没有登录 Bolt 或复现这些结果。\n\n官方来源：https://bolt.new/ https://bolt.new/pricing https://support.bolt.new/get-started/intro-bolt https://support.bolt.new/building/using-bolt/browser-support https://support.bolt.new/faqs/troubleshooting/webcontainer https://stackblitz.com/terms-of-service https://stackblitz.com/privacy-policy 。独立直接回读：https://allaboutcookies.org/bolt-new-review https://www.g2.com/products/bolt-new/reviews 。核验日 2026-10-12；价格 2026-10-19、组织内容 2026-10-26、核心能力 2026-11-11 复核。\n\n纠错与 Owner 更新：所有者可认领条目并申请更新；用户可提交资料纠错，由编辑审核。图片为本站原创示意图，并非 Bolt 商标或产品截图。",
+    "cn": "Bolt 是 StackBlitz 提供、入口为 bolt.new 的 AI 应用构建产品，不等于 StackBlitz 公司条目，也不等于独立的 bolt.diy 社区项目。官方文档介绍了通过提示构建网站及 JavaScript Web 应用、编辑生成代码、浏览器预览、Bolt Cloud 数据库与托管，以及 GitHub 源码管理。这些是官方描述的能力，不是本站在特定账户的实测，也不保证每个生成应用都安全可用。下载项目或交接 GitHub 源码之后，数据、密钥、域名与部署服务仍可能需要单独迁移。\n\n适合：有开发者审查代码、需要验证边界明确的 Web 应用创意的团队；想先给利益相关者展示可点击原型，再决定是否投入长期维护的团队。\n\n不适合：无人维护却处理敏感资料或支付的生产应用；无法监控 token 消耗或安排工程审查的固定预算项目；以为源码导出会自动搬走托管数据库、凭据与运维配置的团队。\n\n限制：官方 Free、Pro、Teams 的价格与额度受账期、地区和账户影响，应核对实时结账。定价页把 AI token 和托管请求额度分别列出；项目扩大或调试循环可能持续消耗 token，不能把一次提示当成固定价成品。Bolt 重点支持 JavaScript Web 后端，在 Chromium 系桌面浏览器效果较好；不能推定 PHP 或 Python 后端等价支持。预览、生成代码及快速发布不能替代权限测试、依赖审查、备份、密钥保护和维护责任人。GitHub 同步与项目下载解决源码交接，不代表托管资源会自动迁移。\n\n比较路径：针对同一个非敏感任务，把 Bolt 与 Lovable 的提示构建流程比较，也与 Replit 的开发者主导流程比较。分别记录预览质量、修正成本、源码可得性、持续用量及安全检查；不推定套餐权益或生产结果等价。\n\n隐私与权利：StackBlitz 的服务条款和隐私政策规定了附带日期、地区及账户例外的模型开发用途与退出规则。条款第 3.5(g) 节规定，涉及个人信息的冲突以隐私政策为准；组织管理账户中非个人内容的精确许可用途仍需按具体账户和协议核查，本页不作精确推荐。核清工作区与协议前，不要上传客户机密资料。\n\n证据边界：独立编辑在 2026-03-31 实际搭建并调试过会员应用；这是历史动手测试，不证明当前账户权益。G2 上 2026-09-19 的当前用户评论介绍了 QA 原型用途及代码需重构的限制；它是带激励标记的用户自述，不是账户审计或效果保证。本站没有登录 Bolt 或复现这些结果。\n\n官方来源：https://bolt.new/ https://bolt.new/pricing https://support.bolt.new/get-started/intro-bolt https://support.bolt.new/building/using-bolt/browser-support https://support.bolt.new/faqs/troubleshooting/webcontainer https://stackblitz.com/terms-of-service https://stackblitz.com/privacy-policy 。独立直接回读：https://allaboutcookies.org/bolt-new-review https://www.g2.com/products/bolt-new/reviews 。核验日 2026-10-12；价格 2026-10-19、组织内容 2026-10-26、核心能力 2026-11-11 复核。\n\n纠错与 Owner 更新：所有者可认领条目并申请更新；用户可提交资料纠错，由编辑审核。图片为本站原创示意图，并非 Bolt 商标或产品截图。",
+    "tw": "Bolt 是 StackBlitz 提供、入口為 bolt.new 的 AI 應用建構產品，不等於 StackBlitz 公司條目，也不等於獨立的 bolt.diy 社群專案。官方文件介紹透過提示建立網站與 JavaScript Web 應用、編輯生成程式碼、瀏覽器預覽、Bolt Cloud 資料庫與託管，以及 GitHub 原始碼管理。這些是官方描述的能力，不是本站在特定帳戶的實測，也不保證每個生成應用都安全可用。下載專案或交接 GitHub 原始碼後，資料、密鑰、網域與部署服務仍可能需要另行遷移。\n\n適合：有開發者審查程式碼、需要驗證範圍明確的 Web 應用構想的團隊；想先展示可點擊原型，再決定是否投入長期維護的團隊。\n\n不適合：無人維護卻處理敏感資料或付款的正式應用；無法監控 token 消耗或安排工程審查的固定預算專案；以為原始碼匯出會自動搬走託管資料庫、憑證與營運設定的團隊。\n\n限制：官方 Free、Pro、Teams 的價格與額度受帳期、地區和帳戶影響，應核對即時結帳。定價頁分別列出 AI token 和託管請求額度；專案擴大或除錯循環可能持續消耗 token，不能把一次提示當成固定價格的成品。Bolt 重點支援 JavaScript Web 後端，在 Chromium 系桌面瀏覽器效果較佳；不能推定 PHP 或 Python 後端等價支援。預覽、生成程式碼及快速發布不能取代權限測試、依賴審查、備份、密鑰保護和維護責任人。GitHub 同步與專案下載解決原始碼交接，不代表託管資源會自動遷移。\n\n比較路徑：針對同一個非敏感任務，把 Bolt 與 Lovable 的提示建構流程比較，也與 Replit 的開發者主導流程比較。分別記錄預覽品質、修正成本、原始碼可得性、持續用量及安全檢查；不推定方案權益或正式環境結果等價。\n\n隱私與權利：StackBlitz 的服務條款和隱私政策規定附帶日期、地區及帳戶例外的模型開發用途與退出規則。條款第 3.5(g) 節規定，涉及個人資訊的衝突以隱私政策為準；組織管理帳戶中非個人內容的精確授權用途仍須依具體帳戶和協議查核，本頁不作精確推薦。核清工作區與協議前，請勿上傳客戶機密資料。\n\n證據邊界：獨立編輯於 2026-03-31 實際建構及除錯會員應用；這是歷史動手測試，不證明目前帳戶權益。G2 上 2026-09-19 的目前使用者評論介紹 QA 原型用途及程式碼須重構的限制；它是帶激勵標記的使用者自述，不是帳戶稽核或成效保證。本站沒有登入 Bolt 或重現這些結果。\n\n官方來源：https://bolt.new/ https://bolt.new/pricing https://support.bolt.new/get-started/intro-bolt https://support.bolt.new/building/using-bolt/browser-support https://support.bolt.new/faqs/troubleshooting/webcontainer https://stackblitz.com/terms-of-service https://stackblitz.com/privacy-policy 。獨立直接查閱：https://allaboutcookies.org/bolt-new-review https://www.g2.com/products/bolt-new/reviews 。查核日 2026-10-12；價格 2026-10-19、組織內容 2026-10-26、核心能力 2026-11-11 複核。\n\n更正與 Owner 更新：所有者可認領條目並申請更新；使用者可提交資料更正，由編輯審查。圖片是本站原創示意圖，不是 Bolt 商標或產品截圖。"
+  },
+  "imageUrl": "/images/tool-media/bolt-editorial-cover.svg",
+  "thumbnailUrl": "/images/tool-media/bolt-editorial-cover.svg",
+  "tags": ["ai-app-builder", "prototyping", "web-development"],
+  "features": {
+    "audience": {
+      "bestFit": {
+        "en": ["Teams testing a bounded web-app idea with an engineer reviewing output.", "Founders showing stakeholders a clickable prototype before committing to maintenance."],
+        "zh": ["有工程师审查输出、验证边界明确的 Web 应用创意的团队。", "投入长期维护前需要展示可点击原型的创始人。"],
+        "cn": ["有工程师审查输出、验证边界明确的 Web 应用创意的团队。", "投入长期维护前需要展示可点击原型的创始人。"],
+        "tw": ["有工程師審查輸出、驗證範圍明確的 Web 應用構想的團隊。", "投入長期維護前需要展示可點擊原型的創辦人。"]
+      },
+      "notIdealFor": {
+        "en": ["Unattended production apps involving sensitive records or payments.", "Projects without token-budget visibility, code review or a migration owner."],
+        "zh": ["无人维护且处理敏感资料或支付的生产应用。", "缺少 token 预算、代码审查或迁移责任人的项目。"],
+        "cn": ["无人维护且处理敏感资料或支付的生产应用。", "缺少 token 预算、代码审查或迁移责任人的项目。"],
+        "tw": ["無人維護且處理敏感資料或付款的正式應用。", "缺少 token 預算、程式碼審查或遷移責任人的專案。"]
+      }
+    },
+    "editorial": {
+      "reviewedAt": "2026-10-12",
+      "reviewedBy": "AI Best Tool editorial; public-source review",
+      "sourceUrl": "https://support.bolt.new/get-started/intro-bolt",
+      "trustNote": {
+        "en": "Official docs plus one dated independent hands-on test and scoped user report; no first-party workspace trial.",
+        "zh": "官方文档、注明日期的独立动手测试和限定范围的用户经历；本站未实测账户。",
+        "cn": "官方文档、注明日期的独立动手测试和限定范围的用户经历；本站未实测账户。",
+        "tw": "官方文件、註明日期的獨立動手測試和有限範圍的使用者經驗；本站未實測帳戶。"
+      }
+    },
+    "evidence": {
+      "official": ["https://bolt.new/", "https://bolt.new/pricing", "https://support.bolt.new/get-started/intro-bolt", "https://support.bolt.new/building/using-bolt/browser-support", "https://support.bolt.new/faqs/troubleshooting/webcontainer", "https://stackblitz.com/terms-of-service", "https://stackblitz.com/privacy-policy"],
+      "independent": ["https://allaboutcookies.org/bolt-new-review", "https://www.g2.com/products/bolt-new/reviews"]
+    },
+    "publicationPolicy": {
+      "entityGates": {"identity": "pass", "uniqueCanonical": "pass", "duplicateIntent": "pass", "coreFunction": "pass", "assetRightsAndLegalSafety": "pass", "misleadingClaims": "pass", "pageContentSufficiency": "pass"},
+      "claims": [
+        {"id": "checkout-and-token-allowance", "category": "price", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Plan prices, billing interval, region and account entitlements must be verified at checkout; token and hosting usage are separate.", "sources": ["https://bolt.new/pricing"], "nextReviewDate": "2026-10-19"},
+        {"id": "code-export-and-hosting-handoff", "category": "account_rights", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Project download and GitHub sync do not guarantee transfer of managed data, secrets, domains or hosting; verify the target workspace.", "sources": ["https://support.bolt.new/faqs/troubleshooting/webcontainer", "https://support.bolt.new/get-started/intro-bolt"], "nextReviewDate": "2026-10-26"},
+        {"id": "organization-content-license", "category": "privacy_rights", "status": "conditional", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "Terms 3.5(g) gives Privacy Policy precedence for personal-information conflicts; organization-managed non-personal content/license scope still needs account/agreement review.", "sources": ["https://stackblitz.com/terms-of-service", "https://stackblitz.com/privacy-policy"], "nextReviewDate": "2026-10-26"},
+        {"id": "production-readiness", "category": "core_capability", "status": "unknown", "exposure": "boundary", "preciseRecommendation": false, "publicLimitation": "A prompt-generated preview does not establish safe production operation, correct access control or maintainable code.", "sources": ["https://support.bolt.new/get-started/intro-bolt", "https://support.bolt.new/building/using-bolt/browser-support"], "nextReviewDate": "2026-11-11"}
+      ]
+    },
+    "media": {"kind": "first_party_editorial", "asset": "/images/tool-media/bolt-editorial-cover.svg", "sha256": "e52024706e1fbcb60b11a3079e36d07f5678ea8db1a7e7eff30c6d4555b97432", "productScreenshot": false},
+    "release": {"target": "published_monitor_noindex", "sitemapEligible": false, "relationshipCreationApproved": false}
+  },
+  "useCases": {
+    "en": ["Prototype a bounded web app for stakeholder review.", "Compare source handoff and operating cost before launch."],
+    "zh": ["为利益相关者审查制作范围明确的 Web 应用原型。", "上线前比较源码交接与运营成本。"],
+    "cn": ["为利益相关者审查制作范围明确的 Web 应用原型。", "上线前比较源码交接与运营成本。"],
+    "tw": ["為利害關係人審查製作範圍明確的 Web 應用原型。", "上線前比較原始碼交接與營運成本。"]
+  }
+}

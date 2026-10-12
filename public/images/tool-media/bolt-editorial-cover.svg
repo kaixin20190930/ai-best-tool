@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">From idea to reviewed application</title>
+  <desc id="desc">Original abstract editorial diagram of an idea, app draft, review, and deployment. Not a product interface.</desc>
+  <rect width="1200" height="630" fill="#f3f8f4"/>
+  <path d="M0 456C216 361 347 504 565 429S926 330 1200 432V630H0Z" fill="#e2eee7"/>
+  <g fill="#fff" stroke="#315b4d" stroke-width="5">
+    <rect x="80" y="155" width="235" height="240" rx="22"/>
+    <rect x="354" y="115" width="235" height="280" rx="22"/>
+    <rect x="628" y="155" width="235" height="240" rx="22"/>
+    <rect x="902" y="115" width="220" height="280" rx="22"/>
+  </g>
+  <g fill="none" stroke="#5d9380" stroke-linecap="round" stroke-width="7">
+    <path d="M315 275h39m235 0h39m235 0h39"/>
+    <path d="m340 261 14 14-14 14m274-28 14 14-14 14m274-28 14 14-14 14"/>
+  </g>
+  <g fill="#d7eee2">
+    <circle cx="198" cy="245" r="44"/><rect x="402" y="194" width="140" height="18" rx="9"/><rect x="402" y="233" width="110" height="12" rx="6"/>
+    <rect x="402" y="263" width="140" height="12" rx="6"/><circle cx="746" cy="245" r="44"/><rect x="947" y="194" width="132" height="82" rx="12"/>
+  </g>
+  <g fill="#315b4d" font-family="Georgia,serif" font-size="21" text-anchor="middle">
+    <text x="198" y="352">Idea</text><text x="472" y="352">Draft</text><text x="746" y="352">Review</text><text x="1012" y="352">Ship</text>
+  </g>
+  <text x="80" y="508" font-family="Georgia,serif" font-size="38" fill="#214638">Build an app, then verify it</text>
+  <text x="82" y="552" font-family="Georgia,serif" font-size="21" fill="#3c6a58">AI Best Tool editorial artwork · not a product screenshot</text>
+</svg>
