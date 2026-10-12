@@ -2,9 +2,10 @@
 
 日期：2026-10-12（Asia/Shanghai）  
 角色：唯一开发子任务  
-结果：**A 线独立 QA 已通过、总控已授权单项 `published + monitor/noindex` 写入，尚未生产提交；B 线继承昨日 PASS、零写入；C 线因关系证据不足延后。**
+状态：`RELEASED_PRODUCTION_VERIFIED`
+结果：**A 线 Bolt 已完成单项生产提交与线上验证；B 线继承昨日 PASS、零写入；C 线因关系证据不足延后，本周额度仍为 `0/2`。**
 
-本交付未执行生产 commit、push 或部署，未修改索引、sitemap、Task/Capability/Fit、freshness 日期或既有实体。生产持久写入计数：`productionWrites=0`。两份用户 SQL 未触碰。
+生产提交已按总控授权完成；本次 closeout 不再执行生产写入、push 或部署，`productionWrites=0`。索引、sitemap 与 Task/Capability/Fit 门禁均未放开，两份用户 SQL 未触碰。
 
 ## A. Bolt 新工具候选
 
@@ -19,7 +20,7 @@ Bolt 的实体门禁已满足，独立 QA 已通过，且总控已完成单项�
 - 素材：使用本站原创中性应用交付流程图，SHA-256 `e52024706e1fbcb60b11a3079e36d07f5678ea8db1a7e7eff30c6d4555b97432`；不是 Bolt/StackBlitz Logo、截图或 UI。
 - 发布目标仅为 `published + monitor/noindex`；`index=false`、`sitemap=false`、`Task/Capability/Fit=false`。
 
-运营覆盖层仍为 `ready_monitor_local_only`。独立 QA 已返回 `QA_PASS_CONTROLLER_RELEASE`，总控已写入候选级授权：只允许单个 Bolt `published + monitor/noindex` 插入；index、sitemap、Task/Capability/Fit 三项门禁保持 false。授权差分完成时尚未运行生产 `--commit`。
+独立 QA 已返回 `QA_PASS_CONTROLLER_RELEASE`，总控授权的唯一 Bolt `published + monitor/noindex` 写入已完成。运营覆盖层现为 `released_monitor_noindex`，证据指向 `bolt-release.json`；index、sitemap、Task/Capability/Fit 三项门禁保持 false，Bolt 不再属于开发候选。
 
 ### 两项互补独立使用证据
 
@@ -44,7 +45,7 @@ Bolt 的实体门禁已满足，独立 QA 已通过，且总控已完成单项�
 - 固定门禁：[`bolt-release-guard.ts`](../scripts/bolt-release-guard.ts)
 - 专项测试：[`test-bolt-controlled-release.ts`](../scripts/test-bolt-controlled-release.ts)
 
-生产只读 preflight 通过：数据库身份和固定 ID 无匹配；`/ai/bolt`、`/cn/ai/bolt`、`/tw/ai/bolt` 均为 200、自指 canonical、`noindex`，且 sitemap 匹配 0。默认 release 在事务内完成固定 ID 插入、EN/CN/TW 后像、旧行哈希保护后执行 `ROLLBACK`；新连接再次 preflight 仍为空前像。`transaction=ROLLBACK`，`productionWrites=0`。
+生产只读 preflight 与事务 rollback 均通过，随后按授权完成真实生产提交。固定 ID `04570837-c50d-4aa2-b8aa-a11738046fe5` 回读为 `published + monitor`，`reviewedAt=2026-10-12`、`nextReviewDate=2026-10-19`。`/ai/bolt`、`/cn/ai/bolt`、`/tw/ai/bolt` 均返回 200、自指 canonical 与 `noindex`；CN 为简体、TW 为繁体。Bolt sitemap 匹配为 0，完整 production SEO smoke PASS，sitemap 共 126 条。
 
 ## B. Freshness 继承结论
 
@@ -60,7 +61,7 @@ Bolt 的实体门禁已满足，独立 QA 已通过，且总控已完成单项�
 新周额度为 `0/2`，但 `build-app-with-ai` 目前没有足够真实关系数据支持用户可见单元：
 
 - 生产 Task 存在，但 n8n 与 OpenRouter 的两个 Fit 已受控撤回为 `stale`；对应旧 Claim 已过复核期，不能恢复为候选工具。
-- Bolt 尚未生产发布，也没有经过关系级 Capability/Fit 门禁。
+- Bolt 已发布为 monitor/noindex，但尚未经过关系级 Capability/Fit 门禁。
 - 已有 Lovable/Replit 工具页面不等于已经形成可发布的 Task 关系图。
 
 因此 C 线明确延后，不创建内部规划型公开页，也不准备空关系 Comparison。Bolt 发布且至少形成经证据审核的真实 Tool Capability/Fit 之后，再判断 Task Page 或 Structured Comparison；本结论不占本周 `0/2` 额度。
@@ -72,11 +73,13 @@ pnpm exec tsx scripts/test-bolt-controlled-release.ts
 ./node_modules/.bin/tsc --noEmit
 pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=bolt --phase=preflight --as-of=2026-10-12 --online
 pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=bolt --phase=release --as-of=2026-10-12
-pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=bolt --phase=preflight --as-of=2026-10-12 --online
+pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=bolt --phase=release --as-of=2026-10-12 --commit
+pnpm exec tsx scripts/candidate-release-pipeline.ts --candidate=bolt --phase=verify --as-of=2026-10-12 --online
+pnpm run seo:production-smoke
 pnpm exec tsx scripts/verify-decision-cl04-app-build-readonly.ts --after-withdrawal
 ```
 
-结果：Bolt 专项、TypeScript、两次生产只读 preflight、事务 rollback 和完整 build 均通过。独立 QA 返回 `QA_PASS_CONTROLLER_RELEASE`，总控已完成候选级生产授权；当前仍未执行生产提交。专项测试确认当前授权通过，缺授权、QA=false、候选不匹配，以及 index/sitemap/Task-Capability-Fit 任一高风险门禁为 true 时均 fail closed。CL-04 verifier 在确认撤回状态后因旧 linked Claim 已过期而停止，进一步证明 C 线关系证据不可发布；该失败未触发写入，也不属于 Bolt 发布器失败。
+结果：Bolt 专项、TypeScript、生产只读 preflight、事务 rollback、完整 build、真实生产提交、在线 verify 与 production SEO smoke 均通过。独立 QA 返回 `QA_PASS_CONTROLLER_RELEASE`；固定实体及三语页面已线上回读，Bolt 未进入 sitemap。专项测试确认缺授权、QA=false、候选不匹配，以及 index/sitemap/Task-Capability-Fit 任一高风险门禁为 true 时均 fail closed。CL-04 verifier 在确认撤回状态后因旧 linked Claim 已过期而停止，进一步证明 C 线关系证据不可发布；该失败未触发写入，也不属于 Bolt 发布器失败。
 
 ## QA 结论与保留风险
 
@@ -84,4 +87,4 @@ pnpm exec tsx scripts/verify-decision-cl04-app-build-readonly.ts --after-withdra
 2. 检查官方定价与 token 帮助页可能存在的日额度差异；公开稿只能保留实时结账和账户核验边界。
 3. 检查 Terms §3.5(g)、§3.5(h) 与 Privacy Policy 组织账户段落，确保未把个人信息优先规则泛化到非个人内容。
 4. 检查固定 ID、素材 SHA、空前像、旧行保护、CN 简体/TW 繁体以及无授权 `--commit` 负例。
-5. 独立 QA 已通过并完成总控授权；本授权差分任务本身仍不执行生产 commit、push 或部署。
+5. 独立 QA、总控授权、生产提交及线上验证均已完成；本 closeout 只同步仓库状态，不再执行生产 commit、push 或部署。

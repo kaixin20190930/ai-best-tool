@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-11
+更新时间：2026-10-12
+
+2026-10-12 **BOLT-CONTROLLED-RELEASE 已完成生产验证**：唯一 Bolt 实体 `04570837-c50d-4aa2-b8aa-a11738046fe5` 为 `published + monitor/noindex`，`reviewedAt=2026-10-12`、`nextReviewDate=2026-10-19`。EN/CN/TW 页面均为 200、自指 canonical 与 noindex，CN 为简体、TW 为繁体；Bolt 未进入 sitemap，完整 production SEO smoke PASS，sitemap 共 126 条。当前运营覆盖层已标记 `released_monitor_noindex` 并从开发候选队列排除；未批准 index、sitemap 或 Task/Capability/Fit。详见[当日运营交付](./DAILY_OPERATIONS_2026-10-12_CN.md)。
 
 2026-10-11 **ANYWORD-FAST-CONTROLLED-RELEASE-2026-10-11 已生产验证**：唯一 Anyword 实体 `4555627d-2de9-4614-a850-fa073388f869` 为 `published + monitor/noindex`。初次发布后发现 CN/TW 语言键错位，已按固定前像受控修正并完成幂等 postcheck；CN 简体、TW 繁体均为 200/self-canonical/noindex，完整 production SEO smoke PASS。sitemap 126 条、Anyword 0 条；当前候选覆盖层已排除 Anyword，不批准索引或 Task/Capability/Fit。详见[交付记录](./ANYWORD_FAST_CONTROLLED_RELEASE_2026-10-11_CN.md)。
 

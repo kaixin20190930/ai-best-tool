@@ -8,14 +8,18 @@ const queue = readCurrentCandidateQueue();
 const snapshot = JSON.parse(fs.readFileSync('data/collection/mature-candidate-buffer-2026-10-06.json', 'utf8'));
 const state = JSON.parse(fs.readFileSync('data/collection/mature-candidate-current-state-2026-10-10.json', 'utf8'));
 assert.equal(snapshot.candidates.length, 15);
-assert.equal(queue.length, 9);
-for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva', 'anyword']) {
+assert.equal(queue.length, 8);
+for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva', 'anyword', 'bolt']) {
   assert(!queue.some((candidate) => candidate.slug === slug), `${slug} reentered new-tool queue`);
 }
-assert.deepEqual(Object.keys(state.released).sort(), ['anyword', 'canva', 'elicit', 'murf', 'pika', 'scite']);
+assert.deepEqual(Object.keys(state.released).sort(), ['anyword', 'bolt', 'canva', 'elicit', 'murf', 'pika', 'scite']);
 assert.deepEqual(state.released.anyword, {
   status: 'released_monitor_noindex',
   evidence: 'data/collection/anyword-release.json',
+});
+assert.deepEqual(state.released.bolt, {
+  status: 'released_monitor_noindex',
+  evidence: 'data/collection/bolt-release.json',
 });
 assert.deepEqual(Object.keys(state.independentReleasesOutsideSnapshot), ['chatgpt']);
 assert.equal(
@@ -26,22 +30,22 @@ assert.equal(
   snapshot.candidates.find((candidate: { slug: string }) => candidate.slug === 'scite')?.verdict,
   'HOLD_EVIDENCE',
 );
+assert.equal(
+  snapshot.candidates.find((candidate: { slug: string }) => candidate.slug === 'bolt')?.verdict,
+  'HOLD_EVIDENCE',
+  'historical Bolt verdict must remain unchanged',
+);
 const command = spawnSync('pnpm', ['--silent', 'run', 'collection:current-mature-queue'], { encoding: 'utf8' });
 assert.equal(command.status, 0, command.stderr || command.stdout);
 const operational = JSON.parse(command.stdout);
 assert.equal(operational.source, 'current_operational_overlay');
-assert.equal(
-  operational.nextDevelopmentCandidate,
-  'bolt',
-  'Bolt should be the only current READY_MONITOR development candidate',
-);
-assert.equal(operational.newToolCandidates.find((candidate: { slug: string }) => candidate.slug === 'bolt')?.status, 'ready_monitor_local_only');
+assert.equal(operational.nextDevelopmentCandidate, null, 'released Bolt must not remain a development candidate');
 assert.deepEqual(operational.newToolCandidates, queue);
 assert.equal(
   operational.newToolCandidates.find((candidate: { slug: string }) => candidate.slug === 'canva')?.status,
   undefined,
 );
-for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva', 'anyword']) {
+for (const slug of ['elicit', 'murf', 'pika', 'scite', 'chatgpt', 'canva', 'anyword', 'bolt']) {
   assert(!operational.newToolCandidates.some((candidate: { slug: string }) => candidate.slug === slug));
 }
 console.log('PASS current candidate overlay preserves historical snapshot and excludes released entities');

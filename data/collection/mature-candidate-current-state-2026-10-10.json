@@ -9,15 +9,11 @@
     "pika": { "status": "released_monitor_noindex", "evidence": "data/collection/pika-release.json" },
     "scite": { "status": "released_monitor_noindex", "evidence": "data/collection/scite-release-manifest-2026-10-10.json" },
     "canva": { "status": "released_monitor_noindex", "evidence": "data/collection/canva-release.json" },
-    "anyword": { "status": "released_monitor_noindex", "evidence": "data/collection/anyword-release.json" }
+    "anyword": { "status": "released_monitor_noindex", "evidence": "data/collection/anyword-release.json" },
+    "bolt": { "status": "released_monitor_noindex", "evidence": "data/collection/bolt-release.json" }
   },
   "independentReleasesOutsideSnapshot": {
     "chatgpt": { "status": "released_monitor_noindex", "evidence": "data/collection/chatgpt-release.json" }
   },
-  "developmentCandidates": {
-    "bolt": {
-      "status": "ready_monitor_local_only",
-      "evidence": "data/collection/bolt-controlled-release-preaudit-2026-10-12.json"
-    }
-  }
+  "developmentCandidates": {}
 }
