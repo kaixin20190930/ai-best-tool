@@ -35,6 +35,10 @@ type PublicationTool = Parameters<typeof getPaidListingPublishGate>[0] & {
   features?: unknown;
 };
 
+export function isMonitorPaymentEligible(commercial: Record<string, unknown>): boolean {
+  return commercial.plan !== 'standard_paid' || commercial.paymentConfirmed === true;
+}
+
 export function getMonitorPublicationBlockers(tool: PublicationTool): string[] {
   const blockers = [...getPaidListingPublishGate(tool).blockers];
   if (tool.pricing && !['free', 'freemium', 'paid'].includes(tool.pricing)) blockers.push('Pricing');
@@ -53,10 +57,41 @@ export function getMonitorPublicationBlockers(tool: PublicationTool): string[] {
     ? features.submission as Record<string, unknown> : {};
   const commercial = submission.commercial && typeof submission.commercial === 'object'
     ? submission.commercial as Record<string, unknown> : {};
-  if (commercial.plan === 'standard_paid' && commercial.paymentConfirmed !== true) {
+  if (!isMonitorPaymentEligible(commercial)) {
     blockers.push('Priority review payment');
   }
   return blockers;
+}
+
+export function buildReadyDraftMonitorPublishSql(evidenceReadyDraftSql: string): string {
+  return `
+    UPDATE tools
+    SET status = 'published',
+        page_quality_status = 'monitor',
+        next_review_date = CASE
+          WHEN next_review_date > CURRENT_DATE THEN next_review_date
+          ELSE CURRENT_DATE + 30
+        END,
+        features = COALESCE(features, '{}'::jsonb) || jsonb_build_object(
+          'submission',
+          COALESCE(features->'submission', '{}'::jsonb) || jsonb_build_object(
+            'review',
+            COALESCE(features->'submission'->'review', '{}'::jsonb) || jsonb_build_object(
+              'approvedAt', NOW()::text,
+              'reviewer', $2::text,
+              'publishMode', 'monitor_noindex'
+            )
+          )
+        ),
+        updated_at = NOW()
+    WHERE id::text = ANY($1::text[])
+      AND ${evidenceReadyDraftSql}
+      AND (
+        COALESCE(features->'submission'->'commercial'->>'plan', 'free') <> 'standard_paid'
+        OR features #> '{submission,commercial,paymentConfirmed}' = 'true'::jsonb
+      )
+    RETURNING name
+  `;
 }
 
 export function getMonitorReviewDate(existing: string | null | undefined, proposed?: string | null): string {

@@ -9,7 +9,7 @@ import { trackCommerceEvent } from '@/app/actions/analytics';
 import { sendTransactionalEmail } from '@/lib/services/mailer';
 import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
 import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
-import { getMonitorPublicationBlockers, getMonitorReviewDate, submissionReviewSlaHoursSql, withMonitorPublicationReview } from '@/lib/services/admin/submissionPublication';
+import { buildReadyDraftMonitorPublishSql, getMonitorPublicationBlockers, getMonitorReviewDate, submissionReviewSlaHoursSql, withMonitorPublicationReview } from '@/lib/services/admin/submissionPublication';
 
 const publicLocales = ['en', 'cn', 'tw', 'jp', 'de', 'es', 'fr', 'pt', 'ru'];
 const validStatuses = ['draft', 'pending', 'published', 'rejected'] as const;
@@ -910,7 +910,7 @@ export async function publishReadyTools(
   toolIds: string[]
 ): Promise<{ success: boolean; published: number; skipped: number; error?: string }> {
   try {
-    await requireAdmin();
+    const reviewer = await requireAdmin();
 
     const ids = Array.from(new Set(toolIds.map((id) => id.trim()).filter(Boolean)));
 
@@ -919,16 +919,10 @@ export async function publishReadyTools(
     }
 
     const pool = getPool();
-    const result = await pool.query(
-      `
-        UPDATE tools
-        SET status = 'published', updated_at = NOW()
-        WHERE id::text = ANY($1::text[])
-          AND ${evidenceReadyDraftSql}
-        RETURNING name
-      `,
-      [ids]
-    );
+    const result = await pool.query(buildReadyDraftMonitorPublishSql(evidenceReadyDraftSql), [
+      ids,
+      reviewer.email || reviewer.id,
+    ]);
 
     revalidateAdminToolPaths();
     for (const row of result.rows) {
