@@ -18,6 +18,16 @@ const migration = readFileSync(
   'db/supabase/migrations/20261006_admin_publish_reviewed_task_tool_group_bilingual_gate.sql',
   'utf8',
 );
+const purposeTypeMigration = readFileSync(
+  'db/supabase/migrations/20261012_research_relation_purpose_array_type.sql', 'utf8',
+);
+const purposeTypeRollback = readFileSync(
+  'db/supabase/manual/20261012_research_relation_purpose_array_type_rollback.sql', 'utf8',
+);
+assert.match(purposeTypeMigration, /l\.purpose::text FROM public\.tool_capability_claims/);
+assert.match(purposeTypeMigration, /l\.purpose::text FROM public\.tool_task_fit_claims/);
+assert.match(purposeTypeRollback, /v_new_cap,v_old_cap/);
+assert.match(purposeTypeRollback, /v_new_fit,v_old_fit/);
 // Only the content gate is superseded: locks, permissions, transaction, evidence,
 // replay, group scope and publication writes must remain byte-for-byte unchanged.
 const stripGate = (sql: string) =>
@@ -265,8 +275,8 @@ async function main(toolId = 'cec78907-e2a1-4eb7-853a-a58334026280') {
       CREATE TABLE product_intelligence_claims(id uuid PRIMARY KEY,profile_id uuid,source_id uuid,source_url text,source_type text,verification_status text,conflict_status text,invalidated_at timestamptz,expires_at timestamptz,verified_at timestamptz,verified_by uuid,review_due_at timestamptz);
       CREATE TABLE tool_capabilities(id uuid PRIMARY KEY,tool_id uuid,capability_id uuid,support_level text,availability text,plan_requirement jsonb,limitations jsonb,status text,reviewed_by uuid,reviewed_at timestamptz,review_due_at timestamptz,last_edited_by uuid,updated_at timestamptz);
       CREATE TABLE tool_task_fits(id uuid PRIMARY KEY,task_id uuid,tool_id uuid,fit_level text,rationale jsonb,required_conditions jsonb,disqualifiers jsonb,status text,reviewed_by uuid,reviewed_at timestamptz,review_due_at timestamptz,last_edited_by uuid,updated_at timestamptz);
-      CREATE TABLE tool_capability_claims(tool_capability_id uuid,claim_id uuid,purpose text);
-      CREATE TABLE tool_task_fit_claims(fit_id uuid,claim_id uuid,purpose text);
+      CREATE TABLE tool_capability_claims(tool_capability_id uuid,claim_id uuid,purpose varchar(40));
+      CREATE TABLE tool_task_fit_claims(fit_id uuid,claim_id uuid,purpose varchar(40));
       CREATE TABLE tool_decision_profile_claims(tool_id uuid,claim_id uuid,purpose text);
       CREATE TABLE product_intelligence_timeline_events(id bigint GENERATED ALWAYS AS IDENTITY,profile_id uuid,event_type text,review_scope text,claim_type text,claim_key text,title text,summary text,old_value jsonb,new_value jsonb,visibility text,occurred_at timestamptz,verified_at timestamptz,verified_by uuid,metadata jsonb);
       ALTER TABLE decision_tasks ENABLE ROW LEVEL SECURITY; ALTER TABLE task_capabilities ENABLE ROW LEVEL SECURITY;
@@ -322,6 +332,17 @@ async function main(toolId = 'cec78907-e2a1-4eb7-853a-a58334026280') {
     assert.deepEqual(counts, { decision: perplexity ? 6 : 5, capability: 10, fit: perplexity ? 7 : 6 });
     await db.query(originalMigration);
     await db.query(migration);
+    const signature = 'public.admin_publish_reviewed_task_tool_group(uuid,uuid,jsonb,jsonb,uuid,text,boolean)';
+    const beforeRepair = (await db.query('SELECT pg_get_functiondef($1::regprocedure) value', [signature])).rows[0].value;
+    await db.query(purposeTypeMigration);
+    const afterRepair = (await db.query('SELECT pg_get_functiondef($1::regprocedure) value', [signature])).rows[0].value;
+    await db.query(purposeTypeMigration);
+    assert.equal((await db.query('SELECT pg_get_functiondef($1::regprocedure) value', [signature])).rows[0].value,
+      afterRepair, 'Compatibility migration must be idempotent');
+    await db.query(purposeTypeRollback);
+    assert.equal((await db.query('SELECT pg_get_functiondef($1::regprocedure) value', [signature])).rows[0].value,
+      beforeRepair, 'Rollback must restore the exact previous function');
+    await db.query(purposeTypeMigration);
     const manifest = await db.query(
       "SELECT jsonb_agg(jsonb_build_object('id',id,'updated_at',updated_at,'status','reviewed') ORDER BY id) value FROM tool_capabilities WHERE tool_id=$1",
       [toolId],

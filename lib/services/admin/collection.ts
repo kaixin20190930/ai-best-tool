@@ -1,5 +1,6 @@
 import { getPool } from '@/db/neon/client';
 import { evaluateCollectionAdmission } from '@/lib/services/admin/collectionAdmission';
+import { parseOps2Selection } from '@/lib/services/admin/ops2Selection';
 import type { PoolClient } from 'pg';
 
 const collectionSchemaSql = `
@@ -1365,11 +1366,19 @@ export async function importCollectionCandidateToDraft(
   if (!candidate) {
     throw new Error('Collection candidate not found');
   }
+  const selection = candidate.raw_payload?.sourceType === 'ops2_selection'
+    ? parseOps2Selection(candidate.raw_payload.ops2Selection) : null;
+  if (selection && (selection.id !== candidate.id || selection.officialUrl !== candidate.normalized_url)) {
+    throw new Error('Structured selection does not match the candidate identity');
+  }
 
   const linkedTool = candidate.tool_id
     ? await pool.query('SELECT id, status FROM tools WHERE id = $1 LIMIT 1', [candidate.tool_id])
     : null;
   const linkedToolStatus = linkedTool?.rows[0]?.status as string | undefined;
+  if (selection && candidate.tool_id && linkedToolStatus === 'draft') {
+    throw new Error('Structured selection cannot overwrite an existing draft');
+  }
   if (candidate.status === 'imported' && candidate.tool_id && linkedToolStatus !== 'draft') {
     return { toolId: candidate.tool_id };
   }
@@ -1428,8 +1437,12 @@ export async function importCollectionCandidateToDraft(
     relevance_score: updatedScore.relevanceScore,
     summary,
   });
-  const title = { en: titleText, zh: titleText };
-  const content = {
+  const title = selection ? Object.fromEntries(
+    (['en', 'zh', 'cn'] as const).map((locale) => [locale, selection.localized[locale].title]),
+  ) : { en: titleText, zh: titleText };
+  const content = selection ? Object.fromEntries(
+    (['en', 'zh', 'cn'] as const).map((locale) => [locale, selection.localized[locale].summary]),
+  ) : {
     en: summary,
     zh: summary,
   };
@@ -1441,7 +1454,9 @@ export async function importCollectionCandidateToDraft(
     sourceName: candidate.source_name,
     score: updatedScore,
   });
-  const detail = {
+  const detail = selection ? Object.fromEntries(
+    (['en', 'zh', 'cn'] as const).map((locale) => [locale, selection.localized[locale].detail]),
+  ) : {
     en: draftDetail,
     zh: draftDetail,
   };
@@ -1456,12 +1471,18 @@ export async function importCollectionCandidateToDraft(
   const pricingSnapshot = getStringValue(candidate.raw_payload.pricingSnapshot) || '';
   const marketValidation = getRecordValue(candidate.raw_payload.marketValidation);
   const localizedList = (values: string[]) => ({ en: values, zh: values });
+  const selectedList = (key: 'bestFor' | 'notIdealFor' | 'limitations' | 'compareAxes') =>
+    Object.fromEntries((['en', 'zh', 'cn'] as const).map((locale) =>
+      [locale, selection!.localized[locale][key]]));
+  const selectedText = (key: 'summary' | 'pricingSummary') =>
+    Object.fromEntries((['en', 'zh', 'cn'] as const).map((locale) =>
+      [locale, selection!.localized[locale][key]]));
   const sourceSummary = evidenceUrls.length
     ? `Verified against ${evidenceUrls.length} official source${evidenceUrls.length === 1 ? '' : 's'}.`
     : 'Verified against the official product source.';
 
   const featurePayload = {
-    collection: {
+    collection: selection ? {} : {
       sourceUrl: candidate.normalized_url,
       sourceName: candidate.source_name,
       canonicalUrl: detailMetadata.canonicalUrl,
@@ -1475,32 +1496,34 @@ export async function importCollectionCandidateToDraft(
       reviewedAt,
       reviewedBy: 'AI Best Tool Editorial',
       sourceUrl: officialUrl,
-      summary: { en: summary, zh: summary },
+      summary: selection ? selectedText('summary') : { en: summary, zh: summary },
       trustNote: { en: sourceSummary, zh: sourceSummary },
     },
-    marketValidation,
-    bestFit: localizedList(classification.useCases),
-    notIdealFor: localizedList(notIdealFor),
+    ...(!selection ? { marketValidation } : {}),
+    bestFit: selection ? selectedList('bestFor') : localizedList(classification.useCases),
+    notIdealFor: selection ? selectedList('notIdealFor') : localizedList(notIdealFor),
     decision: {
-      compareAxes: localizedList(compareAxes),
-      limitations: localizedList(limitations),
-      officialSummary: { en: summary, zh: summary },
+      compareAxes: selection ? selectedList('compareAxes') : localizedList(compareAxes),
+      limitations: selection ? selectedList('limitations') : localizedList(limitations),
+      officialSummary: selection ? selectedText('summary') : { en: summary, zh: summary },
       freshnessSummary: {
         en: reviewedAt ? `Official sources reviewed ${reviewedAt.slice(0, 10)}.` : sourceSummary,
         zh: reviewedAt ? `Official sources reviewed ${reviewedAt.slice(0, 10)}.` : sourceSummary,
       },
-      pricingSummary: { en: pricingSnapshot, zh: pricingSnapshot },
-      mediaSummary: {
-        en: detailMetadata.imageUrl ? 'Official product media is available.' : 'Official product media needs review.',
-        zh: detailMetadata.imageUrl ? 'Official product media is available.' : 'Official product media needs review.',
-      },
-      communitySummary: {
-        en: 'Independent community evidence is not included in this intake review.',
-        zh: 'Independent community evidence is not included in this intake review.',
-      },
+      pricingSummary: selection ? selectedText('pricingSummary') : { en: pricingSnapshot, zh: pricingSnapshot },
+      ...(!selection ? {
+        mediaSummary: {
+          en: detailMetadata.imageUrl ? 'Official product media is available.' : 'Official product media needs review.',
+          zh: detailMetadata.imageUrl ? 'Official product media is available.' : 'Official product media needs review.',
+        },
+        communitySummary: {
+          en: 'Independent community evidence is not included in this intake review.',
+          zh: 'Independent community evidence is not included in this intake review.',
+        },
+      } : {}),
     },
-    suggestedCategorySlug: classification.categorySlug,
-    suggestedUseCases: classification.useCases,
+    ...(!selection ? { suggestedCategorySlug: classification.categorySlug,
+      suggestedUseCases: classification.useCases } : {}),
   };
   const toolResult =
     candidate.tool_id && linkedToolStatus === 'draft'
@@ -1518,6 +1541,7 @@ export async function importCollectionCandidateToDraft(
           pricing = $9,
           use_cases = $10::jsonb,
           features = COALESCE(features, '{}'::jsonb) || $11::jsonb,
+          next_review_date = COALESCE($12::date, next_review_date),
           updated_at = NOW()
       WHERE id = $1 AND status = 'draft'
       RETURNING id
@@ -1534,15 +1558,16 @@ export async function importCollectionCandidateToDraft(
             classification.pricing,
             JSON.stringify(classification.useCases),
             JSON.stringify(featurePayload),
+            selection?.nextReviewDate || null,
           ]
         )
       : await pool.query(
           `
       INSERT INTO tools (
         name, title, content, detail, url, image_url, thumbnail_url,
-        category_id, tags, pricing, use_cases, status, features
+        category_id, tags, pricing, use_cases, status, features, next_review_date
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $6, $7, $8, $9, $10::jsonb, 'draft', $11)
+      VALUES ($1, $2, $3, $4, $5, $6, $6, $7, $8, $9, $10::jsonb, 'draft', $11, $12::date)
       RETURNING id
     `,
           [
@@ -1557,6 +1582,7 @@ export async function importCollectionCandidateToDraft(
             classification.pricing,
             JSON.stringify(classification.useCases),
             JSON.stringify(featurePayload),
+            selection?.nextReviewDate || null,
           ]
         );
   const toolId = toolResult.rows[0].id as string;
