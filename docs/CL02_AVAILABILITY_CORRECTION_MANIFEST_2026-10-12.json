@@ -1,0 +1,187 @@
+{
+  "unit": "CL02-AVAILABILITY-CORRECTION-2026-10-12",
+  "snapshotAt": "2026-10-12T07:09:02.702Z",
+  "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+  "before": [
+    {
+      "id": "c7890701-0000-4000-8000-000000000201",
+      "tool_id": "cec78907-e2a1-4eb7-853a-a58334026280",
+      "capability_id": "50288b6e-a968-4bcf-9e55-911df203e0c7",
+      "support_level": "partial",
+      "availability": "unknown",
+      "plan_requirement": {
+        "cn": "Web、Drive 和 Deep Research 可用性受账号、年龄、地区及套餐影响；须核对预期流程。",
+        "en": "Web, Drive and Deep Research availability depends on account, age, region and plan; verify the intended workflow."
+      },
+      "limitations": [
+        {
+          "cn": "用户选择导入及单 notebook 范围不能提供穷尽、可复现的文献检索。",
+          "en": "User-selected import and notebook scope do not provide exhaustive or reproducible literature search."
+        }
+      ],
+      "status": "reviewed",
+      "reviewed_at": "2026-10-03T07:55:45.61989+00:00",
+      "review_due_at": "2026-12-02T07:55:45.619972+00:00",
+      "reviewed_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "created_at": "2026-10-01T08:10:49.466388+00:00",
+      "updated_at": "2026-10-03T07:55:45.576765+00:00",
+      "editorial_history": [
+        {
+          "at": "2026-10-03T07:55:45.720468+00:00",
+          "by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+          "after": {
+            "plan": {
+              "cn": "Web、Drive 和 Deep Research 可用性受账号、年龄、地区及套餐影响；须核对预期流程。",
+              "en": "Web, Drive and Deep Research availability depends on account, age, region and plan; verify the intended workflow."
+            },
+            "status": "reviewed",
+            "support": "partial",
+            "limitations": [
+              {
+                "cn": "用户选择导入及单 notebook 范围不能提供穷尽、可复现的文献检索。",
+                "en": "User-selected import and notebook scope do not provide exhaustive or reproducible literature search."
+              }
+            ],
+            "availability": "unknown"
+          },
+          "before": {
+            "plan": {
+              "cn": "Web、Drive 和 Deep Research 可用性受账号、年龄、地区及套餐影响；须核对预期流程。",
+              "en": "Web, Drive and Deep Research availability depends on account, age, region and plan; verify the intended workflow."
+            },
+            "status": "draft",
+            "support": "partial",
+            "limitations": [
+              {
+                "cn": "用户选择导入及单 notebook 范围不能提供穷尽、可复现的文献检索。",
+                "en": "User-selected import and notebook scope do not provide exhaustive or reproducible literature search."
+              }
+            ],
+            "availability": "unknown"
+          }
+        }
+      ],
+      "last_edited_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622"
+    },
+    {
+      "id": "d0186230-0000-4000-8000-000000000201",
+      "tool_id": "3d018623-85f9-4df4-bd55-9a4a0e7a2d93",
+      "capability_id": "50288b6e-a968-4bcf-9e55-911df203e0c7",
+      "support_level": "strong",
+      "availability": "unknown",
+      "plan_requirement": {
+        "cn": "Standard 可用基础搜索；Pro Search 深度与限制依套餐变化。Free Pro Search 精确额度未知。",
+        "en": "Basic search is available on Standard; Pro Search depth and limits vary by plan. Exact Free Pro Search quota is unknown."
+      },
+      "limitations": [
+        {
+          "cn": "开放网页与选定焦点不等于穷尽文献检索；须核读原文。",
+          "en": "Open-web and selected focus are not an exhaustive literature search; inspect original sources."
+        }
+      ],
+      "status": "reviewed",
+      "reviewed_at": "2026-10-04T08:00:20.468514+00:00",
+      "review_due_at": "2026-11-02T00:00:00+00:00",
+      "reviewed_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "created_at": "2026-10-03T13:45:17.392282+00:00",
+      "updated_at": "2026-10-04T08:00:20.416155+00:00",
+      "editorial_history": [
+        {
+          "at": "2026-10-04T08:00:20.56221+00:00",
+          "by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+          "after": {
+            "plan": {
+              "cn": "Standard 可用基础搜索；Pro Search 深度与限制依套餐变化。Free Pro Search 精确额度未知。",
+              "en": "Basic search is available on Standard; Pro Search depth and limits vary by plan. Exact Free Pro Search quota is unknown."
+            },
+            "status": "reviewed",
+            "support": "strong",
+            "limitations": [
+              {
+                "cn": "开放网页与选定焦点不等于穷尽文献检索；须核读原文。",
+                "en": "Open-web and selected focus are not an exhaustive literature search; inspect original sources."
+              }
+            ],
+            "availability": "unknown"
+          },
+          "before": {
+            "plan": {
+              "cn": "Standard 可用基础搜索；Pro Search 深度与限制依套餐变化。Free Pro Search 精确额度未知。",
+              "en": "Basic search is available on Standard; Pro Search depth and limits vary by plan. Exact Free Pro Search quota is unknown."
+            },
+            "status": "draft",
+            "support": "strong",
+            "limitations": [
+              {
+                "cn": "开放网页与选定焦点不等于穷尽文献检索；须核读原文。",
+                "en": "Open-web and selected focus are not an exhaustive literature search; inspect original sources."
+              }
+            ],
+            "availability": "unknown"
+          }
+        }
+      ],
+      "last_edited_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622"
+    },
+    {
+      "id": "d0186230-0000-4000-8000-000000000202",
+      "tool_id": "3d018623-85f9-4df4-bd55-9a4a0e7a2d93",
+      "capability_id": "04930ae8-4c78-487f-a6c9-25680b8da681",
+      "support_level": "partial",
+      "availability": "unknown",
+      "plan_requirement": {
+        "cn": "官方说明 Pro Search 有直接来源链接；须按目标套餐及账号核对。",
+        "en": "Direct source links are documented for Pro Search; verify access on the target plan and account."
+      },
+      "limitations": [
+        {
+          "cn": "链接提供回查路径，不证明单篇或单条主张正确；本站未独立实测准确性。",
+          "en": "Links are a review path, not evidence of page-level or claim-level correctness; accuracy was not independently tested."
+        }
+      ],
+      "status": "reviewed",
+      "reviewed_at": "2026-10-04T08:00:20.468514+00:00",
+      "review_due_at": "2026-11-02T00:00:00+00:00",
+      "reviewed_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "created_at": "2026-10-03T13:45:17.392282+00:00",
+      "updated_at": "2026-10-04T08:00:20.416155+00:00",
+      "editorial_history": [
+        {
+          "at": "2026-10-04T08:00:20.566116+00:00",
+          "by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+          "after": {
+            "plan": {
+              "cn": "官方说明 Pro Search 有直接来源链接；须按目标套餐及账号核对。",
+              "en": "Direct source links are documented for Pro Search; verify access on the target plan and account."
+            },
+            "status": "reviewed",
+            "support": "partial",
+            "limitations": [
+              {
+                "cn": "链接提供回查路径，不证明单篇或单条主张正确；本站未独立实测准确性。",
+                "en": "Links are a review path, not evidence of page-level or claim-level correctness; accuracy was not independently tested."
+              }
+            ],
+            "availability": "unknown"
+          },
+          "before": {
+            "plan": {
+              "cn": "官方说明 Pro Search 有直接来源链接；须按目标套餐及账号核对。",
+              "en": "Direct source links are documented for Pro Search; verify access on the target plan and account."
+            },
+            "status": "draft",
+            "support": "partial",
+            "limitations": [
+              {
+                "cn": "链接提供回查路径，不证明单篇或单条主张正确；本站未独立实测准确性。",
+                "en": "Links are a review path, not evidence of page-level or claim-level correctness; accuracy was not independently tested."
+              }
+            ],
+            "availability": "unknown"
+          }
+        }
+      ],
+      "last_edited_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622"
+    }
+  ]
+}
