@@ -2,6 +2,8 @@
 
 更新时间：2026-10-12
 
+2026-10-12 **主线战略与自动化已重新对齐**：产品用户价值正式收敛为 **Evidence-backed AI Tool Decision Platform**。`Task-first`、工具数量、AI 推荐或 comparison 单项均不再视为充分差异化；后续以 Task Fit、Constraint Fit、Claim-level Evidence、Workflow Impact、Freshness/Change 与 Real-use Proof 六层组合验收。当前 Phase 1 信任与测量大部分完成；Phase 2 `research-with-citations` 约完成一半，关系发布、Task Page、Finder 定向联动、统一 Workflow Impact/Evidence Type 和两项真实试用仍是主线缺口；Phase 3 仅有基础数据与候选包；Decision Assistant 继续刻意延期。无人值守运营从 Catalog/Freshness/泛化差异内容三线升级为 Catalog、Freshness、Decision Cluster、Market Feedback 四线，并以当前 Cluster 完成缺口优先于普通目录扩充。完整定位、进度、完成定义、产能分配、指标和审批边界见[Evidence-backed AI Tool Decision Platform 执行基线](./EVIDENCE_BACKED_DECISION_PLATFORM_EXECUTION_2026-10-12_CN.md)。该基线取代“每日收录数量代表主线进展”的旧解释，但不放宽既有 SEO、索引、证据、发布和用户授权门禁。
+
 2026-10-12 **BOLT-CONTROLLED-RELEASE 已完成生产验证**：唯一 Bolt 实体 `04570837-c50d-4aa2-b8aa-a11738046fe5` 为 `published + monitor/noindex`，`reviewedAt=2026-10-12`、`nextReviewDate=2026-10-19`。EN/CN/TW 页面均为 200、自指 canonical 与 noindex，CN 为简体、TW 为繁体；Bolt 未进入 sitemap，完整 production SEO smoke PASS，sitemap 共 126 条。当前运营覆盖层已标记 `released_monitor_noindex` 并从开发候选队列排除；未批准 index、sitemap 或 Task/Capability/Fit。详见[当日运营交付](./DAILY_OPERATIONS_2026-10-12_CN.md)。
 
 2026-10-11 **ANYWORD-FAST-CONTROLLED-RELEASE-2026-10-11 已生产验证**：唯一 Anyword 实体 `4555627d-2de9-4614-a850-fa073388f869` 为 `published + monitor/noindex`。初次发布后发现 CN/TW 语言键错位，已按固定前像受控修正并完成幂等 postcheck；CN 简体、TW 繁体均为 200/self-canonical/noindex，完整 production SEO smoke PASS。sitemap 126 条、Anyword 0 条；当前候选覆盖层已排除 Anyword，不批准索引或 Task/Capability/Fit。详见[交付记录](./ANYWORD_FAST_CONTROLLED_RELEASE_2026-10-11_CN.md)。
