@@ -63,7 +63,7 @@ export function getMonitorPublicationBlockers(tool: PublicationTool): string[] {
   return blockers;
 }
 
-export function buildReadyDraftMonitorPublishSql(evidenceReadyDraftSql: string): string {
+export function buildReadyDraftMonitorPublishSql(evidenceReadyDraftSql: string, bridgeAudit = false): string {
   return `
     UPDATE tools
     SET status = 'published',
@@ -80,6 +80,7 @@ export function buildReadyDraftMonitorPublishSql(evidenceReadyDraftSql: string):
               'approvedAt', NOW()::text,
               'reviewer', $2::text,
               'publishMode', 'monitor_noindex'
+              ${bridgeAudit ? ", 'qaReference', $3::text, 'preimageHash', $4::text, 'nextReviewDate', (CASE WHEN next_review_date > CURRENT_DATE THEN next_review_date ELSE CURRENT_DATE + 30 END)::text" : ''}
             )
           )
         ),

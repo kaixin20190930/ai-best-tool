@@ -1,5 +1,6 @@
 import { getPool } from '@/db/neon/client';
 import { evaluateCollectionAdmission } from '@/lib/services/admin/collectionAdmission';
+import type { PoolClient } from 'pg';
 
 const collectionSchemaSql = `
 CREATE TABLE IF NOT EXISTS collection_sources (
@@ -529,8 +530,8 @@ export function inferDraftClassification(input: {
   };
 }
 
-async function getCategoryIdBySlug(slug: string): Promise<string | null> {
-  const pool = getPool();
+async function getCategoryIdBySlug(slug: string, client?: PoolClient): Promise<string | null> {
+  const pool = client || getPool();
   const storageSlug = resolveCollectionCategorySlug(slug);
   const result = await pool.query('SELECT id FROM categories WHERE slug = $1 LIMIT 1', [
     storageSlug,
@@ -700,8 +701,8 @@ function slugify(value: string): string {
     .slice(0, 80);
 }
 
-async function createUniqueToolSlug(base: string): Promise<string> {
-  const pool = getPool();
+async function createUniqueToolSlug(base: string, client?: PoolClient): Promise<string> {
+  const pool = client || getPool();
   const normalizedBase = slugify(base) || 'ai-tool';
   let candidate = normalizedBase;
   let suffix = 2;
@@ -1349,11 +1350,12 @@ export async function enrichCollectionCandidates(limit = 10): Promise<CandidateE
 }
 
 export async function importCollectionCandidateToDraft(
-  candidateId: string
+  candidateId: string,
+  client?: PoolClient,
 ): Promise<{ toolId: string }> {
-  await ensureCollectionSchema();
+  if (!client) await ensureCollectionSchema();
 
-  const pool = getPool();
+  const pool = client || getPool();
   const candidateResult = await pool.query(
     'SELECT * FROM collection_candidates WHERE id = $1',
     [candidateId]
@@ -1395,7 +1397,7 @@ export async function importCollectionCandidateToDraft(
     candidate.title?.trim() ||
     parsed.hostname.replace(/^www\./, '') ||
     'Collected AI tool';
-  const slug = await createUniqueToolSlug(titleText);
+  const slug = await createUniqueToolSlug(titleText, client);
   const summary =
     detailMetadata.description ||
     candidate.summary ||
@@ -1406,7 +1408,7 @@ export async function importCollectionCandidateToDraft(
     url: officialUrl,
     rawPayload: candidate.raw_payload,
   });
-  const categoryId = await getCategoryIdBySlug(classification.categorySlug);
+  const categoryId = await getCategoryIdBySlug(classification.categorySlug, client);
   const updatedScore = scoreCollectionCandidate({
     title: titleText,
     summary,
