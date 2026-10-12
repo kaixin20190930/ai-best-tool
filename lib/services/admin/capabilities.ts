@@ -5,6 +5,7 @@ import type {
   CapabilitySupportLevel,
   TaskCapabilityImportance,
 } from '@/lib/services/decision/capabilityReadModel';
+import { getDecisionToolIdentities } from '@/lib/services/decision/repository';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 export type CapabilityEditorialStatus = 'draft' | 'reviewed' | 'published' | 'stale';
@@ -23,9 +24,14 @@ export interface AdminCapability {
 export interface AdminToolCapability {
   id: string;
   toolId: string;
+  toolName: string | null;
   capabilityId: string;
+  capabilitySlug: string;
+  capabilityName: string;
   supportLevel: CapabilitySupportLevel;
   availability: CapabilityAvailability;
+  planRequirement: Record<string, unknown>;
+  limitations: unknown[];
   status: CapabilityEditorialStatus;
   evidenceCount: number;
   reviewedAt: string | null;
@@ -71,6 +77,16 @@ function stringRecord(value: unknown): Record<string, string> {
   );
 }
 
+function jsonObject(value: unknown): Record<string, unknown> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('CAPABILITY_ADMIN_INVALID_JSON');
+  return value as Record<string, unknown>;
+}
+
+function jsonArray(value: unknown): unknown[] {
+  if (!Array.isArray(value)) throw new Error('CAPABILITY_ADMIN_INVALID_JSON');
+  return value;
+}
+
 export async function getCapabilityAdminOverview(): Promise<CapabilityAdminOverview> {
   await requireAdmin();
   const supabase = createAdminClient();
@@ -85,7 +101,7 @@ export async function getCapabilityAdminOverview(): Promise<CapabilityAdminOverv
       supabase
         .from('tool_capabilities')
         .select(
-          'id, tool_id, capability_id, support_level, availability, status, reviewed_at, review_due_at, updated_at',
+          'id, tool_id, capability_id, support_level, availability, plan_requirement, limitations, status, reviewed_at, review_due_at, updated_at',
         )
         .order('updated_at', { ascending: false })
         .limit(1000),
@@ -117,9 +133,15 @@ export async function getCapabilityAdminOverview(): Promise<CapabilityAdminOverv
     slug: String(row.slug),
   }));
   const taskSlugById = new Map(taskOptions.map((task) => [task.id, task.slug]));
+  const capabilityRows = (capabilitiesResult.data || []) as Row[];
+  const capabilityById = new Map(capabilityRows.map((row) => [String(row.id), row]));
+  const toolRows = (toolCapabilitiesResult.data || []) as Row[];
+  const toolIds = Array.from(new Set(toolRows.map((row) => String(row.tool_id))));
+  const identities = await getDecisionToolIdentities(toolIds, 'en');
+  const toolNameById = new Map(identities.map((tool) => [tool.id, tool.title]));
 
   return {
-    capabilities: ((capabilitiesResult.data || []) as Row[]).map((row) => ({
+    capabilities: capabilityRows.map((row) => ({
       id: String(row.id),
       slug: String(row.slug),
       name: stringRecord(row.name),
@@ -128,12 +150,17 @@ export async function getCapabilityAdminOverview(): Promise<CapabilityAdminOverv
       status: row.status as CapabilityLifecycleStatus,
       displayOrder: Number(row.display_order || 0),
     })),
-    toolCapabilities: ((toolCapabilitiesResult.data || []) as Row[]).map((row) => ({
+    toolCapabilities: toolRows.map((row) => ({
       id: String(row.id),
       toolId: String(row.tool_id),
+      toolName: toolNameById.get(String(row.tool_id)) || null,
       capabilityId: String(row.capability_id),
+      capabilitySlug: String(capabilityById.get(String(row.capability_id))?.slug || ''),
+      capabilityName: stringRecord(capabilityById.get(String(row.capability_id))?.name).en || '',
       supportLevel: row.support_level as CapabilitySupportLevel,
       availability: row.availability as CapabilityAvailability,
+      planRequirement: jsonObject(row.plan_requirement),
+      limitations: jsonArray(row.limitations),
       status: row.status as CapabilityEditorialStatus,
       evidenceCount: evidenceCount.get(String(row.id)) || 0,
       reviewedAt: typeof row.reviewed_at === 'string' ? row.reviewed_at : null,

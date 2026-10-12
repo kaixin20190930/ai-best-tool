@@ -31,6 +31,17 @@ assert.match(component, /Error:/);
 assert.match(component, /router\.refresh\(\)/);
 assert.match(adminService, /await requireAdmin\(\)/);
 assert.match(adminService, /evidenceCount/);
+assert.match(adminService, /plan_requirement, limitations/);
+assert.match(adminService, /planRequirement: jsonObject\(row\.plan_requirement\)/);
+assert.match(adminService, /limitations: jsonArray\(row\.limitations\)/);
+assert.match(adminService, /getDecisionToolIdentities\(toolIds, 'en'\)/);
+assert.match(component, /key=\{editingToolCapability\?\.id \|\| 'create-tool-capability'\}/);
+assert.match(component, /expectedUpdatedAt: editingToolCapability\?\.updatedAt/);
+assert.match(component, /JSON\.stringify\(editingToolCapability\.planRequirement/);
+assert.match(component, /JSON\.stringify\(editingToolCapability\.limitations/);
+assert.match(component, /Cancel edit/);
+assert.match(component, /item\.availability === 'unknown'/);
+assert.match(actions, /\.eq\('updated_at', input\.expectedUpdatedAt!\)/);
 assert.doesNotMatch(adminService, /claim_value|source_excerpt/);
 
 console.log(

@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import type { CapabilityAdminOverview } from '@/lib/services/admin/capabilities';
+import type { AdminToolCapability, CapabilityAdminOverview } from '@/lib/services/admin/capabilities';
 import {
   addToolCapabilityEvidenceLink,
   removeToolCapabilityEvidenceLink,
@@ -58,13 +58,19 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
+  const [editingToolCapability, setEditingToolCapability] = useState<AdminToolCapability | null>(null);
 
-  const run = (operation: () => Promise<{ success: boolean; error?: string }>, success: string) => {
+  const run = (
+    operation: () => Promise<{ success: boolean; error?: string }>,
+    success: string,
+    onSuccess?: () => void,
+  ) => {
     setMessage(null);
     startTransition(async () => {
       const result = await operation();
       if (result.success) {
         setMessage(success);
+        onSuccess?.();
         router.refresh();
       } else {
         setMessage(`Error: ${result.error || 'Unable to save changes.'}`);
@@ -156,13 +162,16 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
         </form>
 
         <form
+          id='tool-capability-editor'
+          key={editingToolCapability?.id || 'create-tool-capability'}
           onSubmit={(event) => {
             event.preventDefault();
             const data = new FormData(event.currentTarget);
             run(
               () =>
                 saveToolCapability({
-                  id: field(data, 'id') || undefined,
+                  id: editingToolCapability?.id,
+                  expectedUpdatedAt: editingToolCapability?.updatedAt,
                   toolId: field(data, 'toolId'),
                   capabilityId: field(data, 'capabilityId'),
                   supportLevel: field(data, 'supportLevel'),
@@ -171,35 +180,43 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
                   limitations: field(data, 'limitations'),
                   status: field(data, 'status'),
                 }),
-              'Tool capability saved. Add verified evidence by ID below while it remains draft or reviewed.',
+              editingToolCapability
+                ? 'Tool capability updated. Refresh the row before another edit.'
+                : 'Tool capability created. Add verified evidence by ID below while it remains draft or reviewed.',
+              () => setEditingToolCapability(null),
             );
           }}
           className='space-y-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm'
         >
           <div>
-            <h2 className='font-bold text-slate-950'>Tool Capability</h2>
+            <h2 className='font-bold text-slate-950'>Tool Capability · {editingToolCapability ? 'Edit' : 'Create'}</h2>
             <p className='text-xs text-slate-500'>
-              The Tool UUID remains a logical Neon reference; no cross-store lookup is exposed here.
+              {editingToolCapability
+                ? `Editing existing relation ${editingToolCapability.id}. Review every field before saving.`
+                : 'Create a new relationship. Select Edit in the list below to change an existing one.'}
             </p>
           </div>
           <input
             name='id'
-            placeholder='Tool Capability UUID (optional)'
-            disabled={pending}
+            value={editingToolCapability?.id || ''}
+            placeholder='Relation UUID assigned on creation'
+            readOnly
             className='w-full rounded border p-2 text-sm'
           />
           <input
             name='toolId'
             placeholder='Tool UUID'
             required
+            defaultValue={editingToolCapability?.toolId || ''}
+            readOnly={Boolean(editingToolCapability)}
             disabled={pending}
             className='w-full rounded border p-2 text-sm'
           />
           <select
             name='capabilityId'
             required
-            defaultValue=''
-            disabled={pending}
+            defaultValue={editingToolCapability?.capabilityId || ''}
+            disabled={pending || Boolean(editingToolCapability)}
             className='w-full rounded border p-2 text-sm'
           >
             <option value='' disabled>
@@ -211,10 +228,13 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
               </option>
             ))}
           </select>
+          {editingToolCapability ? (
+            <input type='hidden' name='capabilityId' value={editingToolCapability.capabilityId} />
+          ) : null}
           <div className='grid grid-cols-3 gap-2'>
             <select
               name='supportLevel'
-              defaultValue='unknown'
+              defaultValue={editingToolCapability?.supportLevel || 'unknown'}
               disabled={pending}
               className='rounded border p-2 text-sm'
             >
@@ -224,7 +244,7 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
             </select>
             <select
               name='availability'
-              defaultValue='unknown'
+              defaultValue={editingToolCapability?.availability || 'unknown'}
               disabled={pending}
               className='rounded border p-2 text-sm'
             >
@@ -232,7 +252,12 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
                 <option key={level}>{level}</option>
               ))}
             </select>
-            <select name='status' defaultValue='draft' disabled={pending} className='rounded border p-2 text-sm'>
+            <select
+              name='status'
+              defaultValue={editingToolCapability?.status || 'draft'}
+              disabled={pending}
+              className='rounded border p-2 text-sm'
+            >
               {['draft', 'reviewed'].map((status) => (
                 <option key={status}>{status}</option>
               ))}
@@ -240,7 +265,7 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
           </div>
           <textarea
             name='planRequirement'
-            defaultValue='{}'
+            defaultValue={editingToolCapability ? JSON.stringify(editingToolCapability.planRequirement, null, 2) : '{}'}
             rows={2}
             disabled={pending}
             className='w-full rounded border p-2 font-mono text-xs'
@@ -248,13 +273,31 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
           />
           <textarea
             name='limitations'
-            defaultValue='[]'
+            defaultValue={editingToolCapability ? JSON.stringify(editingToolCapability.limitations, null, 2) : '[]'}
             rows={2}
             disabled={pending}
             className='w-full rounded border p-2 font-mono text-xs'
             aria-label='Limitations JSON'
           />
-          <Button pending={pending}>Save tool capability</Button>
+          <div className='flex flex-wrap items-center gap-3'>
+            <Button pending={pending}>
+              {editingToolCapability ? 'Save existing relation' : 'Create tool capability'}
+            </Button>
+            {editingToolCapability ? (
+              <button
+                type='button'
+                disabled={pending}
+                onClick={() => {
+                  setEditingToolCapability(null);
+                  setMessage(null);
+                }}
+                className='rounded border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 disabled:opacity-50'
+              >
+                Cancel edit
+              </button>
+            ) : null}
+          </div>
+          <FormStatus message={message} />
         </form>
 
         <form
@@ -404,15 +447,63 @@ export default function CapabilityManager({ overview }: { overview: CapabilityAd
           )}
         />
         <List
-          title='Tool capabilities'
-          items={overview.toolCapabilities.map(
-            (item) => `${item.toolId} · ${item.status} · ${item.evidenceCount} evidence · ${item.id}`,
-          )}
-        />
-        <List
           title='Task capabilities'
           items={overview.taskCapabilities.map((item) => `${item.taskSlug} · ${item.importance} · ${item.status}`)}
         />
+      </div>
+      <div className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
+        <h2 className='font-bold text-slate-950'>Tool capabilities</h2>
+        <p className='mt-1 text-xs text-slate-500'>
+          Edit loads the complete stored relationship. Published and stale rows are read only here.
+        </p>
+        <div className='mt-3 space-y-3'>
+          {overview.toolCapabilities.map((item) => (
+            <div key={item.id} className='rounded-lg border border-slate-200 p-3 text-xs text-slate-700'>
+              <div className='flex flex-wrap items-start justify-between gap-3'>
+                <div>
+                  <p className='font-semibold text-slate-950'>
+                    {item.toolName || 'Unresolved tool'} · {item.capabilitySlug || 'Unknown capability'}
+                    {item.capabilityName ? ` (${item.capabilityName})` : ''}
+                  </p>
+                  <p className='mt-1'>
+                    Support: {item.supportLevel} · Availability:{' '}
+                    <strong className={item.availability === 'unknown' ? 'text-amber-700' : ''}>
+                      {item.availability}
+                    </strong>{' '}
+                    · Status: {item.status} · Evidence: {item.evidenceCount}
+                  </p>
+                </div>
+                <button
+                  type='button'
+                  disabled={pending || !['draft', 'reviewed'].includes(item.status)}
+                  onClick={() => {
+                    setEditingToolCapability(item);
+                    setMessage(null);
+                    document
+                      .getElementById('tool-capability-editor')
+                      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }}
+                  className='rounded border border-slate-300 px-3 py-1.5 font-semibold text-slate-700 disabled:cursor-not-allowed disabled:opacity-50'
+                >
+                  Edit
+                </button>
+              </div>
+              <p className='mt-2 break-all'>
+                Plan requirement: <code>{JSON.stringify(item.planRequirement)}</code>
+              </p>
+              <p className='mt-1 break-all'>
+                Limitations: <code>{JSON.stringify(item.limitations)}</code>
+              </p>
+              <p className='mt-2'>
+                Reviewed: {item.reviewedAt || '—'} · Review due: {item.reviewDueAt || '—'} · Updated: {item.updatedAt}
+              </p>
+              <p className='mt-1 break-all text-slate-500'>
+                Relation UUID: {item.id} · Tool UUID: {item.toolId} · Capability UUID: {item.capabilityId}
+              </p>
+            </div>
+          ))}
+          {overview.toolCapabilities.length === 0 ? <p className='text-xs text-slate-500'>No records yet.</p> : null}
+        </div>
       </div>
     </section>
   );

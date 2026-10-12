@@ -167,6 +167,7 @@ export async function saveDecisionCapability(input: {
 
 export async function saveToolCapability(input: {
   id?: string;
+  expectedUpdatedAt?: string;
   toolId: string;
   capabilityId: string;
   supportLevel: string;
@@ -177,7 +178,11 @@ export async function saveToolCapability(input: {
 }): Promise<CapabilityActionResult> {
   try {
     const user = await requireAdmin();
-    if ((input.id && !isUuid(input.id)) || !isUuid(input.toolId) || !isUuid(input.capabilityId)) {
+    if (
+      (input.id && (!isUuid(input.id) || !input.expectedUpdatedAt)) ||
+      !isUuid(input.toolId) ||
+      !isUuid(input.capabilityId)
+    ) {
       return { success: false, error: 'Invalid tool or capability ID.' };
     }
     if (
@@ -189,6 +194,9 @@ export async function saveToolCapability(input: {
     }
     const tool = await getDecisionToolIdentities([input.toolId], 'en');
     if (tool.length !== 1) return { success: false, error: 'Directory tool not found.' };
+    if (!input.planRequirement.trim() || !input.limitations.trim()) {
+      return { success: false, error: 'Plan requirements and limitations must be loaded before saving.' };
+    }
     const planRequirement = parseObject(input.planRequirement);
     const limitations = parseArray(input.limitations);
     if (!planRequirement || !limitations)
@@ -208,7 +216,7 @@ export async function saveToolCapability(input: {
     if (input.id) {
       const { data: existing } = await supabase
         .from('tool_capabilities')
-        .select('status, tool_id, capability_id')
+        .select('status, tool_id, capability_id, updated_at')
         .eq('id', input.id)
         .maybeSingle();
       if (!existing || !['draft', 'reviewed'].includes(existing.status)) {
@@ -217,16 +225,23 @@ export async function saveToolCapability(input: {
       if (existing.tool_id !== input.toolId || existing.capability_id !== input.capabilityId) {
         return { success: false, error: 'Tool Capability identity is immutable.' };
       }
+      if (existing.updated_at !== input.expectedUpdatedAt) {
+        return { success: false, error: 'This Tool Capability changed since it was loaded. Refresh before editing.' };
+      }
     }
     const result = input.id
       ? await supabase
           .from('tool_capabilities')
           .update(payload)
           .eq('id', input.id)
+          .eq('updated_at', input.expectedUpdatedAt!)
           .in('status', ['draft', 'reviewed'])
           .select('id')
           .maybeSingle()
       : await supabase.from('tool_capabilities').insert(payload).select('id').single();
+    if (input.id && !result.error && !result.data) {
+      return { success: false, error: 'This Tool Capability changed since it was loaded. Refresh before editing.' };
+    }
     if (result.error || !result.data) return stableCapabilityError(result.error, 'Unable to save tool capability.');
     revalidatePath('/[locale]/admin/decision', 'page');
     return { success: true, id: String(result.data.id) };
