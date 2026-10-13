@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { userInfo } from 'node:os';
+import { Client } from 'pg';
 
 import { assertCandidateAudit, assertCommitScope, assertRelationAudit, assertToolAudit,
   parseOptions, snapshotHash } from './run-ops2-publish-bridge';
-import { evidenceReadyDraftSql } from '../lib/services/admin/draftPublicationSql';
+import { evidenceReadyDraftSql, mediaNeededSql } from '../lib/services/admin/draftPublicationSql';
 import { buildReadyDraftMonitorPublishSql, getMonitorPublicationBlockers } from '../lib/services/admin/submissionPublication';
 
 const id = 'cec78907-e2a1-4eb7-853a-a58334026280';
@@ -82,6 +84,7 @@ assert.match(sql, /'preimageHash', \$4::text/);
 assert.match(sql, /'nextReviewDate'/);
 assert.match(sql, /paymentConfirmed\}' = 'true'::jsonb/);
 assert.match(sql, /marketValidation/);
+assert.match(mediaNeededSql, /COALESCE\(features->'mediaReview'->>'needed' = 'true', FALSE\)/);
 assert.ok(getMonitorPublicationBlockers({
   url: 'https://example.com', category_id: 'category', image_url: 'https://example.com/logo',
   thumbnail_url: 'https://example.com/screenshot', content: { en: 'A'.repeat(100) },
@@ -103,3 +106,19 @@ assert.match(bridge, /if \(options\.mode === 'rollback'\) \{\s*await client\.que
 assert.doesNotMatch(bridge, /error: error instanceof Error \? error\.message/);
 
 console.log('OPS2 publish bridge focused checks passed');
+
+if (process.argv.includes('--local-db')) {
+  const db = new Client({ host: '/tmp', port: 5432, user: userInfo().username, database: 'postgres' });
+  Promise.resolve().then(async () => {
+    await db.connect();
+    const result = await db.query(`SELECT NOT ${mediaNeededSql} AS media_ready FROM (VALUES
+      ('https://cdn.example.com/logo.png'::text, 'https://cdn.example.com/preview.png'::text, '{}'::jsonb),
+      ('https://cdn.example.com/logo.png'::text, 'https://cdn.example.com/preview.png'::text,
+       '{"mediaReview":{"needed":true}}'::jsonb)
+    ) AS fixture(image_url, thumbnail_url, features)`);
+    assert.deepEqual(result.rows.map((row) => row.media_ready), [true, false],
+      'Missing mediaReview must not block complete media; explicit needed=true must block');
+    console.log('OPS2 media SQL null-safety checks passed');
+  }).catch((error) => { console.error(error); process.exitCode = 1; })
+    .finally(() => db.end());
+}

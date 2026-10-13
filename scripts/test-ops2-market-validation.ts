@@ -49,8 +49,7 @@ async function main() {
   const sci = await fixture('scispace');
   assert.equal(v0.score, 81);
   assert.equal(sci.score, 77);
-  assert.equal(v0.qaReport, null);
-  assert.equal(sci.qaReport, null);
+  const unsignedV0 = { ...v0, qaReport: null } satisfies MarketPack;
   assert.throws(() => parseMarketPack({ ...v0, evidenceUrls: [v0.evidenceUrls[0],
     'https://blog.producthunt.com/extra'] }), /different registrable domains/);
   assert.throws(() => parseMarketPack({ ...v0, evidenceUrls: [v0.evidenceUrls[0],
@@ -63,7 +62,7 @@ async function main() {
     /development actor/);
   assert.throws(() => parseMarketPack({ ...v0, sourceNotes: undefined }),
     /source note/);
-  assert.throws(() => validateQa(v0, owner, qaActor), /report required/);
+  assert.throws(() => validateQa(unsignedV0, owner, qaActor), /report required/);
   const selfReviewed = qaPack({ ...v0, developmentActor: qaActor });
   assert.throws(() => validateQa(selfReviewed, owner, qaActor),
     /Development actor cannot approve/);

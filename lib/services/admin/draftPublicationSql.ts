@@ -18,7 +18,7 @@ export const mediaNeededSql = `
     OR thumbnail_url IS NULL
     OR thumbnail_url = ''
     OR thumbnail_url LIKE '%google.com/s2/favicons%'
-    OR features->'mediaReview'->>'needed' = 'true'
+    OR COALESCE(features->'mediaReview'->>'needed' = 'true', FALSE)
   )
 `;
 
