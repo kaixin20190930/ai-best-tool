@@ -228,6 +228,28 @@ export default function GuidesPage({ params: { locale } }: { params: { locale: s
         ))}
       </section>
 
+      {(locale === 'en' || locale === 'cn') && (
+        <section className='mt-8 flex flex-col gap-4 rounded-[20px] border border-cyan-200 bg-cyan-50/70 p-6 sm:flex-row sm:items-center sm:justify-between'>
+          <div>
+            <h2 className='text-xl font-bold text-slate-950'>
+              {isChinese ? '想用 AI 生成并发布网站或应用？' : 'Building and publishing a site or app with AI?'}
+            </h2>
+            <p className='mt-2 max-w-2xl text-sm leading-6 text-slate-700'>
+              {isChinese
+                ? '按代码交接、部署、数据迁移和维护责任，比较 Bolt、Lovable、Replit 与 v0。'
+                : 'Check code handoff, deployment, data moves and maintenance across Bolt, Lovable, Replit and v0.'}
+            </p>
+          </div>
+          <Link
+            href={generateLocalizedPath('/guides/ai-app-builders', locale)}
+            className='inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800'
+          >
+            {isChinese ? '阅读应用构建器指南' : 'Read the app-builder guide'}
+            <ArrowRight className='size-4' />
+          </Link>
+        </section>
+      )}
+
       <section className='mt-10 rounded-[20px] border border-cyan-100 bg-cyan-50/70 p-6'>
         <p className='text-sm font-semibold uppercase tracking-wide text-cyan-800'>
           {isChinese ? '进入榜单' : 'Continue to rankings'}
