@@ -10,6 +10,8 @@ import { batchDigest, buildBatch, canonicalPayload } from './build-app-decision-
 const reviewer = '2b8177ac-70b3-4475-a1ee-509ff8b4b622';
 const qa = 'codex-thread:00000000-0000-4000-8000-000000000001';
 const migration = readFileSync('db/supabase/migrations/20261013_decision_manifest_batch_intake.sql', 'utf8');
+const pgcryptoSearchPathRepair = readFileSync(
+  'db/supabase/migrations/20261013_decision_manifest_pgcrypto_search_path.sql', 'utf8');
 const editorial = readFileSync('db/supabase/migrations/20260925_decision_cluster_editorial_closure.sql', 'utf8');
 const officialIntake = editorial.slice(
   editorial.indexOf('CREATE OR REPLACE FUNCTION decision_official_evidence_intake('),
@@ -75,7 +77,8 @@ async function main() {
     started = true;
     await db.connect();
     await db.query(`
-      CREATE EXTENSION pgcrypto;
+      CREATE SCHEMA extensions;
+      CREATE EXTENSION pgcrypto WITH SCHEMA extensions;
       CREATE SCHEMA auth;
       CREATE ROLE service_role; CREATE ROLE anon; CREATE ROLE authenticated;
       CREATE FUNCTION auth.role() RETURNS text LANGUAGE sql AS $$
@@ -152,6 +155,13 @@ async function main() {
     await db.query(capabilityEvidenceTrigger);
     await db.query(decisionEvidenceTrigger);
     await db.query(migration);
+    await db.query(pgcryptoSearchPathRepair);
+    await db.query(pgcryptoSearchPathRepair);
+    await db.query('ALTER EXTENSION pgcrypto DROP FUNCTION extensions.digest(bytea,text)');
+    await assert.rejects(db.query(pgcryptoSearchPathRepair),
+      /pgcrypto digest\(bytea,text\) must exist/,
+      'A same-schema digest that is not owned by pgcrypto must be rejected');
+    await db.query('ALTER EXTENSION pgcrypto ADD FUNCTION extensions.digest(bytea,text)');
     await db.query(publicationGate);
     const signature = 'public.decision_manifest_batch_intake(uuid,uuid,jsonb,jsonb,text,uuid,text,boolean)';
     const privileges = (await db.query(`SELECT
@@ -206,7 +216,7 @@ async function main() {
     assert.equal(committed.mode,'committed');
     assert.equal(committed.results.length,4);
     const after = await counts();
-    assert.deepEqual(after,{ profiles: 5,sources: after.sources,claims:35,timeline:35,
+    assert.deepEqual(after,{ profiles: 5,sources: after.sources,claims:30,timeline:30,
       capabilities:4,fits:4,records:4,links:28 });
     assert.ok(after.sources >= 8);
     const caps = (await db.query(`SELECT id,status,updated_at::text FROM tool_capabilities ORDER BY id`)).rows;
@@ -269,8 +279,9 @@ async function main() {
     await db.query(`SELECT set_config('request.jwt.claim.role','service_role',false)`);
     assert.equal((await revert(true)).rows[0].value.mode,'reverted');
     assert.deepEqual(await counts(),baseline,'Exact revert must preserve sentinel and restore preimage');
-    console.log(JSON.stringify({ ok:true,fixture:'SYNTHETIC_LOCAL_ONLY',realWriteSet:0,
-      batchHash:batch.batchHash,tools:4,verifiedClaims:35,
+    console.log(JSON.stringify({ ok:true,fixture:'SYNTHETIC_LOCAL_ONLY',realWriteSet:real.tools.length,
+      realVerifiedClaims:real.tools.reduce((total,tool) => total + tool.expectedClaims,0),
+      batchHash:batch.batchHash,fixtureTools:4,fixtureVerifiedClaims:30,
       tested:['canonical hash','tampered hash','missing task field','preflight rollback',
         'atomic commit','idempotent replay','expired claim','extra source',
         'concurrent writer','published revert refusal','role EXECUTE denial',
