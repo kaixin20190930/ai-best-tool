@@ -72,3 +72,9 @@ GSC 只读拉取成功，最新完整数据日为 2026-10-10：
 ### 流程收敛修正
 
 此前将同一批工具的 inventory、evidence、relation candidate 和 release gate 拆成连续任务，造成重复上下文、重复 QA 和 Owner 感知上的反复推进，属于流程膨胀。即日起同一 Cluster/工具批次使用一个端到端交付单元，内部一次完成盘点、缺失证据、关系候选、QA、preflight/rollback 和授权范围内发布；只有真实高风险授权或架构/SEO 冲突才暂停。下一单元合并为 `BUILD-APP-DECISION-CLOSEOUT-01`，覆盖 Bolt、Lovable、Replit、v0 四个工具，不再拆分为单独 evidence/inventory/relation 子任务。
+
+### BUILD-APP-DECISION-CLOSEOUT-01 完成
+
+同一端到端单元已完成并收口。Bolt、Lovable、v0 的生产 intelligence 数据已写入：3 个 ready Profile、18 个 Source、25 个 verified/no-conflict Claim、3 个 Decision Profile；intake 批次提交后幂等复放全部为零写。统一关系门禁随后发布 2 条 Task Capability、3 条 Tool Capability 和 3 条 Fit，并记录 3 条 `decision_publication` 事件。Replit 因账户权益与 availability 仍无足够直接证据，保持 `HOLD_EVIDENCE`，没有进入生产写集。
+
+生产公开边界未被扩大：`/tasks/build-app-with-ai` 与 `/cn/tasks/build-app-with-ai` 仍为 404，sitemap 中该 Task URL 为 0；未批准 index/sitemap。下一差异化工作是对 Task Page 做单独的用户价值、内容和 SEO 页面门禁，而不是重复核验本批关系。

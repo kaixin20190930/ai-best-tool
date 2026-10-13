@@ -2,6 +2,8 @@
 
 更新时间：2026-10-13
 
+2026-10-13 **BUILD-APP-DECISION-CLOSEOUT-01 已完成生产收口**：Bolt、Lovable、v0 已通过统一批次写入 3 个 ready Profile、18 个 Source、25 个 verified/no-conflict Claim 和对应 Decision/Capability/Fit 候选；批次哈希 `6e42a944...d655` 提交后幂等复放为零写。既有统一关系门禁随后发布 2 条 Task Capability、3 条 Tool Capability、3 条 Fit，并产生 3 条审计事件。Replit 因目标账户 availability/权益证据不足继续 `HOLD_EVIDENCE`，未进入写集。生产 `/tasks/build-app-with-ai` 与 `/cn/tasks/build-app-with-ai` 仍为 404，sitemap 匹配 0；关系发布不等于页面或索引批准。下一差异化单元为 Task Page 页面级内容与 SEO 门禁，不重复本批证据或关系验收。详见[生产收口审计](./BUILD_APP_DECISION_CLOSEOUT_2026-10-13_CN.md)。
+
 2026-10-13 **自动运营 V2 首个通用双工具闭环已完成**：v0（`2d598569-ba06-4f65-966b-dde8df1161cc`）与 SciSpace（`ec03d7b2-e6c7-44f0-9ae2-9ac23f156f16`）均经统一候选选择包、独立 QA、候选入队、草稿导入、独立市场验证、事务 rollback、显式 commit 与零写 postcheck 发布为 `published + monitor/noindex`。v0 市场验证 81，SciSpace 77；第三方评论只证明真实讨论、使用场景与摩擦，不作为活跃用户数或功能可靠性证明。四个 EN/CN 页面均 200、自指 canonical 与 `noindex, follow`，sitemap 仍为 126 且两工具均为 0 条。生产现有 84 个工具、65 个 published、17 个 continue_index、65 个 monitor。此次补齐的是可复用系统能力，并修复媒体门禁 NULL 语义与日期时区审计，不存在 v0/SciSpace 专属运行时发布器。通用契约见[市场验证桥](./OPS2_MARKET_VALIDATION_BRIDGE_2026-10-13_CN.md)和[自动运营 V2](./AUTOMATED_OPERATIONS_V2_IMPLEMENTATION_2026-10-12_CN.md)。
 
 2026-10-12 **自动运营 V2 全面执行方案已建立**：确认现有系统已具备 `collection_candidates → draft → Admin → monitor/noindex` 的数据库路径，但自动运营仍过度依赖每工具 release JSON、guard、专项测试和 Git 提交，导致成熟大工具也被当作代码项目交付。自 2026-10-13 起，成熟高需求工具通过身份、canonical、核心 AI 能力、两项官方来源、三语言内容、合法媒体和 Claim 边界后即可走快车道进入 `published + monitor/noindex`；完整独立采用、真实账户、精确价格/额度不再阻塞实体页面，只限制推荐强度、精确 Claim 和索引资格。正常日仍至少 1 个、最多 2 个，新工具优先填补 Cluster；Freshness 每日 5-10 条，Decision 每周至少 2 个用户可见单元。默认收录改走通用数据库/Admin 路径，只有重定向、跨库身份、索引/canonical、安全或基础迁移才允许建立工具专属代码。四周排期、实现差距、明日 SciSpace/v0 执行单和验收口径见[自动运营 V2 全面执行方案](./AUTOMATED_OPERATIONS_V2_IMPLEMENTATION_2026-10-12_CN.md)。
