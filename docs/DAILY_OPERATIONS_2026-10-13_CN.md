@@ -68,3 +68,7 @@ GSC 只读拉取成功，最新完整数据日为 2026-10-10：
 ### BUILD-APP-RELATION-PRODUCTION-INVENTORY-01
 
 `2026-10-13T08:34:51.528Z` 的生产只读回读成功：`build-app-with-ai` 为 active；`ai-assisted-app-development (required)` 与 `developer-workflow-integration (preferred)` 两条 Task Capability 均为 reviewed。Bolt、Lovable、Replit、v0 均为唯一 published 目录实体；四者各自 production profile/source/claim/Tool Capability/Fit/evidence links 均为 0。此处是成功 GET/SELECT 后的实际零行，不是不可见；离线 24 条 Claim 不在生产 profile 中。独立 QA 提出的两项 P2 已窄修复：候选 host 采用精确域名边界并涵盖 v0.app/v0.dev，实体须名称别名与官方 host 双重匹配；单边、冲突及重复候选 fail closed。修复后只重跑一次 verifier，计数不变，`productionWrites=0`；原 QA 仅复核身份差分并最终 `QA_PASS`。快照与审计：[机器快照](../data/decision-graph/build-app-production-inventory-2026-10-13.json)、[生产关系盘点](./BUILD_APP_RELATION_PRODUCTION_INVENTORY_2026-10-13_CN.md)。未执行 RPC、未写库、未改公开页面/SEO/索引/sitemap，也无需部署。
+
+### 流程收敛修正
+
+此前将同一批工具的 inventory、evidence、relation candidate 和 release gate 拆成连续任务，造成重复上下文、重复 QA 和 Owner 感知上的反复推进，属于流程膨胀。即日起同一 Cluster/工具批次使用一个端到端交付单元，内部一次完成盘点、缺失证据、关系候选、QA、preflight/rollback 和授权范围内发布；只有真实高风险授权或架构/SEO 冲突才暂停。下一单元合并为 `BUILD-APP-DECISION-CLOSEOUT-01`，覆盖 Bolt、Lovable、Replit、v0 四个工具，不再拆分为单独 evidence/inventory/relation 子任务。

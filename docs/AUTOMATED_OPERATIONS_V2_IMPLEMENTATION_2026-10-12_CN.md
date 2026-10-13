@@ -212,3 +212,12 @@ Catalog、Freshness、Decision Cluster 和 Market Feedback 是四条独立管线
 - 已发布工具的实体 PASS 不因 Decision 页面 HOLD 而重跑。
 - Decision 只核缺失维度和变化 Claim；证据补齐后由一个开发任务形成固定 change set，再由一个独立 QA 做增量验收。
 - 没有运行时代码、路由、索引或数据库变更时，不运行 TypeScript、完整 build 或 production smoke。
+
+### Decision Cluster 端到端交付，禁止阶段任务膨胀
+
+- 一个 Cluster 或同一批工具默认只有一个端到端交付单元。生产盘点、缺口分析、官方证据补齐、profile/source/claim 候选、Tool Capability/Fit 候选、独立 QA、只读 preflight、rollback 和可授权范围内的 commit 都是该单元的内部阶段，不得拆成连续多个需要 Owner 逐项确认的任务。
+- 同一批次只创建一个开发槽和一个独立 QA 槽。开发必须一次性交付完整 change set；QA 只核差分和高风险边界。普通修正返回原开发与原 QA，不新建后缀任务。
+- 批次中的单个工具证据不足时，只将该工具标记为精确 `HOLD_EVIDENCE`，继续完成其他工具；不得因一个对象 HOLD 而冻结整批或四条运营管线。
+- 只有基础迁移/RLS、不可逆生产操作、真实外部账户、付费、index/sitemap、删除/归档/合并重定向需要中途请求 Owner。请求必须合并为一次授权，说明完整变更、回滚和未授权时的安全状态。
+- 研究型中间产物默认并入最终交付文档，不单独作为“下一任务”。只有发现会改变产品架构、用户意图或 SEO 边界的真实冲突时，才允许独立停止并升级决策。
+- 完成定义以用户结果为准，而不是内部文件数量：对关系型 Decision 单元，至少应形成可发布对象清单、每项 PASS/HOLD 原因、生产后像或明确授权阻塞，以及唯一下一步。单纯完成 inventory 或 evidence packet 不算独立业务交付。
