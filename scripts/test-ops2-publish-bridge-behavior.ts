@@ -27,8 +27,11 @@ function fixture(kind: 'candidate' | 'tool') {
     if (sql === 'ROLLBACK') { if (saved) state = saved; saved = null; return { rows: [], rowCount: null }; }
     if (sql === 'COMMIT') { saved = null; return { rows: [], rowCount: null }; }
     if (/^SELECT \* FROM collection_candidates/.test(sql)) return { rows: [clone(state.candidate)], rowCount: 1 };
-    if (/^SELECT id,status FROM tools/.test(sql) || /^SELECT \* FROM tools/.test(sql)) {
+    if (/^SELECT id,status FROM tools/.test(sql) || /^SELECT \*, next_review_date::text AS next_review_date_db_text/.test(sql)) {
       const rows = state.tool && state.tool.id === params[0] ? [clone(state.tool)] : [];
+      if (rows.length && sql.includes('next_review_date_db_text')) {
+        rows[0].next_review_date_db_text = nextReview;
+      }
       return { rows, rowCount: rows.length };
     }
     if (/^SELECT id,name,url FROM tools WHERE id <>/.test(sql)) return { rows: [], rowCount: 0 };

@@ -126,8 +126,9 @@ export function assertToolAudit(row: Row, hash: string, env = process.env) {
   assert.equal(review?.preimageHash, hash);
   assert.equal(review?.qaReference, env.OPS2_QA_REFERENCE);
   assert.equal(review?.reviewer, env.OPS2_REVIEWER_ID);
-  const date = row.next_review_date instanceof Date ? row.next_review_date.toISOString().slice(0, 10)
-    : String(row.next_review_date || '').slice(0, 10);
+  const date = typeof row.next_review_date_db_text === 'string' ? row.next_review_date_db_text
+    : row.next_review_date instanceof Date ? row.next_review_date.toISOString().slice(0, 10)
+      : String(row.next_review_date || '').slice(0, 10);
   assert.match(date, /^\d{4}-\d{2}-\d{2}$/);
   assert.equal(review?.nextReviewDate, date);
 }
@@ -156,7 +157,8 @@ export function assertRelationAudit(manifest: Row, audit: Row, reviewer: string,
 }
 
 async function readTool(client: PoolClient, id: string, lock = false) {
-  const result = await client.query(`SELECT * FROM tools WHERE id = $1${lock ? ' FOR UPDATE' : ''}`, [id]);
+  const result = await client.query(`SELECT *, next_review_date::text AS next_review_date_db_text
+    FROM tools WHERE id = $1${lock ? ' FOR UPDATE' : ''}`, [id]);
   assert.equal(result.rows.length, 1, 'Tool not found');
   return result.rows[0] as Row;
 }

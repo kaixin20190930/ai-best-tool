@@ -52,6 +52,11 @@ const tool = { id, status: 'published', page_quality_status: 'monitor', next_rev
     qaReference: env.OPS2_QA_REFERENCE, reviewer: env.OPS2_REVIEWER_ID, nextReviewDate: '2026-11-12' } } } };
 assertToolAudit(tool, hash, env);
 assertToolAudit(tool, hash, env);
+const timezoneTool = { ...tool, next_review_date: new Date('2026-11-10T16:00:00Z'),
+  next_review_date_db_text: '2026-11-11', features: { submission: { review: {
+    ...tool.features.submission.review, nextReviewDate: '2026-11-11' } } } };
+assertToolAudit(timezoneTool, hash, env);
+assert.throws(() => assertToolAudit({ ...timezoneTool, next_review_date_db_text: '2026-11-10' }, hash, env));
 assert.throws(() => assertToolAudit({ ...tool, next_review_date: '2026-11-13' }, hash, env));
 assert.throws(() => assertToolAudit({ ...tool, page_quality_status: 'continue_index' }, hash, env));
 assert.throws(() => assertToolAudit({ ...tool, features: { submission: { review: {
