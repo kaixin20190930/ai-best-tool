@@ -28,10 +28,10 @@ v0 与 SciSpace 已通过通用无人值守链路完成生产发布，不是零�
 
 ## C. Decision Cluster
 
-今日尚未交付新的用户可见差异化单元，本周进度仍为 `0/2`。`BUILD-APP-DECISION-UNIT-01` 已完成开发审计并取得独立 `QA_PASS`，结论为 `HOLD_PUBLIC_COMPARISON`：
+今日已交付 app-builder 主 Guide 这一用户可见 Decision 单元，本周进度为 `1/2`。`BUILD-APP-DECISION-UNIT-01` 已完成开发审计并取得独立 `QA_PASS`，结论为 `HOLD_PUBLIC_COMPARISON`：
 
 - `research-with-citations` 的真实关系 rollback/commit 仍要求受控直连数据库事务能力；当前只读 preflight 已通过，但不能绕过事务门禁。
-- `build-app-with-ai` 已有 Bolt、Lovable、Replit、v0 四个公开 monitor 工具，但现有生产 Task 关系不足；旧 n8n/OpenRouter Fit 已撤回，不能恢复或用静态工具页冒充已验证关系。
+- `build-app-with-ai` 已有 Bolt、Lovable、Replit、v0 四个公开 monitor 工具。2026-09-28 历史快照记录 n8n/OpenRouter Fit 已撤回为 `stale`；四个现有工具的当前生产 Task 关系状态未知，需通过只读 inventory 确认，不能据历史快照断言当前关系不足，也不能恢复旧 Fit 或用静态工具页冒充已验证关系。
 - 现有 `/guides/ai-coding-tools-comparison` 只是 noindex unavailable 页面。下一交付单元应先审计四工具的现有证据与关系差分；证据足够才实现 Structured Comparison，证据不足则输出明确 HOLD，不生成内部规划型公开内容。
 - 审计已确认 v0 的最新逐项评估尚未形成版本化证据快照，Replit 的迁移/导出边界也缺少同一份当前逐项快照；同时现有 comparison URL 的入口意图是代码补全、调试和重构，不能直接替换成 prompt-to-app 构建器比较。
 - 完整结论见 [`BUILD_APP_DECISION_UNIT_01_HOLD_2026-10-13_CN.md`](./BUILD_APP_DECISION_UNIT_01_HOLD_2026-10-13_CN.md)。本轮没有修改公开页面、关系、索引、sitemap 或生产数据。
@@ -64,3 +64,5 @@ GSC 只读拉取成功，最新完整数据日为 2026-10-10：
 ## 下一项
 
 执行 `BUILD-APP-RELATION-READINESS-01`：只读评估 Bolt、Lovable、Replit、v0 对 `build-app-with-ai` 的 Task/Capability/Fit 关系差分，明确可复用证据、缺口和最小发布包；不直接写生产关系、不创建 Task Page、不改变 Guide 的 noindex/sitemap 边界。Catalog、Freshness 与 Market Feedback 管线继续独立运行，不等待该审计。
+
+`BUILD-APP-RELATION-READINESS-01` 开发研究已完成，等待本单独立 QA（上一项 Guide 的 QA 结果不适用于本审计）。24 条版本化 Claim 仅覆盖 Git/源码、托管/部署、数据后端、集成、费用和维护六维；缺少直接证明核心 AI app generation、适用 availability 与 Task Fit 的关系级 Claim。因此四工具候选均保持 `HOLD_EVIDENCE`，且仓库没有四工具当前生产关系行，不能声称生产关系为零或已存在。权威文档：[关系就绪审计](./BUILD_APP_RELATION_READINESS_2026-10-13_CN.md)及[机器清单](../data/decision-graph/build-app-relation-readiness-2026-10-13.json)。QA PASS 后精确下一步为只读回读生产 Task、两条 Task Capability、四工具关系/profile/claim/link 版本；确认实际 preimage 后，再逐工具补齐核心证据。未写数据库、运行时代码或公开页面。

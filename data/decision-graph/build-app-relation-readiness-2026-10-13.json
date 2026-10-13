@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "unit": "BUILD-APP-RELATION-READINESS-01",
+  "reviewedAt": "2026-10-13",
+  "status": "development_complete_waiting_independent_qa",
+  "task": {
+    "slug": "build-app-with-ai",
+    "output": "application",
+    "requiredCapability": "ai-assisted-app-development",
+    "preferredCapability": "developer-workflow-integration",
+    "productionCurrentState": "not_read_in_this_r_level_audit"
+  },
+  "evidenceSnapshots": [
+    "data/collection/build-app-bolt-lovable-evidence-2026-10-13.json",
+    "data/collection/build-app-v0-replit-evidence-2026-10-13.json"
+  ],
+  "claimSummary": {
+    "total": 24,
+    "verified_public": 9,
+    "conditional": 14,
+    "unknown": 1,
+    "scope": "Six dimensions: source_git_handoff, hosting_deployment, data_backend_portability, integrations, cost_usage_boundaries, maintenance_operational_ownership. These do not directly establish core AI app generation or Task Fit."
+  },
+  "contract": {
+    "toolCapabilityPurposes": ["support", "availability", "plan", "limitation"],
+    "fitPurposes": ["fit", "limitation"],
+    "sameOwnerCurrentVerifiedEvidenceRequired": true,
+    "unknownAvailabilityBlocksPublication": true,
+    "guideCopyIsRelationshipEvidence": false
+  },
+  "tools": [
+    {
+      "slug": "bolt",
+      "snapshot": "build-app-bolt-lovable-evidence-2026-10-13",
+      "claimStatusCounts": {"verified_public": 2, "conditional": 4, "unknown": 0},
+      "reusableClaimKeys": ["source_git_handoff", "hosting_deployment", "data_backend_portability", "integrations", "cost_usage_boundaries", "maintenance_operational_ownership"],
+      "proposedCapability": "ai-assisted-app-development",
+      "proposedFitTask": "build-app-with-ai",
+      "candidateStatus": "hold_evidence",
+      "missing": ["direct_core_ai_app_generation_claim", "scoped_availability_and_plan_claim", "task_specific_fit_and_limitation_evidence"],
+      "productionRelationState": "unknown_until_read_only_inventory"
+    },
+    {
+      "slug": "lovable",
+      "snapshot": "build-app-bolt-lovable-evidence-2026-10-13",
+      "claimStatusCounts": {"verified_public": 2, "conditional": 4, "unknown": 0},
+      "reusableClaimKeys": ["source_git_handoff", "hosting_deployment", "data_backend_portability", "integrations", "cost_usage_boundaries", "maintenance_operational_ownership"],
+      "proposedCapability": "ai-assisted-app-development",
+      "proposedFitTask": "build-app-with-ai",
+      "candidateStatus": "hold_evidence",
+      "missing": ["direct_core_ai_app_generation_claim", "scoped_availability_and_plan_claim", "task_specific_fit_and_limitation_evidence"],
+      "productionRelationState": "unknown_until_read_only_inventory"
+    },
+    {
+      "slug": "replit",
+      "snapshot": "build-app-v0-replit-evidence-2026-10-13",
+      "claimStatusCounts": {"verified_public": 2, "conditional": 4, "unknown": 0},
+      "reusableClaimKeys": ["source_git_handoff", "hosting_deployment", "data_backend_portability", "integrations", "cost_usage_boundaries", "maintenance_operational_ownership"],
+      "proposedCapability": "ai-assisted-app-development",
+      "proposedFitTask": "build-app-with-ai",
+      "candidateStatus": "hold_evidence",
+      "missing": ["direct_core_ai_app_generation_claim", "scoped_availability_and_plan_claim", "task_specific_fit_and_limitation_evidence"],
+      "productionRelationState": "unknown_until_read_only_inventory"
+    },
+    {
+      "slug": "v0",
+      "snapshot": "build-app-v0-replit-evidence-2026-10-13",
+      "claimStatusCounts": {"verified_public": 3, "conditional": 2, "unknown": 1},
+      "reusableClaimKeys": ["source_git_handoff", "hosting_deployment", "data_backend_portability", "integrations", "cost_usage_boundaries", "maintenance_operational_ownership"],
+      "proposedCapability": "ai-assisted-app-development",
+      "proposedFitTask": "build-app-with-ai",
+      "candidateStatus": "hold_evidence",
+      "missing": ["direct_core_ai_app_generation_claim", "scoped_availability_and_plan_claim", "task_specific_fit_and_limitation_evidence"],
+      "preserveUnknown": ["data_backend_portability"],
+      "productionRelationState": "unknown_until_read_only_inventory"
+    }
+  ],
+  "minimalFuturePacket": {
+    "perToolMaximumRelations": 2,
+    "perToolBaseRelationCount": 2,
+    "firstRelation": "Tool Capability: ai-assisted-app-development",
+    "secondRelation": "Fit: build-app-with-ai",
+    "excludedFromCurrentPacket": ["developer-workflow-integration"],
+    "futureIndependentCandidate": "developer-workflow-integration",
+    "futureCandidateRule": "Only assess in a separately scoped future unit with its own user need, direct evidence and independent QA. It does not increase this packet's two-relation limit.",
+    "publishBeforeEvidence": ["core_output", "availability", "plan", "limitation", "fit", "fit_limitation"],
+    "taskPageGate": "At least 3 distinct current published Fits plus independent route/editorial gate; does not auto-approve page or indexing."
+  },
+  "nonActions": ["no_database_write", "no_runtime_code_change", "no_public_page_change", "no_index_or_sitemap_change", "no_sql", "no_commit", "no_push", "no_deploy"]
+}
