@@ -57,6 +57,8 @@ GSC 只读拉取成功，最新完整数据日为 2026-10-10：
 
 `APP-BUILDER-PRIMARY-GUIDE-IA-01` 已完成并在一次证据范围窄修复后取得独立 `QA_PASS`：目标架构采用独立 app-builder Guide 作为编辑性搜索主入口，`build-app-with-ai` Task Page 在至少三条有效 published Fit 和页面注册通过后作为结构化下游；未来 Comparison 只能 canonical 到有效、同语言且非 noindex 的主 Guide。12 条现有 Claim 仅覆盖 v0/Replit，Bolt/Lovable 尚未纳入，不能据此直接实现四工具 Guide。
 
+`BUILD-APP-BOLT-LOVABLE-EVIDENCE-01` 已完成并取得独立 `QA_PASS`：Bolt 与 Lovable 各形成 6 条版本化 Claim，共 12 条，状态为 4 `verified_public`、8 `conditional`、0 `unknown`。QA 删除了 Lovable “旧计费迁移”及“一键迁移”两处超出来源的表述，改为官方实际支持的分步导出、迁移与服务重配边界。至此 Bolt、Lovable、Replit、v0 均具备同一六维契约下的版本化 Guide 输入，但不代表 Guide 已实现或获得索引资格。
+
 ## 下一项
 
-执行 `BUILD-APP-BOLT-LOVABLE-EVIDENCE-01`：按 v0/Replit 的同一六维契约补齐 Bolt 与 Lovable 的版本化逐 Claim 官方证据；不可核实项保持 `unknown/conditional`。独立 QA 通过后，四工具 Guide 才能进入内容实现评审；该证据任务不阻塞 Catalog、Freshness 或 Market Feedback。
+执行 `APP-BUILDER-PRIMARY-GUIDE-IMPLEMENTATION-01`：基于四工具版本化证据实现 EN/CN 主 Guide，明确 Best for、Not ideal、六个决策维度、真实限制和来源日期；初始保持 noindex、不进 sitemap。实现不得创建 Comparison、发布 Task 关系或消耗索引额度，完成后仅做 C 级增量验收。
