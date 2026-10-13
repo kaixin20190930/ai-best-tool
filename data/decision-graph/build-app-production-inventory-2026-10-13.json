@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 1,
+  "unit": "BUILD-APP-RELATION-PRODUCTION-INVENTORY-01",
+  "checkedAtUtc": "2026-10-13T08:34:51.528Z",
+  "access": {
+    "neon": {
+      "status": "readable",
+      "mode": "BEGIN READ ONLY + SELECT + ROLLBACK",
+      "writes": 0
+    },
+    "supabase": {
+      "status": "readable",
+      "mode": "HTTP GET only; non-GET rejected before network",
+      "writes": 0,
+      "rpcCalls": 0
+    },
+    "absenceSemantics": "An empty row array means zero only when the table GET completed successfully. Any failed/partial lookup aborts snapshot generation and must be reported as unknown/inaccessible."
+  },
+  "task": {
+    "id": "10ffdf04-6885-4a28-949d-0723038c6954",
+    "slug": "build-app-with-ai",
+    "name": {
+      "cn": "使用 AI 构建应用",
+      "en": "Build an application with AI"
+    },
+    "description": {
+      "cn": "使用 AI 辅助开发，同时保留可审核的实现、集成和部署决策。",
+      "en": "Use AI-assisted development while keeping implementation, integration, and deployment decisions reviewable."
+    },
+    "category_id": null,
+    "status": "active",
+    "display_order": 3,
+    "constraint_schema": {
+      "output": "application",
+      "requiresCodeReview": true,
+      "requiresIntegrationReview": true
+    },
+    "created_at": "2026-09-23T06:06:52.904308+00:00",
+    "updated_at": "2026-09-23T06:06:52.904308+00:00",
+    "requestedCapabilities": [
+      {
+        "id": "460f946b-9cfb-48fc-8cc5-28328e1b396e",
+        "slug": "ai-assisted-app-development",
+        "name": {
+          "cn": "AI 辅助应用开发",
+          "en": "AI-assisted app development"
+        },
+        "description": {
+          "cn": "在审核下生成或修改应用代码。",
+          "en": "Generate or modify application code with review."
+        },
+        "capability_group": "automation",
+        "status": "active",
+        "display_order": 6,
+        "created_at": "2026-09-23T06:06:52.904308+00:00",
+        "updated_at": "2026-09-23T06:06:52.904308+00:00"
+      },
+      {
+        "id": "136ae3d3-9468-4445-a01d-8f2aaef53b97",
+        "slug": "developer-workflow-integration",
+        "name": {
+          "cn": "开发工作流集成",
+          "en": "Developer workflow integration"
+        },
+        "description": {
+          "cn": "将开发工作连接到工具、服务或自动化。",
+          "en": "Connect development work to tools, services, or automation."
+        },
+        "capability_group": "automation",
+        "status": "active",
+        "display_order": 7,
+        "created_at": "2026-09-23T06:06:52.904308+00:00",
+        "updated_at": "2026-09-23T06:06:52.904308+00:00"
+      }
+    ]
+  },
+  "taskCapabilities": [
+    {
+      "task_id": "10ffdf04-6885-4a28-949d-0723038c6954",
+      "capability_id": "136ae3d3-9468-4445-a01d-8f2aaef53b97",
+      "importance": "preferred",
+      "rationale": {
+        "cn": "实现必须适配交付工作流。",
+        "en": "Implementation must fit a delivery workflow."
+      },
+      "status": "reviewed",
+      "reviewed_at": "2026-09-23T06:06:52.904308+00:00",
+      "review_due_at": "2026-12-22T06:06:52.904308+00:00",
+      "reviewed_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "created_at": "2026-09-23T06:06:52.904308+00:00",
+      "updated_at": "2026-09-23T06:06:52.904308+00:00",
+      "editorial_history": [],
+      "last_edited_by": null,
+      "capability": {
+        "id": "136ae3d3-9468-4445-a01d-8f2aaef53b97",
+        "slug": "developer-workflow-integration",
+        "name": {
+          "cn": "开发工作流集成",
+          "en": "Developer workflow integration"
+        },
+        "description": {
+          "cn": "将开发工作连接到工具、服务或自动化。",
+          "en": "Connect development work to tools, services, or automation."
+        },
+        "capability_group": "automation",
+        "status": "active",
+        "display_order": 7,
+        "created_at": "2026-09-23T06:06:52.904308+00:00",
+        "updated_at": "2026-09-23T06:06:52.904308+00:00"
+      }
+    },
+    {
+      "task_id": "10ffdf04-6885-4a28-949d-0723038c6954",
+      "capability_id": "460f946b-9cfb-48fc-8cc5-28328e1b396e",
+      "importance": "required",
+      "rationale": {
+        "cn": "请求的输出是应用。",
+        "en": "The requested output is an application."
+      },
+      "status": "reviewed",
+      "reviewed_at": "2026-09-23T06:06:52.904308+00:00",
+      "review_due_at": "2026-12-22T06:06:52.904308+00:00",
+      "reviewed_by": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "created_at": "2026-09-23T06:06:52.904308+00:00",
+      "updated_at": "2026-09-23T06:06:52.904308+00:00",
+      "editorial_history": [],
+      "last_edited_by": null,
+      "capability": {
+        "id": "460f946b-9cfb-48fc-8cc5-28328e1b396e",
+        "slug": "ai-assisted-app-development",
+        "name": {
+          "cn": "AI 辅助应用开发",
+          "en": "AI-assisted app development"
+        },
+        "description": {
+          "cn": "在审核下生成或修改应用代码。",
+          "en": "Generate or modify application code with review."
+        },
+        "capability_group": "automation",
+        "status": "active",
+        "display_order": 6,
+        "created_at": "2026-09-23T06:06:52.904308+00:00",
+        "updated_at": "2026-09-23T06:06:52.904308+00:00"
+      }
+    }
+  ],
+  "tools": [
+    {
+      "directory": {
+        "id": "04570837-c50d-4aa2-b8aa-a11738046fe5",
+        "name": "bolt",
+        "status": "published",
+        "url": "https://bolt.new/",
+        "updated_at": "2026-10-12 02:20:48.518005+00"
+      },
+      "profile": null,
+      "profileCount": 0,
+      "sources": [],
+      "sourceCount": 0,
+      "claims": [],
+      "claimCount": 0,
+      "toolCapabilities": [],
+      "fits": [],
+      "otherFitCount": 0
+    },
+    {
+      "directory": {
+        "id": "8fee5c8b-f284-41d4-b691-c099e5bb230b",
+        "name": "lovable",
+        "status": "published",
+        "url": "https://lovable.dev/",
+        "updated_at": "2026-09-14 03:14:21.572026+00"
+      },
+      "profile": null,
+      "profileCount": 0,
+      "sources": [],
+      "sourceCount": 0,
+      "claims": [],
+      "claimCount": 0,
+      "toolCapabilities": [],
+      "fits": [],
+      "otherFitCount": 0
+    },
+    {
+      "directory": {
+        "id": "b14c8fe0-3dc5-47ed-8dd8-9d16c9892f85",
+        "name": "replit",
+        "status": "published",
+        "url": "https://replit.com/",
+        "updated_at": "2026-10-09 14:29:49.311992+00"
+      },
+      "profile": null,
+      "profileCount": 0,
+      "sources": [],
+      "sourceCount": 0,
+      "claims": [],
+      "claimCount": 0,
+      "toolCapabilities": [],
+      "fits": [],
+      "otherFitCount": 0
+    },
+    {
+      "directory": {
+        "id": "2d598569-ba06-4f65-966b-dde8df1161cc",
+        "name": "v0-by-vercel",
+        "status": "published",
+        "url": "https://v0.app/",
+        "updated_at": "2026-10-13 05:39:04.094414+00"
+      },
+      "profile": null,
+      "profileCount": 0,
+      "sources": [],
+      "sourceCount": 0,
+      "claims": [],
+      "claimCount": 0,
+      "toolCapabilities": [],
+      "fits": [],
+      "otherFitCount": 0
+    }
+  ],
+  "totals": {
+    "directoryTools": 4,
+    "profiles": 0,
+    "sources": 0,
+    "claims": 0,
+    "taskCapabilities": 2,
+    "toolCapabilities": 0,
+    "fits": 0,
+    "toolCapabilityEvidenceLinks": 0,
+    "fitEvidenceLinks": 0
+  },
+  "historicalComparison": {
+    "snapshotDate": "2026-09-28",
+    "source": "docs/DECISION_GRAPH_CL07_PRODUCTION_CLOSEOUT_2026-09-27_CN.md and docs/DECISION_GRAPH_CL04_APP_BUILD_ELIGIBILITY_2026-09-27_CN.md",
+    "limitation": "The historical snapshot covers n8n/OpenRouter, not the four current target tools. It records 2 Task Capabilities; n8n/OpenRouter each had 1 Tool Capability and 1 Fit, 12 sources and 7 claims total, and 1 Tool Capability support link plus 1 Fit link per tool before the 2026-09-28 withdrawal. Their two Fits were then changed to stale; this is not a baseline for Bolt/Lovable/Replit/v0."
+  },
+  "readinessComparison": {
+    "source": "data/decision-graph/build-app-relation-readiness-2026-10-13.json",
+    "priorProductionState": "unknown_until_read_only_inventory",
+    "checkedNow": true
+  }
+}

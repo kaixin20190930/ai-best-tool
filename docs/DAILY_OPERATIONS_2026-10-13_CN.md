@@ -61,8 +61,10 @@ GSC 只读拉取成功，最新完整数据日为 2026-10-10：
 
 `APP-BUILDER-PRIMARY-GUIDE-IMPLEMENTATION-01` 已完成开发、独立 `QA_PASS`、推送与生产验证：新增 EN/CN app-builder 主 Guide，基于 Bolt、Lovable、Replit、v0 的版本化证据展示六个决策维度、Best for、Not ideal、限制和官方来源。页面仅支持 EN/CN，初始为 `noindex, follow`、self-canonical、无 hreflang，且不进入 sitemap；没有创建 Comparison、发布 Task/Capability/Fit 关系或修改生产数据库。专项测试、既有 Guide 边界测试、TypeScript、完整 build、差分检查和一次生产 SEO smoke 通过。运行时代码提交 `0998944a` 已推送 `main`；线上 EN/CN 路由为 200，unsupported locale 使用 noindex 的 Next not-found 边界，sitemap 匹配 0。
 
-## 下一项
+## 差异化线下一项
 
-执行 `BUILD-APP-RELATION-READINESS-01`：只读评估 Bolt、Lovable、Replit、v0 对 `build-app-with-ai` 的 Task/Capability/Fit 关系差分，明确可复用证据、缺口和最小发布包；不直接写生产关系、不创建 Task Page、不改变 Guide 的 noindex/sitemap 边界。Catalog、Freshness 与 Market Feedback 管线继续独立运行，不等待该审计。
+`BUILD-APP-RELATION-READINESS-01` 已通过独立 QA；其 24 条离线 Claim 只覆盖 Git/源码、托管/部署、数据后端、集成、费用和维护六维，不能直接证明核心 AI app generation、适用 availability 与 Task Fit。生产关系当时标记未知，现已由后续 inventory 收敛为明确生产状态，见下方。
 
-`BUILD-APP-RELATION-READINESS-01` 开发研究已完成，等待本单独立 QA（上一项 Guide 的 QA 结果不适用于本审计）。24 条版本化 Claim 仅覆盖 Git/源码、托管/部署、数据后端、集成、费用和维护六维；缺少直接证明核心 AI app generation、适用 availability 与 Task Fit 的关系级 Claim。因此四工具候选均保持 `HOLD_EVIDENCE`，且仓库没有四工具当前生产关系行，不能声称生产关系为零或已存在。权威文档：[关系就绪审计](./BUILD_APP_RELATION_READINESS_2026-10-13_CN.md)及[机器清单](../data/decision-graph/build-app-relation-readiness-2026-10-13.json)。QA PASS 后精确下一步为只读回读生产 Task、两条 Task Capability、四工具关系/profile/claim/link 版本；确认实际 preimage 后，再逐工具补齐核心证据。未写数据库、运行时代码或公开页面。
+### BUILD-APP-RELATION-PRODUCTION-INVENTORY-01
+
+`2026-10-13T08:34:51.528Z` 的生产只读回读成功：`build-app-with-ai` 为 active；`ai-assisted-app-development (required)` 与 `developer-workflow-integration (preferred)` 两条 Task Capability 均为 reviewed。Bolt、Lovable、Replit、v0 均为唯一 published 目录实体；四者各自 production profile/source/claim/Tool Capability/Fit/evidence links 均为 0。此处是成功 GET/SELECT 后的实际零行，不是不可见；离线 24 条 Claim 不在生产 profile 中。独立 QA 提出的两项 P2 已窄修复：候选 host 采用精确域名边界并涵盖 v0.app/v0.dev，实体须名称别名与官方 host 双重匹配；单边、冲突及重复候选 fail closed。修复后只重跑一次 verifier，计数不变，`productionWrites=0`；原 QA 仅复核身份差分并最终 `QA_PASS`。快照与审计：[机器快照](../data/decision-graph/build-app-production-inventory-2026-10-13.json)、[生产关系盘点](./BUILD_APP_RELATION_PRODUCTION_INVENTORY_2026-10-13_CN.md)。未执行 RPC、未写库、未改公开页面/SEO/索引/sitemap，也无需部署。
