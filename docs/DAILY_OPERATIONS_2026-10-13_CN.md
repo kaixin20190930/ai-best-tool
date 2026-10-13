@@ -53,6 +53,8 @@ GSC 只读拉取成功，最新完整数据日为 2026-10-10：
 
 `BUILD-APP-EVIDENCE-SNAPSHOT-01` 已完成并取得独立 `QA_PASS`：v0、Replit 各形成 6 条版本化逐 Claim 证据，共 12 条；5 条 `verified_public`、6 条 `conditional`、1 条 `unknown`。QA 仅修正 Replit 数据迁移来源、Connector 套餐边界及计费措辞，没有扩张到页面、关系或生产测试。证据见 [`BUILD_APP_V0_REPLIT_EVIDENCE_2026-10-13_CN.md`](./BUILD_APP_V0_REPLIT_EVIDENCE_2026-10-13_CN.md)。
 
+`BUILD-APP-COMPARISON-INTENT-01` 已完成并在一次窄修复后取得独立 `QA_PASS`：现有 `/guides/ai-coding-tools-comparison` 保留编码助手/编码 Agent 意图，不改造成应用构建器比较。仓库当前没有适合作为 app-builder primary 的主 Guide；因此不能预设 comparison URL 或 self-canonical。未来必须先批准真正对应的主 Guide，再按冻结规则决定 comparison canonical，默认指向该主 Guide；独立索引另行审批。
+
 ## 下一项
 
-执行 `BUILD-APP-COMPARISON-INTENT-01`：决定现有 `/guides/ai-coding-tools-comparison` 保留“编码助手”意图还是改造成同时明确区分编码助手与应用构建器的单一入口。先完成 SEO/内链/用户意图影响审计，再决定是否修改页面；不新增同义 URL，不自动发布 Task 关系或批准索引。
+执行 `APP-BUILDER-PRIMARY-GUIDE-IA-01`：先审计是否应将既有 `build-app-with-ai` Task Page 作为用户决策主入口，或需要独立的 app-builder Guide；定义唯一主意图、路由、canonical 和内链边界。只有主入口方案通过独立 QA 后，才允许安排 comparison 页面实现。
