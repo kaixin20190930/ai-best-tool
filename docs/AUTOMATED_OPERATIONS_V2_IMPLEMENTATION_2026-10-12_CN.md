@@ -100,6 +100,8 @@
 
 目标：完成 Research Cluster 最小闭环，并让普通成熟工具默认走无代码路径。
 
+**2026-10-13 进展**：`OPS2-01` 至 `OPS2-03` 的首个真实双工具闭环已完成。v0 与 SciSpace 均通过通用选择包入队、candidate→draft、独立市场验证、发布 preflight/rollback/commit/postcheck，最终为 `published + monitor/noindex`，未进入 sitemap。过程中修复了通用父品牌域与平台自有媒体契约、市场验证独立 QA/来源追溯、缺失 `mediaReview.needed` 的 SQL NULL 语义，以及 PostgreSQL `date` 的时区审计误差；这些修复适用于后续普通工具，不是工具专属发布脚本。当前生产共 84 个工具、65 个 published、17 个 continue_index、65 个 monitor，sitemap 仍为 126 条。Research relation 只读 preflight 已通过，但 rollback/commit 仍因缺少直接 `SUPABASE_DB_URL` 保持 HOLD，不影响 Catalog/Freshness。
+
 - OPS2-01：统一成熟工具快车道的实体/Claim 门禁。
 - OPS2-02：建立通用数据库发布 preflight、commit、postcheck 和审计记录。
 - OPS2-03：自动化接入 candidate → draft → monitor/noindex，不为普通工具新增专项脚本。
@@ -140,6 +142,8 @@
 - Decision Assistant 只有在三个 Cluster 数据和行为样本达到门槛后才能排期。
 
 ## 7. 明日执行单（2026-10-13）
+
+**执行结果**：Catalog 两项均已完成受控发布。SciSpace 为 `research-with-citations` Alternative，市场验证 77；v0 为 `build-app-with-ai` Gap-filler，市场验证 81。两者公开与索引分离，当前均为 monitor/noindex。以下原执行单保留为当日审计基线，不再作为待办重复执行。
 
 ### 主任务：Research 关系发布
 
