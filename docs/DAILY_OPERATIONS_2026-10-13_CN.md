@@ -55,6 +55,8 @@ GSC 只读拉取成功，最新完整数据日为 2026-10-10：
 
 `BUILD-APP-COMPARISON-INTENT-01` 已完成并在一次窄修复后取得独立 `QA_PASS`：现有 `/guides/ai-coding-tools-comparison` 保留编码助手/编码 Agent 意图，不改造成应用构建器比较。仓库当前没有适合作为 app-builder primary 的主 Guide；因此不能预设 comparison URL 或 self-canonical。未来必须先批准真正对应的主 Guide，再按冻结规则决定 comparison canonical，默认指向该主 Guide；独立索引另行审批。
 
+`APP-BUILDER-PRIMARY-GUIDE-IA-01` 已完成并在一次证据范围窄修复后取得独立 `QA_PASS`：目标架构采用独立 app-builder Guide 作为编辑性搜索主入口，`build-app-with-ai` Task Page 在至少三条有效 published Fit 和页面注册通过后作为结构化下游；未来 Comparison 只能 canonical 到有效、同语言且非 noindex 的主 Guide。12 条现有 Claim 仅覆盖 v0/Replit，Bolt/Lovable 尚未纳入，不能据此直接实现四工具 Guide。
+
 ## 下一项
 
-执行 `APP-BUILDER-PRIMARY-GUIDE-IA-01`：先审计是否应将既有 `build-app-with-ai` Task Page 作为用户决策主入口，或需要独立的 app-builder Guide；定义唯一主意图、路由、canonical 和内链边界。只有主入口方案通过独立 QA 后，才允许安排 comparison 页面实现。
+执行 `BUILD-APP-BOLT-LOVABLE-EVIDENCE-01`：按 v0/Replit 的同一六维契约补齐 Bolt 与 Lovable 的版本化逐 Claim 官方证据；不可核实项保持 `unknown/conditional`。独立 QA 通过后，四工具 Guide 才能进入内容实现评审；该证据任务不阻塞 Catalog、Freshness 或 Market Feedback。
