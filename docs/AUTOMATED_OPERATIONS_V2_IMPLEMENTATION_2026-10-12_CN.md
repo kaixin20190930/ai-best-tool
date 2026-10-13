@@ -184,3 +184,31 @@
 - Catalog 速度可以稳定在每天 1-2 个，同时保持 noindex 安全边界；Decision Cluster 与 Freshness 继续并行，不再二选一。
 
 Review 通过。本方案从 2026-10-13 起作为自动运营的唯一实施排期；旧的逐工具专项发布文件只作为历史审计，不再定义默认流程。
+
+## 10. 管线隔离与非静默失败协议
+
+### 新工具不继承 Decision 页面门禁
+
+Catalog、Freshness、Decision Cluster 和 Market Feedback 是四条独立管线：
+
+- 成熟工具进入 `published + monitor/noindex` 只需通过本文件第 3 节的实体级快速门禁。Structured Comparison 所需的逐格证据、Task/Capability/Fit 关系和 comparison 搜索意图不属于工具公开前置条件。
+- 新兴、身份模糊、重复意图、核心 AI 能力不足、素材权利不清或页面内容不足的候选进入 `HOLD_ENTITY`；可变价格、额度、账户权益和未实测边界只进入 Claim 级 `conditional / unknown / conflict`，不得把整个 Catalog 管线冻结。
+- Decision 单元缺证据时只 HOLD 当前 Decision 单元。Catalog 继续选择下一成熟组合候选，Freshness 和 Market Feedback 继续独立运行。
+- 同一工具已经公开但尚不能进入比较页是允许状态，不得误报为工具发布失败。
+
+### 每日计划偏差必须主动报告
+
+每日运行结束必须产生并主动发送日报，不允许因“没有发布”“仍在 HOLD”或“任务正在等待”而静默：
+
+1. 四条线分别列出 `planned / completed / partial / blocked / not_due`，不得只报整体健康。
+2. 任一计划项未完成时，必须写明唯一直接原因、是否为系统故障、已采取的自动修复或替代动作，以及明确下一项和预计进入条件。
+3. Catalog 当日未发布工具时，必须区分：候选池为空、候选实体 HOLD、通用系统故障、外部依赖异常。系统故障先修复；候选 HOLD 则自动切换下一候选或推进一个可解除缺口。
+4. 一条线 HOLD 不得跳过其他线。只有共享生产基础设施故障、权限风险或数据一致性风险才能暂停多条线，并必须当天通知 Owner。
+5. 当日目标与实际不一致即视为 `PLAN_DEVIATION`，无论是否需要 Owner 操作都必须通知；不得等用户询问后才说明。
+6. 日报必须明确最后一行：`下一步：<唯一动作>`。若存在授权事项，另列 `需要 Owner：<事项>`；否则写 `无需 Owner 操作`。
+
+### 防止重复验证
+
+- 已发布工具的实体 PASS 不因 Decision 页面 HOLD 而重跑。
+- Decision 只核缺失维度和变化 Claim；证据补齐后由一个开发任务形成固定 change set，再由一个独立 QA 做增量验收。
+- 没有运行时代码、路由、索引或数据库变更时，不运行 TypeScript、完整 build 或 production smoke。

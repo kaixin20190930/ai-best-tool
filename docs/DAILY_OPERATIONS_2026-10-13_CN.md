@@ -49,6 +49,10 @@ GSC 只读拉取成功，最新完整数据日为 2026-10-10：
 
 昨日遗留的通用候选输入、候选转 draft、独立市场验证、父品牌域名/素材、QA 独立性、`sourceNotes`、媒体 NULL 与复核日期时区问题均已修复并进入 `main`。总控锁中的旧“尚未发布”描述已同步纠正，防止自动化再次把已完成工作判为待办。
 
+自动运营规则已追加“管线隔离与非静默失败协议”：成熟工具公开不继承 comparison/关系门禁；任一管线 HOLD 不得冻结其他管线；任何目标未完成必须标记 `PLAN_DEVIATION` 并主动发送四线日报，不能等待 Owner 追问。`ai-best-tool` 每日自动化已同步更新并保持 ACTIVE。
+
+`BUILD-APP-EVIDENCE-SNAPSHOT-01` 已完成并取得独立 `QA_PASS`：v0、Replit 各形成 6 条版本化逐 Claim 证据，共 12 条；5 条 `verified_public`、6 条 `conditional`、1 条 `unknown`。QA 仅修正 Replit 数据迁移来源、Connector 套餐边界及计费措辞，没有扩张到页面、关系或生产测试。证据见 [`BUILD_APP_V0_REPLIT_EVIDENCE_2026-10-13_CN.md`](./BUILD_APP_V0_REPLIT_EVIDENCE_2026-10-13_CN.md)。
+
 ## 下一项
 
-启动 `BUILD-APP-EVIDENCE-SNAPSHOT-01`：只补 v0 与 Replit 的版本化、逐 Claim 官方证据快照，范围限定为源码/Git 交接、托管、数据/后端、集成、费用和维护边界；不可核实项保持 `unknown`。完成独立 QA 后，再单独处理现有 comparison URL 的用户意图，不直接发布页面或关系。
+执行 `BUILD-APP-COMPARISON-INTENT-01`：决定现有 `/guides/ai-coding-tools-comparison` 保留“编码助手”意图还是改造成同时明确区分编码助手与应用构建器的单一入口。先完成 SEO/内链/用户意图影响审计，再决定是否修改页面；不新增同义 URL，不自动发布 Task 关系或批准索引。

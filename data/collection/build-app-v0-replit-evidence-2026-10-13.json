@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "snapshotId": "build-app-v0-replit-evidence-2026-10-13",
+  "cluster": "build-app-with-ai",
+  "reviewedAt": "2026-10-13",
+  "sourceDateMeaning": "Official pages were accessed and reviewed on this date; vendor page publication dates were not consistently exposed.",
+  "scope": [
+    "source_git_handoff",
+    "hosting_deployment",
+    "data_backend_portability",
+    "integrations",
+    "cost_usage_boundaries",
+    "maintenance_operational_ownership"
+  ],
+  "tools": [
+    {
+      "tool": "v0",
+      "claims": [
+        {
+          "tool": "v0",
+          "stableKey": "source_git_handoff",
+          "sourceUrl": "https://v0.app/docs/github",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Current public v0-to-GitHub workflow when a project is connected to a repository; account roles and repository permissions apply.",
+          "status": "verified_public",
+          "value": "Connected chats use a base branch and isolated working branches; v0 pushes generated changes to the working branch and supports pull-request review before merge. The connected GitHub repository is the code source of truth.",
+          "limitation": "This establishes the documented Git workflow, not transfer of Vercel project settings, secrets, databases, domains, or a tested export of every project asset.",
+          "nextReviewDate": "2026-11-12"
+        },
+        {
+          "tool": "v0",
+          "stableKey": "hosting_deployment",
+          "sourceUrl": "https://v0.app/docs/deployments",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Documented preview and production deployment path for v0 projects.",
+          "status": "verified_public",
+          "value": "v0 deploys projects to Vercel; working branches can receive preview deployments, and publishing updates the linked Vercel project's production deployment and URL.",
+          "limitation": "A Vercel deployment path is not evidence that an app can be deployed unchanged to another host; portability was not tested.",
+          "nextReviewDate": "2026-11-12"
+        },
+        {
+          "tool": "v0",
+          "stableKey": "data_backend_portability",
+          "sourceUrl": "https://v0.app/docs/databases",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Publicly documented database integrations and data export or migration behavior for a v0-created project.",
+          "status": "unknown",
+          "value": "The docs describe connecting providers including Upstash, Neon, Supabase, and Vercel Blob, and selecting existing stores.",
+          "limitation": "The reviewed page does not establish a complete data export, schema migration, credential transfer, backup/restore, or provider-exit procedure for a project. Do not infer either portability or lock-in from this gap.",
+          "nextReviewDate": "2026-11-12"
+        },
+        {
+          "tool": "v0",
+          "stableKey": "integrations",
+          "sourceUrl": "https://v0.app/docs/quickstart",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Examples and integration paths documented by v0; availability depends on the connected provider and project configuration.",
+          "status": "verified_public",
+          "value": "Official docs describe database and AI integrations, external APIs using project environment variables, and a Stripe payment integration; documented database examples include Neon, Supabase, Upstash, and Vercel Blob.",
+          "limitation": "This is not an exhaustive compatibility list and does not establish plan-independent access, successful integration for every app, or transferability of provider accounts and credentials.",
+          "nextReviewDate": "2026-11-12"
+        },
+        {
+          "tool": "v0",
+          "stableKey": "cost_usage_boundaries",
+          "sourceUrl": "https://v0.app/pricing",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Public v0 plan and model-usage listing as displayed on the review date; excludes individualized checkout and connected Vercel service usage.",
+          "status": "conditional",
+          "value": "The public page listed Free at $0 with a seven-message daily limit, Plus at a displayed $30 per user/month with included credits, Business at $100 per user/month, and custom Enterprise terms; model token rates are usage-specific.",
+          "limitation": "Displayed prices, promotions, included credits, tax, eligibility, and account entitlements can change or vary. The reviewed page does not establish total Vercel hosting, database, or third-party provider cost for a built app; confirm current account checkout and provider billing before estimating total cost.",
+          "nextReviewDate": "2026-10-20"
+        },
+        {
+          "tool": "v0",
+          "stableKey": "maintenance_operational_ownership",
+          "sourceUrl": "https://v0.app/docs/github",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Public evidence about GitHub and Vercel permissions in the documented development and publishing workflow; not a complete operations responsibility matrix.",
+          "status": "conditional",
+          "value": "Publishing and deployment actions depend on v0, GitHub repository, and Vercel project roles; branch protections and required human reviews can block publishing.",
+          "limitation": "The reviewed docs do not define the customer's ongoing responsibility for application security, incident response, backups, upgrades, monitoring, or service-level operations. Do not claim those duties are automated or contractually assigned based on this page.",
+          "nextReviewDate": "2026-11-12"
+        }
+      ]
+    },
+    {
+      "tool": "replit",
+      "claims": [
+        {
+          "tool": "replit",
+          "stableKey": "source_git_handoff",
+          "sourceUrl": "https://docs.replit.com/learn/projects-and-artifacts/version-control",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Documented Git and GitHub source control inside Replit; does not cover every generated or hosted resource.",
+          "status": "verified_public",
+          "value": "Replit documents Git-backed version control, GitHub connectivity, importing, modifying and pushing code between Replit and GitHub, branch workflows, and Git CLI access.",
+          "limitation": "Code synchronization does not prove that database contents, secrets, domains, deployment configuration, integrations, or account-level resources move with the repository.",
+          "nextReviewDate": "2026-11-12"
+        },
+        {
+          "tool": "replit",
+          "stableKey": "hosting_deployment",
+          "sourceUrl": "https://docs.replit.com/features/publishing/deployment-types",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Publicly documented Replit deployment modes and their broad operating models.",
+          "status": "verified_public",
+          "value": "Replit documents Autoscale, Static, Reserved VM, and Scheduled deployments with different runtime and billing models; deployment configuration and resource selection are project-specific.",
+          "limitation": "This establishes available Replit deployment choices, not portability of a deployed application to another host or equivalence of runtime behavior there.",
+          "nextReviewDate": "2026-11-12"
+        },
+        {
+          "tool": "replit",
+          "stableKey": "data_backend_portability",
+          "sourceUrl": "https://docs.replit.com/features/data-and-storage/shared-database-migration",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Documented database data export/import workflow; does not cover every app resource or automated whole-project migration.",
+          "status": "conditional",
+          "value": "Replit documents exporting database data to a file and, for a specific shared-database migration scenario, using PostgreSQL dump/restore commands to move data between development and production databases.",
+          "limitation": "The procedure is scenario-specific and may require maintenance planning; custom roles or policies may need additional handling. It does not prove turnkey migration of all schemas, integrations, secrets, files, domains, jobs, and deployment settings to another provider.",
+          "nextReviewDate": "2026-11-12"
+        },
+        {
+          "tool": "replit",
+          "stableKey": "integrations",
+          "sourceUrl": "https://docs.replit.com/features/integrations/overview",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Integration classes documented for Replit Agent; exact features depend on plan, connector, permissions, and supplied credentials.",
+          "status": "conditional",
+          "value": "Replit distinguishes managed integrations, first-party Connectors, external integrations requiring user-provided API keys, and paid third-party Agent services; most Connectors require paid plans, while some are available on Free and Replit-managed integrations are available to Free plan builders.",
+          "limitation": "Availability, account authorization, scopes, plan eligibility, and provider charges differ by integration. The categories do not establish that every integration is supported on every plan or portable to another development platform.",
+          "nextReviewDate": "2026-11-12"
+        },
+        {
+          "tool": "replit",
+          "stableKey": "cost_usage_boundaries",
+          "sourceUrl": "https://docs.replit.com/billing/ai-billing",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Public AI and cloud usage billing model; exact plan price, credits, workload consumption, and checkout are account- and usage-dependent.",
+          "status": "conditional",
+          "value": "Official docs describe effort-based paid Agent usage, third-party Agent services charged at provider API rates, and credits applying across Agent and Replit cloud services such as published apps, storage, and databases.",
+          "limitation": "A subscription price is not a total application cost. Actual spend varies with request complexity, selected model or provider, plan allowance, and current account terms; this page does not establish one universal build or monthly operating cost.",
+          "nextReviewDate": "2026-10-27"
+        },
+        {
+          "tool": "replit",
+          "stableKey": "maintenance_operational_ownership",
+          "sourceUrl": "https://docs.replit.com/features/security/shared-responsibility-model",
+          "sourceDate": "2026-10-13",
+          "reviewedDate": "2026-10-13",
+          "scope": "Replit's published shared-responsibility framing for application security and operations; does not replace account-specific contractual review.",
+          "status": "conditional",
+          "value": "Replit publishes a shared responsibility model, so platform-provided controls and customer application/account responsibilities must be distinguished rather than treating hosting as full operational ownership transfer.",
+          "limitation": "This source does not prove the customer's actual staffing, incident-response readiness, support entitlement, recovery objective, or contractual allocation for a particular account. Review applicable plan and contract terms.",
+          "nextReviewDate": "2026-11-12"
+        }
+      ]
+    }
+  ]
+}
