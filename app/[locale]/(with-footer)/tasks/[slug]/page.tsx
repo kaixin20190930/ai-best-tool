@@ -50,6 +50,7 @@ function constraints(model: TaskPageModel, isChinese: boolean): string[] {
 }
 
 export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
+  if (params.slug === 'build-app-with-ai' && !['en', 'cn'].includes(params.locale)) notFound();
   const model = await getPublicTaskPage(params.slug, params.locale);
   if (!model) notFound();
   return buildLocalizedPageMetadata({
@@ -62,13 +63,25 @@ export async function generateMetadata({ params }: { params: { locale: string; s
 }
 
 export default async function TaskPage({ params }: { params: { locale: string; slug: string } }) {
+  if (params.slug === 'build-app-with-ai' && !['en', 'cn'].includes(params.locale)) notFound();
   const model = await getPublicTaskPage(params.slug, params.locale);
   if (!model) notFound();
   const { locale } = params;
   const isChinese = locale === 'cn' || locale === 'tw';
   const name = text(model.name, locale);
   const isMeetingNotes = model.slug === 'meeting-notes';
+  const isAppBuilder = model.slug === 'build-app-with-ai';
   const taskConstraints = isMeetingNotes ? meetingNotesConstraints(model, isChinese) : constraints(model, isChinese);
+  let eyebrow = 'Task decision guide';
+  let context = label(isChinese, 'Only current, published fits backed by verifiable evidence appear here. Order is not a review score.', '仅展示当前已发布、证据可核验的适配关系；排序不是评测分数。');
+  if (isMeetingNotes) {
+    eyebrow = isChinese ? '会议工具选择指南' : eyebrow;
+    context = label(isChinese, 'Compare conditions and plan limits using the official sources below. Order is not a review score.', '根据下方官方来源比较适用条件与套餐限制；排序不是评测分数。');
+  }
+  if (isAppBuilder) {
+    eyebrow = label(isChinese, 'Build an app with AI', '用 AI 构建应用');
+    context = label(isChinese, 'Compare which workflow fits your project, then check the official evidence and limits for each tool. These are conditional fits, not a ranking or hands-on test.', '先比较哪种工作流适合你的项目，再核对各工具的官方证据与限制。这些是有条件的适配判断，不是排名或实测结果。');
+  }
 
   return (
     <main className='min-h-screen bg-slate-50'>
@@ -84,16 +97,28 @@ export default async function TaskPage({ params }: { params: { locale: string; s
         />
         <header className='max-w-3xl'>
           <p className='text-sm font-semibold uppercase tracking-widest text-cyan-700'>
-            {isMeetingNotes && isChinese ? '会议工具选择指南' : 'Task decision guide'}
+            {eyebrow}
           </p>
           <h1 className='mt-3 text-4xl font-bold tracking-tight text-slate-950'>{name}</h1>
           <p className='mt-4 text-lg leading-8 text-slate-700'>{text(model.description, locale)}</p>
           <p className='mt-3 text-sm text-slate-600'>
-            {isMeetingNotes
-              ? label(isChinese, 'Compare conditions and plan limits using the official sources below. Order is not a review score.', '根据下方官方来源比较适用条件与套餐限制；排序不是评测分数。')
-              : label(isChinese, 'Only current, published fits backed by verifiable evidence appear here. Order is not a review score.', '仅展示当前已发布、证据可核验的适配关系；排序不是评测分数。')}
+            {context}
           </p>
         </header>
+
+        {isAppBuilder && (
+          <section className='mt-8 rounded-2xl border border-cyan-200 bg-cyan-50 p-6'>
+            <h2 className='text-xl font-semibold text-slate-950'>
+              {label(isChinese, 'The key difference', '三种工作流的核心差异')}
+            </h2>
+            <p className='mt-3 text-sm leading-7 text-slate-700'>
+              {label(isChinese, 'Bolt suits a prompt-to-web-app workflow with code and backend checks before launch. Lovable focuses on building screens, data and logic together while you review Cloud usage. v0 suits incremental app building when you specify backend needs and validate connected services. Each choice still requires review of generated behavior and current account limits.', 'Bolt 适合提示词构建 Web 应用、上线前能审查代码和测试后端的团队；Lovable 适合一起构建界面、数据和逻辑，并核对 Cloud 用量的项目；v0 适合逐步补充后端需求、核验连接服务的应用。三者都需要审查生成结果和当前账户限制。')}
+            </p>
+            <Link href={generateLocalizedPath('/guides/ai-app-builders', locale)} className='mt-4 inline-flex text-sm font-semibold text-cyan-800 underline'>
+              {label(isChinese, 'Compare code, hosting, data, integrations and costs in the full guide', '在完整指南中比较代码、托管、数据、集成和费用')}
+            </Link>
+          </section>
+        )}
 
         <section className='mt-10 grid gap-6 md:grid-cols-2'>
           <div className='rounded-2xl border border-slate-200 bg-white p-6'>
@@ -147,13 +172,22 @@ export default async function TaskPage({ params }: { params: { locale: string; s
                     : label(isChinese, 'Conditional fit', '有条件适配')}
                 </p>
                 <h3 className='mt-2 text-xl font-semibold text-slate-950'>{tool.identity.title}</h3>
-                <p className='mt-3 text-sm leading-6 text-slate-700'>{text(tool.rationale, locale)}</p>
+                <h4 className='mt-4 text-sm font-semibold text-slate-900'>{isAppBuilder ? label(isChinese, 'Best for', '更适合') : label(isChinese, 'Why it fits', '适配原因')}</h4>
+                <p className='mt-2 text-sm leading-6 text-slate-700'>{text(tool.rationale, locale)}</p>
+                {isAppBuilder && tool.disqualifiers.length > 0 && (
+                  <>
+                    <h4 className='mt-4 text-sm font-semibold text-slate-900'>{label(isChinese, 'Not ideal for', '不太适合')}</h4>
+                    <ul className='mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600'>
+                      {tool.disqualifiers.map((item) => <li key={`${item.en}:${item.cn}`}>{text(item, locale)}</li>)}
+                    </ul>
+                  </>
+                )}
                 <h4 className='mt-5 text-sm font-semibold text-slate-900'>
                   {isChinese ? '条件与限制' : 'Conditions and limitations'}
                 </h4>
                 {tool.requiredConditions.length || tool.disqualifiers.length ? (
                   <ul className='mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600'>
-                    {[...tool.requiredConditions, ...tool.disqualifiers].map((item) => (
+                    {[...tool.requiredConditions, ...(isAppBuilder ? [] : tool.disqualifiers)].map((item) => (
                       <li key={`${item.en}:${item.cn}`}>{text(item, locale)}</li>
                     ))}
                   </ul>

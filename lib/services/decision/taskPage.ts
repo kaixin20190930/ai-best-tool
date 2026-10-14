@@ -62,7 +62,7 @@ export default async function getPublicTaskPage(slug: string, locale: string): P
       .select('id, owner_type, owner_id')
       .in('id', profileIds);
     if (profilesResult.error) return null;
-    return deriveTaskPageReadModel({
+    const model = deriveTaskPageReadModel({
       task,
       taskCapabilities,
       capabilities: (capabilityResult.data || []) as Row[],
@@ -72,6 +72,10 @@ export default async function getPublicTaskPage(slug: string, locale: string): P
       profiles: (profilesResult.data || []) as Row[],
       identities,
     });
+    if (slug === 'build-app-with-ai' && model?.tools.map((tool) => tool.identity.slug).sort().join(',') !== 'bolt,lovable,v0') {
+      return null;
+    }
+    return model;
   } catch (error) {
     console.error('Task Page read failed:', error);
     return null;

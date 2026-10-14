@@ -243,7 +243,11 @@ assert.match(
 );
 assert.doesNotMatch(metadataSource, /Task unavailable|任务页不可用/);
 const middleware = readFileSync(resolve('middleware.ts'), 'utf8');
-assert.deepEqual(APPROVED_TASK_PAGE_SLUGS, ['meeting-notes'], 'only meeting-notes has editorial release approval');
+assert.deepEqual(APPROVED_TASK_PAGE_SLUGS, ['meeting-notes', 'build-app-with-ai']);
+assert.equal(getTaskPageRouteDecision('/tasks/build-app-with-ai'), 'approved');
+assert.equal(getTaskPageRouteDecision('/cn/tasks/build-app-with-ai'), 'approved');
+assert.equal(getTaskPageRouteDecision('/tasks/build-app-with-ai', []), 'closed', 'approval withdrawal closes the route');
+assert.equal(getTaskPageRouteDecision('/tasks/research-with-citations'), 'closed');
 assert.equal(getTaskPageRouteDecision('/cn/tasks/research-with-citations'), 'closed', 'editorial preflight does not approve the public Task Page');
 assert.equal(getTaskPageRouteDecision('/tasks/meeting-notes'), 'approved', 'default English Task path is approved');
 assert.equal(getTaskPageRouteDecision('/en/tasks/meeting-notes'), 'approved');
@@ -261,6 +265,13 @@ assert.match(route, /indexable: false/);
 assert.match(route, /buildLocalizedPageMetadata/);
 assert.match(route, /SeoBreadcrumbs/);
 assert.match(route, /getLocalizedToolPath/);
+assert.match(route, /params\.slug === 'build-app-with-ai' && !\['en', 'cn'\]\.includes\(params\.locale\)/);
+assert.match(route, /'Best for', '更适合'/);
+assert.match(route, /'Not ideal for', '不太适合'/);
+assert.match(route, /'\/guides\/ai-app-builders'/);
+const guide = readFileSync(resolve('app/[locale]/(with-footer)/guides/ai-app-builders/page.tsx'), 'utf8');
+assert.match(guide, /'\/tasks\/build-app-with-ai'/);
+assert.match(read, /'bolt,lovable,v0'/, 'app-builder candidates stay limited to the published reviewed set');
 assert.match(route, /generateLocalizedPath\('\/find-tools'/);
 assert.doesNotMatch(sitemap, /tasks\/\$\{|url: 'tasks'/);
 assert.match(read, /getDecisionToolIdentities/);
@@ -275,6 +286,16 @@ const metadata = buildLocalizedPageMetadata({
 assert.equal(metadata.alternates?.canonical, 'https://aibesttool.com/cn/tasks/meeting-notes');
 assert.equal(metadata.alternates?.languages, undefined, 'noindex pages do not advertise hreflang');
 assert.deepEqual(metadata.robots, { index: false, follow: true, googleBot: { index: false, follow: true } });
+const appMetadata = buildLocalizedPageMetadata({
+  locale: 'en',
+  path: '/tasks/build-app-with-ai',
+  title: 'Build an app with AI',
+  description: 'Compare current fits.',
+  indexable: false,
+});
+assert.equal(appMetadata.alternates?.canonical, 'https://aibesttool.com/tasks/build-app-with-ai');
+assert.equal(appMetadata.alternates?.languages, undefined);
+assert.deepEqual(appMetadata.robots, metadata.robots);
 console.log(
   JSON.stringify(
     { success: true, eligibilityFailClosed: true, rawClaimsExcluded: true, noindex: true, sitemapExcluded: true },

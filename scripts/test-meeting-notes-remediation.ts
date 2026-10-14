@@ -105,7 +105,7 @@ assert.deepEqual(
   'the script writes only its temporary data and named relationship/evidence tables',
 );
 
-assert.match(registry, /APPROVED_TASK_PAGE_SLUGS: readonly string\[\] = \[\]/);
+assert.match(registry, /APPROVED_TASK_PAGE_SLUGS: readonly string\[\] = \['meeting-notes', 'build-app-with-ai'\]/);
 assert.doesNotMatch(
   sql,
   /APPROVED_TASK_PAGE_SLUGS|continue_index|sitemap|CREATE\s+(?:TABLE|INDEX|POLICY)|ALTER\s+TABLE/i,

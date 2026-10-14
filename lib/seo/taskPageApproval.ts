@@ -2,9 +2,9 @@
  * Task Pages need explicit editorial release in addition to their live data gate.
  * Add a slug here only after editorial approval and a current evidence check.
  * Remove it in the same release when freshness monitoring or review withdraws approval.
- * meeting-notes is the first editorially approved Task Page; all other slugs stay closed.
+ * Approved pages still fail closed when their current published relations or evidence disappear.
  */
-export const APPROVED_TASK_PAGE_SLUGS: readonly string[] = ['meeting-notes'];
+export const APPROVED_TASK_PAGE_SLUGS: readonly string[] = ['meeting-notes', 'build-app-with-ai'];
 
 export type TaskPageRouteDecision = 'other' | 'approved' | 'closed';
 
