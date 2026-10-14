@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Brand content workflow illustration</title>
+  <desc id="desc">An abstract draft passes through voice, terminology, and human review cards.</desc>
+  <rect width="1200" height="630" fill="#f4f1e9"/>
+  <rect x="95" y="126" width="240" height="376" rx="24" fill="#ffffff" stroke="#9b9a90" stroke-width="3"/>
+  <rect x="480" y="126" width="240" height="376" rx="24" fill="#ffffff" stroke="#9b9a90" stroke-width="3"/>
+  <rect x="865" y="126" width="240" height="376" rx="24" fill="#ffffff" stroke="#9b9a90" stroke-width="3"/>
+  <path d="M335 314h145m240 0h145" fill="none" stroke="#275d5e" stroke-width="10" stroke-linecap="round"/>
+  <path d="m452 291 28 23-28 23m385-46 28 23-28 23" fill="none" stroke="#275d5e" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="215" cy="219" r="43" fill="#d8e5df"/>
+  <path d="M183 216h64m-64 20h45" stroke="#275d5e" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="600" cy="219" r="43" fill="#e9d8bd"/>
+  <path d="M579 218c11-20 31-20 42 0-11 20-31 20-42 0Z" fill="none" stroke="#77583c" stroke-width="7"/>
+  <circle cx="985" cy="219" r="43" fill="#d8e5df"/>
+  <path d="m963 219 15 15 29-32" fill="none" stroke="#275d5e" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="215" y="372" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" fill="#26383a">Draft</text>
+  <text x="600" y="372" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" fill="#26383a">Rules</text>
+  <text x="985" y="372" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" fill="#26383a">Review</text>
+  <text x="600" y="571" text-anchor="middle" font-family="Arial,sans-serif" font-size="22" fill="#626a66">AI Best Tool editorial illustration · no product UI shown</text>
+</svg>
