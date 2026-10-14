@@ -66,7 +66,7 @@ function copy(locale: string) {
           '上线后谁负责安全复核、费用监控、修复与恢复演练？',
         ],
         sourcesTitle: '来源与核查时间',
-        taskLink: '按已核验的适配条件筛选 Bolt、Lovable 和 v0',
+      taskLink: '按已核验的适配条件筛选 Bolt、Lovable 和 v0',
         sourcesNote:
           '本指南按 2026 年 10 月 13 日核查的官方资料整理；价格、额度及账户权益可能变化。具体结账与项目适用性，请在相应工具和服务中再次确认。',
         otherPath: '如果你主要是在 IDE 里补全、调试或重构代码，请改看开发者工具指南。',
@@ -111,7 +111,7 @@ function copy(locale: string) {
           'Who will own security review, spend monitoring, fixes and recovery drills after launch?',
         ],
         sourcesTitle: 'Sources and review date',
-        taskLink: 'Compare the verified fits for Bolt, Lovable and v0',
+      taskLink: 'Compare the verified fits for Bolt, Lovable and v0',
         sourcesNote:
           'This guide summarizes official documentation reviewed on October 13, 2026. Prices, allowances and account entitlements may change. Recheck checkout and project-specific eligibility with each provider.',
         otherPath:
