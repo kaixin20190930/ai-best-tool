@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "current_operational_overlay",
-  "asOf": "2026-10-12",
+  "asOf": "2026-10-14",
   "historicalSnapshot": "data/collection/mature-candidate-buffer-2026-10-06.json",
   "released": {
     "elicit": { "status": "released_monitor_noindex", "evidence": "data/collection/elicit-release.json" },
@@ -10,7 +10,9 @@
     "scite": { "status": "released_monitor_noindex", "evidence": "data/collection/scite-release-manifest-2026-10-10.json" },
     "canva": { "status": "released_monitor_noindex", "evidence": "data/collection/canva-release.json" },
     "anyword": { "status": "released_monitor_noindex", "evidence": "data/collection/anyword-release.json" },
-    "bolt": { "status": "released_monitor_noindex", "evidence": "data/collection/bolt-release.json" }
+    "bolt": { "status": "released_monitor_noindex", "evidence": "data/collection/bolt-release.json" },
+    "v0": { "status": "released_monitor_noindex", "evidence": "docs/DAILY_OPERATIONS_2026-10-13_CN.md" },
+    "scispace": { "status": "released_monitor_noindex", "evidence": "docs/DAILY_OPERATIONS_2026-10-13_CN.md" }
   },
   "independentReleasesOutsideSnapshot": {
     "chatgpt": { "status": "released_monitor_noindex", "evidence": "data/collection/chatgpt-release.json" }

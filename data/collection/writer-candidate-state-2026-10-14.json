@@ -1,0 +1,39 @@
+{
+  "unit": "DAILY-OPERATIONS-CLOSEOUT-2026-10-14",
+  "asOf": "2026-10-14",
+  "slug": "writer",
+  "status": "HOLD_EVIDENCE",
+  "proposedCanonical": "/ai/writer",
+  "cluster": "brand-constrained-marketing-content",
+  "role": "Gap-filler",
+  "selectionReason": "Current ready queue is empty. WRITER fills the brand-governance gap with mature official product evidence; Bubble follows an app-builder cluster already served by four published tools, while WellSaid has narrower demand evidence. No demand estimate is inferred from GSC brand traffic.",
+  "closedGap": "Official documentation now directly confirms the brand-control setup and role boundary: style guide and terms affect WRITER Agent output only after connection to a voice profile; organization or IT admins configure an Agent profile to enforce that voice. Team admins can manage their team's style guide. This does not prove plan entitlement, actual output consistency, or customer adoption.",
+  "evidence": [
+    {
+      "url": "https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice",
+      "kind": "official",
+      "checkedAt": "2026-10-14",
+      "supports": "Voice linkage requirement, team setup, and organization-level enforcement steps"
+    },
+    {
+      "url": "https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer",
+      "kind": "official",
+      "checkedAt": "2026-10-14",
+      "supports": "Role and style-guide permission boundaries"
+    }
+  ],
+  "remainingEntityGates": [
+    "Current official product scope and unique production identity/canonical must be rechecked before enqueue",
+    "Three-language Best for, Not ideal, limitations, comparison path, and review dates are not prepared",
+    "Legal media or platform-owned neutral asset and real display need review"
+  ],
+  "remainingClaimHolds": [
+    "Plan entitlement and purchase path",
+    "Actual brand-rule consistency, retention, and integration scope"
+  ],
+  "marketSignalBoundary": "Historical G2 listing is only a discovery lead; current brand-workflow use and independent adoption remain unverified.",
+  "publicReleaseApproved": false,
+  "indexReleaseApproved": false,
+  "relationshipCreationApproved": false,
+  "nextAction": "Prepare the three-language entity page and rights-cleared media, then run the generic duplicate/canonical and entity preflight. Keep uncertain plan and outcome claims conditional."
+}
