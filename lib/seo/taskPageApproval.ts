@@ -16,8 +16,10 @@ export function getTaskPageRouteDecision(
   pathname: string,
   approvedSlugs: readonly string[] = APPROVED_TASK_PAGE_SLUGS,
 ): TaskPageRouteDecision {
+  const explicitLocale = pathname.match(supportedLocalePrefix)?.[0].slice(1);
   const pathWithoutLocale = pathname.replace(supportedLocalePrefix, '') || '/';
   if (pathWithoutLocale !== '/tasks' && !pathWithoutLocale.startsWith('/tasks/')) return 'other';
   const slug = pathWithoutLocale.match(taskSlugPath)?.[1];
+  if (slug === 'build-app-with-ai' && explicitLocale && !['en', 'cn'].includes(explicitLocale)) return 'closed';
   return slug && approvedSlugs.includes(slug) ? 'approved' : 'closed';
 }

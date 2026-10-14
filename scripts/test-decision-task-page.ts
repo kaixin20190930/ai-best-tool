@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
 import { APPROVED_TASK_PAGE_SLUGS, getTaskPageRouteDecision } from '@/lib/seo/taskPageApproval';
 import { evaluateTaskPageEditorialGate } from '@/lib/services/decision/taskPageEditorialGate';
+import { isReviewedAppBuilderCandidateSet } from '@/lib/services/decision/taskPage';
 import { deriveTaskPageReadModel } from '@/lib/services/decision/taskPageReadModel';
 
 /* eslint-disable no-param-reassign -- Gate fixtures are deliberately mutated one field at a time. */
@@ -246,6 +247,8 @@ const middleware = readFileSync(resolve('middleware.ts'), 'utf8');
 assert.deepEqual(APPROVED_TASK_PAGE_SLUGS, ['meeting-notes', 'build-app-with-ai']);
 assert.equal(getTaskPageRouteDecision('/tasks/build-app-with-ai'), 'approved');
 assert.equal(getTaskPageRouteDecision('/cn/tasks/build-app-with-ai'), 'approved');
+assert.equal(getTaskPageRouteDecision('/fr/tasks/build-app-with-ai'), 'closed');
+assert.equal(getTaskPageRouteDecision('/jp/tasks/build-app-with-ai'), 'closed');
 assert.equal(getTaskPageRouteDecision('/tasks/build-app-with-ai', []), 'closed', 'approval withdrawal closes the route');
 assert.equal(getTaskPageRouteDecision('/tasks/research-with-citations'), 'closed');
 assert.equal(getTaskPageRouteDecision('/cn/tasks/research-with-citations'), 'closed', 'editorial preflight does not approve the public Task Page');
@@ -271,7 +274,26 @@ assert.match(route, /'Not ideal for', '不太适合'/);
 assert.match(route, /'\/guides\/ai-app-builders'/);
 const guide = readFileSync(resolve('app/[locale]/(with-footer)/guides/ai-app-builders/page.tsx'), 'utf8');
 assert.match(guide, /'\/tasks\/build-app-with-ai'/);
-assert.match(read, /'bolt,lovable,v0'/, 'app-builder candidates stay limited to the published reviewed set');
+const reviewedAppModel = {
+  ...publicModel,
+  tools: [
+    { ...publicModel.tools[0], identity: { ...publicModel.tools[0].identity, id: '04570837-c50d-4aa2-b8aa-a11738046fe5', slug: 'bolt' } },
+    { ...publicModel.tools[1], identity: { ...publicModel.tools[1].identity, id: '8fee5c8b-f284-41d4-b691-c099e5bb230b', slug: 'lovable' } },
+    { ...publicModel.tools[2], identity: { ...publicModel.tools[2].identity, id: '2d598569-ba06-4f65-966b-dde8df1161cc', slug: 'v0-by-vercel' } },
+  ],
+};
+assert.equal(isReviewedAppBuilderCandidateSet(reviewedAppModel), true);
+assert.equal(isReviewedAppBuilderCandidateSet(null), false);
+assert.equal(isReviewedAppBuilderCandidateSet({ ...reviewedAppModel, tools: reviewedAppModel.tools.slice(0, 2) }), false);
+const unreviewedAppModel = {
+  ...reviewedAppModel,
+  tools: [
+    reviewedAppModel.tools[0],
+    reviewedAppModel.tools[1],
+    { ...reviewedAppModel.tools[2], identity: { ...reviewedAppModel.tools[2].identity, id: 'b14c8fe0-3dc5-47ed-8dd8-9d16c9892f85', slug: 'replit' } },
+  ],
+};
+assert.equal(isReviewedAppBuilderCandidateSet(unreviewedAppModel), false);
 assert.match(route, /generateLocalizedPath\('\/find-tools'/);
 assert.doesNotMatch(sitemap, /tasks\/\$\{|url: 'tasks'/);
 assert.match(read, /getDecisionToolIdentities/);

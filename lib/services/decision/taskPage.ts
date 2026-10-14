@@ -5,6 +5,20 @@ import { deriveTaskPageReadModel, type TaskPageModel } from './taskPageReadModel
 
 type Row = Record<string, unknown>;
 
+const reviewedAppBuilderToolIds = [
+  '04570837-c50d-4aa2-b8aa-a11738046fe5', // Bolt
+  '8fee5c8b-f284-41d4-b691-c099e5bb230b', // Lovable
+  '2d598569-ba06-4f65-966b-dde8df1161cc', // v0 (directory slug: v0-by-vercel)
+].sort();
+
+export function isReviewedAppBuilderCandidateSet(model: TaskPageModel | null): boolean {
+  return Boolean(
+    model &&
+      model.tools.length === reviewedAppBuilderToolIds.length &&
+      model.tools.map((tool) => tool.identity.id).sort().every((id, index) => id === reviewedAppBuilderToolIds[index]),
+  );
+}
+
 /** Public Task Page data is assembled only on the server and fails closed on read errors. */
 export default async function getPublicTaskPage(slug: string, locale: string): Promise<TaskPageModel | null> {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
@@ -72,7 +86,7 @@ export default async function getPublicTaskPage(slug: string, locale: string): P
       profiles: (profilesResult.data || []) as Row[],
       identities,
     });
-    if (slug === 'build-app-with-ai' && model?.tools.map((tool) => tool.identity.slug).sort().join(',') !== 'bolt,lovable,v0') {
+    if (slug === 'build-app-with-ai' && !isReviewedAppBuilderCandidateSet(model)) {
       return null;
     }
     return model;
