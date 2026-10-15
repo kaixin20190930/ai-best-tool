@@ -1,0 +1,221 @@
+{
+  "unit": "CATALOG-NEW-TOOLS-BATCH-2026-10-15",
+  "asOf": "2026-10-15",
+  "productionWriteAuthorized": false,
+  "indexAndSitemapAuthorized": false,
+  "selectionBoundary": "Each selection is a candidate only. Independent QA is required before enqueue commit; draft and monitor release require their own generic bridge gates.",
+  "productionIdentityRead": {
+    "mode": "Neon BEGIN READ ONLY / ROLLBACK plus Supabase SELECT",
+    "checkedAt": "2026-10-15",
+    "toolMatches": 0,
+    "candidateMatches": 0,
+    "matchingPattern": "everygen|muse.?wonder|artcraft|melty|clef|getartcraft|meta.ai",
+    "activeTaskSlugs": ["ai-voiceover", "brand-constrained-marketing-content", "build-app-with-ai", "meeting-notes", "product-image-to-short-video", "research-with-citations"],
+    "categorySlugs": ["chatbot", "design-art", "life-assistant", "other", "productivity", "text-writing"],
+    "productionWrites": 0
+  },
+  "preflightAndRollback": [
+    {
+      "name": "Everygen",
+      "candidateId": "ca68f6e6-1eea-43d7-8a23-21769b9fb3ac",
+      "selectionHash": "4bf1964d17a397ab265efe9c3614ff020c01b5f36c3e1b6ca66bce231af6b6e1",
+      "preimageHash": "fb14027779c5bd2335de7b63f742020d402ad896681dde7a7a164449977e1a7a",
+      "rollbackPreviewPostimageHash": "6a7bfe7c76e7cc6daecb39692f369eb8d5383eccf9867025a7452f18274d7e58",
+      "preflight": "PASS",
+      "rollback": "PASS",
+      "productionWrites": 0
+    },
+    {
+      "name": "Meta Muse Wonder",
+      "candidateId": "638f9de2-0c60-424c-a58d-9e435a262da5",
+      "selectionHash": "0d5c3f46fa3e791679ee63187d3b3a9fe84dcdffb369e770f9ede938ed8558f4",
+      "preimageHash": "526ff1168aa55d9b1541f5b5d336b11f02834d3b483e8a780fc0142ea5ccb34a",
+      "rollbackPreviewPostimageHash": "af61b3cac90c6ce731f33e7c962fccb7d2c9e7ca71ea6858f3bea23dde45737c",
+      "preflight": "PASS",
+      "rollback": "PASS",
+      "productionWrites": 0
+    }
+  ],
+  "genericReleasePlan": [
+    "Independent QA checks exact selection hashes, official source scope, media ownership, localized claims, and HOLD boundaries; a stale preimage requires new preflight and rollback, not a blind commit.",
+    "After QA PASS, generic ops2:enqueue commit requires exact reviewer, QA report, authorization and rollback hash; postcheck must match its returned postimage hash.",
+    "For each enqueued candidate, use generic ops2:publish-bridge candidate preflight, rollback, exact approved commit and postcheck to obtain one draft; then complete the existing market validation and generic tool preflight/rollback/commit/postcheck for published + monitor/noindex.",
+    "Before any future commit, reread one canonical entity, original candidate status, noindex and zero sitemap entries; after commit, reread that entity and protected non-target rows. Rehearsal postimage hashes are not commit postimage hashes.",
+    "Do not change Task, Capability, Fit, schema, RLS, redirects, index, sitemap, or another candidate; a single HOLD remains excluded from the write set."
+  ],
+  "readySelections": [
+    {
+      "id": "ca68f6e6-1eea-43d7-8a23-21769b9fb3ac",
+      "name": "Everygen",
+      "officialUrl": "https://everygen.ai/",
+      "categorySlug": "design-art",
+      "cluster": { "taskSlug": "product-image-to-short-video", "role": "alternative" },
+      "officialSources": [
+        { "id": "home", "url": "https://everygen.ai/", "claimKeys": ["identity", "video_ad_workflow", "commercial_statement"] },
+        { "id": "terms", "url": "https://everygen.ai/terms", "claimKeys": ["operator", "content_rights", "billing_boundary"] },
+        { "id": "pricing", "url": "https://everygen.ai/pricing", "claimKeys": ["paid_plans", "credits"] }
+      ],
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["home"], "evidenceExcerpt": "The official site presents AI short-form video, UGC-ad, script, voiceover and export workflows." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["home", "terms"], "evidenceExcerpt": "The official site identifies everygen.ai as its only official website; its terms name Viewmax LLC as operator." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": ["711df152-fdcf-4a19-930c-ab866b67605f"], "rationale": "One existing reviewed Fit is in this Task. Everygen is a distinct product with a short-video ad workflow, not a second entity for that existing tool." }
+      },
+      "reviewedAt": "2026-10-15",
+      "nextReviewDate": "2026-10-22",
+      "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/everygen-editorial-cover.svg", "sha256": "067e47bd6fdb0e5745b55ccefdaafe2179e928d23f88e8bf3e1ad66eb39d02ac", "creator": "AI Best Tool editorial", "createdAt": "2026-10-15", "noVendorMarks": true },
+      "pricing": "paid",
+      "tags": ["AI video", "short-form video", "UGC ads"],
+      "localized": {
+        "en": {
+          "title": "Everygen: AI shorts and UGC ad workflows",
+          "summary": "Everygen combines AI short-video creation, ad templates, scripts, voiceover and exports. Check source-media rights, the selected model and credit costs before publishing.",
+          "detail": "Everygen is a short-form video and UGC-style ad workspace operated by Viewmax LLC. Its public site describes AI video generation, ad templates, script, voiceover and export paths. It accepts user media, but rights to that media and consent for depicted people remain the user's responsibility. The official site identifies everygen.ai as the only official domain; similarly named sites are not part of this listing. This is a source-based review, not a hands-on output-quality test. Compare a real product brief, input rights, output format, credit use and human review with other short-video tools before purchase.",
+          "bestFor": ["Creators testing short-form product ads with their own authorized media", "Teams comparing script-to-video and UGC-style workflows"],
+          "notIdealFor": ["Teams requiring a verified account-specific credit cost before procurement", "Anyone seeking permission to remix third-party clips or impersonate real people"],
+          "limitations": ["Models, credits and export costs vary by plan and task", "The listing has not tested a paid account or output quality", "Third-party input rights and synthetic-media disclosures need human review"],
+          "compareAxes": ["Same product brief and aspect ratio", "Credit cost per usable export", "Input rights and commercial approval"],
+          "pricingSummary": "Paid plans and credits are public; exact checkout price and per-task consumption remain account-dependent."
+        },
+        "zh": {
+          "title": "Everygen：AI 短影片與 UGC 廣告工作流程",
+          "summary": "Everygen 提供 AI 短影片、廣告範本、腳本、配音及匯出流程。適合比較短影片廣告製作路徑；發布前仍須核對素材權利、所選模型、實際 credits 消耗，以及合成內容揭露要求，本站尚未實測成片品質。",
+          "detail": "Everygen 是 Viewmax LLC 營運的短影片與 UGC 風格廣告工作台。官網展示 AI 影片生成、廣告範本、腳本、配音和匯出路徑，也支援使用者自備素材。素材權利、人物同意及合成內容揭露仍須使用者自行確認。官網聲明 everygen.ai 是唯一官方網域；同名近似站點不屬於此條目。本條為官方資料核驗，並非實際帳戶效果測試。採購前建議用同一產品簡報比較成片格式、credits、素材權利和人工審校成本。",
+          "bestFor": ["使用有權素材測試短影片廣告的創作者", "比較腳本轉影片及 UGC 風格流程的團隊"],
+          "notIdealFor": ["採購前必須確定目標帳戶逐次生成費用的團隊", "希望直接取得第三方影片改編或真人仿冒許可的使用者"],
+          "limitations": ["模型、credits 和匯出成本依方案與任務變化", "尚未實測付費帳戶和成片品質", "第三方素材權利和合成媒體揭露須人工核對"],
+          "compareAxes": ["同一產品簡報和畫幅", "每條可用成片的 credits 成本", "輸入素材權利及商用審批"],
+          "pricingSummary": "公開資料列出付費方案與 credits；具體結帳價格和任務消耗以帳戶為準。"
+        },
+        "cn": {
+          "title": "Everygen：AI 短视频与 UGC 广告工作流",
+          "summary": "Everygen 提供 AI 短视频、广告模板、脚本、配音及导出流程。适合比较短视频广告制作路径；发布前仍需核对素材权利、所选模型、实际 credits 消耗，以及合成内容披露要求，本站尚未实测成片质量。",
+          "detail": "Everygen 是 Viewmax LLC 运营的短视频与 UGC 风格广告工作台。官网展示 AI 视频生成、广告模板、脚本、配音和导出路径，也支持用户自带素材。素材权利、人物同意及合成内容披露仍需使用者自行确认。官网声明 everygen.ai 是唯一官方域名；同名近似站点不属于此条目。本条为官方资料核验，并非实际账户效果测试。采购前建议用同一产品简报比较成片格式、credits、素材权利和人工审校成本。",
+          "bestFor": ["使用有权素材测试短视频广告的创作者", "比较脚本转视频及 UGC 风格流程的团队"],
+          "notIdealFor": ["采购前必须确定目标账户逐次生成费用的团队", "希望直接获得第三方视频改编或真人仿冒许可的使用者"],
+          "limitations": ["模型、credits 和导出成本依套餐与任务变化", "尚未实测付费账户和成片质量", "第三方素材权利和合成媒体披露须人工核对"],
+          "compareAxes": ["同一产品简报和画幅", "每条可用成片的 credits 成本", "输入素材权利及商用审批"],
+          "pricingSummary": "公开资料列出付费套餐与 credits；具体结账价格和任务消耗以账户为准。"
+        }
+      },
+      "claimGate": { "status": "PASS", "items": [
+        { "key": "identity", "status": "verified_public", "boundary": "Only everygen.ai is identified as official; do not merge similarly named domains.", "sourceIds": ["home"], "nextReviewDate": "2026-11-14" },
+        { "key": "video_ad_workflow", "status": "verified_public", "boundary": "Public workflow description only; output performance is untested.", "sourceIds": ["home"], "nextReviewDate": "2026-11-14" },
+        { "key": "paid_plans", "status": "conditional", "boundary": "Public plan listing is dynamic; no exact checkout promise.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-22" },
+        { "key": "credits", "status": "conditional", "boundary": "Model and task determine credit cost; do not promise a fixed number per usable export.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-22" },
+        { "key": "content_rights", "status": "conditional", "boundary": "User content rights do not establish rights to third-party inputs or all output uses.", "sourceIds": ["terms"], "nextReviewDate": "2026-10-29" },
+        { "key": "privacy_retention", "status": "unknown", "boundary": "Account-specific retention and model training terms have not been verified.", "sourceIds": [], "nextReviewDate": "2026-10-29" }
+      ] }
+    },
+    {
+      "id": "638f9de2-0c60-424c-a58d-9e435a262da5",
+      "name": "Meta Muse Wonder",
+      "officialUrl": "https://dev.meta.ai/models/muse-wonder",
+      "officialDomainGroup": { "canonicalProductDomain": "dev.meta.ai", "parentBrandDomains": ["about.fb.com"], "identitySourceIds": ["announcement", "model"] },
+      "categorySlug": "chatbot",
+      "cluster": { "taskSlug": "build-app-with-ai", "role": "alternative" },
+      "officialSources": [
+        { "id": "model", "url": "https://dev.meta.ai/models/muse-wonder", "claimKeys": ["identity", "model_family", "model_access"] },
+        { "id": "docs", "url": "https://dev.meta.ai/docs/models", "claimKeys": ["model_family", "model_access", "privacy_mode"] },
+        { "id": "announcement", "url": "https://about.fb.com/news/2026/10/introducing-muse-wonder-models/", "claimKeys": ["identity", "brand_relationship", "model_family"] }
+      ],
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["model", "docs"], "evidenceExcerpt": "Meta describes Muse Wonder as a model series for coding, long-running agents and computer use; Full is a variant, not a separate product." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["announcement", "model"], "evidenceExcerpt": "Meta's announcement links the Muse Wonder and Full family to its own dev.meta.ai model page and describes Meta Model API and Muse Code access." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": ["2d598569-ba06-4f65-966b-dde8df1161cc", "04570837-c50d-4aa2-b8aa-a11738046fe5", "8fee5c8b-f284-41d4-b691-c099e5bb230b"], "rationale": "Existing published Task Fits are app-building products; this is one distinct Meta model family, disclosed as a developer building block rather than a ready-made app builder." }
+      },
+      "reviewedAt": "2026-10-15",
+      "nextReviewDate": "2026-10-29",
+      "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/muse-wonder-editorial-cover.svg", "sha256": "1b7b688a745d7631a6c8e25c6f9700a451c010fe69a2d6a74fc5b813ab56eb21", "creator": "AI Best Tool editorial", "createdAt": "2026-10-15", "noVendorMarks": true },
+      "pricing": "paid",
+      "tags": ["AI model", "coding agents", "app development"],
+      "localized": {
+        "en": {
+          "title": "Meta Muse Wonder: agentic coding model family",
+          "summary": "Muse Wonder is Meta's coding and agent model family. Wonder and Wonder Full have different access paths; this is a model layer, not a ready-made app builder.",
+          "detail": "Meta Muse Wonder is a model family for long-running agents, coding and computer use. Muse Wonder is available through Meta Model API and Muse Code; Muse Wonder Full is a higher-capability variant offered through eligible Muse Code subscriptions, not a separate product page. Developers can use the family while building an application, but this listing does not claim a prompt-to-app product experience. Access, content-use mode and costs differ by route and plan. This is an official-source assessment, not a hands-on benchmark. Compare implementation effort, access route, model behavior and review requirements against ready-made app builders before choosing.",
+          "bestFor": ["Developers building agentic coding or app workflows through an API or Muse Code", "Teams evaluating long-horizon model behavior"],
+          "notIdealFor": ["Nontechnical users seeking an instant hosted app builder", "Buyers assuming Wonder Full is available in the Model API"],
+          "limitations": ["Wonder Full is a Muse Code subscription variant rather than a Model API model", "No independent hands-on benchmark or target-account entitlement check was performed", "Privacy and content-use settings depend on access mode"],
+          "compareAxes": ["Model layer versus hosted app builder", "API or Muse Code access and plan", "Coding task success and human verification"],
+          "pricingSummary": "Meta lists Model API token pricing and Muse Code plans; target-account entitlement and billing need confirmation."
+        },
+        "zh": {
+          "title": "Meta Muse Wonder：代理式程式設計模型家族",
+          "summary": "Muse Wonder 是 Meta 面向程式設計和長任務代理的模型家族。Wonder 與 Wonder Full 的入口、方案和資料使用模式不同；它屬於開發者模型層，並非開箱即用的應用程式建構器，本站沒有獨立實測基準。",
+          "detail": "Meta Muse Wonder 是面向長任務代理、程式設計和電腦操作的模型家族。Muse Wonder 可經 Meta Model API 與 Muse Code 使用；Muse Wonder Full 是符合條件的 Muse Code 訂閱可用的高能力變體，不另建產品實體。開發者可用它建構應用程式流程，但本條不宣稱它具備一句話生成完整託管應用程式的產品體驗。入口、資料使用模式和費用依路線與方案而異。本條只根據官方資料評估，沒有獨立實測基準。選擇前應與現成 App Builder 比較接入工作量、可用權限、模型表現和人工複核成本。",
+          "bestFor": ["透過 API 或 Muse Code 建構程式代理與應用流程的開發者", "評估長任務模型能力的團隊"],
+          "notIdealFor": ["希望即刻生成託管應用程式的非技術使用者", "假設 Wonder Full 能在 Model API 使用的採購者"],
+          "limitations": ["Wonder Full 屬於 Muse Code 訂閱變體，並非 Model API 模型", "尚未完成獨立實測基準或目標帳戶權益核驗", "隱私與內容使用設定取決於存取模式"],
+          "compareAxes": ["模型層與現成 App Builder", "API 或 Muse Code 入口及方案", "程式任務成功率與人工驗收"],
+          "pricingSummary": "Meta 公開列出 API token 價格和 Muse Code 方案；目標帳戶權益與結帳仍須核對。"
+        },
+        "cn": {
+          "title": "Meta Muse Wonder：智能体编程模型家族",
+          "summary": "Muse Wonder 是 Meta 面向编程和长任务代理的模型家族。Wonder 与 Wonder Full 的入口、套餐和数据使用模式不同；它属于开发者模型层，并非开箱即用的应用构建器，本站没有独立实测基准。",
+          "detail": "Meta Muse Wonder 是面向长任务代理、编程和计算机操作的模型家族。Muse Wonder 可经 Meta Model API 与 Muse Code 使用；Muse Wonder Full 是符合条件的 Muse Code 订阅可用的高能力变体，不另建产品实体。开发者可用它构建应用工作流，但本条不宣称它具备一句话生成完整托管应用的产品体验。入口、数据使用模式和费用依路线与套餐而异。本条只根据官方资料评估，没有独立实测基准。选择前应与现成 App Builder 比较接入工作量、可用权限、模型表现和人工复核成本。",
+          "bestFor": ["通过 API 或 Muse Code 构建编程代理与应用流程的开发者", "评估长任务模型能力的团队"],
+          "notIdealFor": ["希望即刻生成托管应用的非技术用户", "假设 Wonder Full 能在 Model API 使用的采购者"],
+          "limitations": ["Wonder Full 属于 Muse Code 订阅变体，并非 Model API 模型", "尚未完成独立实测基准或目标账户权益核验", "隐私与内容使用设置取决于访问模式"],
+          "compareAxes": ["模型层与现成 App Builder", "API 或 Muse Code 入口及套餐", "编程任务成功率与人工验收"],
+          "pricingSummary": "Meta 公开列出 API token 价格和 Muse Code 套餐；目标账户权益与结账仍需核对。"
+        }
+      },
+      "claimGate": { "status": "PASS", "items": [
+        { "key": "identity", "status": "verified_public", "boundary": "Wonder and Wonder Full form one Meta model family; no separate Full entity.", "sourceIds": ["announcement", "model"], "nextReviewDate": "2026-11-14" },
+        { "key": "model_family", "status": "verified_public", "boundary": "Coding and agent capabilities are vendor-described, not independently benchmarked.", "sourceIds": ["model", "docs", "announcement"], "nextReviewDate": "2026-11-14" },
+        { "key": "model_access", "status": "verified_public", "boundary": "Wonder Full is limited to eligible Muse Code subscriptions, not Model API.", "sourceIds": ["model", "docs"], "nextReviewDate": "2026-10-29" },
+        { "key": "privacy_mode", "status": "conditional", "boundary": "Content-use settings vary by Standard and Contributor modes and access route.", "sourceIds": ["docs"], "nextReviewDate": "2026-10-29" },
+        { "key": "commercial_rights", "status": "unknown", "boundary": "Target-account contract and commercial-use terms have not been checked.", "sourceIds": [], "nextReviewDate": "2026-10-29" }
+      ] }
+    }
+  ],
+  "holds": [
+    {
+      "name": "ArtCraft",
+      "officialUrl": "https://getartcraft.com/",
+      "status": "HOLD_CLUSTER_FIT",
+      "reason": "The only video Task is product-image-to-short-video. Official ArtCraft sources describe controllable image/video scene composition but do not establish a product-photo-to-short-video workflow. Do not relabel it to satisfy the current Task contract.",
+      "officialSources": ["https://getartcraft.com/", "https://getartcraft.com/faq", "https://app.getartcraft.com/pricing"],
+      "clusterRole": "Creative image/video composition alternative, pending a semantically accurate active Task",
+      "positioning": { "en": "Open-source, controllable AI image/video studio", "cn": "开源可控的 AI 图像与视频创作工作室", "tw": "開源可控的 AI 圖像與影片創作工作室" },
+      "bestFor": { "en": "Artists who need scene, layer and model control", "cn": "需要场景、图层及模型控制的创作者", "tw": "需要場景、圖層及模型控制的創作者" },
+      "notIdealFor": { "en": "A proven one-click product-photo ad workflow", "cn": "要求已验证一键商品图广告流程的用户", "tw": "要求已驗證一鍵商品圖廣告流程的用戶" },
+      "limitations": { "en": "Credits and model access differ by subscription or own compute; output rights need account-level review", "cn": "credits 与模型入口依订阅或自有算力变化；输出权利需按账户核对", "tw": "credits 與模型入口依訂閱或自有算力變化；輸出權利需按帳戶核對" },
+      "comparePath": "Compare scene-control effort, own-compute path and per-output cost against other AI image/video studios.",
+      "claimBoundary": { "pricing": "conditional", "privacy": "unknown", "rights": "unknown", "commercial": "unknown" },
+      "mediaGate": "HOLD: no platform-owned, non-placeholder asset prepared while cluster fit is unresolved"
+    },
+    {
+      "name": "Melty",
+      "officialUrl": "https://melty.gg/",
+      "status": "HOLD_CLUSTER_FIT",
+      "reason": "The current six active Tasks do not cover game mashups/mods. Melty.gg is a distinct Stella Montis Inc. game platform, not the legacy Melty AI code editor. Reusing build-app-with-ai would misstate user intent.",
+      "officialSources": ["https://melty.gg/", "https://melty.gg/terms", "https://melty.gg/privacy"],
+      "clusterRole": "First-party game-mashup/mod workflow candidate",
+      "positioning": { "en": "AI-assisted game mashup and mod platform", "cn": "AI 辅助游戏 mashup 与模组平台", "tw": "AI 輔助遊戲 mashup 與模組平台" },
+      "bestFor": { "en": "Players and mod creators with legitimate game copies and a coding agent", "cn": "拥有合法游戏副本并使用编程代理的玩家与模组作者", "tw": "擁有合法遊戲副本並使用程式代理的玩家與模組作者" },
+      "notIdealFor": { "en": "A general-purpose AI code editor or guaranteed compatibility across all games", "cn": "通用 AI 代码编辑器或保证所有游戏兼容的需求", "tw": "通用 AI 程式編輯器或保證所有遊戲相容的需求" },
+      "limitations": { "en": "Windows-first; source-game ownership and publisher mod policies still matter", "cn": "当前以 Windows 为主；原游戏所有权及发行商模组政策仍适用", "tw": "目前以 Windows 為主；原遊戲所有權及發行商模組政策仍適用" },
+      "comparePath": "Compare setup effort, supported games, safety checks and creator publishing rights with other mod platforms.",
+      "claimBoundary": { "pricing": "verified_public", "privacy": "conditional", "rights": "conditional", "commercial": "unknown" },
+      "mediaGate": "HOLD: no platform-owned, non-placeholder asset prepared while cluster fit is unresolved"
+    },
+    {
+      "name": "Cloudflare Clef",
+      "officialUrl": "https://developers.cloudflare.com/workers-ai/models/clef/",
+      "status": "HOLD_CLUSTER_FIT",
+      "reason": "The current active Tasks do not cover typed decision classification or agent routing. Clef and Clef-flash are one Cloudflare model family, not general app builders and not two tools.",
+      "officialSources": ["https://blog.cloudflare.com/clef-decision-models/", "https://developers.cloudflare.com/workers-ai/models/clef/"],
+      "clusterRole": "Developer decision-model and routing candidate",
+      "positioning": { "en": "Multimodal typed decision-model family for Workers AI", "cn": "面向 Workers AI 的多模态结构化决策模型家族", "tw": "面向 Workers AI 的多模態結構化決策模型家族" },
+      "bestFor": { "en": "Developers routing agent actions using typed options and probabilities", "cn": "用结构化选项和概率路由代理动作的开发者", "tw": "用結構化選項和機率路由代理動作的開發者" },
+      "notIdealFor": { "en": "Open-ended chat, creative generation or deterministic policy enforcement", "cn": "开放式聊天、创意生成或严格确定性的政策执行", "tw": "開放式聊天、創意生成或嚴格確定性的政策執行" },
+      "limitations": { "en": "Probabilities need thresholds and human fallback; hosting, token and license terms vary by route", "cn": "概率结果需配置阈值与人工兜底；托管、token 与许可依入口变化", "tw": "機率結果需設定閾值與人工兜底；託管、token 與授權依入口變化" },
+      "comparePath": "Compare typed outputs, latency, cost and escalation policy against alternative classification models.",
+      "claimBoundary": { "pricing": "conditional", "privacy": "conditional", "rights": "verified_public", "commercial": "conditional" },
+      "mediaGate": "HOLD: no platform-owned, non-placeholder asset prepared while cluster fit is unresolved"
+    }
+  ]
+}
