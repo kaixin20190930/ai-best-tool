@@ -117,7 +117,7 @@
     ]
   },
   "toolReleaseCommit": {
-    "state": "PUBLISHED_MONITOR_POSTCHECK_PASS_DEPLOYMENT_PENDING",
+    "state": "PUBLISHED_MONITOR_PRODUCTION_PASS",
     "qaVerdict": "QA_PASS_PUBLISH_BATCH",
     "qaFixedSha": "766a31cf",
     "qaReference": "codex-thread:01a13e77-0a6f-7c22-8488-ac53f599c50b",
@@ -130,7 +130,7 @@
       { "name": "Melty", "slug": "melty", "toolId": "5bd11bd0-5100-4203-abce-1dddf6b06565", "commitWrites": 1, "postcheckWrites": 0, "replayWrites": 0 },
       { "name": "Cloudflare Clef", "slug": "cloudflare-clef", "toolId": "c8da0b9d-5422-41e0-be1f-55196bf74faa", "commitWrites": 1, "postcheckWrites": 0, "replayWrites": 0 }
     ],
-    "productionReadback": "Each tool is unique, published+monitor, has en/cn/tw and simplified zh content/detail, uses its platform-owned media path, and remains non-indexable. EN/CN/TW pages return 200 with self-canonical and noindex; sitemap has zero matches per slug. Media URLs are 404 until this batch's committed SVG assets deploy; deployment verification is pending."
+    "productionReadback": "Each tool is unique, published+monitor, has en/cn/tw and simplified zh content/detail, uses its platform-owned media path, and remains non-indexable. After deployment all 15 EN/CN/TW pages return 200 with localized titles, self-canonical and noindex; all five platform-owned SVG media URLs return 200; sitemap has 126 URLs and zero matches per slug. The single production SEO smoke passed."
   },
   "genericReleasePlan": [
     "Independent QA checks exact selection hashes, official source scope, media ownership, localized claims, and HOLD boundaries; a stale preimage requires new preflight and rollback, not a blind commit.",
