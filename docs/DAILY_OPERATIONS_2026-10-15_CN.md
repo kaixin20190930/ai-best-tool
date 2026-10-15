@@ -10,7 +10,7 @@
 | Catalog | **完成：published+monitor / noindex** | WRITER 唯一候选已入队、导入、发布；语言字段纠正经独立 QA_PASS、精确前像提交与 postcheck，三语言生产页、素材、sitemap 和一次 SEO smoke 均通过 |
 | Freshness | **completed：只读 selector；production writes=0** | 88 个工具、66 个 published、20 条到期；`schedule_sync=0 / claim_due=8 / entity_due=5 / manual_archive_review=7`。没有因 updated_at 或仅有来源 URL 而推进复核日期；本次未准备或执行生产变更 |
 | Decision | **not_due** | 本周 10-13 已记录 1/2，10-14 完成第二个用户可见 App Builder Task Page 单元；本周配额已达到至少 2 个，10-15 不再新建页面或拆分 gate |
-| Market Feedback | **blocked：GSC 实时刷新凭据缺失；站内事件 unavailable** | 现有最新私有 GSC 快照截至 2026-10-11；10-15 只读抓取命令因四个 `GSC_*` 环境变量均缺失而退出，未生成新快照。没有可用站内事件快照 |
+| Market Feedback | **blocked：运行环境未注入 GSC 配置；站内事件 unavailable** | 现有最新私有 GSC 快照截至 2026-10-11；10-15 只读抓取进程未获得四个 `GSC_*` 环境变量，未生成新快照。没有可用站内事件快照 |
 
 ## Catalog：WRITER 受控续跑
 
@@ -34,7 +34,7 @@
 
 ### Market Feedback
 
-执行既有 `pnpm run gsc:fetch-readonly` 后，命令因环境未提供 `GSC_CLIENT_ID`、`GSC_CLIENT_SECRET`、`GSC_REFRESH_TOKEN`、`GSC_PROPERTY_URL` 而退出；没有生成新快照。仓库现存最新私有 API 快照 `search-analytics-2026-10-11`，因此最新可用 GSC 完整日期为 **2026-10-11（Pacific Time）**，不是 10-15 当日数据。站内事件快照不可用，记为 **unavailable**，不以 GSC 点击代替站内行为。
+执行既有 `pnpm run gsc:fetch-readonly` 后，命令因当前进程未注入 `GSC_CLIENT_ID`、`GSC_CLIENT_SECRET`、`GSC_REFRESH_TOKEN`、`GSC_PROPERTY_URL` 而退出；这不等于凭据本身不存在，也没有生成新快照。仓库现存最新私有 API 快照 `search-analytics-2026-10-11`，因此最新可用 GSC 完整日期为 **2026-10-11（Pacific Time）**，不是 10-15 当日数据。站内事件快照不可用，记为 **unavailable**，不以 GSC 点击代替站内行为。
 
 ### 生产与计划偏差
 
@@ -43,4 +43,4 @@
 - `PLAN_DEVIATION`：Catalog 已按原范围完成 WRITER `published + monitor/noindex`，未批准 index/sitemap。Freshness 完成全量分流，但没有满足受控变更所需完整证据，故当日无更新，属于证据/变更边界而非 selector 故障。Decision 因本周 `2/2` 配额已达而 `not_due`。Market 未能刷新 GSC，原因是本次命令环境缺少四项 GSC 凭据；站内事件仍 unavailable。没有扩大到数据库写入、代码、页面或索引变更。
 - 本次收口只修改本日报；未新增脚本、页面或数据文件，未运行 build/TypeScript 或额外 production smoke。两份受保护 SQL 保持原有工作区修改且不纳入本次提交。
 
-下一步：下一次 Market 运行应在可读取既有 GSC 凭据的环境刷新只读快照；Freshness 按 selector 的 `claim_due` 队列逐项取得当日官方证据后再形成受控批次。无需 Owner 进行索引、sitemap 或数据库授权。
+唯一下一步：从 Freshness `claim_due` 队列选择一个同类、低风险且可取得当日官方证据的批次，形成精确 change set、前像、rollback 和独立 QA；证据不足的条目继续 HOLD，不改复核日期。后续 Market 待办是在可读取既有 GSC 配置的运行环境刷新只读快照。无需 Owner 进行索引、sitemap 或数据库授权。
