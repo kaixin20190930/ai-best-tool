@@ -17,8 +17,26 @@ const completeTool = {
 assert.equal(getToolIndexDecision(completeTool).indexable, true);
 assert.equal(getToolIndexDecision({ ...completeTool, features: { collection: {} } }).indexable, false);
 assert.equal(getToolIndexDecision({ ...completeTool, features: { collection: {}, marketValidation: { verdict: 'emerging' } } }).indexable, false);
-assert.equal(getToolIndexDecision({ ...completeTool, features: { collection: {}, marketValidation: { verdict: 'validated' } } }).indexable, true);
-assert.equal(getToolIndexDecision({ ...completeTool, pageQualityStatus: 'monitor', features: { collection: {}, marketValidation: { verdict: 'validated' } } }).indexable, false);
+const completeMarket = {
+  verdict: 'validated',
+  reviewedAt: '2026-10-15',
+  evidenceUrls: ['https://example.com/reviews'],
+  strongSignals: ['verified adoption'],
+  score: 75,
+};
+const collectionTool = { ...completeTool, features: { collection: {}, marketValidation: completeMarket } };
+assert.equal(getToolIndexDecision(collectionTool).indexable, true);
+for (const invalidMarket of [
+  { ...completeMarket, reviewedAt: '' },
+  { ...completeMarket, evidenceUrls: [] },
+  { ...completeMarket, strongSignals: [] },
+  { ...completeMarket, score: 74 },
+]) {
+  assert.equal(getToolIndexDecision({ ...collectionTool, features: {
+    collection: {}, marketValidation: invalidMarket,
+  } }).indexable, false);
+}
+assert.equal(getToolIndexDecision({ ...collectionTool, pageQualityStatus: 'monitor' }).indexable, false);
 assert.equal(getToolIndexDecision({ ...completeTool, pageQualityStatus: 'monitor' }).indexable, false);
 assert.equal(getToolIndexDecision({ ...completeTool, status: 'draft' }).indexable, false);
 assert.equal(getToolIndexDecision({ ...completeTool, detail: '' }).indexable, true);

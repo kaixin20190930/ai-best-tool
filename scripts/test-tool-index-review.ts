@@ -106,7 +106,10 @@ const releasedPayloadEvidence = deriveIndexReviewEvidence({
     official: [{ url: 'https://example.com/pricing' }, { url: 'https://example.com/privacy' }],
     independent: [{ url: 'https://reviews.example/tool' }, { url: 'https://store.example/tool' }],
   },
-  marketValidation: { verdict: 'validated', strongSignals: ['adoption', 'reviews'] },
+  marketValidation: {
+    verdict: 'validated', reviewedAt: '2026-09-20', evidenceUrls: ['https://reviews.example/tool'],
+    strongSignals: ['adoption', 'reviews'], score: 80,
+  },
 });
 assert.deepEqual(releasedPayloadEvidence, {
   officialSourceCount: 2,
@@ -115,4 +118,12 @@ assert.deepEqual(releasedPayloadEvidence, {
   marketValidated: true,
   editorialReviewed: true,
 });
+for (const marketValidation of [
+  { verdict: 'validated', reviewedAt: '', evidenceUrls: ['https://reviews.example/tool'], strongSignals: ['adoption'], score: 80 },
+  { verdict: 'validated', reviewedAt: '2026-09-20', evidenceUrls: [], strongSignals: ['adoption'], score: 80 },
+  { verdict: 'validated', reviewedAt: '2026-09-20', evidenceUrls: ['https://reviews.example/tool'], strongSignals: [], score: 80 },
+  { verdict: 'validated', reviewedAt: '2026-09-20', evidenceUrls: ['https://reviews.example/tool'], strongSignals: ['adoption'], score: 74 },
+]) {
+  assert.equal(deriveIndexReviewEvidence({ marketValidation }).marketValidated, false);
+}
 console.log('PASS: index review decisions, precedence, freshness, and pre-index GSC boundary');

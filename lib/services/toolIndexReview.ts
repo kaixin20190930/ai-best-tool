@@ -1,3 +1,5 @@
+import { isMarketValidatedForIndex } from '@/lib/seo/toolIndexing';
+
 export type IndexReviewDecision =
   | 'approve_continue_index'
   | 'hold_monitor'
@@ -96,7 +98,7 @@ export function deriveIndexReviewEvidence(featuresValue: unknown): {
       localizedList(audience.notIdealFor).length > 0 &&
       localizedList(decision.compareAxes).length > 0 &&
       localizedList(decision.limitations).length > 0,
-    marketValidated: market.verdict === 'validated',
+    marketValidated: isMarketValidatedForIndex(market),
     editorialReviewed: typeof editorial.reviewedAt === 'string' && editorial.reviewedAt.length > 0,
   };
 }

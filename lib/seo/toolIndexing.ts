@@ -28,6 +28,20 @@ export interface ToolIndexDecision {
   reason: 'published_and_approved' | 'not_published' | 'indexing_paused' | 'quality_below_threshold' | 'market_not_validated';
 }
 
+export function isMarketValidatedForIndex(value: unknown): boolean {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const market = value as Record<string, unknown>;
+  const hasText = (item: unknown) => typeof item === 'string' && item.trim().length > 0;
+  const hasItems = (items: unknown) => Array.isArray(items) && items.some(hasText);
+  const score = typeof market.score === 'number' ? market.score : Number.NaN;
+  return market.verdict === 'validated'
+    && hasText(market.reviewedAt)
+    && hasItems(market.evidenceUrls)
+    && hasItems(market.strongSignals)
+    && Number.isFinite(score)
+    && score >= 75;
+}
+
 export function getToolIndexDecision(tool: ToolIndexingInput): ToolIndexDecision {
   const quality = getToolQuality({
     category_id: tool.categoryId,
@@ -54,9 +68,7 @@ export function getToolIndexDecision(tool: ToolIndexingInput): ToolIndexDecision
   const features = tool.features && typeof tool.features === 'object' && !Array.isArray(tool.features)
     ? tool.features as Record<string, unknown> : {};
   if (Object.hasOwn(features, 'collection')) {
-    const market = features.marketValidation && typeof features.marketValidation === 'object'
-      ? features.marketValidation as Record<string, unknown> : {};
-    if (market.verdict !== 'validated') {
+    if (!isMarketValidatedForIndex(features.marketValidation)) {
       return { indexable: false, qualityScore: quality.score, reason: 'market_not_validated' };
     }
   }
