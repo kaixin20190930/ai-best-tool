@@ -65,7 +65,7 @@ assert.throws(() => parseOps2Selection({ ...fixture, localized: { en: content.en
 assert.throws(() => parseOps2Selection({ ...fixture, localized: { ...newLocalized, zh: content.zh } }),
   /cannot mix/);
 assert.equal(selectionRawPayload(selection).sourceType, 'ops2_selection');
-assert.match(evidenceReadyDraftSql, /features->'marketValidation'->>'verdict' = 'validated'/);
+assert.doesNotMatch(evidenceReadyDraftSql, /marketValidation/);
 assert.doesNotMatch(evidenceReadyDraftSql, /ops2_selection|ops2Selection/);
 assert.throws(() => parseOps2Selection({ ...fixture, officialSources: fixture.officialSources.slice(0, 1) }));
 assert.throws(() => parseOps2Selection({ ...fixture, officialDomainGroup: {

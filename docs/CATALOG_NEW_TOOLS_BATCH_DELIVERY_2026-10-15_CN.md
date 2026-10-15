@@ -18,7 +18,7 @@
 
 ## 后续门禁
 
-唯一发布差分：五个实际 draft 的通用 `tool` preflight 均返回 `ready=false`，共同 blocker 为 `Evidence-ready draft predicate`。原因为 selection 导入的 draft 带 `features.collection`，但没有达到现有发布门禁要求的 `marketValidation.verdict=validated`、复核日期、证据 URL、strong signals 和至少 75 分。各项 rollback 均被同一门禁拒绝，持久写入 0；未执行 published commit。目标仍为 `published + monitor/noindex`、sitemap excluded，不能将 draft 或失败的 rollback 报为已发布。下一步只需沿现有市场验证路径补齐可核验证据，之后重跑受影响项的通用发布 preflight/rollback 与原 QA 增量验收；不复审已 PASS 的工具身份、来源、媒体和 Claim。
+旧门禁错误地将 `marketValidation=validated` 作为 monitor 公开的前提。通用实体发布 SQL 已移除此耦合；admission 现在把 monitor 公开资格与市场信号分别返回。索引评审仍要求市场验证，collection 来源工具即使被误设为 `continue_index`，未验证市场信号也不能进入 sitemap。未创建 Task/Fit 或强推荐。五个实际 draft 的通用 `tool` preflight 现均返回 `ready=true`、blockers 为空；事务 rollback 均成功预演 `published+monitor` 并回滚，持久写入 0。未执行 published commit，也未 push。下一步由原独立 QA 仅验收本次通用门禁差分；既有身份、来源、媒体和 Claim PASS 不重验。
 
 两份受保护 SQL 与未跟踪 Freshness 文件均排除在本单元提交之外。
 

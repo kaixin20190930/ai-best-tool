@@ -19,12 +19,13 @@ interface ToolIndexingInput {
   detail?: unknown;
   pricing?: string | null;
   tags?: string[] | null;
+  features?: unknown;
 }
 
 export interface ToolIndexDecision {
   indexable: boolean;
   qualityScore: number;
-  reason: 'published_and_approved' | 'not_published' | 'indexing_paused' | 'quality_below_threshold';
+  reason: 'published_and_approved' | 'not_published' | 'indexing_paused' | 'quality_below_threshold' | 'market_not_validated';
 }
 
 export function getToolIndexDecision(tool: ToolIndexingInput): ToolIndexDecision {
@@ -48,6 +49,16 @@ export function getToolIndexDecision(tool: ToolIndexingInput): ToolIndexDecision
 
   if (quality.score < 80) {
     return { indexable: false, qualityScore: quality.score, reason: 'quality_below_threshold' };
+  }
+
+  const features = tool.features && typeof tool.features === 'object' && !Array.isArray(tool.features)
+    ? tool.features as Record<string, unknown> : {};
+  if (Object.hasOwn(features, 'collection')) {
+    const market = features.marketValidation && typeof features.marketValidation === 'object'
+      ? features.marketValidation as Record<string, unknown> : {};
+    if (market.verdict !== 'validated') {
+      return { indexable: false, qualityScore: quality.score, reason: 'market_not_validated' };
+    }
   }
 
   return { indexable: true, qualityScore: quality.score, reason: 'published_and_approved' };

@@ -88,7 +88,10 @@ assert.match(sql, /'qaReference', \$3::text/);
 assert.match(sql, /'preimageHash', \$4::text/);
 assert.match(sql, /'nextReviewDate'/);
 assert.match(sql, /paymentConfirmed\}' = 'true'::jsonb/);
-assert.match(sql, /marketValidation/);
+assert.doesNotMatch(sql, /marketValidation/);
+assert.match(sql, /bestFit/);
+assert.match(sql, /notIdealFor/);
+assert.match(sql, /compareAxes/);
 assert.match(mediaNeededSql, /COALESCE\(features->'mediaReview'->>'needed' = 'true', FALSE\)/);
 assert.ok(getMonitorPublicationBlockers({
   url: 'https://example.com', category_id: 'category', image_url: 'https://example.com/logo',

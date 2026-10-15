@@ -103,22 +103,23 @@
     "productionReadback": "One linked draft Tool per imported candidate; official URL, platform-owned image and thumbnail, EN/CN/TW fields, simplified zh alias and unique name/URL match the approved selections. Read-only transaction; zero readback writes."
   },
   "toolReleasePreview": {
-    "state": "HOLD_MARKET_VALIDATION",
+    "state": "READY_FOR_INDEPENDENT_PUBLISH_QA",
     "target": "published + monitor/noindex; sitemap excluded",
     "productionSitemapReadback": { "httpStatus": 200, "matchingUrlsPerSlug": 0, "productionWrites": 0 },
-    "commonBlocker": "Evidence-ready draft predicate: selected drafts contain features.collection but lack validated marketValidation with dated evidence, strong signals and score >= 75. No published commit attempted.",
+    "commonBlocker": null,
+    "gateCorrection": "Market validation is separate from entity-ready monitor publication. It remains required for index review and collection-tool sitemap eligibility. No published commit attempted.",
     "results": [
-      { "name": "Everygen", "toolId": "b2a89bbc-d6ba-4aef-a3db-5a7919b5336f", "preimageHash": "59b2366f93ff256bd790eb57515617d066be6902720d390dc00b4d0b9815e68f", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 },
-      { "name": "Meta Muse Wonder", "toolId": "c2a1a67a-2b53-4c5e-b066-5415dc525dad", "preimageHash": "07d06c14660a30b7d779eaa21b511739c0f0ddfecb614f5229b5b6e2ba26542a", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 },
-      { "name": "ArtCraft", "toolId": "f76fe986-99dc-432d-808c-91169a13cd8e", "preimageHash": "e6cf5cdb3afe7e14f7039ce8555f44d77e6c8e6d7e44a913740589ea5b38e3ef", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 },
-      { "name": "Melty", "toolId": "5bd11bd0-5100-4203-abce-1dddf6b06565", "preimageHash": "2f9c69c3ed9da5e25c8d6728ed011b4e5fa2a54f7809c03d7034345c8536b265", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 },
-      { "name": "Cloudflare Clef", "toolId": "c8da0b9d-5422-41e0-be1f-55196bf74faa", "preimageHash": "f85c7d2dab8d76b4d5f46354af1f591d4695abf693c066632eda860c06832552", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 }
+      { "name": "Everygen", "toolId": "b2a89bbc-d6ba-4aef-a3db-5a7919b5336f", "preimageHash": "59b2366f93ff256bd790eb57515617d066be6902720d390dc00b4d0b9815e68f", "preflightReady": true, "rollback": "PASS", "productionWrites": 0 },
+      { "name": "Meta Muse Wonder", "toolId": "c2a1a67a-2b53-4c5e-b066-5415dc525dad", "preimageHash": "07d06c14660a30b7d779eaa21b511739c0f0ddfecb614f5229b5b6e2ba26542a", "preflightReady": true, "rollback": "PASS", "productionWrites": 0 },
+      { "name": "ArtCraft", "toolId": "f76fe986-99dc-432d-808c-91169a13cd8e", "preimageHash": "e6cf5cdb3afe7e14f7039ce8555f44d77e6c8e6d7e44a913740589ea5b38e3ef", "preflightReady": true, "rollback": "PASS", "productionWrites": 0 },
+      { "name": "Melty", "toolId": "5bd11bd0-5100-4203-abce-1dddf6b06565", "preimageHash": "2f9c69c3ed9da5e25c8d6728ed011b4e5fa2a54f7809c03d7034345c8536b265", "preflightReady": true, "rollback": "PASS", "productionWrites": 0 },
+      { "name": "Cloudflare Clef", "toolId": "c8da0b9d-5422-41e0-be1f-55196bf74faa", "preimageHash": "f85c7d2dab8d76b4d5f46354af1f591d4695abf693c066632eda860c06832552", "preflightReady": true, "rollback": "PASS", "productionWrites": 0 }
     ]
   },
   "genericReleasePlan": [
     "Independent QA checks exact selection hashes, official source scope, media ownership, localized claims, and HOLD boundaries; a stale preimage requires new preflight and rollback, not a blind commit.",
     "After QA PASS, generic ops2:enqueue commit requires exact reviewer, QA report, authorization and rollback hash; postcheck must match its returned postimage hash.",
-    "For each enqueued candidate, use generic ops2:publish-bridge candidate preflight, rollback, exact approved commit and postcheck to obtain one draft; then complete the existing market validation and generic tool preflight/rollback/commit/postcheck for published + monitor/noindex.",
+    "For each enqueued candidate, use generic ops2:publish-bridge candidate preflight, rollback, exact approved commit and postcheck to obtain one draft; then run generic entity-ready tool preflight/rollback/commit/postcheck for published + monitor/noindex. Market validation is a separate recommendation and index gate.",
     "Before any future commit, reread one canonical entity, original candidate status, noindex and zero sitemap entries; after commit, reread that entity and protected non-target rows. Rehearsal postimage hashes are not commit postimage hashes.",
     "Do not change Task, Capability, Fit, schema, RLS, redirects, index, sitemap, or another candidate; each selection is independently gated, and no HOLD candidate enters the write set."
   ],

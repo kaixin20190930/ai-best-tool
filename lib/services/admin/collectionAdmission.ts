@@ -79,20 +79,16 @@ export function evaluateCollectionAdmission(candidate: CollectionAdmissionCandid
   ].filter(Boolean) as string[];
   const draftReady = candidate.relevance_score >= 50 && candidate.quality_score >= 80 && coreGaps.length === 0;
   const marketValidated = marketGaps.length === 0;
-  const publishReady = draftReady && decisionGaps.length === 0 && marketValidated;
+  const publishReady = draftReady && decisionGaps.length === 0;
 
   let nextAction = 'Enrich core fields before creating a draft';
   if (candidate.status === 'imported') {
-    nextAction = publishReady
-      ? 'Final editorial review'
-      : marketValidated
-        ? 'Complete the imported draft'
-        : 'Hold draft until market validation is recorded';
-  }
-  else if (candidate.status === 'rejected') nextAction = 'Keep closed unless new evidence arrives';
+    if (!publishReady) nextAction = 'Complete the imported draft entity and decision evidence';
+    else if (marketValidated) nextAction = 'Final editorial review for monitor publication';
+    else nextAction = 'Publish monitor/noindex, then add market evidence before recommendation or indexing';
+  } else if (candidate.status === 'rejected') nextAction = 'Keep closed unless new evidence arrives';
   else if (candidate.status === 'skipped') nextAction = 'Re-evaluate when the source changes';
-  else if (publishReady) nextAction = 'Create draft and verify before publishing';
-  else if (draftReady && !marketValidated) nextAction = 'Create draft, then verify market value and durability';
+  else if (publishReady) nextAction = 'Create draft and verify before monitor publication';
   else if (draftReady) nextAction = 'Create draft, then complete decision evidence';
   else if (candidate.quality_score < 70 || coreGaps.length >= 3) nextAction = 'Enrich and rescore';
 

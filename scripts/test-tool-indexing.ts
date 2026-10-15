@@ -15,6 +15,10 @@ const completeTool = {
 };
 
 assert.equal(getToolIndexDecision(completeTool).indexable, true);
+assert.equal(getToolIndexDecision({ ...completeTool, features: { collection: {} } }).indexable, false);
+assert.equal(getToolIndexDecision({ ...completeTool, features: { collection: {}, marketValidation: { verdict: 'emerging' } } }).indexable, false);
+assert.equal(getToolIndexDecision({ ...completeTool, features: { collection: {}, marketValidation: { verdict: 'validated' } } }).indexable, true);
+assert.equal(getToolIndexDecision({ ...completeTool, pageQualityStatus: 'monitor', features: { collection: {}, marketValidation: { verdict: 'validated' } } }).indexable, false);
 assert.equal(getToolIndexDecision({ ...completeTool, pageQualityStatus: 'monitor' }).indexable, false);
 assert.equal(getToolIndexDecision({ ...completeTool, status: 'draft' }).indexable, false);
 assert.equal(getToolIndexDecision({ ...completeTool, detail: '' }).indexable, true);

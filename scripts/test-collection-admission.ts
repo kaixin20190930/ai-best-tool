@@ -68,7 +68,7 @@ const emerging = evaluateCollectionAdmission({
 
 assert.equal(emerging.draftReady, true);
 assert.equal(emerging.marketValidated, false);
-assert.equal(emerging.publishReady, false);
+assert.equal(emerging.publishReady, true);
 assert.ok(emerging.marketGaps.includes('Market verdict is not validated'));
 
 const lowMarketScore = evaluateCollectionAdmission({
@@ -83,7 +83,16 @@ const lowMarketScore = evaluateCollectionAdmission({
 });
 
 assert.equal(lowMarketScore.marketValidated, false);
-assert.equal(lowMarketScore.publishReady, false);
+assert.equal(lowMarketScore.publishReady, true);
 assert.ok(lowMarketScore.marketGaps.includes('Market score must be at least 75'));
+
+const importedEmerging = evaluateCollectionAdmission({ ...completeCandidate, status: 'imported', raw_payload: {
+  ...completeCandidate.raw_payload, marketValidation: { verdict: 'emerging' },
+} });
+assert.match(importedEmerging.nextAction, /Publish monitor\/noindex, then add market evidence/);
+const missingDecision = evaluateCollectionAdmission({ ...completeCandidate, raw_payload: {
+  ...completeCandidate.raw_payload, decision: { ...completeCandidate.raw_payload.decision, compareAxes: [] },
+} });
+assert.equal(missingDecision.publishReady, false);
 
 console.log('Collection admission test passed.');

@@ -28,6 +28,7 @@ const passing: IndexReviewInput = {
 };
 
 assert.equal(evaluateToolIndexReview(passing).decision, 'approve_continue_index');
+assert.equal(evaluateToolIndexReview({ ...passing, marketValidated: false }).decision, 'repair_monitor');
 assert.equal(evaluateToolIndexReview({ ...passing, policyPaused: true }).decision, 'hold_monitor');
 assert.equal(evaluateToolIndexReview({ ...passing, gscSnapshotDate: '2026-08-01' }).decision, 'hold_monitor');
 assert.equal(evaluateToolIndexReview({ ...passing, independentSignalCount: 0 }).decision, 'repair_monitor');

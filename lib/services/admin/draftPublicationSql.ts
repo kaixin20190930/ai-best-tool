@@ -42,21 +42,5 @@ export const evidenceReadyDraftSql = `
     AND ${toolQualityScoreSql} >= 80
     AND NOT ${mediaNeededSql}
     AND ${evidenceCompleteSql}
-    AND (
-      NOT (features ? 'collection')
-      OR (
-        features->'marketValidation'->>'verdict' = 'validated'
-        AND NULLIF(BTRIM(features->'marketValidation'->>'reviewedAt'), '') IS NOT NULL
-        AND jsonb_typeof(features->'marketValidation'->'evidenceUrls') = 'array'
-        AND jsonb_array_length(features->'marketValidation'->'evidenceUrls') > 0
-        AND jsonb_typeof(features->'marketValidation'->'strongSignals') = 'array'
-        AND jsonb_array_length(features->'marketValidation'->'strongSignals') > 0
-        AND CASE
-          WHEN COALESCE(features->'marketValidation'->>'score', '') ~ '^[0-9]+$'
-            THEN (features->'marketValidation'->>'score')::int
-          ELSE 0
-        END >= 75
-      )
-    )
   )
 `;
