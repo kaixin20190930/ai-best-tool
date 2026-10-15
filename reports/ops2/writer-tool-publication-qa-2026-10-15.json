@@ -1,0 +1,56 @@
+{
+  "artifactType": "ops2_tool_publication_qa_handoff",
+  "unit": "WRITER-CONTROLLED-RELEASE-2026-10-14",
+  "preparedAt": "2026-10-15",
+  "candidateId": "57546b22-bab3-55f8-8e87-e4a97e422f57",
+  "toolId": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+  "priorMarketQa": {
+    "thread": "01a13862-4a3e-70e2-83fd-31635e9fa1f7",
+    "completedAt": "2026-10-15T02:03:03Z",
+    "scope": "marketValidation change set only; final answer explicitly excludes tool publication"
+  },
+  "marketValidation": {
+    "packHash": "8d64b1754b278b7a57bfbbe49fabe233cc1d6148a021acc83d9f6077b092c805",
+    "preimageHash": "c8f61382d0cc3ccf23ae6070da4a6c528e5a8b21c266433b450eac7737576546",
+    "commitPostimageHash": "cb2415c303cab5ccfb2e1f13f4cc2e61b726bb9b9f14e859807a6c09cab5983e",
+    "commitProductionWrites": 1,
+    "postcheckProductionWrites": 0
+  },
+  "genericToolGate": {
+    "preflight": {
+      "kind": "tool",
+      "mode": "preflight",
+      "id": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+      "preimageHash": "022d83587280bc1a49b71cb04b6570d645a0dddd100743fe6dfb831a99fa235a",
+      "blockers": [],
+      "ready": true,
+      "productionWrites": 0,
+      "checkedAt": "2026-10-15T02:10:30.010Z"
+    },
+    "rollback": {
+      "kind": "tool",
+      "mode": "rollback",
+      "id": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+      "proposedStatus": "published+monitor",
+      "productionWrites": 0,
+      "checkedAt": "2026-10-15T02:10:51.710Z"
+    },
+    "commit": "NOT_RUN",
+    "postcheck": "NOT_RUN"
+  },
+  "media": {
+    "assetPath": "/images/tool-media/writer-editorial-cover.svg",
+    "localSha256": "b62aea331b4af372374d552387fe550ce2bbcba04d3e0d11565b57c2c50fd5c3",
+    "productionHttpStatusBeforeDeploy": 404
+  },
+  "publicationScope": {
+    "target": "published + monitor/noindex",
+    "sitemapApproved": false,
+    "indexApproved": false,
+    "relationshipCreationApproved": false
+  },
+  "hold": {
+    "code": "INDEPENDENT_TOOL_PUBLICATION_QA_REQUIRED",
+    "preciseGap": "The existing independent QA PASS explicitly covers only marketValidation and excludes tool publication. The same QA must review this exact tool preflight, rollback, media deployment boundary, public EN/CN/TW content and noindex/sitemap constraints before an exact tool commit may use its QA reference. Refresh preflight after any tool or deployment change."
+  }
+}
