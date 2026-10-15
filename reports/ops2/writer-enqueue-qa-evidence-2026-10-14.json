@@ -1,0 +1,254 @@
+{
+  "artifactType": "historical_ops2_enqueue_qa_evidence",
+  "scope": "WRITER candidate selection and original read-only preflight only",
+  "sourceCommit": "24f1b6d13109599212a30afad97948036b469487",
+  "executedOn": "2026-10-14",
+  "command": "pnpm run ops2:enqueue --mode=preflight < /tmp/writer-ops2-selection-2026-10-14.json",
+  "selection": {
+    "id": "57546b22-bab3-55f8-8e87-e4a97e422f57",
+    "name": "WRITER",
+    "officialUrl": "https://writer.com/",
+    "categorySlug": "productivity",
+    "cluster": {
+      "taskSlug": "brand-constrained-marketing-content",
+      "role": "gap_filler"
+    },
+    "officialSources": [
+      {
+        "id": "platform",
+        "url": "https://writer.com/",
+        "claimKeys": [
+          "identity",
+          "ai_agent",
+          "brand_workflow"
+        ]
+      },
+      {
+        "id": "brand",
+        "url": "https://writer.com/brand/",
+        "claimKeys": [
+          "brand_workflow",
+          "terms_style_voice"
+        ]
+      },
+      {
+        "id": "voice_setup",
+        "url": "https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice",
+        "claimKeys": [
+          "terms_style_voice",
+          "role_boundary"
+        ]
+      },
+      {
+        "id": "roles",
+        "url": "https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer",
+        "claimKeys": [
+          "role_boundary"
+        ]
+      },
+      {
+        "id": "plans",
+        "url": "https://writer.com/plans/",
+        "claimKeys": [
+          "public_plan_path"
+        ]
+      }
+    ],
+    "entityGate": {
+      "status": "PASS",
+      "aiCoreCapability": {
+        "status": "PASS",
+        "sourceIds": [
+          "platform",
+          "brand"
+        ],
+        "evidenceExcerpt": "WRITER official pages identify an enterprise AI Agent platform and content creation with Playbooks, Voice, Terms and Style Guide."
+      },
+      "identityCanonical": {
+        "status": "PASS",
+        "sourceIds": [
+          "platform"
+        ],
+        "evidenceExcerpt": "The current official WRITER homepage presents the single enterprise platform at writer.com; Agent and brand controls belong to it."
+      },
+      "duplicateIntent": {
+        "status": "PASS",
+        "checkedToolIds": [],
+        "rationale": "Production has no WRITER or writer.com tool or candidate; existing Jasper and Grammarly have distinct drafting and revision purposes; no reviewed or published Task Fits exist."
+      }
+    },
+    "reviewedAt": "2026-10-14",
+    "nextReviewDate": "2026-10-21",
+    "media": {
+      "mode": "platform_owned_editorial",
+      "assetPath": "/images/tool-media/writer-editorial-cover.svg",
+      "sha256": "b62aea331b4af372374d552387fe550ce2bbcba04d3e0d11565b57c2c50fd5c3",
+      "creator": "AI Best Tool editorial",
+      "createdAt": "2026-10-14",
+      "noVendorMarks": true
+    },
+    "pricing": "paid",
+    "tags": [
+      "marketing",
+      "brand",
+      "content-workflow"
+    ],
+    "localized": {
+      "en": {
+        "title": "WRITER: governed AI content workflows",
+        "summary": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+        "detail": "WRITER combines AI Agent workflows with voice profiles, terms, and style guides for teams preparing marketing content. The official setup guide says terms and style rules affect Agent output only when linked to the voice used for generation. Organization or IT admins can use an Agent profile to set a default or restricted voice; team admins can manage their team style guide. Human review remains appropriate for factual accuracy, legal claims, and brand fit.\n\nBest for: Marketing teams that can configure and review a shared voice and terminology; organizations comparing governance of repeatable content workflows.\n\nNot ideal for: A one-off personal writing assistant; teams needing a verified guarantee that every draft is compliant; buyers who require confirmed account-specific rights before procurement.\n\nLimitations: The selected voice and profile configuration determine whether rules apply; public documentation does not prove consistent results in a target workspace. This review did not test a live account, output quality, integrations, data retention, or commercial reuse rights.\n\nCompare: Compare Jasper for brand-guided drafting, Grammarly for checking and revision, and WRITER for connected Agent voice/terms governance. Test the same brief and review rules in each actual account.\n\nPricing and data: Public plans show Starter trial and Enterprise contact-sales paths. Exact price, credits, feature rights, retention, privacy contract, and commercial terms for a target account remain unverified. Confirm these before purchase or sensitive uploads.\n\nSources and review: https://writer.com/ ; https://writer.com/brand/ ; https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice ; https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer ; https://writer.com/plans/ . Reviewed 2026-10-14; next review 2026-10-21.",
+        "bestFor": [
+          "Marketing teams able to configure a shared voice and terminology, then review output.",
+          "Organizations comparing governance for repeatable content workflows."
+        ],
+        "notIdealFor": [
+          "One-off personal writing without team setup.",
+          "Teams seeking a guarantee that every draft is compliant or brand-correct."
+        ],
+        "limitations": [
+          "Style and terms apply to Agent output only through the voice actually used.",
+          "No live-account test of results, integrations, retention, or commercial rights."
+        ],
+        "compareAxes": [
+          "Against Jasper: brand-guided drafting and setup effort.",
+          "Against Grammarly: checking and revision versus Agent workflow controls."
+        ],
+        "pricingSummary": "Starter trial and Enterprise sales paths are public; target-account price and entitlements are unknown."
+      },
+      "zh": {
+        "title": "WRITER：有品牌规则治理的 AI 内容工作流",
+        "summary": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。",
+        "detail": "WRITER 将 AI Agent 工作流与团队 voice profile、术语和风格指南结合。官方设置文档说明，术语与风格规则只有连接到生成时使用的 voice 后才影响 Agent 输出。组织或 IT 管理员可通过 Agent profile 设置默认或受限 voice；团队管理员可管理本团队风格指南。事实、法律表述和品牌适配仍需人工审核。\n\n适合：能够配置共同 voice 与术语并审核输出的营销团队；比较可复用内容流程治理方式的组织。\n\n不适合：只需一次性个人写作的人；要求每份草稿必然合规的团队；采购前必须核实目标账户权益的买方。\n\n限制：规则是否生效取决于实际使用的 voice 和 profile 设置。公开文档不能证明目标工作区的输出稳定性。本次未测试真实账户、输出质量、集成、数据留存或商用复用权。\n\n比较：Jasper 偏品牌资料辅助起草，Grammarly 偏检查与改写；WRITER 可重点比较 Agent voice/术语连接和管理边界。在实际账户中用同一 brief 与审核标准试验。\n\n价格与数据：公开方案展示 Starter 试用与 Enterprise 联系销售路径；目标账户的金额、credits、功能权益、留存、隐私合同和商用条款未核实。采购或上传敏感内容前应确认。\n\n来源与复核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核验；下次复核 2026-10-21。",
+        "bestFor": [
+          "能够配置团队 voice、术语并审核输出的营销团队。",
+          "比较可复用内容流程治理方式的组织。"
+        ],
+        "notIdealFor": [
+          "只需一次性个人写作、无团队配置的人。",
+          "要求每份草稿必然合规或品牌准确的团队。"
+        ],
+        "limitations": [
+          "术语和风格规则只通过实际使用且已连接的 voice 作用于 Agent 输出。",
+          "未实测账户效果、集成、留存或商用权益。"
+        ],
+        "compareAxes": [
+          "对比 Jasper 的品牌资料起草与配置成本。",
+          "对比 Grammarly 的检查改写与 Agent 工作流治理。"
+        ],
+        "pricingSummary": "公开有 Starter 试用及 Enterprise 销售路径；目标账户价格与权益未知。"
+      },
+      "cn": {
+        "title": "WRITER：具品牌規則治理的 AI 內容工作流程",
+        "summary": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+        "detail": "WRITER 將 AI Agent 工作流程與團隊 voice profile、術語及風格指南結合。官方設定文件指出，術語與風格規則須連結至產生內容時使用的 voice，才會影響 Agent 輸出。組織或 IT 管理員可透過 Agent profile 設定預設或受限 voice；團隊管理員可管理團隊風格指南。事實、法律陳述及品牌適切性仍需人工審核。\n\n適合：能設定共同 voice 與術語並審核輸出的行銷團隊；比較可重複內容流程治理方式的組織。\n\n不適合：只需要一次性個人寫作的人；要求每份草稿必然合規的團隊；採購前必須核實目標帳戶權益的買方。\n\n限制：規則是否生效取決於實際使用的 voice 與 profile 設定。公開文件無法證明目標工作區的輸出穩定性。本次未測試真實帳戶、輸出品質、整合、資料留存或商業重用權。\n\n比較：Jasper 側重品牌資料輔助起草，Grammarly 側重檢查及改寫；WRITER 可比較 Agent voice/術語連結與管理邊界。在實際帳戶以相同 brief 與審核標準測試。\n\n價格與資料：公開方案展示 Starter 試用及 Enterprise 聯絡銷售路徑；目標帳戶的金額、credits、功能權益、留存、隱私合約與商業條款未核實。採購或上傳敏感內容前應確認。\n\n來源與複核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核驗；下次複核 2026-10-21。",
+        "bestFor": [
+          "能設定團隊 voice、術語並審核輸出的行銷團隊。",
+          "比較可重複內容流程治理方式的組織。"
+        ],
+        "notIdealFor": [
+          "只需要一次性個人寫作、沒有團隊設定的人。",
+          "要求每份草稿必然合規或符合品牌的團隊。"
+        ],
+        "limitations": [
+          "術語與風格規則只透過實際使用且已連結的 voice 作用於 Agent 輸出。",
+          "未實測帳戶效果、整合、留存或商業權益。"
+        ],
+        "compareAxes": [
+          "比較 Jasper 的品牌資料起草與設定成本。",
+          "比較 Grammarly 的檢查改寫與 Agent 工作流程治理。"
+        ],
+        "pricingSummary": "公開有 Starter 試用與 Enterprise 銷售路徑；目標帳戶價格及權益未知。"
+      }
+    },
+    "claimGate": {
+      "status": "PASS",
+      "items": [
+        {
+          "key": "identity",
+          "status": "verified_public",
+          "boundary": "One WRITER enterprise platform; Agent and Style Checker are features, not separate listings.",
+          "sourceIds": [
+            "platform"
+          ],
+          "nextReviewDate": "2026-10-21"
+        },
+        {
+          "key": "ai_agent",
+          "status": "verified_public",
+          "boundary": "Public product scope only; no account output result measured.",
+          "sourceIds": [
+            "platform"
+          ],
+          "nextReviewDate": "2026-10-21"
+        },
+        {
+          "key": "terms_style_voice",
+          "status": "verified_public",
+          "boundary": "Terms and style affect Agent output only when connected to the selected voice; no consistency guarantee.",
+          "sourceIds": [
+            "brand",
+            "voice_setup"
+          ],
+          "nextReviewDate": "2026-10-21"
+        },
+        {
+          "key": "role_boundary",
+          "status": "verified_public",
+          "boundary": "Public default-role permissions; target organization custom roles and seats untested.",
+          "sourceIds": [
+            "voice_setup",
+            "roles"
+          ],
+          "nextReviewDate": "2026-10-21"
+        },
+        {
+          "key": "public_plan_path",
+          "status": "conditional",
+          "boundary": "Public Starter trial and Enterprise sales paths; target checkout and exact entitlement unknown.",
+          "sourceIds": [
+            "plans"
+          ],
+          "nextReviewDate": "2026-10-21"
+        },
+        {
+          "key": "account_price_credits",
+          "status": "unknown",
+          "boundary": "Exact price, credits and overages require target account or contract.",
+          "sourceIds": [],
+          "nextReviewDate": "2026-10-21"
+        },
+        {
+          "key": "privacy_retention",
+          "status": "unknown",
+          "boundary": "Target data processing, retention and contract require review before sensitive upload.",
+          "sourceIds": [],
+          "nextReviewDate": "2026-10-21"
+        },
+        {
+          "key": "commercial_rights",
+          "status": "unknown",
+          "boundary": "Commercial reuse and output ownership under target terms unverified.",
+          "sourceIds": [],
+          "nextReviewDate": "2026-10-21"
+        },
+        {
+          "key": "output_consistency",
+          "status": "unknown",
+          "boundary": "No real workspace test; marketing performance statements excluded.",
+          "sourceIds": [],
+          "nextReviewDate": "2026-10-21"
+        }
+      ]
+    }
+  },
+  "originalPreflightOutput": {
+    "mode": "preflight",
+    "id": "57546b22-bab3-55f8-8e87-e4a97e422f57",
+    "preimageHash": "5fe06f4c41a2d9b630a64e3ce011eb92a237b5dfe5f19ef6d0e713b9386aee6b",
+    "selectionHash": "ee66c9bf54ce2c809a5bf354582c9ab4684b592dbeb22fc720f2b34b2fa26b57",
+    "ready": true,
+    "productionWrites": 0
+  },
+  "note": "The selection is the exact JSON value supplied on stdin in that run. This report is QA evidence, not a runtime release payload or current production authorization."
+}

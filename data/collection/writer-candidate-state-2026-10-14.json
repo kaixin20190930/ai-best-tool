@@ -256,7 +256,8 @@
     "preimageHash": "5fe06f4c41a2d9b630a64e3ce011eb92a237b5dfe5f19ef6d0e713b9386aee6b",
     "ready": true,
     "productionWrites": 0,
-    "selectionTransport": "temporary stdin input; no WRITER-specific runtime release file committed"
+    "selectionTransport": "temporary stdin input; no WRITER-specific runtime release file committed",
+    "qaEvidenceArtifact": "reports/ops2/writer-enqueue-qa-evidence-2026-10-14.json"
   },
   "publicationHold": {
     "code": "INDEPENDENT_QA_AND_REVIEWER_REQUIRED",
