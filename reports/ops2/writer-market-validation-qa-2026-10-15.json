@@ -1,0 +1,90 @@
+{
+  "artifactType": "ops2_market_validation_qa_candidate",
+  "unit": "WRITER-CONTROLLED-RELEASE-2026-10-14",
+  "preparedAt": "2026-10-15",
+  "candidateId": "57546b22-bab3-55f8-8e87-e4a97e422f57",
+  "toolId": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+  "status": "QA_PENDING_NO_MARKET_COMMIT",
+  "pack": {
+    "toolId": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+    "developmentActor": "codex-thread:01a13862-07a2-7643-b4fb-84e53ff0a817",
+    "verdict": "validated",
+    "score": 77,
+    "reviewedAt": "2026-10-15",
+    "vendorDomains": [
+      "writer.com"
+    ],
+    "evidenceUrls": [
+      "https://www.g2.com/products/writer/reviews",
+      "https://www.trustradius.com/products/writer-com/reviews"
+    ],
+    "strongSignals": [
+      "G2 directly lists WRITER in its Agentic AI category with 138 reviews; September 2026 reviewers describe using company documents for AI drafts and applying brand guidelines, while still editing output.",
+      "TrustRadius directly lists the WRITER enterprise agent platform; a vetted September 2025 enterprise review describes agents used with proprietary context to create training assets."
+    ],
+    "supportingSignals": [
+      "G2 shows recent mixed first-hand feedback on setup, tone configuration and final editing; reviews support use and friction, not consistent performance across accounts.",
+      "TrustRadius includes a 2025 marketing leadership review critical of content quality; most other displayed marketing writing reviews are older and cannot validate current Agent features."
+    ],
+    "rationale": {
+      "en": "Two directly readable review platforms show product-specific use of WRITER, including recent Agent and brand-content workflows. The evidence is self-selected and mixed; it supports conditional market validation for this entity only, not an active-user estimate, guaranteed brand consistency, plan entitlement or output quality.",
+      "cn": "两个可直接读取的独立评论平台记录了 WRITER 产品级使用，包括较新的 Agent 与品牌内容流程。样本自选择且评价有分歧；这只支持该实体有条件的市场验证，不推断活跃用户规模、品牌一致性保证、套餐权益或输出质量。"
+    },
+    "sourceNotes": [
+      {
+        "url": "https://www.g2.com/products/writer/reviews",
+        "observedAt": "2026-10-15",
+        "signal": "Current page identifies WRITER as an Agentic AI product, displays 138 reviews and September 2026 first-hand reports of enterprise content drafting with company guidelines and required editing.",
+        "limitation": "G2 reviews are self-selected; some are seller-invited or incentivized. Vendor-supplied product description and AI-generated summaries were excluded from the signal."
+      },
+      {
+        "url": "https://www.trustradius.com/products/writer-com/reviews",
+        "observedAt": "2026-10-15",
+        "signal": "Current WRITER enterprise-agent review page displays a vetted September 2025 account of agents using proprietary context in a large organization, alongside a critical 2025 marketing review.",
+        "limitation": "The product page is labeled WRITER (Palmyra LLM); most displayed marketing-writing reviews date to 2024 and may cover an older workflow. Vetted or incentivized reviews do not prove current usage totals."
+      }
+    ],
+    "qaReport": null
+  },
+  "sourceReview": {
+    "g2": "Direct page inspected on 2026-10-15: WRITER Agentic AI listing, 138 reviews, September 2026 reviews discussing company guidelines, drafting and editing; vendor description and AI-generated summary excluded.",
+    "trustRadius": "Direct product/review pages inspected on 2026-10-15: WRITER (Palmyra LLM) enterprise-agent description and September 2025 vetted agent-use review; most marketing-writing reviews are older and not proof of current Agent behavior.",
+    "identityBoundary": "Both listings identify a WRITER enterprise AI platform; source records are market-use signals, not proof of target-account features or WRITER style-rule efficacy.",
+    "sampleBoundary": "Both are self-selected review platforms; some records are incentivized or vendor invited. Scores/counts are not active-user estimates."
+  },
+  "genericBridge": {
+    "preflight": {
+      "mode": "preflight",
+      "toolId": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+      "preimageHash": "c8f61382d0cc3ccf23ae6070da4a6c528e5a8b21c266433b450eac7737576546",
+      "packHash": "8d64b1754b278b7a57bfbbe49fabe233cc1d6148a021acc83d9f6077b092c805",
+      "protectedHash": "b14765cc7555c21440958c7fa3ded0ca8ddd8f8f74036f1e77af5980905b4c98",
+      "productionWrites": 0
+    },
+    "rollback": {
+      "mode": "rollback",
+      "toolId": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+      "preimageHash": "c8f61382d0cc3ccf23ae6070da4a6c528e5a8b21c266433b450eac7737576546",
+      "postimageHash": "2cc8922029ade7062de14662d24d82033635f5ca06975f334263ff1ba508b797",
+      "productionWrites": 0
+    },
+    "postRollbackPreflight": {
+      "mode": "preflight",
+      "toolId": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+      "preimageHash": "c8f61382d0cc3ccf23ae6070da4a6c528e5a8b21c266433b450eac7737576546",
+      "packHash": "8d64b1754b278b7a57bfbbe49fabe233cc1d6148a021acc83d9f6077b092c805",
+      "protectedHash": "b14765cc7555c21440958c7fa3ded0ca8ddd8f8f74036f1e77af5980905b4c98",
+      "productionWrites": 0
+    },
+    "postcheck": "PENDING: requires independent QA PASS and a subsequent exact market-validation commit; no market commit attempted"
+  },
+  "production": {
+    "candidateStatus": "imported",
+    "draftToolStatus": "draft",
+    "marketValidation": null,
+    "toolPublication": "HOLD",
+    "indexOrSitemapChanges": 0,
+    "marketValidationPersistentWrites": 0
+  },
+  "nextReviewDate": "2026-10-22"
+}
