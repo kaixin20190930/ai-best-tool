@@ -6,18 +6,20 @@
 
 原独立 QA `codex-thread:01a13e77-0a6f-7c22-8488-ac53f599c50b` 对固定 SHA `df7c78c79312aa1fa018214d2d74a0b6ead6cea1` 返回 `QA_PASS_ENQUEUE_BATCH`，明确只批准五项 enqueue commit。以每项精确 selection/preimage、独立 QA actor、管理员 reviewer 和 rollback hash 执行通用 `ops2:enqueue`，五项各首次写入一条 `new` 候选；各自 postcheck 匹配完整后像，重放 commit 均为零写。
 
-| 工具 | Candidate ID | Enqueue | Draft | 发布 |
-| --- | --- | --- | --- | --- |
-| Everygen | `ca68f6e6-1eea-43d7-8a23-21769b9fb3ac` | `new`，postcheck/replay PASS | 待独立 draft QA | 未执行 |
-| Meta Muse Wonder | `638f9de2-0c60-424c-a58d-9e435a262da5` | `new`，postcheck/replay PASS | 待独立 draft QA | 未执行 |
-| ArtCraft | `4ec268e5-74ba-4dc2-8d08-f3592eb95178` | `new`，postcheck/replay PASS | 待独立 draft QA | 未执行 |
-| Melty | `a11602ea-b9fa-4960-bc87-ce3a9f2d80d9` | `new`，postcheck/replay PASS | 待独立 draft QA | 未执行 |
-| Cloudflare Clef | `f949c9c1-c900-4aff-a796-347ca01ad7da` | `new`，postcheck/replay PASS | 待独立 draft QA | 未执行 |
+| 工具 | Candidate ID | Draft Tool ID / slug | 发布预演 |
+| --- | --- | --- | --- |
+| Everygen | `ca68f6e6-1eea-43d7-8a23-21769b9fb3ac` | `b2a89bbc-d6ba-4aef-a3db-5a7919b5336f` / `everygen` | HOLD |
+| Meta Muse Wonder | `638f9de2-0c60-424c-a58d-9e435a262da5` | `c2a1a67a-2b53-4c5e-b066-5415dc525dad` / `meta-muse-wonder` | HOLD |
+| ArtCraft | `4ec268e5-74ba-4dc2-8d08-f3592eb95178` | `f76fe986-99dc-432d-808c-91169a13cd8e` / `artcraft` | HOLD |
+| Melty | `a11602ea-b9fa-4960-bc87-ce3a9f2d80d9` | `5bd11bd0-5100-4203-abce-1dddf6b06565` / `melty` | HOLD |
+| Cloudflare Clef | `f949c9c1-c900-4aff-a796-347ca01ad7da` | `c8da0b9d-5422-41e0-be1f-55196bf74faa` / `cloudflare-clef` | HOLD |
 
-生产只读事务逐项确认：每个 ID/官方 URL 仅有一条候选；存储的完整 selection 与已验收包相同，包含 `en/cn/tw`、自有媒体、Cluster 和逐 Claim 边界；当前同名/同 URL 工具实体为零。五项通用 `candidate` 桥 preflight 与事务 rollback 均 PASS，回滚后零持久写。具体 preimage、拟生成 Tool ID 和 enqueue postimage 记录在批次 JSON，不将 rollback 预览 ID 冒充已创建实体。
+生产只读事务逐项确认：每个 ID/官方 URL 仅有一条候选；存储的完整 selection 与已验收包相同，包含 `en/cn/tw`、自有媒体、Cluster 和逐 Claim 边界；入队时同名/同 URL 工具实体为零。五项通用 `candidate` 桥 preflight 与事务 rollback 均 PASS，回滚后零持久写。原独立 QA 随后返回 `QA_PASS_DRAFT_BATCH`；五项经通用桥独立 commit/postcheck 均成为唯一 `draft`，每项 commit 报告 3 个写操作、postcheck 零写。只读回读确认实际 Tool ID/slug、官方 URL、自有媒体和 EN/CN/TW/简体 zh 后像，不使用 rollback 时的拟 ID。
 
 ## 后续门禁
 
-`QA_PASS_ENQUEUE_BATCH` 不包含 draft 导入。`ops2:publish-bridge --kind=candidate` 的 commit 需要自己的精确授权和独立 QA 引用；不得复用入队 QA 作为 draft 批准。原 QA 对本批五项的 draft preflight/rollback 做一次差分确认后，才能逐项执行通用 draft commit/postcheck。随后才能对实际 draft Tool ID 生成通用 `tool` 发布 change set，检查三语、self-canonical、noindex、素材、身份/意图和 sitemap 排除，执行 preflight/rollback 并交原 QA 做发布前增量验收。公开发布 commit、push、index/sitemap 均未授权也未执行。
+唯一发布差分：五个实际 draft 的通用 `tool` preflight 均返回 `ready=false`，共同 blocker 为 `Evidence-ready draft predicate`。原因为 selection 导入的 draft 带 `features.collection`，但没有达到现有发布门禁要求的 `marketValidation.verdict=validated`、复核日期、证据 URL、strong signals 和至少 75 分。各项 rollback 均被同一门禁拒绝，持久写入 0；未执行 published commit。目标仍为 `published + monitor/noindex`、sitemap excluded，不能将 draft 或失败的 rollback 报为已发布。下一步只需沿现有市场验证路径补齐可核验证据，之后重跑受影响项的通用发布 preflight/rollback 与原 QA 增量验收；不复审已 PASS 的工具身份、来源、媒体和 Claim。
 
 两份受保护 SQL 与未跟踪 Freshness 文件均排除在本单元提交之外。
+
+生产 `sitemap.xml` 返回 200，五个 draft slug 的匹配 URL 均为 0。由于尚未公开发布，页面 self-canonical 与 `noindex` 的生产响应不能冒称已经验证；它们仍是下一次发布门禁的目标，而非本轮 PASS。

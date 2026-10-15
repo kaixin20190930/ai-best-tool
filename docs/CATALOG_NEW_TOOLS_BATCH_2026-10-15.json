@@ -82,14 +82,37 @@
     "productionReadback": "Five unique new candidates match each full parsed selection; no matching tool entities; read-only transaction and zero readback writes."
   },
   "candidateDraftBridge": {
-    "state": "HOLD_INDEPENDENT_DRAFT_QA",
-    "reason": "The prior independent QA approved enqueue only, not candidate-to-draft commit. Generic bridge requires its own exact authorization and independent QA reference.",
+    "state": "QA_PASS_DRAFT_BATCH_COMMITTED",
+    "qaVerdict": "QA_PASS_DRAFT_BATCH",
+    "qaReference": "codex-thread:01a13e77-0a6f-7c22-8488-ac53f599c50b",
+    "reason": "The same independent QA approved candidate-to-draft only; all five generic commits and postchecks passed. This does not authorize published commit.",
     "preflightAndRollback": [
       { "name": "Everygen", "candidateId": "ca68f6e6-1eea-43d7-8a23-21769b9fb3ac", "preimageHash": "d9695143a400316a36d90ac0f26a06a2613e937c93ecf261f17da26d26ed369c", "proposedToolId": "93dfb698-4d35-4fc8-acee-a653ebaa4b34", "preflight": "PASS", "rollback": "PASS", "productionWrites": 0 },
       { "name": "Meta Muse Wonder", "candidateId": "638f9de2-0c60-424c-a58d-9e435a262da5", "preimageHash": "00cf2cd59fcc1c53ef59ccd2491e4dda0fd6e43f26dfe1c27ac939e7a81ecd49", "proposedToolId": "e20e8096-2d85-452b-b9b2-5f9f00f9c215", "preflight": "PASS", "rollback": "PASS", "productionWrites": 0 },
       { "name": "ArtCraft", "candidateId": "4ec268e5-74ba-4dc2-8d08-f3592eb95178", "preimageHash": "94eae37b2ab0b1699805420ba4140614b6a15c559d8e76d626662b98e8eed5fb", "proposedToolId": "848abf9c-50ae-4d65-89bf-c93d46b77dcf", "preflight": "PASS", "rollback": "PASS", "productionWrites": 0 },
       { "name": "Melty", "candidateId": "a11602ea-b9fa-4960-bc87-ce3a9f2d80d9", "preimageHash": "ceee47748432d3e36b944282a95765d2761c377eddccc0222b05f42d23740462", "proposedToolId": "e6ded9b4-f6c7-4b5d-98a3-d5f88ba5f8f2", "preflight": "PASS", "rollback": "PASS", "productionWrites": 0 },
       { "name": "Cloudflare Clef", "candidateId": "f949c9c1-c900-4aff-a796-347ca01ad7da", "preimageHash": "fff0deb7ffb1379330c08f0aef7a0c5e75718ebe1240eb048bc2cd145632b4e5", "proposedToolId": "3c79be75-4a7f-4ce4-80e7-3875a1557a90", "preflight": "PASS", "rollback": "PASS", "productionWrites": 0 }
+    ],
+    "commitAndPostcheck": [
+      { "name": "Everygen", "candidateId": "ca68f6e6-1eea-43d7-8a23-21769b9fb3ac", "toolId": "b2a89bbc-d6ba-4aef-a3db-5a7919b5336f", "slug": "everygen", "status": "draft", "commitWrites": 3, "postcheckWrites": 0 },
+      { "name": "Meta Muse Wonder", "candidateId": "638f9de2-0c60-424c-a58d-9e435a262da5", "toolId": "c2a1a67a-2b53-4c5e-b066-5415dc525dad", "slug": "meta-muse-wonder", "status": "draft", "commitWrites": 3, "postcheckWrites": 0 },
+      { "name": "ArtCraft", "candidateId": "4ec268e5-74ba-4dc2-8d08-f3592eb95178", "toolId": "f76fe986-99dc-432d-808c-91169a13cd8e", "slug": "artcraft", "status": "draft", "commitWrites": 3, "postcheckWrites": 0 },
+      { "name": "Melty", "candidateId": "a11602ea-b9fa-4960-bc87-ce3a9f2d80d9", "toolId": "5bd11bd0-5100-4203-abce-1dddf6b06565", "slug": "melty", "status": "draft", "commitWrites": 3, "postcheckWrites": 0 },
+      { "name": "Cloudflare Clef", "candidateId": "f949c9c1-c900-4aff-a796-347ca01ad7da", "toolId": "c8da0b9d-5422-41e0-be1f-55196bf74faa", "slug": "cloudflare-clef", "status": "draft", "commitWrites": 3, "postcheckWrites": 0 }
+    ],
+    "productionReadback": "One linked draft Tool per imported candidate; official URL, platform-owned image and thumbnail, EN/CN/TW fields, simplified zh alias and unique name/URL match the approved selections. Read-only transaction; zero readback writes."
+  },
+  "toolReleasePreview": {
+    "state": "HOLD_MARKET_VALIDATION",
+    "target": "published + monitor/noindex; sitemap excluded",
+    "productionSitemapReadback": { "httpStatus": 200, "matchingUrlsPerSlug": 0, "productionWrites": 0 },
+    "commonBlocker": "Evidence-ready draft predicate: selected drafts contain features.collection but lack validated marketValidation with dated evidence, strong signals and score >= 75. No published commit attempted.",
+    "results": [
+      { "name": "Everygen", "toolId": "b2a89bbc-d6ba-4aef-a3db-5a7919b5336f", "preimageHash": "59b2366f93ff256bd790eb57515617d066be6902720d390dc00b4d0b9815e68f", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 },
+      { "name": "Meta Muse Wonder", "toolId": "c2a1a67a-2b53-4c5e-b066-5415dc525dad", "preimageHash": "07d06c14660a30b7d779eaa21b511739c0f0ddfecb614f5229b5b6e2ba26542a", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 },
+      { "name": "ArtCraft", "toolId": "f76fe986-99dc-432d-808c-91169a13cd8e", "preimageHash": "e6cf5cdb3afe7e14f7039ce8555f44d77e6c8e6d7e44a913740589ea5b38e3ef", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 },
+      { "name": "Melty", "toolId": "5bd11bd0-5100-4203-abce-1dddf6b06565", "preimageHash": "2f9c69c3ed9da5e25c8d6728ed011b4e5fa2a54f7809c03d7034345c8536b265", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 },
+      { "name": "Cloudflare Clef", "toolId": "c8da0b9d-5422-41e0-be1f-55196bf74faa", "preimageHash": "f85c7d2dab8d76b4d5f46354af1f591d4695abf693c066632eda860c06832552", "preflightReady": false, "rollback": "HOLD", "productionWrites": 0 }
     ]
   },
   "genericReleasePlan": [
