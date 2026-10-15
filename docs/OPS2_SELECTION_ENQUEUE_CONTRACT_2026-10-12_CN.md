@@ -4,6 +4,7 @@
 
 - 控制器通过标准输入发送一个临时结构化选择包，运行 `pnpm run ops2:enqueue --mode=preflight`。`pnpm run` 后不得再插入额外的 `--`，否则参数会被错误透传。不维护每个工具的 JSON、guard、test 或运行时代码。
 - 选择包必须包含稳定 UUID、官方 HTTPS canonical、名称、Cluster 角色、现有 Category、两个带 ID 且覆盖不同事实的官方 URL、三语言编辑内容和决策字段。普通 Catalog 可省略 `cluster.taskSlug`：只查工具实体身份、名称、标题、canonical/URL 的全局冲突，不读取 Task Fits，也不创建 Task/Capability/Fit 关系；此时 `duplicateIntent.checkedToolIds` 必须为空。有明确 Task 的旧路径必须提供活跃 `taskSlug`，`checkedToolIds` 与该 Task 下状态为 `reviewed` 或 `published` 的 Fit 工具 ID 去重排序后精确一致，数据库真实为空才允许 `[]`。`entityGate` 要逐项 PASS AI 核心能力、身份/canonical、重复意图；`claimGate` 每项要有状态、sourceIds、边界和复核日。
+- 新选择包的 `localized` 固定为 `en/cn/tw`，`cn` 是简体、`tw` 是繁体；缺少 `tw` 必须拒绝。历史 `en/zh/cn` 选择包仅作输入兼容，显式以旧 `zh` 作为 `tw` 来源，不改历史存储行，也不允许与新 `tw` 混用。新导入工具字段写入 `en/cn/tw`，运行时 `zh` 仅复制 `cn` 作为简体兼容别名，不能承载繁体。
 - 默认官方来源仍只能位于 canonical 产品域及其子域。产品由独立父品牌域持有时，可声明 `officialDomainGroup`：`canonicalProductDomain` 必须与 `officialUrl` 一致，`parentBrandDomains` 去重且不能重复 canonical，所有 source URL 必须属于组内域。`identitySourceIds` 必须指向实际参与 identity gate 的官方来源；声明父品牌域时，至少一条父品牌域来源同时标记 `identity` 与 `brand_relationship`，明确证明产品归属。不能把合作方、登录域、CDN 或任意 alias 加入组内绕过来源限制。
 - 媒体分两种模式。`official_licensed` 继续要求官方素材、官方授权来源、PASS 状态和授权摘录。`platform_owned_editorial` 只允许 AI Best Tool 编辑团队自行制作的中性素材，必须记录 `/images/tool-media/` 下的 `assetPath`、文件 `sha256`、`creator=AI Best Tool editorial`、`createdAt` 和 `noVendorMarks=true`；不得包含厂商 Logo、截图、商标视觉、外链图片或脚本，也不要求厂商授权来源。工具专属中性素材属于内容资产，不得演变为工具专属发布器、guard 或测试流程。
 - 账号权益只有存在账户级证据引用时才可标记 `verified_account`。冲突、未知、过期 Claim 不得被写成精确已验证断言；独立 QA 必须核对三语言正文是否遵守边界。

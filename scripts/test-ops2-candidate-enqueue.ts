@@ -5,7 +5,7 @@ import { tmpdir, userInfo } from 'node:os';
 import { join } from 'node:path';
 import { Client, type PoolClient } from 'pg';
 
-import { parseOps2Selection, selectionHash, selectionRawPayload } from '../lib/services/admin/ops2Selection';
+import { parseOps2Selection, selectionHash, selectionLocalizedField, selectionRawPayload } from '../lib/services/admin/ops2Selection';
 import { evidenceReadyDraftSql } from '../lib/services/admin/draftPublicationSql';
 import { importCollectionCandidateToDraft } from '../lib/services/admin/collection';
 import { parseOptions, parseQaReport, qaReportHash, run, verifyPlatformOwnedMedia } from './run-ops2-candidate-enqueue';
@@ -48,6 +48,22 @@ const fixture = {
 };
 
 const selection = parseOps2Selection(fixture);
+assert.equal(selection.localized.tw.title, content.zh.title);
+assert.equal(selection.localized.cn.title, content.cn.title);
+assert.equal(selectionLocalizedField(selection, 'title').tw, content.zh.title);
+assert.equal(selectionLocalizedField(selection, 'title').zh, content.cn.title);
+const newLocalized = { en: content.en, cn: content.cn, tw: {
+  ...content.zh, title: 'Fixture AI traditional research',
+} };
+const newSelection = parseOps2Selection({ ...fixture, localized: newLocalized });
+assert.equal(newSelection.localized.tw.title, 'Fixture AI traditional research');
+assert.equal(newSelection.localized.cn.title, content.cn.title);
+assert.equal(selectionLocalizedField(newSelection, 'title').tw, 'Fixture AI traditional research');
+assert.equal(selectionLocalizedField(newSelection, 'title').zh, content.cn.title);
+assert.throws(() => parseOps2Selection({ ...fixture, localized: { en: content.en, cn: content.cn } }),
+  /requires tw/);
+assert.throws(() => parseOps2Selection({ ...fixture, localized: { ...newLocalized, zh: content.zh } }),
+  /cannot mix/);
 assert.equal(selectionRawPayload(selection).sourceType, 'ops2_selection');
 assert.match(evidenceReadyDraftSql, /features->'marketValidation'->>'verdict' = 'validated'/);
 assert.doesNotMatch(evidenceReadyDraftSql, /ops2_selection|ops2Selection/);
@@ -376,7 +392,9 @@ async function runLocalDb() {
       const tool = (await db.query('SELECT * FROM tools WHERE id=$1', [imported.toolId])).rows[0];
       assert.equal(tool.status, 'draft');
       assert.equal(tool.title.cn, selection.localized.cn.title);
-      assert.equal(tool.content.zh, selection.localized.zh.summary);
+      assert.equal(tool.content.zh, selection.localized.cn.summary);
+      assert.equal(tool.content.tw, selection.localized.tw.summary);
+      assert.equal(tool.title.tw, selection.localized.tw.title);
       assert.equal(tool.detail.en, selection.localized.en.detail);
       assert.deepEqual(tool.features.collection, {});
       assert.equal(tool.features.ops2Selection, undefined);

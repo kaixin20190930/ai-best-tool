@@ -18,9 +18,9 @@
     {
       "name": "Everygen",
       "candidateId": "ca68f6e6-1eea-43d7-8a23-21769b9fb3ac",
-      "selectionHash": "4bf1964d17a397ab265efe9c3614ff020c01b5f36c3e1b6ca66bce231af6b6e1",
-      "preimageHash": "fb14027779c5bd2335de7b63f742020d402ad896681dde7a7a164449977e1a7a",
-      "rollbackPreviewPostimageHash": "7d2ed0ec7e9ac531bb23562f19217bb653a850669291a985ca52824663216b43",
+      "selectionHash": "e917e3146a5d0dc2295354c36f18139365e97da7f58c294779bd6819895b6420",
+      "preimageHash": "c1b5b3b782b08b614d79bace9f6e1dbbbb29fbd5e9ba7360495aad75898caa97",
+      "rollbackPreviewPostimageHash": "3a61dd85dd347f97cebf4f889d904c578d24f1f4e669b8eaef56011dc7f20532",
       "preflight": "PASS",
       "rollback": "PASS",
       "productionWrites": 0
@@ -28,9 +28,9 @@
     {
       "name": "Meta Muse Wonder",
       "candidateId": "638f9de2-0c60-424c-a58d-9e435a262da5",
-      "selectionHash": "0d5c3f46fa3e791679ee63187d3b3a9fe84dcdffb369e770f9ede938ed8558f4",
-      "preimageHash": "526ff1168aa55d9b1541f5b5d336b11f02834d3b483e8a780fc0142ea5ccb34a",
-      "rollbackPreviewPostimageHash": "3c1801889d381b5a2c2474b55d9c3ff10928af4b52420e523fcd0f4b59767272",
+      "selectionHash": "7e6d4bd0f0a0cbd1946e1816611af4c6f6b4ddc1cb1cae4ad2ef56276d0eac6b",
+      "preimageHash": "df62c26cc9a773a3642b576c61b550a1cb0f15cff823e9325477504d10d8c4b3",
+      "rollbackPreviewPostimageHash": "0a29f9391dea631a980e278a377362c9b0b8de7636c9fc3f01faff26e77ddcb3",
       "preflight": "PASS",
       "rollback": "PASS",
       "productionWrites": 0
@@ -38,9 +38,9 @@
     {
       "name": "ArtCraft",
       "candidateId": "4ec268e5-74ba-4dc2-8d08-f3592eb95178",
-      "selectionHash": "c01cc52bbe0a0bb23a1833ae84876ddbd83c8588236b47fc3f2eac583915a448",
-      "preimageHash": "a06a33023d0927d538dbe19e596bad425949b5809050abf477d800dc8f31a64e",
-      "rollbackPreviewPostimageHash": "5b46df19e46ba090d6627c7d5c6273c31c25c9bb413873a55aca55b1cae12b8c",
+      "selectionHash": "c18686e7af7fdd354aa122a3862b2eded702068f6cc3da9621182df51ed4eb90",
+      "preimageHash": "921b9ca8b93486cf7e1cc40d4d8c9d68ace0ed9e08011e898cfec9f87995c61c",
+      "rollbackPreviewPostimageHash": "d60cd930326f6f298ab43db77c832edd0ec758bcb3010cc12da2627a58eca91d",
       "preflight": "PASS",
       "rollback": "PASS",
       "productionWrites": 0
@@ -48,9 +48,9 @@
     {
       "name": "Melty",
       "candidateId": "a11602ea-b9fa-4960-bc87-ce3a9f2d80d9",
-      "selectionHash": "610bcaf07c734e4350428ad38d04d4f814127395fdc8703b4f578a6a7171b647",
-      "preimageHash": "919e4fd2bc6cc365b02504273d320d0ae758a43885e6dc7d8a0d15bd8cc7b70c",
-      "rollbackPreviewPostimageHash": "e0aee90ca2a21b379e023cec36377e7da7bc3b7f3f4d4cf418d045102c054547",
+      "selectionHash": "43d5b03c2c8a179b85ad8c84b577571c5aa4c9441ffe9bd5b1553aa08b61e076",
+      "preimageHash": "2be1b5f6715544d5b6764122506a0f2581a419f5f57ec4d2eb0a75deb43f92e7",
+      "rollbackPreviewPostimageHash": "331e01152345f03cbf76875231627ab26f8e1d29a3df5a395cb8f612239d319e",
       "preflight": "PASS",
       "rollback": "PASS",
       "productionWrites": 0
@@ -58,9 +58,9 @@
     {
       "name": "Cloudflare Clef",
       "candidateId": "f949c9c1-c900-4aff-a796-347ca01ad7da",
-      "selectionHash": "e7b277ef058e6760c4f8a3cbf24a774375d93f3bf05b9f3c3bfddc3dcc8c62c6",
-      "preimageHash": "56d2585caa153062a082224c14454ac712ce855d6c3eef917d155fc69ec1496b",
-      "rollbackPreviewPostimageHash": "9ad0f817c1fcf7b50c430cf740831cb13c08e28e6c52b8c7218b56f005cd7ab4",
+      "selectionHash": "b6daab0089a94d83fa574bb50b725d35ee6512f499e20a22935715b3afcf97ef",
+      "preimageHash": "50950c337f9915034589a4e9e9d95dbf16773c8e04ad100414f40486d739ab84",
+      "rollbackPreviewPostimageHash": "ea3d716e2d98ee30a193e8aaa722490001c104b65ec97369d1a325667f94551f",
       "preflight": "PASS",
       "rollback": "PASS",
       "productionWrites": 0
@@ -107,7 +107,7 @@
           "compareAxes": ["Same product brief and aspect ratio", "Credit cost per usable export", "Input rights and commercial approval"],
           "pricingSummary": "Paid plans and credits are public; exact checkout price and per-task consumption remain account-dependent."
         },
-        "zh": {
+        "tw": {
           "title": "Everygen：AI 短影片與 UGC 廣告工作流程",
           "summary": "Everygen 提供 AI 短影片、廣告範本、腳本、配音及匯出流程。適合比較短影片廣告製作路徑；發布前仍須核對素材權利、所選模型、實際 credits 消耗，以及合成內容揭露要求，本站尚未實測成片品質。",
           "detail": "Everygen 是 Viewmax LLC 營運的短影片與 UGC 風格廣告工作台。官網展示 AI 影片生成、廣告範本、腳本、配音和匯出路徑，也支援使用者自備素材。素材權利、人物同意及合成內容揭露仍須使用者自行確認。官網聲明 everygen.ai 是唯一官方網域；同名近似站點不屬於此條目。本條為官方資料核驗，並非實際帳戶效果測試。採購前建議用同一產品簡報比較成片格式、credits、素材權利和人工審校成本。",
@@ -171,7 +171,7 @@
           "compareAxes": ["Model layer versus hosted app builder", "API or Muse Code access and plan", "Coding task success and human verification"],
           "pricingSummary": "Meta lists Model API token pricing and Muse Code plans; target-account entitlement and billing need confirmation."
         },
-        "zh": {
+        "tw": {
           "title": "Meta Muse Wonder：代理式程式設計模型家族",
           "summary": "Muse Wonder 是 Meta 面向程式設計和長任務代理的模型家族。Wonder 與 Wonder Full 的入口、方案和資料使用模式不同；它屬於開發者模型層，並非開箱即用的應用程式建構器，本站沒有獨立實測基準。",
           "detail": "Meta Muse Wonder 是面向長任務代理、程式設計和電腦操作的模型家族。Muse Wonder 可經 Meta Model API 與 Muse Code 使用；Muse Wonder Full 是符合條件的 Muse Code 訂閱可用的高能力變體，不另建產品實體。開發者可用它建構應用程式流程，但本條不宣稱它具備一句話生成完整託管應用程式的產品體驗。入口、資料使用模式和費用依路線與方案而異。本條只根據官方資料評估，沒有獨立實測基準。選擇前應與現成 App Builder 比較接入工作量、可用權限、模型表現和人工複核成本。",
@@ -222,7 +222,7 @@
       "pricing": "freemium", "tags": ["AI image", "AI video", "creative studio"],
       "localized": {
         "en": { "title": "ArtCraft: controllable AI image and video studio", "summary": "ArtCraft combines scene composition, layers and AI image/video models in an open-source creative studio. Check plan credits, model access and output rights for your account.", "detail": "ArtCraft is a controllable AI image and video studio at getartcraft.com. Its public site describes image, layer and 3D scene composition, and its model guide lists supported image and video models. This is not evidence of a one-click product-photo ad workflow. The studio offers a free or bring-your-own-compute path alongside paid credits, but model access and output cost depend on the route. This listing has not tested a paid workspace, commercial-use terms or the quality of generated output. Compare scene control, workflow effort, model availability and effective cost before choosing.", "bestFor": ["Artists arranging layered scenes before generation", "Teams comparing open-source creative studios and model choice"], "notIdealFor": ["Buyers expecting a proven one-click product-photo ad workflow", "Teams requiring confirmed account-specific commercial rights"], "limitations": ["Model availability and credits vary by route", "No paid-workspace or output-quality test was performed", "Commercial rights and retention need account-level review"], "compareAxes": ["Scene and layer control", "Own compute versus hosted credits", "Cost and rights per usable output"], "pricingSummary": "Free or own-compute use is described publicly; paid credits and model access vary by plan." },
-        "zh": { "title": "ArtCraft：可控的 AI 圖像與影片工作室", "summary": "ArtCraft 把場景構圖、圖層與 AI 圖像和影片模型放在開源創作工作室中。選用前須按帳戶核對方案 credits、模型入口和輸出權利；本站未實測付費工作區或生成品質。", "detail": "ArtCraft 是位於 getartcraft.com 的可控 AI 圖像與影片工作室。官網介紹圖像、圖層與 3D 場景構圖，模型指南列出支援的圖像和影片模型；這並不能證明它有一鍵將商品照片變成廣告影片的流程。產品描述免費或自備算力路徑，也提供付費 credits，但模型入口與輸出成本依使用路徑而異。本條沒有測試付費工作區、商用條款或生成品質。選擇前應比較場景控制、製作步驟、模型可用性和實際成本。", "bestFor": ["生成前需要編排圖層與場景的創作者", "比較開源創作工作室及模型選擇的團隊"], "notIdealFor": ["期待已證實的一鍵商品照廣告流程的採購者", "需要已核准帳戶商用權利的團隊"], "limitations": ["模型可用性和 credits 依使用路徑變化", "尚未實測付費工作區或輸出品質", "商用權利與保留期需依帳戶核對"], "compareAxes": ["場景與圖層控制", "自備算力與託管 credits", "每件可用作品的成本與權利"], "pricingSummary": "官網描述免費或自備算力使用；付費 credits 和模型入口依方案而異。" },
+        "tw": { "title": "ArtCraft：可控的 AI 圖像與影片工作室", "summary": "ArtCraft 把場景構圖、圖層與 AI 圖像和影片模型放在開源創作工作室中。選用前須按帳戶核對方案 credits、模型入口和輸出權利；本站未實測付費工作區或生成品質。", "detail": "ArtCraft 是位於 getartcraft.com 的可控 AI 圖像與影片工作室。官網介紹圖像、圖層與 3D 場景構圖，模型指南列出支援的圖像和影片模型；這並不能證明它有一鍵將商品照片變成廣告影片的流程。產品描述免費或自備算力路徑，也提供付費 credits，但模型入口與輸出成本依使用路徑而異。本條沒有測試付費工作區、商用條款或生成品質。選擇前應比較場景控制、製作步驟、模型可用性和實際成本。", "bestFor": ["生成前需要編排圖層與場景的創作者", "比較開源創作工作室及模型選擇的團隊"], "notIdealFor": ["期待已證實的一鍵商品照廣告流程的採購者", "需要已核准帳戶商用權利的團隊"], "limitations": ["模型可用性和 credits 依使用路徑變化", "尚未實測付費工作區或輸出品質", "商用權利與保留期需依帳戶核對"], "compareAxes": ["場景與圖層控制", "自備算力與託管 credits", "每件可用作品的成本與權利"], "pricingSummary": "官網描述免費或自備算力使用；付費 credits 和模型入口依方案而異。" },
         "cn": { "title": "ArtCraft：可控的 AI 图像与视频工作室", "summary": "ArtCraft 把场景构图、图层与 AI 图像和视频模型放在开源创作工作室中。选用前需按账户核对套餐 credits、模型入口和输出权利；本站未实测付费工作区或生成质量。", "detail": "ArtCraft 是位于 getartcraft.com 的可控 AI 图像与视频工作室。官网介绍图像、图层与 3D 场景构图，模型指南列出支持的图像和视频模型；这并不能证明它有一键将商品照片变成广告视频的流程。产品描述免费或自带算力路径，也提供付费 credits，但模型入口与输出成本依使用路径而异。本条没有测试付费工作区、商用条款或生成质量。选择前应比较场景控制、制作步骤、模型可用性和实际成本。", "bestFor": ["生成前需要编排图层与场景的创作者", "比较开源创作工作室及模型选择的团队"], "notIdealFor": ["期待已证实的一键商品图广告流程的采购者", "需要已核准账户商用权利的团队"], "limitations": ["模型可用性和 credits 依使用路径变化", "尚未实测付费工作区或输出质量", "商用权利与保留期需按账户核对"], "compareAxes": ["场景与图层控制", "自带算力与托管 credits", "每件可用作品的成本与权利"], "pricingSummary": "官网描述免费或自带算力使用；付费 credits 和模型入口依套餐而异。" }
       },
       "claimGate": { "status": "PASS", "items": [
@@ -256,7 +256,7 @@
       "pricing": "free", "tags": ["game mods", "game mashups", "AI-assisted creation"],
       "localized": {
         "en": { "title": "Melty: AI-assisted game mashups and mods", "summary": "Melty is a Windows game-mashup and mod platform with a coding-agent creation route. Publishing grants Melty an exclusive marketplace licence that persists 12 months after removal.", "detail": "Melty at melty.gg is a game-mashup and mod platform operated by Stella Montis Inc., not the earlier Melty AI code editor. Players use their own legitimate game copies; creators can give Melty instructions to a coding agent and publish a mashup. Its current terms say Melty is free and mashups are currently free, but publishing grants Melty an exclusive worldwide marketplace licence while content remains on Melty and for 12 months after removal. A special transition applies to content already present before the October 14, 2026 terms. Other people's game assets keep their own licences, and publisher mod or anti-cheat rules still apply. This listing does not test compatibility, installation safety or creator earnings.", "bestFor": ["Players with legitimate game copies who want one-click mashup setup", "Mod creators who accept the publishing licence and use a coding agent"], "notIdealFor": ["Developers seeking a general AI code editor", "Creators needing to distribute the same mashup on another marketplace during exclusivity"], "limitations": ["Current desktop path is Windows-focused and requires owned games", "Publishing exclusivity lasts through availability plus 12 months after removal, subject to the stated legacy transition", "Game publisher and third-party asset rights are separate from Melty access"], "compareAxes": ["Game ownership and supported titles", "Creator distribution rights", "Install audit and compatibility evidence"], "pricingSummary": "The current terms say the service and mashups are free; future paid features may have separate terms." },
-        "zh": { "title": "Melty：AI 輔助遊戲混搭與模組平台", "summary": "Melty 是以 Windows 為主的遊戲混搭與模組平台，可透過程式代理建立作品。發布作品會授予 Melty 獨家 Marketplace 授權，內容下架後仍延續 12 個月，須先核對權利。", "detail": "melty.gg 的 Melty 是 Stella Montis Inc. 營運的遊戲混搭與模組平台，不是舊同名 AI 程式碼編輯器。玩家需擁有合法的原遊戲副本；創作者可把 Melty 指引交給程式代理製作並發布作品。現行條款稱服務及混搭作品目前免費，但發布會授予 Melty 全球獨家的 Marketplace 授權，在內容上架期間及下架後 12 個月有效；2026 年 10 月 14 日前已上架內容另有過渡安排。其他人的遊戲素材仍受原權利約束，發行商模組及反作弊規則亦適用。本站未實測相容性、安裝安全或創作者收益。", "bestFor": ["擁有合法遊戲副本並需要簡化安裝的玩家", "接受發布授權且使用程式代理的模組創作者"], "notIdealFor": ["尋找通用 AI 程式碼編輯器的開發者", "獨家期間要在其他 Marketplace 發布同一作品的創作者"], "limitations": ["目前以 Windows 為主且需要自有遊戲", "發布獨家權在上架期間和下架後 12 個月持續，舊內容有過渡安排", "遊戲發行商與第三方素材權利不因使用 Melty 消失"], "compareAxes": ["遊戲所有權和支援範圍", "創作者分發權利", "安裝稽核與相容性證據"], "pricingSummary": "現行條款稱服務與混搭作品免費；未來付費功能可能另有條款。" },
+        "tw": { "title": "Melty：AI 輔助遊戲混搭與模組平台", "summary": "Melty 是以 Windows 為主的遊戲混搭與模組平台，可透過程式代理建立作品。發布作品會授予 Melty 獨家 Marketplace 授權，內容下架後仍延續 12 個月，須先核對權利。", "detail": "melty.gg 的 Melty 是 Stella Montis Inc. 營運的遊戲混搭與模組平台，不是舊同名 AI 程式碼編輯器。玩家需擁有合法的原遊戲副本；創作者可把 Melty 指引交給程式代理製作並發布作品。現行條款稱服務及混搭作品目前免費，但發布會授予 Melty 全球獨家的 Marketplace 授權，在內容上架期間及下架後 12 個月有效；2026 年 10 月 14 日前已上架內容另有過渡安排。其他人的遊戲素材仍受原權利約束，發行商模組及反作弊規則亦適用。本站未實測相容性、安裝安全或創作者收益。", "bestFor": ["擁有合法遊戲副本並需要簡化安裝的玩家", "接受發布授權且使用程式代理的模組創作者"], "notIdealFor": ["尋找通用 AI 程式碼編輯器的開發者", "獨家期間要在其他 Marketplace 發布同一作品的創作者"], "limitations": ["目前以 Windows 為主且需要自有遊戲", "發布獨家權在上架期間和下架後 12 個月持續，舊內容有過渡安排", "遊戲發行商與第三方素材權利不因使用 Melty 消失"], "compareAxes": ["遊戲所有權和支援範圍", "創作者分發權利", "安裝稽核與相容性證據"], "pricingSummary": "現行條款稱服務與混搭作品免費；未來付費功能可能另有條款。" },
         "cn": { "title": "Melty：AI 辅助游戏混搭与模组平台", "summary": "Melty 是以 Windows 为主的游戏混搭与模组平台，可通过编程代理建立作品。发布作品会授予 Melty 独家 Marketplace 许可，内容下架后仍延续 12 个月，需先核对权利。", "detail": "melty.gg 的 Melty 是 Stella Montis Inc. 运营的游戏混搭与模组平台，不是旧同名 AI 代码编辑器。玩家需拥有合法的原游戏副本；创作者可把 Melty 指引交给编程代理制作并发布作品。现行条款称服务及混搭作品目前免费，但发布会授予 Melty 全球独家的 Marketplace 许可，在内容上架期间及下架后 12 个月有效；2026 年 10 月 14 日前已上架内容另有过渡安排。其他人的游戏素材仍受原权利约束，发行商模组及反作弊规则也适用。本站未实测兼容性、安装安全或创作者收益。", "bestFor": ["拥有合法游戏副本并需要简化安装的玩家", "接受发布许可且使用编程代理的模组创作者"], "notIdealFor": ["寻找通用 AI 代码编辑器的开发者", "独家期间要在其他 Marketplace 发布同一作品的创作者"], "limitations": ["目前以 Windows 为主且需要自有游戏", "发布独家权在上架期间和下架后 12 个月持续，旧内容有过渡安排", "游戏发行商与第三方素材权利不因使用 Melty 消失"], "compareAxes": ["游戏所有权和支持范围", "创作者分发权利", "安装审核与兼容性证据"], "pricingSummary": "现行条款称服务与混搭作品免费；未来付费功能可能另有条款。" }
       },
       "claimGate": { "status": "PASS", "items": [
@@ -292,7 +292,7 @@
       "pricing": "freemium", "tags": ["decision model", "classification", "Workers AI"],
       "localized": {
         "en": { "title": "Cloudflare Clef: typed decision-model family", "summary": "Cloudflare Clef groups Clef, Clef-flash and Clef-omni for probability-based typed decisions. Their input modalities, hosted context windows and rates differ; verify the route before use.", "detail": "Cloudflare Clef is one Workers AI decision-model family, not three separate tools. Clef handles typed probability decisions over text, JSON, images and video; Clef-flash favors lower-cost text/image routing with a shorter hosted 24K context; Clef-omni adds direct audio and video alongside text and images. The October 9 Workers AI changelog lists hosted prices of $0.240, $0.038 and $0.150 per million input tokens respectively, with 64K, 24K and 64K hosted context windows. These are provider-published rates, not a target-account bill. Media tokenization and free daily neuron allocation also affect actual cost. Threshold design and human fallback remain the user's responsibility; this listing has not benchmarked decision accuracy or checked an account contract.", "bestFor": ["Developers routing agents or support triage using typed options and probabilities", "Teams comparing text, image, audio and video decision paths"], "notIdealFor": ["Open-ended conversational generation", "Safety-critical automatic action without thresholds and human fallback"], "limitations": ["Hosted rates and context differ across three variants", "Media is billed as input tokens", "No independent accuracy benchmark or account-contract review was performed"], "compareAxes": ["Required input modality", "Hosted context and tokenized media cost", "Decision calibration and escalation policy"], "pricingSummary": "Published hosted input rates differ: Clef $0.240, Clef-flash $0.038, Clef-omni $0.150 per million tokens as of 2026-10-15; account billing may differ." },
-        "zh": { "title": "Cloudflare Clef：結構化決策模型家族", "summary": "Cloudflare Clef 將 Clef、Clef-flash 和 Clef-omni 視為同一個機率式結構化決策模型家族。三者的輸入模態、託管上下文與費率不同，選用前須依工作負載與帳戶路徑核對。", "detail": "Cloudflare Clef 是一個 Workers AI 決策模型家族，不拆成三個工具。Clef 對文字、JSON、圖像與影片輸入回傳結構化選項機率；Clef-flash 偏向低成本的文字與圖像路由，託管上下文縮至 24K；Clef-omni 在文字與圖像之外直接處理音訊和影片。10 月 9 日 Workers AI 更新列出的託管輸入費率，依序為每百萬 tokens 0.240、0.038 和 0.150 美元，上下文分別為 64K、24K 和 64K。這是供應商公開牌價，並非目標帳戶帳單；媒體 token 化及每日免費 neuron 配額也影響實際費用。閾值設計與人工兜底仍由使用者負責，本站未實測決策準確度或帳戶合約。", "bestFor": ["用結構化選項與機率路由代理或客服分流的開發者", "比較文字、圖像、音訊和影片決策路徑的團隊"], "notIdealFor": ["開放式對話生成", "沒有閾值與人工兜底的高風險自動動作"], "limitations": ["三個變體的託管價格和上下文不同", "媒體會換算為輸入 tokens 計費", "尚無獨立準確度基準或帳戶合約核驗"], "compareAxes": ["所需輸入模態", "託管上下文與媒體 token 成本", "決策校準與升級處理政策"], "pricingSummary": "截至 2026-10-15 的公開牌價：Clef、Clef-flash、Clef-omni 每百萬輸入 tokens 分別為 0.240、0.038、0.150 美元；帳戶結算仍需確認。" },
+        "tw": { "title": "Cloudflare Clef：結構化決策模型家族", "summary": "Cloudflare Clef 將 Clef、Clef-flash 和 Clef-omni 視為同一個機率式結構化決策模型家族。三者的輸入模態、託管上下文與費率不同，選用前須依工作負載與帳戶路徑核對。", "detail": "Cloudflare Clef 是一個 Workers AI 決策模型家族，不拆成三個工具。Clef 對文字、JSON、圖像與影片輸入回傳結構化選項機率；Clef-flash 偏向低成本的文字與圖像路由，託管上下文縮至 24K；Clef-omni 在文字與圖像之外直接處理音訊和影片。10 月 9 日 Workers AI 更新列出的託管輸入費率，依序為每百萬 tokens 0.240、0.038 和 0.150 美元，上下文分別為 64K、24K 和 64K。這是供應商公開牌價，並非目標帳戶帳單；媒體 token 化及每日免費 neuron 配額也影響實際費用。閾值設計與人工兜底仍由使用者負責，本站未實測決策準確度或帳戶合約。", "bestFor": ["用結構化選項與機率路由代理或客服分流的開發者", "比較文字、圖像、音訊和影片決策路徑的團隊"], "notIdealFor": ["開放式對話生成", "沒有閾值與人工兜底的高風險自動動作"], "limitations": ["三個變體的託管價格和上下文不同", "媒體會換算為輸入 tokens 計費", "尚無獨立準確度基準或帳戶合約核驗"], "compareAxes": ["所需輸入模態", "託管上下文與媒體 token 成本", "決策校準與升級處理政策"], "pricingSummary": "截至 2026-10-15 的公開牌價：Clef、Clef-flash、Clef-omni 每百萬輸入 tokens 分別為 0.240、0.038、0.150 美元；帳戶結算仍需確認。" },
         "cn": { "title": "Cloudflare Clef：结构化决策模型家族", "summary": "Cloudflare Clef 将 Clef、Clef-flash 和 Clef-omni 视为同一个概率式结构化决策模型家族。三者的输入模态、托管上下文与费率不同，选用前需按工作负载与账户路径核对。", "detail": "Cloudflare Clef 是一个 Workers AI 决策模型家族，不拆成三个工具。Clef 对文字、JSON、图像与视频输入返回结构化选项概率；Clef-flash 偏向低成本的文字与图像路由，托管上下文缩至 24K；Clef-omni 在文字与图像之外直接处理音频和视频。10 月 9 日 Workers AI 更新列出的托管输入费率，依次为每百万 tokens 0.240、0.038 和 0.150 美元，上下文分别为 64K、24K 和 64K。这是供应商公开标价，并非目标账户账单；媒体 token 化及每日免费 neuron 配额也影响实际费用。阈值设计与人工兜底仍由使用者负责，本站未实测决策准确度或账户合同。", "bestFor": ["用结构化选项与概率路由代理或客服分流的开发者", "比较文字、图像、音频和视频决策路径的团队"], "notIdealFor": ["开放式对话生成", "没有阈值与人工兜底的高风险自动动作"], "limitations": ["三个变体的托管价格和上下文不同", "媒体会换算为输入 tokens 计费", "尚无独立准确度基准或账户合同核验"], "compareAxes": ["所需输入模态", "托管上下文与媒体 token 成本", "决策校准与升级处理政策"], "pricingSummary": "截至 2026-10-15 的公开标价：Clef、Clef-flash、Clef-omni 每百万输入 tokens 分别为 0.240、0.038、0.150 美元；账户结算仍需确认。" }
       },
       "claimGate": { "status": "PASS", "items": [

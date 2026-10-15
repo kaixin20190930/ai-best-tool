@@ -1,6 +1,6 @@
 import { getPool } from '@/db/neon/client';
 import { evaluateCollectionAdmission } from '@/lib/services/admin/collectionAdmission';
-import { parseOps2Selection } from '@/lib/services/admin/ops2Selection';
+import { parseOps2Selection, selectionLocalizedField } from '@/lib/services/admin/ops2Selection';
 import type { PoolClient } from 'pg';
 
 const collectionSchemaSql = `
@@ -1437,12 +1437,12 @@ export async function importCollectionCandidateToDraft(
     relevance_score: updatedScore.relevanceScore,
     summary,
   });
-  const title = selection ? Object.fromEntries(
-    (['en', 'zh', 'cn'] as const).map((locale) => [locale, selection.localized[locale].title]),
-  ) : { en: titleText, zh: titleText };
-  const content = selection ? Object.fromEntries(
-    (['en', 'zh', 'cn'] as const).map((locale) => [locale, selection.localized[locale].summary]),
-  ) : {
+  const selectedText = (key: 'title' | 'summary' | 'detail' | 'pricingSummary') =>
+    selectionLocalizedField(selection!, key);
+  const selectedList = (key: 'bestFor' | 'notIdealFor' | 'limitations' | 'compareAxes') =>
+    selectionLocalizedField(selection!, key);
+  const title = selection ? selectedText('title') : { en: titleText, zh: titleText };
+  const content = selection ? selectedText('summary') : {
     en: summary,
     zh: summary,
   };
@@ -1454,9 +1454,7 @@ export async function importCollectionCandidateToDraft(
     sourceName: candidate.source_name,
     score: updatedScore,
   });
-  const detail = selection ? Object.fromEntries(
-    (['en', 'zh', 'cn'] as const).map((locale) => [locale, selection.localized[locale].detail]),
-  ) : {
+  const detail = selection ? selectedText('detail') : {
     en: draftDetail,
     zh: draftDetail,
   };
@@ -1471,12 +1469,6 @@ export async function importCollectionCandidateToDraft(
   const pricingSnapshot = getStringValue(candidate.raw_payload.pricingSnapshot) || '';
   const marketValidation = getRecordValue(candidate.raw_payload.marketValidation);
   const localizedList = (values: string[]) => ({ en: values, zh: values });
-  const selectedList = (key: 'bestFor' | 'notIdealFor' | 'limitations' | 'compareAxes') =>
-    Object.fromEntries((['en', 'zh', 'cn'] as const).map((locale) =>
-      [locale, selection!.localized[locale][key]]));
-  const selectedText = (key: 'summary' | 'pricingSummary') =>
-    Object.fromEntries((['en', 'zh', 'cn'] as const).map((locale) =>
-      [locale, selection!.localized[locale][key]]));
   const sourceSummary = evidenceUrls.length
     ? `Verified against ${evidenceUrls.length} official source${evidenceUrls.length === 1 ? '' : 's'}.`
     : 'Verified against the official product source.';

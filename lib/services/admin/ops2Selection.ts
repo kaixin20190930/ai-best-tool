@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const locales = ['en', 'zh', 'cn'] as const;
+const locales = ['en', 'cn', 'tw'] as const;
 type Locale = typeof locales[number];
 
 export type Ops2Selection = {
@@ -32,6 +32,13 @@ export type Ops2Selection = {
     status: 'verified_public' | 'verified_account' | 'conditional' | 'conflict' | 'unknown' | 'stale';
     boundary: string; sourceIds: string[]; nextReviewDate: string; accountEvidenceRef?: string }[] };
 };
+
+export function selectionLocalizedField<K extends keyof Ops2Selection['localized']['en']>(
+  selection: Ops2Selection, key: K,
+): Record<'en' | 'cn' | 'tw' | 'zh', Ops2Selection['localized']['en'][K]> {
+  return { en: selection.localized.en[key], cn: selection.localized.cn[key],
+    tw: selection.localized.tw[key], zh: selection.localized.cn[key] };
+}
 
 function text(value: unknown, label: string, min = 1): string {
   if (typeof value !== 'string' || value.trim().length < min) throw new Error(`Invalid ${label}`);
@@ -210,8 +217,13 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
     throw new Error('Review dates must describe a current, future-due snapshot');
   const pricing = raw.pricing;
   if (!['free', 'freemium', 'paid'].includes(pricing)) throw new Error('Invalid pricing');
+  const legacyTraditional = raw.localized?.tw === undefined && raw.localized?.zh !== undefined;
+  if (raw.localized?.tw !== undefined && raw.localized?.zh !== undefined)
+    throw new Error('Selection cannot mix tw with legacy zh');
+  if (raw.localized?.tw === undefined && !legacyTraditional)
+    throw new Error('Selection requires tw; only legacy en/zh/cn may fall back to zh');
   const localized = Object.fromEntries(locales.map((locale) => {
-    const value = raw.localized?.[locale];
+    const value = locale === 'tw' && legacyTraditional ? raw.localized.zh : raw.localized?.[locale];
     return [locale, {
       title: text(value?.title, `${locale}.title`, 4),
       summary: text(value?.summary, `${locale}.summary`, 80),
