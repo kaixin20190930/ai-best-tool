@@ -40,7 +40,7 @@
 
 - 今日 freshness selector 的生产状态统计：**88 total / 66 published**。selector 未返回 `continue_index`、`monitor`、`archive` 的分项数量；本单不访问数据库补查，也不从旧统计推算当前分布。
 - Sitemap 最近有明确总量记录为 **126 URLs（2026-10-14 日报）**。WRITER 今日生产验证为 sitemap 匹配 **0**；今日未重新获取 sitemap 总数，因此 126 是最近确认值，不标作 10-15 实时计数。WRITER 部署源 SHA 为 `3773c9408b5bad13089c6cf2297e7657a38af805`，日报记录的生产 SEO smoke 已通过。
-- `PLAN_DEVIATION`：Catalog 已按原范围完成 WRITER `published + monitor/noindex`，未批准 index/sitemap。Freshness 完成全量分流，但没有满足受控变更所需完整证据，故当日无更新，属于证据/变更边界而非 selector 故障。Decision 因本周 `2/2` 配额已达而 `not_due`。Market 未能刷新 GSC，原因是本次命令环境缺少四项 GSC 凭据；站内事件仍 unavailable。没有扩大到数据库写入、代码、页面或索引变更。
+- `PLAN_DEVIATION`：Catalog 已按原范围完成 WRITER `published + monitor/noindex`，未批准 index/sitemap。Freshness 完成全量分流，但没有满足受控变更所需完整证据，故当日无更新，属于证据/变更边界而非 selector 故障。Decision 因本周 `2/2` 配额已达而 `not_due`。Market 未能刷新 GSC，原因是当前命令进程未获得四项 `GSC_*` 环境变量；站内事件仍 unavailable。没有扩大到数据库写入、代码、页面或索引变更。
 - 本次收口只修改本日报；未新增脚本、页面或数据文件，未运行 build/TypeScript 或额外 production smoke。两份受保护 SQL 保持原有工作区修改且不纳入本次提交。
 
 唯一下一步：从 Freshness `claim_due` 队列选择一个同类、低风险且可取得当日官方证据的批次，形成精确 change set、前像、rollback 和独立 QA；证据不足的条目继续 HOLD，不改复核日期。后续 Market 待办是在可读取既有 GSC 配置的运行环境刷新只读快照。无需 Owner 进行索引、sitemap 或数据库授权。
