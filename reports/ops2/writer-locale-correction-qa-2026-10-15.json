@@ -1,0 +1,731 @@
+{
+  "unit": "WRITER-CONTROLLED-RELEASE-2026-10-14",
+  "kind": "existing-entity-locale-correction-qa-candidate",
+  "asOf": "2026-10-15T02:48:02.928Z",
+  "scope": "Only the existing WRITER tools row; no runtime change, status/index/sitemap change, relation write, or generic migration.",
+  "productionWrites": 0,
+  "identity": {
+    "id": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+    "name": "writer",
+    "status": "published",
+    "page_quality_status": "monitor",
+    "updated_at": "2026-10-15 02:34:29.531146+00"
+  },
+  "preimageHash": "9573ee5943d096341f4b04cc454c2795d748e60f59f1bf821df37cd85d5c93a4",
+  "targetFieldsPreimageHash": "17d5b8130cedab10e1379a57e86e5c9237d92bce5058ec95490c34bd59e23e1e",
+  "expectedTargetFieldsPostimageHash": "74c70449578437c4952d807a1c8d5fc7efa8234d96bf2c4c86476ff54f930274",
+  "changes": [
+    {
+      "path": "title.cn",
+      "before": "WRITER：具品牌規則治理的 AI 內容工作流程",
+      "after": "WRITER：有品牌规则治理的 AI 内容工作流"
+    },
+    {
+      "path": "title.tw",
+      "before": null,
+      "after": "WRITER：具品牌規則治理的 AI 內容工作流程"
+    },
+    {
+      "path": "content.cn",
+      "before": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+      "after": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+    },
+    {
+      "path": "content.tw",
+      "before": null,
+      "after": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。"
+    },
+    {
+      "path": "detail.cn",
+      "before": "WRITER 將 AI Agent 工作流程與團隊 voice profile、術語及風格指南結合。官方設定文件指出，術語與風格規則須連結至產生內容時使用的 voice，才會影響 Agent 輸出。組織或 IT 管理員可透過 Agent profile 設定預設或受限 voice；團隊管理員可管理團隊風格指南。事實、法律陳述及品牌適切性仍需人工審核。\n\n適合：能設定共同 voice 與術語並審核輸出的行銷團隊；比較可重複內容流程治理方式的組織。\n\n不適合：只需要一次性個人寫作的人；要求每份草稿必然合規的團隊；採購前必須核實目標帳戶權益的買方。\n\n限制：規則是否生效取決於實際使用的 voice 與 profile 設定。公開文件無法證明目標工作區的輸出穩定性。本次未測試真實帳戶、輸出品質、整合、資料留存或商業重用權。\n\n比較：Jasper 側重品牌資料輔助起草，Grammarly 側重檢查及改寫；WRITER 可比較 Agent voice/術語連結與管理邊界。在實際帳戶以相同 brief 與審核標準測試。\n\n價格與資料：公開方案展示 Starter 試用及 Enterprise 聯絡銷售路徑；目標帳戶的金額、credits、功能權益、留存、隱私合約與商業條款未核實。採購或上傳敏感內容前應確認。\n\n來源與複核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核驗；下次複核 2026-10-21。",
+      "after": "WRITER 将 AI Agent 工作流与团队 voice profile、术语和风格指南结合。官方设置文档说明，术语与风格规则只有连接到生成时使用的 voice 后才影响 Agent 输出。组织或 IT 管理员可通过 Agent profile 设置默认或受限 voice；团队管理员可管理本团队风格指南。事实、法律表述和品牌适配仍需人工审核。\n\n适合：能够配置共同 voice 与术语并审核输出的营销团队；比较可复用内容流程治理方式的组织。\n\n不适合：只需一次性个人写作的人；要求每份草稿必然合规的团队；采购前必须核实目标账户权益的买方。\n\n限制：规则是否生效取决于实际使用的 voice 和 profile 设置。公开文档不能证明目标工作区的输出稳定性。本次未测试真实账户、输出质量、集成、数据留存或商用复用权。\n\n比较：Jasper 偏品牌资料辅助起草，Grammarly 偏检查与改写；WRITER 可重点比较 Agent voice/术语连接和管理边界。在实际账户中用同一 brief 与审核标准试验。\n\n价格与数据：公开方案展示 Starter 试用与 Enterprise 联系销售路径；目标账户的金额、credits、功能权益、留存、隐私合同和商用条款未核实。采购或上传敏感内容前应确认。\n\n来源与复核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核验；下次复核 2026-10-21。"
+    },
+    {
+      "path": "detail.tw",
+      "before": null,
+      "after": "WRITER 將 AI Agent 工作流程與團隊 voice profile、術語及風格指南結合。官方設定文件指出，術語與風格規則須連結至產生內容時使用的 voice，才會影響 Agent 輸出。組織或 IT 管理員可透過 Agent profile 設定預設或受限 voice；團隊管理員可管理團隊風格指南。事實、法律陳述及品牌適切性仍需人工審核。\n\n適合：能設定共同 voice 與術語並審核輸出的行銷團隊；比較可重複內容流程治理方式的組織。\n\n不適合：只需要一次性個人寫作的人；要求每份草稿必然合規的團隊；採購前必須核實目標帳戶權益的買方。\n\n限制：規則是否生效取決於實際使用的 voice 與 profile 設定。公開文件無法證明目標工作區的輸出穩定性。本次未測試真實帳戶、輸出品質、整合、資料留存或商業重用權。\n\n比較：Jasper 側重品牌資料輔助起草，Grammarly 側重檢查及改寫；WRITER 可比較 Agent voice/術語連結與管理邊界。在實際帳戶以相同 brief 與審核標準測試。\n\n價格與資料：公開方案展示 Starter 試用及 Enterprise 聯絡銷售路徑；目標帳戶的金額、credits、功能權益、留存、隱私合約與商業條款未核實。採購或上傳敏感內容前應確認。\n\n來源與複核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核驗；下次複核 2026-10-21。"
+    },
+    {
+      "path": "features.bestFit.cn",
+      "before": [
+        "能設定團隊 voice、術語並審核輸出的行銷團隊。",
+        "比較可重複內容流程治理方式的組織。"
+      ],
+      "after": [
+        "能够配置团队 voice、术语并审核输出的营销团队。",
+        "比较可复用内容流程治理方式的组织。"
+      ]
+    },
+    {
+      "path": "features.bestFit.tw",
+      "before": null,
+      "after": [
+        "能設定團隊 voice、術語並審核輸出的行銷團隊。",
+        "比較可重複內容流程治理方式的組織。"
+      ]
+    },
+    {
+      "path": "features.notIdealFor.cn",
+      "before": [
+        "只需要一次性個人寫作、沒有團隊設定的人。",
+        "要求每份草稿必然合規或符合品牌的團隊。"
+      ],
+      "after": [
+        "只需一次性个人写作、无团队配置的人。",
+        "要求每份草稿必然合规或品牌准确的团队。"
+      ]
+    },
+    {
+      "path": "features.notIdealFor.tw",
+      "before": null,
+      "after": [
+        "只需要一次性個人寫作、沒有團隊設定的人。",
+        "要求每份草稿必然合規或符合品牌的團隊。"
+      ]
+    },
+    {
+      "path": "features.editorial.summary.cn",
+      "before": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+      "after": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+    },
+    {
+      "path": "features.editorial.summary.tw",
+      "before": null,
+      "after": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。"
+    },
+    {
+      "path": "features.decision.compareAxes.cn",
+      "before": [
+        "比較 Jasper 的品牌資料起草與設定成本。",
+        "比較 Grammarly 的檢查改寫與 Agent 工作流程治理。"
+      ],
+      "after": [
+        "对比 Jasper 的品牌资料起草与配置成本。",
+        "对比 Grammarly 的检查改写与 Agent 工作流治理。"
+      ]
+    },
+    {
+      "path": "features.decision.compareAxes.tw",
+      "before": null,
+      "after": [
+        "比較 Jasper 的品牌資料起草與設定成本。",
+        "比較 Grammarly 的檢查改寫與 Agent 工作流程治理。"
+      ]
+    },
+    {
+      "path": "features.decision.limitations.cn",
+      "before": [
+        "術語與風格規則只透過實際使用且已連結的 voice 作用於 Agent 輸出。",
+        "未實測帳戶效果、整合、留存或商業權益。"
+      ],
+      "after": [
+        "术语和风格规则只通过实际使用且已连接的 voice 作用于 Agent 输出。",
+        "未实测账户效果、集成、留存或商用权益。"
+      ]
+    },
+    {
+      "path": "features.decision.limitations.tw",
+      "before": null,
+      "after": [
+        "術語與風格規則只透過實際使用且已連結的 voice 作用於 Agent 輸出。",
+        "未實測帳戶效果、整合、留存或商業權益。"
+      ]
+    },
+    {
+      "path": "features.decision.officialSummary.cn",
+      "before": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+      "after": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+    },
+    {
+      "path": "features.decision.officialSummary.tw",
+      "before": null,
+      "after": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。"
+    },
+    {
+      "path": "features.decision.pricingSummary.cn",
+      "before": "公開有 Starter 試用與 Enterprise 銷售路徑；目標帳戶價格及權益未知。",
+      "after": "公开有 Starter 试用及 Enterprise 销售路径；目标账户价格与权益未知。"
+    },
+    {
+      "path": "features.decision.pricingSummary.tw",
+      "before": null,
+      "after": "公開有 Starter 試用與 Enterprise 銷售路徑；目標帳戶價格及權益未知。"
+    },
+    {
+      "path": "features.editorial.trustNote.cn",
+      "before": null,
+      "after": "已对照 5 个官方来源核验。"
+    },
+    {
+      "path": "features.editorial.trustNote.tw",
+      "before": null,
+      "after": "已對照 5 個官方來源核驗。"
+    },
+    {
+      "path": "features.decision.freshnessSummary.cn",
+      "before": null,
+      "after": "官方来源于 2026-10-14 核验。"
+    },
+    {
+      "path": "features.decision.freshnessSummary.tw",
+      "before": null,
+      "after": "官方來源於 2026-10-14 核驗。"
+    },
+    {
+      "path": "features.marketValidation.rationale.tw",
+      "before": null,
+      "after": "兩個可直接讀取的獨立評論平台記錄了 WRITER 產品層級的使用，包括較新的 Agent 與品牌內容流程。樣本由評論者自行選擇，評價也有分歧；這只支持對該產品有條件的市場驗證，不推斷活躍使用者規模、品牌一致性保證、方案權益或輸出品質。"
+    }
+  ],
+  "preimage": {
+    "identity": {
+      "id": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+      "name": "writer",
+      "status": "published",
+      "page_quality_status": "monitor",
+      "updated_at": "2026-10-15 02:34:29.531146+00"
+    },
+    "fields": {
+      "title": {
+        "cn": "WRITER：具品牌規則治理的 AI 內容工作流程",
+        "en": "WRITER: governed AI content workflows",
+        "zh": "WRITER：有品牌规则治理的 AI 内容工作流"
+      },
+      "content": {
+        "cn": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+        "en": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+        "zh": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+      },
+      "detail": {
+        "cn": "WRITER 將 AI Agent 工作流程與團隊 voice profile、術語及風格指南結合。官方設定文件指出，術語與風格規則須連結至產生內容時使用的 voice，才會影響 Agent 輸出。組織或 IT 管理員可透過 Agent profile 設定預設或受限 voice；團隊管理員可管理團隊風格指南。事實、法律陳述及品牌適切性仍需人工審核。\n\n適合：能設定共同 voice 與術語並審核輸出的行銷團隊；比較可重複內容流程治理方式的組織。\n\n不適合：只需要一次性個人寫作的人；要求每份草稿必然合規的團隊；採購前必須核實目標帳戶權益的買方。\n\n限制：規則是否生效取決於實際使用的 voice 與 profile 設定。公開文件無法證明目標工作區的輸出穩定性。本次未測試真實帳戶、輸出品質、整合、資料留存或商業重用權。\n\n比較：Jasper 側重品牌資料輔助起草，Grammarly 側重檢查及改寫；WRITER 可比較 Agent voice/術語連結與管理邊界。在實際帳戶以相同 brief 與審核標準測試。\n\n價格與資料：公開方案展示 Starter 試用及 Enterprise 聯絡銷售路徑；目標帳戶的金額、credits、功能權益、留存、隱私合約與商業條款未核實。採購或上傳敏感內容前應確認。\n\n來源與複核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核驗；下次複核 2026-10-21。",
+        "en": "WRITER combines AI Agent workflows with voice profiles, terms, and style guides for teams preparing marketing content. The official setup guide says terms and style rules affect Agent output only when linked to the voice used for generation. Organization or IT admins can use an Agent profile to set a default or restricted voice; team admins can manage their team style guide. Human review remains appropriate for factual accuracy, legal claims, and brand fit.\n\nBest for: Marketing teams that can configure and review a shared voice and terminology; organizations comparing governance of repeatable content workflows.\n\nNot ideal for: A one-off personal writing assistant; teams needing a verified guarantee that every draft is compliant; buyers who require confirmed account-specific rights before procurement.\n\nLimitations: The selected voice and profile configuration determine whether rules apply; public documentation does not prove consistent results in a target workspace. This review did not test a live account, output quality, integrations, data retention, or commercial reuse rights.\n\nCompare: Compare Jasper for brand-guided drafting, Grammarly for checking and revision, and WRITER for connected Agent voice/terms governance. Test the same brief and review rules in each actual account.\n\nPricing and data: Public plans show Starter trial and Enterprise contact-sales paths. Exact price, credits, feature rights, retention, privacy contract, and commercial terms for a target account remain unverified. Confirm these before purchase or sensitive uploads.\n\nSources and review: https://writer.com/ ; https://writer.com/brand/ ; https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice ; https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer ; https://writer.com/plans/ . Reviewed 2026-10-14; next review 2026-10-21.",
+        "zh": "WRITER 将 AI Agent 工作流与团队 voice profile、术语和风格指南结合。官方设置文档说明，术语与风格规则只有连接到生成时使用的 voice 后才影响 Agent 输出。组织或 IT 管理员可通过 Agent profile 设置默认或受限 voice；团队管理员可管理本团队风格指南。事实、法律表述和品牌适配仍需人工审核。\n\n适合：能够配置共同 voice 与术语并审核输出的营销团队；比较可复用内容流程治理方式的组织。\n\n不适合：只需一次性个人写作的人；要求每份草稿必然合规的团队；采购前必须核实目标账户权益的买方。\n\n限制：规则是否生效取决于实际使用的 voice 和 profile 设置。公开文档不能证明目标工作区的输出稳定性。本次未测试真实账户、输出质量、集成、数据留存或商用复用权。\n\n比较：Jasper 偏品牌资料辅助起草，Grammarly 偏检查与改写；WRITER 可重点比较 Agent voice/术语连接和管理边界。在实际账户中用同一 brief 与审核标准试验。\n\n价格与数据：公开方案展示 Starter 试用与 Enterprise 联系销售路径；目标账户的金额、credits、功能权益、留存、隐私合同和商用条款未核实。采购或上传敏感内容前应确认。\n\n来源与复核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核验；下次复核 2026-10-21。"
+      },
+      "features": {
+        "bestFit": {
+          "cn": [
+            "能設定團隊 voice、術語並審核輸出的行銷團隊。",
+            "比較可重複內容流程治理方式的組織。"
+          ],
+          "en": [
+            "Marketing teams able to configure a shared voice and terminology, then review output.",
+            "Organizations comparing governance for repeatable content workflows."
+          ],
+          "zh": [
+            "能够配置团队 voice、术语并审核输出的营销团队。",
+            "比较可复用内容流程治理方式的组织。"
+          ]
+        },
+        "decision": {
+          "compareAxes": {
+            "cn": [
+              "比較 Jasper 的品牌資料起草與設定成本。",
+              "比較 Grammarly 的檢查改寫與 Agent 工作流程治理。"
+            ],
+            "en": [
+              "Against Jasper: brand-guided drafting and setup effort.",
+              "Against Grammarly: checking and revision versus Agent workflow controls."
+            ],
+            "zh": [
+              "对比 Jasper 的品牌资料起草与配置成本。",
+              "对比 Grammarly 的检查改写与 Agent 工作流治理。"
+            ]
+          },
+          "limitations": {
+            "cn": [
+              "術語與風格規則只透過實際使用且已連結的 voice 作用於 Agent 輸出。",
+              "未實測帳戶效果、整合、留存或商業權益。"
+            ],
+            "en": [
+              "Style and terms apply to Agent output only through the voice actually used.",
+              "No live-account test of results, integrations, retention, or commercial rights."
+            ],
+            "zh": [
+              "术语和风格规则只通过实际使用且已连接的 voice 作用于 Agent 输出。",
+              "未实测账户效果、集成、留存或商用权益。"
+            ]
+          },
+          "pricingSummary": {
+            "cn": "公開有 Starter 試用與 Enterprise 銷售路徑；目標帳戶價格及權益未知。",
+            "en": "Starter trial and Enterprise sales paths are public; target-account price and entitlements are unknown.",
+            "zh": "公开有 Starter 试用及 Enterprise 销售路径；目标账户价格与权益未知。"
+          },
+          "officialSummary": {
+            "cn": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+            "en": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+            "zh": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+          },
+          "freshnessSummary": {
+            "en": "Official sources reviewed 2026-10-14.",
+            "zh": "Official sources reviewed 2026-10-14."
+          }
+        },
+        "editorial": {
+          "summary": {
+            "cn": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+            "en": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+            "zh": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+          },
+          "sourceUrl": "https://writer.com/",
+          "trustNote": {
+            "en": "Verified against 5 official sources.",
+            "zh": "Verified against 5 official sources."
+          },
+          "reviewedAt": "2026-10-14",
+          "reviewedBy": "AI Best Tool Editorial"
+        },
+        "collection": {},
+        "submission": {
+          "review": {
+            "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+            "approvedAt": "2026-10-15 02:34:29.531146+00",
+            "publishMode": "monitor_noindex",
+            "qaReference": "codex-thread:01a13862-4a3e-70e2-83fd-31635e9fa1f7",
+            "preimageHash": "022d83587280bc1a49b71cb04b6570d645a0dddd100743fe6dfb831a99fa235a",
+            "nextReviewDate": "2026-10-21"
+          }
+        },
+        "notIdealFor": {
+          "cn": [
+            "只需要一次性個人寫作、沒有團隊設定的人。",
+            "要求每份草稿必然合規或符合品牌的團隊。"
+          ],
+          "en": [
+            "One-off personal writing without team setup.",
+            "Teams seeking a guarantee that every draft is compliant or brand-correct."
+          ],
+          "zh": [
+            "只需一次性个人写作、无团队配置的人。",
+            "要求每份草稿必然合规或品牌准确的团队。"
+          ]
+        },
+        "marketValidation": {
+          "score": 77,
+          "verdict": "validated",
+          "rationale": {
+            "cn": "两个可直接读取的独立评论平台记录了 WRITER 产品级使用，包括较新的 Agent 与品牌内容流程。样本自选择且评价有分歧；这只支持该实体有条件的市场验证，不推断活跃用户规模、品牌一致性保证、套餐权益或输出质量。",
+            "en": "Two directly readable review platforms show product-specific use of WRITER, including recent Agent and brand-content workflows. The evidence is self-selected and mixed; it supports conditional market validation for this entity only, not an active-user estimate, guaranteed brand consistency, plan entitlement or output quality."
+          },
+          "reviewedAt": "2026-10-15",
+          "sourceNotes": [
+            {
+              "url": "https://www.g2.com/products/writer/reviews",
+              "signal": "Current page identifies WRITER as an Agentic AI product, displays 138 reviews and September 2026 first-hand reports of enterprise content drafting with company guidelines and required editing.",
+              "limitation": "G2 reviews are self-selected; some are seller-invited or incentivized. Vendor-supplied product description and AI-generated summaries were excluded from the signal.",
+              "observedAt": "2026-10-15"
+            },
+            {
+              "url": "https://www.trustradius.com/products/writer-com/reviews",
+              "signal": "Current WRITER enterprise-agent review page displays a vetted September 2025 account of agents using proprietary context in a large organization, alongside a critical 2025 marketing review.",
+              "limitation": "The product page is labeled WRITER (Palmyra LLM); most displayed marketing-writing reviews date to 2024 and may cover an older workflow. Vetted or incentivized reviews do not prove current usage totals.",
+              "observedAt": "2026-10-15"
+            }
+          ],
+          "evidenceUrls": [
+            "https://www.g2.com/products/writer/reviews",
+            "https://www.trustradius.com/products/writer-com/reviews"
+          ],
+          "strongSignals": [
+            "G2 directly lists WRITER in its Agentic AI category with 138 reviews; September 2026 reviewers describe using company documents for AI drafts and applying brand guidelines, while still editing output.",
+            "TrustRadius directly lists the WRITER enterprise agent platform; a vetted September 2025 enterprise review describes agents used with proprietary context to create training assets."
+          ],
+          "ops2MarketAudit": {
+            "qaActor": "codex-thread:01a13862-4a3e-70e2-83fd-31635e9fa1f7",
+            "packHash": "8d64b1754b278b7a57bfbbe49fabe233cc1d6148a021acc83d9f6077b092c805",
+            "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+            "preimageHash": "c8f61382d0cc3ccf23ae6070da4a6c528e5a8b21c266433b450eac7737576546",
+            "qaReportHash": "d8d122deac1298a4babb1b36365d341677425a4e1b0e687e0ecd68ff69a84c00",
+            "protectedHash": "b14765cc7555c21440958c7fa3ded0ca8ddd8f8f74036f1e77af5980905b4c98",
+            "developmentActor": "codex-thread:01a13862-07a2-7643-b4fb-84e53ff0a817"
+          },
+          "supportingSignals": [
+            "G2 shows recent mixed first-hand feedback on setup, tone configuration and final editing; reviews support use and friction, not consistent performance across accounts.",
+            "TrustRadius includes a 2025 marketing leadership review critical of content quality; most other displayed marketing writing reviews are older and cannot validate current Agent features."
+          ]
+        }
+      }
+    }
+  },
+  "proposedPostimage": {
+    "identity": {
+      "id": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+      "name": "writer",
+      "status": "published",
+      "page_quality_status": "monitor",
+      "updated_at": "COMMIT_TIMESTAMP"
+    },
+    "fields": {
+      "title": {
+        "cn": "WRITER：有品牌规则治理的 AI 内容工作流",
+        "en": "WRITER: governed AI content workflows",
+        "zh": "WRITER：有品牌规则治理的 AI 内容工作流",
+        "tw": "WRITER：具品牌規則治理的 AI 內容工作流程"
+      },
+      "content": {
+        "cn": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。",
+        "en": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+        "zh": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。",
+        "tw": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。"
+      },
+      "detail": {
+        "cn": "WRITER 将 AI Agent 工作流与团队 voice profile、术语和风格指南结合。官方设置文档说明，术语与风格规则只有连接到生成时使用的 voice 后才影响 Agent 输出。组织或 IT 管理员可通过 Agent profile 设置默认或受限 voice；团队管理员可管理本团队风格指南。事实、法律表述和品牌适配仍需人工审核。\n\n适合：能够配置共同 voice 与术语并审核输出的营销团队；比较可复用内容流程治理方式的组织。\n\n不适合：只需一次性个人写作的人；要求每份草稿必然合规的团队；采购前必须核实目标账户权益的买方。\n\n限制：规则是否生效取决于实际使用的 voice 和 profile 设置。公开文档不能证明目标工作区的输出稳定性。本次未测试真实账户、输出质量、集成、数据留存或商用复用权。\n\n比较：Jasper 偏品牌资料辅助起草，Grammarly 偏检查与改写；WRITER 可重点比较 Agent voice/术语连接和管理边界。在实际账户中用同一 brief 与审核标准试验。\n\n价格与数据：公开方案展示 Starter 试用与 Enterprise 联系销售路径；目标账户的金额、credits、功能权益、留存、隐私合同和商用条款未核实。采购或上传敏感内容前应确认。\n\n来源与复核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核验；下次复核 2026-10-21。",
+        "en": "WRITER combines AI Agent workflows with voice profiles, terms, and style guides for teams preparing marketing content. The official setup guide says terms and style rules affect Agent output only when linked to the voice used for generation. Organization or IT admins can use an Agent profile to set a default or restricted voice; team admins can manage their team style guide. Human review remains appropriate for factual accuracy, legal claims, and brand fit.\n\nBest for: Marketing teams that can configure and review a shared voice and terminology; organizations comparing governance of repeatable content workflows.\n\nNot ideal for: A one-off personal writing assistant; teams needing a verified guarantee that every draft is compliant; buyers who require confirmed account-specific rights before procurement.\n\nLimitations: The selected voice and profile configuration determine whether rules apply; public documentation does not prove consistent results in a target workspace. This review did not test a live account, output quality, integrations, data retention, or commercial reuse rights.\n\nCompare: Compare Jasper for brand-guided drafting, Grammarly for checking and revision, and WRITER for connected Agent voice/terms governance. Test the same brief and review rules in each actual account.\n\nPricing and data: Public plans show Starter trial and Enterprise contact-sales paths. Exact price, credits, feature rights, retention, privacy contract, and commercial terms for a target account remain unverified. Confirm these before purchase or sensitive uploads.\n\nSources and review: https://writer.com/ ; https://writer.com/brand/ ; https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice ; https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer ; https://writer.com/plans/ . Reviewed 2026-10-14; next review 2026-10-21.",
+        "zh": "WRITER 将 AI Agent 工作流与团队 voice profile、术语和风格指南结合。官方设置文档说明，术语与风格规则只有连接到生成时使用的 voice 后才影响 Agent 输出。组织或 IT 管理员可通过 Agent profile 设置默认或受限 voice；团队管理员可管理本团队风格指南。事实、法律表述和品牌适配仍需人工审核。\n\n适合：能够配置共同 voice 与术语并审核输出的营销团队；比较可复用内容流程治理方式的组织。\n\n不适合：只需一次性个人写作的人；要求每份草稿必然合规的团队；采购前必须核实目标账户权益的买方。\n\n限制：规则是否生效取决于实际使用的 voice 和 profile 设置。公开文档不能证明目标工作区的输出稳定性。本次未测试真实账户、输出质量、集成、数据留存或商用复用权。\n\n比较：Jasper 偏品牌资料辅助起草，Grammarly 偏检查与改写；WRITER 可重点比较 Agent voice/术语连接和管理边界。在实际账户中用同一 brief 与审核标准试验。\n\n价格与数据：公开方案展示 Starter 试用与 Enterprise 联系销售路径；目标账户的金额、credits、功能权益、留存、隐私合同和商用条款未核实。采购或上传敏感内容前应确认。\n\n来源与复核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核验；下次复核 2026-10-21。",
+        "tw": "WRITER 將 AI Agent 工作流程與團隊 voice profile、術語及風格指南結合。官方設定文件指出，術語與風格規則須連結至產生內容時使用的 voice，才會影響 Agent 輸出。組織或 IT 管理員可透過 Agent profile 設定預設或受限 voice；團隊管理員可管理團隊風格指南。事實、法律陳述及品牌適切性仍需人工審核。\n\n適合：能設定共同 voice 與術語並審核輸出的行銷團隊；比較可重複內容流程治理方式的組織。\n\n不適合：只需要一次性個人寫作的人；要求每份草稿必然合規的團隊；採購前必須核實目標帳戶權益的買方。\n\n限制：規則是否生效取決於實際使用的 voice 與 profile 設定。公開文件無法證明目標工作區的輸出穩定性。本次未測試真實帳戶、輸出品質、整合、資料留存或商業重用權。\n\n比較：Jasper 側重品牌資料輔助起草，Grammarly 側重檢查及改寫；WRITER 可比較 Agent voice/術語連結與管理邊界。在實際帳戶以相同 brief 與審核標準測試。\n\n價格與資料：公開方案展示 Starter 試用及 Enterprise 聯絡銷售路徑；目標帳戶的金額、credits、功能權益、留存、隱私合約與商業條款未核實。採購或上傳敏感內容前應確認。\n\n來源與複核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核驗；下次複核 2026-10-21。"
+      },
+      "features": {
+        "bestFit": {
+          "cn": [
+            "能够配置团队 voice、术语并审核输出的营销团队。",
+            "比较可复用内容流程治理方式的组织。"
+          ],
+          "en": [
+            "Marketing teams able to configure a shared voice and terminology, then review output.",
+            "Organizations comparing governance for repeatable content workflows."
+          ],
+          "zh": [
+            "能够配置团队 voice、术语并审核输出的营销团队。",
+            "比较可复用内容流程治理方式的组织。"
+          ],
+          "tw": [
+            "能設定團隊 voice、術語並審核輸出的行銷團隊。",
+            "比較可重複內容流程治理方式的組織。"
+          ]
+        },
+        "decision": {
+          "compareAxes": {
+            "cn": [
+              "对比 Jasper 的品牌资料起草与配置成本。",
+              "对比 Grammarly 的检查改写与 Agent 工作流治理。"
+            ],
+            "en": [
+              "Against Jasper: brand-guided drafting and setup effort.",
+              "Against Grammarly: checking and revision versus Agent workflow controls."
+            ],
+            "zh": [
+              "对比 Jasper 的品牌资料起草与配置成本。",
+              "对比 Grammarly 的检查改写与 Agent 工作流治理。"
+            ],
+            "tw": [
+              "比較 Jasper 的品牌資料起草與設定成本。",
+              "比較 Grammarly 的檢查改寫與 Agent 工作流程治理。"
+            ]
+          },
+          "limitations": {
+            "cn": [
+              "术语和风格规则只通过实际使用且已连接的 voice 作用于 Agent 输出。",
+              "未实测账户效果、集成、留存或商用权益。"
+            ],
+            "en": [
+              "Style and terms apply to Agent output only through the voice actually used.",
+              "No live-account test of results, integrations, retention, or commercial rights."
+            ],
+            "zh": [
+              "术语和风格规则只通过实际使用且已连接的 voice 作用于 Agent 输出。",
+              "未实测账户效果、集成、留存或商用权益。"
+            ],
+            "tw": [
+              "術語與風格規則只透過實際使用且已連結的 voice 作用於 Agent 輸出。",
+              "未實測帳戶效果、整合、留存或商業權益。"
+            ]
+          },
+          "pricingSummary": {
+            "cn": "公开有 Starter 试用及 Enterprise 销售路径；目标账户价格与权益未知。",
+            "en": "Starter trial and Enterprise sales paths are public; target-account price and entitlements are unknown.",
+            "zh": "公开有 Starter 试用及 Enterprise 销售路径；目标账户价格与权益未知。",
+            "tw": "公開有 Starter 試用與 Enterprise 銷售路徑；目標帳戶價格及權益未知。"
+          },
+          "officialSummary": {
+            "cn": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。",
+            "en": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+            "zh": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。",
+            "tw": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。"
+          },
+          "freshnessSummary": {
+            "en": "Official sources reviewed 2026-10-14.",
+            "zh": "Official sources reviewed 2026-10-14.",
+            "cn": "官方来源于 2026-10-14 核验。",
+            "tw": "官方來源於 2026-10-14 核驗。"
+          }
+        },
+        "editorial": {
+          "summary": {
+            "cn": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。",
+            "en": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+            "zh": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。",
+            "tw": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。"
+          },
+          "sourceUrl": "https://writer.com/",
+          "trustNote": {
+            "en": "Verified against 5 official sources.",
+            "zh": "Verified against 5 official sources.",
+            "cn": "已对照 5 个官方来源核验。",
+            "tw": "已對照 5 個官方來源核驗。"
+          },
+          "reviewedAt": "2026-10-14",
+          "reviewedBy": "AI Best Tool Editorial"
+        },
+        "collection": {},
+        "submission": {
+          "review": {
+            "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+            "approvedAt": "2026-10-15 02:34:29.531146+00",
+            "publishMode": "monitor_noindex",
+            "qaReference": "codex-thread:01a13862-4a3e-70e2-83fd-31635e9fa1f7",
+            "preimageHash": "022d83587280bc1a49b71cb04b6570d645a0dddd100743fe6dfb831a99fa235a",
+            "nextReviewDate": "2026-10-21"
+          }
+        },
+        "notIdealFor": {
+          "cn": [
+            "只需一次性个人写作、无团队配置的人。",
+            "要求每份草稿必然合规或品牌准确的团队。"
+          ],
+          "en": [
+            "One-off personal writing without team setup.",
+            "Teams seeking a guarantee that every draft is compliant or brand-correct."
+          ],
+          "zh": [
+            "只需一次性个人写作、无团队配置的人。",
+            "要求每份草稿必然合规或品牌准确的团队。"
+          ],
+          "tw": [
+            "只需要一次性個人寫作、沒有團隊設定的人。",
+            "要求每份草稿必然合規或符合品牌的團隊。"
+          ]
+        },
+        "marketValidation": {
+          "score": 77,
+          "verdict": "validated",
+          "rationale": {
+            "cn": "两个可直接读取的独立评论平台记录了 WRITER 产品级使用，包括较新的 Agent 与品牌内容流程。样本自选择且评价有分歧；这只支持该实体有条件的市场验证，不推断活跃用户规模、品牌一致性保证、套餐权益或输出质量。",
+            "en": "Two directly readable review platforms show product-specific use of WRITER, including recent Agent and brand-content workflows. The evidence is self-selected and mixed; it supports conditional market validation for this entity only, not an active-user estimate, guaranteed brand consistency, plan entitlement or output quality.",
+            "tw": "兩個可直接讀取的獨立評論平台記錄了 WRITER 產品層級的使用，包括較新的 Agent 與品牌內容流程。樣本由評論者自行選擇，評價也有分歧；這只支持對該產品有條件的市場驗證，不推斷活躍使用者規模、品牌一致性保證、方案權益或輸出品質。"
+          },
+          "reviewedAt": "2026-10-15",
+          "sourceNotes": [
+            {
+              "url": "https://www.g2.com/products/writer/reviews",
+              "signal": "Current page identifies WRITER as an Agentic AI product, displays 138 reviews and September 2026 first-hand reports of enterprise content drafting with company guidelines and required editing.",
+              "limitation": "G2 reviews are self-selected; some are seller-invited or incentivized. Vendor-supplied product description and AI-generated summaries were excluded from the signal.",
+              "observedAt": "2026-10-15"
+            },
+            {
+              "url": "https://www.trustradius.com/products/writer-com/reviews",
+              "signal": "Current WRITER enterprise-agent review page displays a vetted September 2025 account of agents using proprietary context in a large organization, alongside a critical 2025 marketing review.",
+              "limitation": "The product page is labeled WRITER (Palmyra LLM); most displayed marketing-writing reviews date to 2024 and may cover an older workflow. Vetted or incentivized reviews do not prove current usage totals.",
+              "observedAt": "2026-10-15"
+            }
+          ],
+          "evidenceUrls": [
+            "https://www.g2.com/products/writer/reviews",
+            "https://www.trustradius.com/products/writer-com/reviews"
+          ],
+          "strongSignals": [
+            "G2 directly lists WRITER in its Agentic AI category with 138 reviews; September 2026 reviewers describe using company documents for AI drafts and applying brand guidelines, while still editing output.",
+            "TrustRadius directly lists the WRITER enterprise agent platform; a vetted September 2025 enterprise review describes agents used with proprietary context to create training assets."
+          ],
+          "ops2MarketAudit": {
+            "qaActor": "codex-thread:01a13862-4a3e-70e2-83fd-31635e9fa1f7",
+            "packHash": "8d64b1754b278b7a57bfbbe49fabe233cc1d6148a021acc83d9f6077b092c805",
+            "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+            "preimageHash": "c8f61382d0cc3ccf23ae6070da4a6c528e5a8b21c266433b450eac7737576546",
+            "qaReportHash": "d8d122deac1298a4babb1b36365d341677425a4e1b0e687e0ecd68ff69a84c00",
+            "protectedHash": "b14765cc7555c21440958c7fa3ded0ca8ddd8f8f74036f1e77af5980905b4c98",
+            "developmentActor": "codex-thread:01a13862-07a2-7643-b4fb-84e53ff0a817"
+          },
+          "supportingSignals": [
+            "G2 shows recent mixed first-hand feedback on setup, tone configuration and final editing; reviews support use and friction, not consistent performance across accounts.",
+            "TrustRadius includes a 2025 marketing leadership review critical of content quality; most other displayed marketing writing reviews are older and cannot validate current Agent features."
+          ]
+        }
+      }
+    }
+  },
+  "rollback": {
+    "guard": "Only if the four target columns exactly equal proposedPostimage.fields and status/page_quality_status remain published/monitor.",
+    "restoreFields": {
+      "title": {
+        "cn": "WRITER：具品牌規則治理的 AI 內容工作流程",
+        "en": "WRITER: governed AI content workflows",
+        "zh": "WRITER：有品牌规则治理的 AI 内容工作流"
+      },
+      "content": {
+        "cn": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+        "en": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+        "zh": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+      },
+      "detail": {
+        "cn": "WRITER 將 AI Agent 工作流程與團隊 voice profile、術語及風格指南結合。官方設定文件指出，術語與風格規則須連結至產生內容時使用的 voice，才會影響 Agent 輸出。組織或 IT 管理員可透過 Agent profile 設定預設或受限 voice；團隊管理員可管理團隊風格指南。事實、法律陳述及品牌適切性仍需人工審核。\n\n適合：能設定共同 voice 與術語並審核輸出的行銷團隊；比較可重複內容流程治理方式的組織。\n\n不適合：只需要一次性個人寫作的人；要求每份草稿必然合規的團隊；採購前必須核實目標帳戶權益的買方。\n\n限制：規則是否生效取決於實際使用的 voice 與 profile 設定。公開文件無法證明目標工作區的輸出穩定性。本次未測試真實帳戶、輸出品質、整合、資料留存或商業重用權。\n\n比較：Jasper 側重品牌資料輔助起草，Grammarly 側重檢查及改寫；WRITER 可比較 Agent voice/術語連結與管理邊界。在實際帳戶以相同 brief 與審核標準測試。\n\n價格與資料：公開方案展示 Starter 試用及 Enterprise 聯絡銷售路徑；目標帳戶的金額、credits、功能權益、留存、隱私合約與商業條款未核實。採購或上傳敏感內容前應確認。\n\n來源與複核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核驗；下次複核 2026-10-21。",
+        "en": "WRITER combines AI Agent workflows with voice profiles, terms, and style guides for teams preparing marketing content. The official setup guide says terms and style rules affect Agent output only when linked to the voice used for generation. Organization or IT admins can use an Agent profile to set a default or restricted voice; team admins can manage their team style guide. Human review remains appropriate for factual accuracy, legal claims, and brand fit.\n\nBest for: Marketing teams that can configure and review a shared voice and terminology; organizations comparing governance of repeatable content workflows.\n\nNot ideal for: A one-off personal writing assistant; teams needing a verified guarantee that every draft is compliant; buyers who require confirmed account-specific rights before procurement.\n\nLimitations: The selected voice and profile configuration determine whether rules apply; public documentation does not prove consistent results in a target workspace. This review did not test a live account, output quality, integrations, data retention, or commercial reuse rights.\n\nCompare: Compare Jasper for brand-guided drafting, Grammarly for checking and revision, and WRITER for connected Agent voice/terms governance. Test the same brief and review rules in each actual account.\n\nPricing and data: Public plans show Starter trial and Enterprise contact-sales paths. Exact price, credits, feature rights, retention, privacy contract, and commercial terms for a target account remain unverified. Confirm these before purchase or sensitive uploads.\n\nSources and review: https://writer.com/ ; https://writer.com/brand/ ; https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice ; https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer ; https://writer.com/plans/ . Reviewed 2026-10-14; next review 2026-10-21.",
+        "zh": "WRITER 将 AI Agent 工作流与团队 voice profile、术语和风格指南结合。官方设置文档说明，术语与风格规则只有连接到生成时使用的 voice 后才影响 Agent 输出。组织或 IT 管理员可通过 Agent profile 设置默认或受限 voice；团队管理员可管理本团队风格指南。事实、法律表述和品牌适配仍需人工审核。\n\n适合：能够配置共同 voice 与术语并审核输出的营销团队；比较可复用内容流程治理方式的组织。\n\n不适合：只需一次性个人写作的人；要求每份草稿必然合规的团队；采购前必须核实目标账户权益的买方。\n\n限制：规则是否生效取决于实际使用的 voice 和 profile 设置。公开文档不能证明目标工作区的输出稳定性。本次未测试真实账户、输出质量、集成、数据留存或商用复用权。\n\n比较：Jasper 偏品牌资料辅助起草，Grammarly 偏检查与改写；WRITER 可重点比较 Agent voice/术语连接和管理边界。在实际账户中用同一 brief 与审核标准试验。\n\n价格与数据：公开方案展示 Starter 试用与 Enterprise 联系销售路径；目标账户的金额、credits、功能权益、留存、隐私合同和商用条款未核实。采购或上传敏感内容前应确认。\n\n来源与复核：https://writer.com/；https://writer.com/brand/；https://support.writer.com/articles/2086260283-how-to-connect-your-style-guide-and-terms-to-a-voice；https://support.writer.com/articles/5831006655-understanding-roles-and-permissions-in-writer；https://writer.com/plans/。2026-10-14 核验；下次复核 2026-10-21。"
+      },
+      "features": {
+        "bestFit": {
+          "cn": [
+            "能設定團隊 voice、術語並審核輸出的行銷團隊。",
+            "比較可重複內容流程治理方式的組織。"
+          ],
+          "en": [
+            "Marketing teams able to configure a shared voice and terminology, then review output.",
+            "Organizations comparing governance for repeatable content workflows."
+          ],
+          "zh": [
+            "能够配置团队 voice、术语并审核输出的营销团队。",
+            "比较可复用内容流程治理方式的组织。"
+          ]
+        },
+        "decision": {
+          "compareAxes": {
+            "cn": [
+              "比較 Jasper 的品牌資料起草與設定成本。",
+              "比較 Grammarly 的檢查改寫與 Agent 工作流程治理。"
+            ],
+            "en": [
+              "Against Jasper: brand-guided drafting and setup effort.",
+              "Against Grammarly: checking and revision versus Agent workflow controls."
+            ],
+            "zh": [
+              "对比 Jasper 的品牌资料起草与配置成本。",
+              "对比 Grammarly 的检查改写与 Agent 工作流治理。"
+            ]
+          },
+          "limitations": {
+            "cn": [
+              "術語與風格規則只透過實際使用且已連結的 voice 作用於 Agent 輸出。",
+              "未實測帳戶效果、整合、留存或商業權益。"
+            ],
+            "en": [
+              "Style and terms apply to Agent output only through the voice actually used.",
+              "No live-account test of results, integrations, retention, or commercial rights."
+            ],
+            "zh": [
+              "术语和风格规则只通过实际使用且已连接的 voice 作用于 Agent 输出。",
+              "未实测账户效果、集成、留存或商用权益。"
+            ]
+          },
+          "pricingSummary": {
+            "cn": "公開有 Starter 試用與 Enterprise 銷售路徑；目標帳戶價格及權益未知。",
+            "en": "Starter trial and Enterprise sales paths are public; target-account price and entitlements are unknown.",
+            "zh": "公开有 Starter 试用及 Enterprise 销售路径；目标账户价格与权益未知。"
+          },
+          "officialSummary": {
+            "cn": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+            "en": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+            "zh": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+          },
+          "freshnessSummary": {
+            "en": "Official sources reviewed 2026-10-14.",
+            "zh": "Official sources reviewed 2026-10-14."
+          }
+        },
+        "editorial": {
+          "summary": {
+            "cn": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。",
+            "en": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee.",
+            "zh": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+          },
+          "sourceUrl": "https://writer.com/",
+          "trustNote": {
+            "en": "Verified against 5 official sources.",
+            "zh": "Verified against 5 official sources."
+          },
+          "reviewedAt": "2026-10-14",
+          "reviewedBy": "AI Best Tool Editorial"
+        },
+        "collection": {},
+        "submission": {
+          "review": {
+            "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+            "approvedAt": "2026-10-15 02:34:29.531146+00",
+            "publishMode": "monitor_noindex",
+            "qaReference": "codex-thread:01a13862-4a3e-70e2-83fd-31635e9fa1f7",
+            "preimageHash": "022d83587280bc1a49b71cb04b6570d645a0dddd100743fe6dfb831a99fa235a",
+            "nextReviewDate": "2026-10-21"
+          }
+        },
+        "notIdealFor": {
+          "cn": [
+            "只需要一次性個人寫作、沒有團隊設定的人。",
+            "要求每份草稿必然合規或符合品牌的團隊。"
+          ],
+          "en": [
+            "One-off personal writing without team setup.",
+            "Teams seeking a guarantee that every draft is compliant or brand-correct."
+          ],
+          "zh": [
+            "只需一次性个人写作、无团队配置的人。",
+            "要求每份草稿必然合规或品牌准确的团队。"
+          ]
+        },
+        "marketValidation": {
+          "score": 77,
+          "verdict": "validated",
+          "rationale": {
+            "cn": "两个可直接读取的独立评论平台记录了 WRITER 产品级使用，包括较新的 Agent 与品牌内容流程。样本自选择且评价有分歧；这只支持该实体有条件的市场验证，不推断活跃用户规模、品牌一致性保证、套餐权益或输出质量。",
+            "en": "Two directly readable review platforms show product-specific use of WRITER, including recent Agent and brand-content workflows. The evidence is self-selected and mixed; it supports conditional market validation for this entity only, not an active-user estimate, guaranteed brand consistency, plan entitlement or output quality."
+          },
+          "reviewedAt": "2026-10-15",
+          "sourceNotes": [
+            {
+              "url": "https://www.g2.com/products/writer/reviews",
+              "signal": "Current page identifies WRITER as an Agentic AI product, displays 138 reviews and September 2026 first-hand reports of enterprise content drafting with company guidelines and required editing.",
+              "limitation": "G2 reviews are self-selected; some are seller-invited or incentivized. Vendor-supplied product description and AI-generated summaries were excluded from the signal.",
+              "observedAt": "2026-10-15"
+            },
+            {
+              "url": "https://www.trustradius.com/products/writer-com/reviews",
+              "signal": "Current WRITER enterprise-agent review page displays a vetted September 2025 account of agents using proprietary context in a large organization, alongside a critical 2025 marketing review.",
+              "limitation": "The product page is labeled WRITER (Palmyra LLM); most displayed marketing-writing reviews date to 2024 and may cover an older workflow. Vetted or incentivized reviews do not prove current usage totals.",
+              "observedAt": "2026-10-15"
+            }
+          ],
+          "evidenceUrls": [
+            "https://www.g2.com/products/writer/reviews",
+            "https://www.trustradius.com/products/writer-com/reviews"
+          ],
+          "strongSignals": [
+            "G2 directly lists WRITER in its Agentic AI category with 138 reviews; September 2026 reviewers describe using company documents for AI drafts and applying brand guidelines, while still editing output.",
+            "TrustRadius directly lists the WRITER enterprise agent platform; a vetted September 2025 enterprise review describes agents used with proprietary context to create training assets."
+          ],
+          "ops2MarketAudit": {
+            "qaActor": "codex-thread:01a13862-4a3e-70e2-83fd-31635e9fa1f7",
+            "packHash": "8d64b1754b278b7a57bfbbe49fabe233cc1d6148a021acc83d9f6077b092c805",
+            "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+            "preimageHash": "c8f61382d0cc3ccf23ae6070da4a6c528e5a8b21c266433b450eac7737576546",
+            "qaReportHash": "d8d122deac1298a4babb1b36365d341677425a4e1b0e687e0ecd68ff69a84c00",
+            "protectedHash": "b14765cc7555c21440958c7fa3ded0ca8ddd8f8f74036f1e77af5980905b4c98",
+            "developmentActor": "codex-thread:01a13862-07a2-7643-b4fb-84e53ff0a817"
+          },
+          "supportingSignals": [
+            "G2 shows recent mixed first-hand feedback on setup, tone configuration and final editing; reviews support use and friction, not consistent performance across accounts.",
+            "TrustRadius includes a 2025 marketing leadership review critical of content quality; most other displayed marketing writing reviews are older and cannot validate current Agent features."
+          ]
+        }
+      }
+    }
+  },
+  "commitPlan": {
+    "guard": "One-row UPDATE by id/name/status/page_quality_status/updated_at and exact original title/content/detail/features values; abort on rowcount != 1.",
+    "set": "title, content, detail, features only; updated_at may advance by database trigger."
+  },
+  "postcheckPlan": {
+    "assert": "Exactly one WRITER row; target columns equal proposedPostimage.fields; status=published; page_quality_status=monitor; indexable=false; EN/CN/TW title, summary, detail and decision fields match expected language; owned media 200; sitemap writer match 0."
+  },
+  "expectedRoutes": {
+    "/ai/writer": {
+      "title": "WRITER: governed AI content workflows",
+      "summary": "WRITER is an enterprise AI agent platform with brand voice, terminology, and style settings for marketing content workflows. This listing covers the product and configuration path, not a measured output-quality guarantee."
+    },
+    "/cn/ai/writer": {
+      "title": "WRITER：有品牌规则治理的 AI 内容工作流",
+      "summary": "WRITER 是面向企业的 AI Agent 平台，提供品牌语气、术语和风格设置，用于营销内容流程。本条目说明产品与配置路径，不承诺实际输出质量。仅依据公开资料核验身份与配置条件，目标账户的价格、权限及实际效果需另行确认。"
+    },
+    "/tw/ai/writer": {
+      "title": "WRITER：具品牌規則治理的 AI 內容工作流程",
+      "summary": "WRITER 是企業 AI Agent 平台，提供品牌語氣、術語及風格設定，支援行銷內容流程。本條目說明產品與設定路徑，不保證實際輸出品質。僅依公開資料核驗身分與設定條件，目標帳戶的價格、權限及實際效果須另行確認。"
+    }
+  },
+  "systemicFinding": "Generic OPS2 import stores selection zh as zh (Simplified) and cn as cn (Traditional); public /cn uses cn, /tw uses tw. Future three-language candidates need a separately scoped generic fix.",
+  "qaStatus": "PENDING_INDEPENDENT_REVIEW"
+}
