@@ -1,7 +1,7 @@
 {
   "unit": "CATALOG-NEW-TOOLS-BATCH-2026-10-15",
   "asOf": "2026-10-15",
-  "productionWriteAuthorized": false,
+  "productionWriteAuthorized": true,
   "indexAndSitemapAuthorized": false,
   "selectionBoundary": "Each selection is a candidate only. Independent QA is required before enqueue commit; draft and monitor release require their own generic bridge gates.",
   "productionIdentityRead": {
@@ -115,6 +115,22 @@
       { "name": "Melty", "toolId": "5bd11bd0-5100-4203-abce-1dddf6b06565", "preimageHash": "2f9c69c3ed9da5e25c8d6728ed011b4e5fa2a54f7809c03d7034345c8536b265", "preflightReady": true, "rollback": "PASS", "productionWrites": 0 },
       { "name": "Cloudflare Clef", "toolId": "c8da0b9d-5422-41e0-be1f-55196bf74faa", "preimageHash": "f85c7d2dab8d76b4d5f46354af1f591d4695abf693c066632eda860c06832552", "preflightReady": true, "rollback": "PASS", "productionWrites": 0 }
     ]
+  },
+  "toolReleaseCommit": {
+    "state": "PUBLISHED_MONITOR_POSTCHECK_PASS_DEPLOYMENT_PENDING",
+    "qaVerdict": "QA_PASS_PUBLISH_BATCH",
+    "qaFixedSha": "766a31cf",
+    "qaReference": "codex-thread:01a13e77-0a6f-7c22-8488-ac53f599c50b",
+    "checkedAtUtc": "2026-10-15T09:38:44Z",
+    "target": "published + monitor/noindex; no index or sitemap approval",
+    "results": [
+      { "name": "Everygen", "slug": "everygen", "toolId": "b2a89bbc-d6ba-4aef-a3db-5a7919b5336f", "commitWrites": 1, "postcheckWrites": 0, "replayWrites": 0 },
+      { "name": "Meta Muse Wonder", "slug": "meta-muse-wonder", "toolId": "c2a1a67a-2b53-4c5e-b066-5415dc525dad", "commitWrites": 1, "postcheckWrites": 0, "replayWrites": 0 },
+      { "name": "ArtCraft", "slug": "artcraft", "toolId": "f76fe986-99dc-432d-808c-91169a13cd8e", "commitWrites": 1, "postcheckWrites": 0, "replayWrites": 0 },
+      { "name": "Melty", "slug": "melty", "toolId": "5bd11bd0-5100-4203-abce-1dddf6b06565", "commitWrites": 1, "postcheckWrites": 0, "replayWrites": 0 },
+      { "name": "Cloudflare Clef", "slug": "cloudflare-clef", "toolId": "c8da0b9d-5422-41e0-be1f-55196bf74faa", "commitWrites": 1, "postcheckWrites": 0, "replayWrites": 0 }
+    ],
+    "productionReadback": "Each tool is unique, published+monitor, has en/cn/tw and simplified zh content/detail, uses its platform-owned media path, and remains non-indexable. EN/CN/TW pages return 200 with self-canonical and noindex; sitemap has zero matches per slug. Media URLs are 404 until this batch's committed SVG assets deploy; deployment verification is pending."
   },
   "genericReleasePlan": [
     "Independent QA checks exact selection hashes, official source scope, media ownership, localized claims, and HOLD boundaries; a stale preimage requires new preflight and rollback, not a blind commit.",

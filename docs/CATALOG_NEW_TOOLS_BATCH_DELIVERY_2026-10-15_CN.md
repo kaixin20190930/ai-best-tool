@@ -23,3 +23,9 @@
 两份受保护 SQL 与未跟踪 Freshness 文件均排除在本单元提交之外。
 
 生产 `sitemap.xml` 返回 200，五个 draft slug 的匹配 URL 均为 0。由于尚未公开发布，页面 self-canonical 与 `noindex` 的生产响应不能冒称已经验证；它们仍是下一次发布门禁的目标，而非本轮 PASS。
+
+## 最终发布与部署待验
+
+原独立 QA 对固定 SHA `766a31cf` 返回 `QA_PASS_PUBLISH_BATCH`，明确批准五个既有 ready draft 进入 `published + monitor/noindex`，不批准 index/sitemap。以每项原 preimage hash、精确授权和同一 QA reference 执行通用 tool bridge：Everygen、Meta Muse Wonder、ArtCraft、Melty、Cloudflare Clef 均首次 commit 成功，各 `productionWrites=1`；各自 postcheck 通过且零写，commit 幂等重放均 `alreadyApplied=true`、零写。只读数据库回读为 93 total、71 published、17 continue_index、74 monitor；五项唯一、`published + monitor`、EN/CN/TW 及简体 zh 字段完整，index decision 全部 false。
+
+首次线上回读：五项 EN/CN/TW 共 15 页均返回 200，语言标题、自指 canonical、`noindex` 均匹配；sitemap 为 126 条，五项各匹配 0。五个自有 SVG 在尚未推送批次代码时均为 404，因此**媒体线上验收尚未通过**；本批素材已在本地提交，必须等远端部署后复验 200。不可将数据库已发布等同于部署完成。

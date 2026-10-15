@@ -1,4 +1,4 @@
-# AI Best Tool 每日运营交付：2026-10-15（已收口）
+# AI Best Tool 每日运营交付：2026-10-15（五工具部署待验）
 
 日期：2026-10-15（Asia/Shanghai）
 本记录完成 2026-10-15 Catalog、Freshness、Decision 与 Market Feedback 四线结账。
@@ -7,7 +7,7 @@
 
 | 线 | 当前状态 | 已确认范围 |
 | --- | --- | --- |
-| Catalog | **完成：published+monitor / noindex** | WRITER 唯一候选已入队、导入、发布；语言字段纠正经独立 QA_PASS、精确前像提交与 postcheck，三语言生产页、素材、sitemap 和一次 SEO smoke 均通过 |
+| Catalog | **WRITER 完成；追加五工具已发布、部署待验** | WRITER 的三语言生产页、素材、sitemap 与 SEO smoke 均通过；Owner 指定的五工具批次已完成通用桥发布及零写 postcheck，15 页正确，新增自有素材待部署后回验 |
 | Freshness | **completed：只读 selector；production writes=0** | 88 个工具、66 个 published、20 条到期；`schedule_sync=0 / claim_due=8 / entity_due=5 / manual_archive_review=7`。没有因 updated_at 或仅有来源 URL 而推进复核日期；本次未准备或执行生产变更 |
 | Decision | **not_due** | 本周 10-13 已记录 1/2，10-14 完成第二个用户可见 App Builder Task Page 单元；本周配额已达到至少 2 个，10-15 不再新建页面或拆分 gate |
 | Market Feedback | **blocked：运行环境未注入 GSC 配置；站内事件 unavailable** | 现有最新私有 GSC 快照截至 2026-10-11；10-15 只读抓取进程未获得四个 `GSC_*` 环境变量，未生成新快照。没有可用站内事件快照 |
@@ -23,6 +23,10 @@
 2026-10-15 03:16 UTC 生产回读：`/ai/writer`、`/cn/ai/writer`、`/tw/ai/writer` 都是 200，标题、摘要、正文首段分别符合英文、简体、繁体预期；三页 robots 均为 `noindex, follow`，canonical 各指自身，没有 `NEXT_NOT_FOUND`。线上自有 SVG 为 200，SHA-256 为 `b62aea331b4af372374d552387fe550ce2bbcba04d3e0d11565b57c2c50fd5c3`；sitemap 中 WRITER 匹配 0。必要的 `pnpm run seo:production-smoke` 仅运行一次并通过：既有核心页、canonical/hreflang、robots、重定向和 sitemap 检查均绿。
 
 ## 10-15 运营收口
+
+### Catalog 五工具追加批次
+
+在 WRITER 之后，Owner 明确指定同一 `CATALOG-NEW-TOOLS-BATCH-2026-10-15` 的五项，并取得独立 `QA_PASS_PUBLISH_BATCH`。Everygen、Meta Muse Wonder、ArtCraft、Melty、Cloudflare Clef 均由通用候选入队、draft、tool bridge 逐项受控提交为 `published + monitor/noindex`；五项各首次发布写入 1，postcheck 与幂等重放均零写。生产只读统计为 **93 total / 71 published / 17 continue_index / 74 monitor**。五项 EN/CN/TW 共 15 页已返回 200、语言标题、自指 canonical 与 noindex 正确，sitemap 各 0；首次检查 SVG 素材仍为 404，待本批提交推送与部署后复验，不视为最终线上通过。逐项 ID、前像、QA 和后像见[批次审计](./CATALOG_NEW_TOOLS_BATCH_DELIVERY_2026-10-15_CN.md)。此 Owner 指定批次不改变自动运营常规日 1–2 项的默认节奏；没有批准索引或 sitemap。
 
 ### Freshness
 
@@ -41,6 +45,6 @@
 - 今日 freshness selector 的生产状态统计：**88 total / 66 published**。selector 未返回 `continue_index`、`monitor`、`archive` 的分项数量；本单不访问数据库补查，也不从旧统计推算当前分布。
 - Sitemap 最近有明确总量记录为 **126 URLs（2026-10-14 日报）**。WRITER 今日生产验证为 sitemap 匹配 **0**；今日未重新获取 sitemap 总数，因此 126 是最近确认值，不标作 10-15 实时计数。WRITER 部署源 SHA 为 `3773c9408b5bad13089c6cf2297e7657a38af805`，日报记录的生产 SEO smoke 已通过。
 - `PLAN_DEVIATION`：Catalog 已按原范围完成 WRITER `published + monitor/noindex`，未批准 index/sitemap。Freshness 完成全量分流，但没有满足受控变更所需完整证据，故当日无更新，属于证据/变更边界而非 selector 故障。Decision 因本周 `2/2` 配额已达而 `not_due`。Market 未能刷新 GSC，原因是当前命令进程未获得四项 `GSC_*` 环境变量；站内事件仍 unavailable。没有扩大到数据库写入、代码、页面或索引变更。
-- 本次收口只修改本日报；未新增脚本、页面或数据文件，未运行 build/TypeScript 或额外 production smoke。两份受保护 SQL 保持原有工作区修改且不纳入本次提交。
+- 上述 WRITER 收口当时只修改本日报；后续 Owner 指定五工具追加批次已另行记录，不复跑 build 或事实核验。两份受保护 SQL 保持原有工作区修改且不纳入本次提交。
 
 唯一下一步：从 Freshness `claim_due` 队列选择一个同类、低风险且可取得当日官方证据的批次，形成精确 change set、前像、rollback 和独立 QA；证据不足的条目继续 HOLD，不改复核日期。后续 Market 待办是在可读取既有 GSC 配置的运行环境刷新只读快照。无需 Owner 进行索引、sitemap 或数据库授权。
