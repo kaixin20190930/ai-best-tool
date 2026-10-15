@@ -11,7 +11,7 @@ export type Ops2Selection = {
   officialDomainGroup?: { canonicalProductDomain: string; parentBrandDomains: string[];
     identitySourceIds: string[] };
   categorySlug: string;
-  cluster: { taskSlug: string; role: 'anchor' | 'alternative' | 'gap_filler' };
+  cluster: { taskSlug?: string; role: 'anchor' | 'alternative' | 'gap_filler' };
   officialSources: { id: string; url: string; claimKeys: string[] }[];
   entityGate: { status: 'PASS'; aiCoreCapability: { status: 'PASS'; sourceIds: string[]; evidenceExcerpt: string };
     identityCanonical: { status: 'PASS'; sourceIds: string[]; evidenceExcerpt: string };
@@ -107,9 +107,11 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
     : [canonicalHost];
   const categorySlug = text(raw.categorySlug, 'categorySlug');
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(categorySlug)) throw new Error('Invalid categorySlug');
-  const taskSlug = text(raw.cluster?.taskSlug, 'cluster.taskSlug');
+  const taskSlug = raw.cluster?.taskSlug === undefined
+    ? undefined : text(raw.cluster.taskSlug, 'cluster.taskSlug');
   const role = raw.cluster?.role;
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(taskSlug) || !['anchor', 'alternative', 'gap_filler'].includes(role))
+  if ((taskSlug !== undefined && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(taskSlug)) ||
+      !['anchor', 'alternative', 'gap_filler'].includes(role))
     throw new Error('Invalid cluster');
   const officialSources = raw.officialSources;
   if (!Array.isArray(officialSources) || officialSources.length < 2) throw new Error('Two official sources are required');
@@ -151,6 +153,8 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
   if (new Set(parsedEntityGate.duplicateIntent.checkedToolIds.map((id) => id.toLowerCase())).size !==
       parsedEntityGate.duplicateIntent.checkedToolIds.length)
     throw new Error('Duplicate checkedToolIds are not allowed');
+  if (taskSlug === undefined && parsedEntityGate.duplicateIntent.checkedToolIds.length !== 0)
+    throw new Error('Catalog-only selection cannot claim Task Fit checks');
   if (officialDomainGroup) {
     const identitySourceIds = sourceIds(officialDomainGroup.identitySourceIds,
       'officialDomainGroup.identitySourceIds', availableSourceIds);
@@ -242,7 +246,8 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
     throw new Error('Duplicate claim key');
   return { id, name: text(raw.name, 'name', 4), officialUrl,
     ...(officialDomainGroup ? { officialDomainGroup } : {}), categorySlug,
-    cluster: { taskSlug, role }, officialSources: sources, entityGate: parsedEntityGate,
+    cluster: { ...(taskSlug === undefined ? {} : { taskSlug }), role },
+    officialSources: sources, entityGate: parsedEntityGate,
     reviewedAt, nextReviewDate, media,
     pricing, tags: list(raw.tags, 'tags'), localized, claimGate: { status: 'PASS', items: parsedClaims } };
 }

@@ -165,10 +165,12 @@ async function assertValidClusterAndCategory(client: PoolClient, selection: Ops2
   const category = await client.query('SELECT id FROM categories WHERE slug=$1',
     [resolveCollectionCategorySlug(selection.categorySlug)]);
   assert.equal(category.rowCount, 1, 'Selected category is not available');
-  const actual = (await deps.readTaskFitToolIds(client, selection.cluster.taskSlug))
-    .map((id) => id.toLowerCase()).sort();
-  const checked = selection.entityGate.duplicateIntent.checkedToolIds.map((id) => id.toLowerCase()).sort();
-  assert.deepEqual(checked, actual, 'Task duplicate-intent comparison must cover every reviewed/published Fit tool');
+  if (selection.cluster.taskSlug) {
+    const actual = (await deps.readTaskFitToolIds(client, selection.cluster.taskSlug))
+      .map((id) => id.toLowerCase()).sort();
+    const checked = selection.entityGate.duplicateIntent.checkedToolIds.map((id) => id.toLowerCase()).sort();
+    assert.deepEqual(checked, actual, 'Task duplicate-intent comparison must cover every reviewed/published Fit tool');
+  }
 }
 
 async function readTaskFitToolIdsFromClient(client: PoolClient, taskSlug: string): Promise<string[]> {
@@ -278,7 +280,7 @@ export async function run(selection: Ops2Selection, options: Options, deps = pro
       qaReportHash: qaHash || 'rollback-preview',
       queuedAt: new Date().toISOString(),
     } };
-    const scoreReason = `Editorial ${selection.cluster.role} for ${selection.cluster.taskSlug}; two official sources`;
+    const scoreReason = `Editorial ${selection.cluster.role} for ${selection.cluster.taskSlug || 'catalog'}; two official sources`;
     const postimageHash = candidateFingerprint({ status: 'new', title: selection.name,
       summary: selection.localized.en.summary, url: selection.officialUrl,
       normalized_url: selection.officialUrl, relevance_score: 80, quality_score: 90,

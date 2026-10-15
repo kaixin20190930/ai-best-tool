@@ -69,6 +69,20 @@ assert.throws(() => parseOps2Selection({ ...fixture, claimGate: { status: 'PASS'
   { ...fixture.claimGate.items[0], sourceIds: ['missing'] }] } }));
 assert.throws(() => parseOps2Selection({ ...fixture, localized: { ...fixture.localized, cn: null } }));
 assert.throws(() => parseOptions(['--mode=commit']));
+const catalogSelection = parseOps2Selection({ ...fixture,
+  id: 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee', name: 'Catalog Fixture AI',
+  cluster: { role: 'gap_filler' },
+  entityGate: { ...fixture.entityGate, duplicateIntent: { status: 'PASS', checkedToolIds: [],
+    rationale: 'Catalog-only selection has no Task Fit and was checked against tool identity and canonical URL.' } },
+});
+assert.equal(catalogSelection.cluster.taskSlug, undefined);
+assert.throws(() => parseOps2Selection({ ...fixture, cluster: { role: 'gap_filler', taskSlug: '' } }),
+  /cluster.taskSlug/);
+assert.throws(() => parseOps2Selection({ ...fixture, cluster: { role: 'gap_filler', taskSlug: 'Bad Task' } }),
+  /Invalid cluster/);
+assert.throws(() => parseOps2Selection({ ...fixture, cluster: { role: 'gap_filler' },
+  entityGate: { ...fixture.entityGate, duplicateIntent: { ...fixture.entityGate.duplicateIntent,
+    checkedToolIds: ['aaaaaaaa-1111-4111-8111-aaaaaaaaaaaa'] } } }), /cannot claim Task Fit/);
 
 const parentBrandFixture = {
   ...fixture,
@@ -225,6 +239,19 @@ async function main() {
       /Fit query failed/);
     state.fitQueryFails = false;
     state.fitToolIds = [];
+    state.taskExists = false;
+    state.fitQueryFails = true;
+    const catalogPreflight = await run(catalogSelection, parseOptions(['--mode=preflight']), deps);
+    assert.equal(catalogPreflight.ready, true, 'Catalog-only selection must not require a Task or Fit lookup');
+    const catalogRollback = await run(catalogSelection,
+      parseOptions(['--mode=rollback', `--expected-hash=${catalogPreflight.preimageHash}`]), deps);
+    assert.equal(catalogRollback.productionWrites, 0);
+    assert.equal(state.candidate, null);
+    state.tools = [{ id: 'existing', name: 'Other Tool', url: catalogSelection.officialUrl }];
+    await assert.rejects(run(catalogSelection, parseOptions(['--mode=preflight']), deps), /already exists/);
+    state.tools = [];
+    state.taskExists = true;
+    state.fitQueryFails = false;
     const preflight = await run(selection, parseOptions(['--mode=preflight']), deps);
     assert.equal(preflight.ready, true);
     const hash = preflight.preimageHash!;
@@ -272,7 +299,7 @@ async function main() {
     await assert.rejects(run(selection, parseOptions([...postArgs.slice(0, 2), `--expected-post-hash=${'0'.repeat(64)}`]), deps));
     const replay = await run(selection, parseOptions(['--mode=commit', `--expected-hash=${hash}`]), deps);
     assert.equal(replay.productionWrites, 0);
-    assert.equal(state.writes, 2, 'Only rolled-back preview and first commit may issue an insert');
+    assert.equal(state.writes, 3, 'Catalog preview, Task preview and first commit are the only inserts');
     const different = parseOps2Selection({ ...fixture, name: 'Changed Fixture AI Research' });
     await assert.rejects(run(different, parseOptions(['--mode=preflight']), deps));
     state.tools = [{ id: 'existing', name: 'Fixture AI Research', url: selection.officialUrl }];

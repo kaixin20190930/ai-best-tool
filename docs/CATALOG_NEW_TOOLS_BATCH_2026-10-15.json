@@ -20,7 +20,7 @@
       "candidateId": "ca68f6e6-1eea-43d7-8a23-21769b9fb3ac",
       "selectionHash": "4bf1964d17a397ab265efe9c3614ff020c01b5f36c3e1b6ca66bce231af6b6e1",
       "preimageHash": "fb14027779c5bd2335de7b63f742020d402ad896681dde7a7a164449977e1a7a",
-      "rollbackPreviewPostimageHash": "6a7bfe7c76e7cc6daecb39692f369eb8d5383eccf9867025a7452f18274d7e58",
+      "rollbackPreviewPostimageHash": "7d2ed0ec7e9ac531bb23562f19217bb653a850669291a985ca52824663216b43",
       "preflight": "PASS",
       "rollback": "PASS",
       "productionWrites": 0
@@ -30,7 +30,37 @@
       "candidateId": "638f9de2-0c60-424c-a58d-9e435a262da5",
       "selectionHash": "0d5c3f46fa3e791679ee63187d3b3a9fe84dcdffb369e770f9ede938ed8558f4",
       "preimageHash": "526ff1168aa55d9b1541f5b5d336b11f02834d3b483e8a780fc0142ea5ccb34a",
-      "rollbackPreviewPostimageHash": "af61b3cac90c6ce731f33e7c962fccb7d2c9e7ca71ea6858f3bea23dde45737c",
+      "rollbackPreviewPostimageHash": "3c1801889d381b5a2c2474b55d9c3ff10928af4b52420e523fcd0f4b59767272",
+      "preflight": "PASS",
+      "rollback": "PASS",
+      "productionWrites": 0
+    },
+    {
+      "name": "ArtCraft",
+      "candidateId": "4ec268e5-74ba-4dc2-8d08-f3592eb95178",
+      "selectionHash": "c01cc52bbe0a0bb23a1833ae84876ddbd83c8588236b47fc3f2eac583915a448",
+      "preimageHash": "a06a33023d0927d538dbe19e596bad425949b5809050abf477d800dc8f31a64e",
+      "rollbackPreviewPostimageHash": "5b46df19e46ba090d6627c7d5c6273c31c25c9bb413873a55aca55b1cae12b8c",
+      "preflight": "PASS",
+      "rollback": "PASS",
+      "productionWrites": 0
+    },
+    {
+      "name": "Melty",
+      "candidateId": "a11602ea-b9fa-4960-bc87-ce3a9f2d80d9",
+      "selectionHash": "610bcaf07c734e4350428ad38d04d4f814127395fdc8703b4f578a6a7171b647",
+      "preimageHash": "919e4fd2bc6cc365b02504273d320d0ae758a43885e6dc7d8a0d15bd8cc7b70c",
+      "rollbackPreviewPostimageHash": "e0aee90ca2a21b379e023cec36377e7da7bc3b7f3f4d4cf418d045102c054547",
+      "preflight": "PASS",
+      "rollback": "PASS",
+      "productionWrites": 0
+    },
+    {
+      "name": "Cloudflare Clef",
+      "candidateId": "f949c9c1-c900-4aff-a796-347ca01ad7da",
+      "selectionHash": "e7b277ef058e6760c4f8a3cbf24a774375d93f3bf05b9f3c3bfddc3dcc8c62c6",
+      "preimageHash": "56d2585caa153062a082224c14454ac712ce855d6c3eef917d155fc69ec1496b",
+      "rollbackPreviewPostimageHash": "9ad0f817c1fcf7b50c430cf740831cb13c08e28e6c52b8c7218b56f005cd7ab4",
       "preflight": "PASS",
       "rollback": "PASS",
       "productionWrites": 0
@@ -41,7 +71,7 @@
     "After QA PASS, generic ops2:enqueue commit requires exact reviewer, QA report, authorization and rollback hash; postcheck must match its returned postimage hash.",
     "For each enqueued candidate, use generic ops2:publish-bridge candidate preflight, rollback, exact approved commit and postcheck to obtain one draft; then complete the existing market validation and generic tool preflight/rollback/commit/postcheck for published + monitor/noindex.",
     "Before any future commit, reread one canonical entity, original candidate status, noindex and zero sitemap entries; after commit, reread that entity and protected non-target rows. Rehearsal postimage hashes are not commit postimage hashes.",
-    "Do not change Task, Capability, Fit, schema, RLS, redirects, index, sitemap, or another candidate; a single HOLD remains excluded from the write set."
+    "Do not change Task, Capability, Fit, schema, RLS, redirects, index, sitemap, or another candidate; each selection is independently gated, and no HOLD candidate enters the write set."
   ],
   "readySelections": [
     {
@@ -169,53 +199,114 @@
         { "key": "privacy_mode", "status": "conditional", "boundary": "Content-use settings vary by Standard and Contributor modes and access route.", "sourceIds": ["docs"], "nextReviewDate": "2026-10-29" },
         { "key": "commercial_rights", "status": "unknown", "boundary": "Target-account contract and commercial-use terms have not been checked.", "sourceIds": [], "nextReviewDate": "2026-10-29" }
       ] }
-    }
-  ],
-  "holds": [
+    },
     {
+      "id": "4ec268e5-74ba-4dc2-8d08-f3592eb95178",
       "name": "ArtCraft",
       "officialUrl": "https://getartcraft.com/",
-      "status": "HOLD_CLUSTER_FIT",
-      "reason": "The only video Task is product-image-to-short-video. Official ArtCraft sources describe controllable image/video scene composition but do not establish a product-photo-to-short-video workflow. Do not relabel it to satisfy the current Task contract.",
-      "officialSources": ["https://getartcraft.com/", "https://getartcraft.com/faq", "https://app.getartcraft.com/pricing"],
-      "clusterRole": "Creative image/video composition alternative, pending a semantically accurate active Task",
-      "positioning": { "en": "Open-source, controllable AI image/video studio", "cn": "开源可控的 AI 图像与视频创作工作室", "tw": "開源可控的 AI 圖像與影片創作工作室" },
-      "bestFor": { "en": "Artists who need scene, layer and model control", "cn": "需要场景、图层及模型控制的创作者", "tw": "需要場景、圖層及模型控制的創作者" },
-      "notIdealFor": { "en": "A proven one-click product-photo ad workflow", "cn": "要求已验证一键商品图广告流程的用户", "tw": "要求已驗證一鍵商品圖廣告流程的用戶" },
-      "limitations": { "en": "Credits and model access differ by subscription or own compute; output rights need account-level review", "cn": "credits 与模型入口依订阅或自有算力变化；输出权利需按账户核对", "tw": "credits 與模型入口依訂閱或自有算力變化；輸出權利需按帳戶核對" },
-      "comparePath": "Compare scene-control effort, own-compute path and per-output cost against other AI image/video studios.",
-      "claimBoundary": { "pricing": "conditional", "privacy": "unknown", "rights": "unknown", "commercial": "unknown" },
-      "mediaGate": "HOLD: no platform-owned, non-placeholder asset prepared while cluster fit is unresolved"
+      "categorySlug": "design-art",
+      "cluster": { "role": "gap_filler" },
+      "officialSources": [
+        { "id": "home", "url": "https://getartcraft.com/", "claimKeys": ["identity", "creative_studio", "open_source"] },
+        { "id": "models", "url": "https://getartcraft.com/faq/models-supported", "claimKeys": ["model_access", "image_video_models"] },
+        { "id": "pricing", "url": "https://app.getartcraft.com/pricing", "claimKeys": ["plan_pricing", "credits"] }
+      ],
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["home", "models"], "evidenceExcerpt": "ArtCraft presents a controllable AI image and video studio with scene composition and multiple supported generation models." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["home"], "evidenceExcerpt": "The ArtCraft product and app are linked from getartcraft.com; artcraft.art is not used as an official identity." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Catalog-only identity, name and canonical URL were checked against the entire production tool table; no Task Fit is claimed." }
+      },
+      "reviewedAt": "2026-10-15", "nextReviewDate": "2026-10-29",
+      "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/artcraft-editorial-cover.svg", "sha256": "dd2cf8aec199c9b419d51a92ea60599cda0c76e429a6c759f2254eb021aff733", "creator": "AI Best Tool editorial", "createdAt": "2026-10-15", "noVendorMarks": true },
+      "pricing": "freemium", "tags": ["AI image", "AI video", "creative studio"],
+      "localized": {
+        "en": { "title": "ArtCraft: controllable AI image and video studio", "summary": "ArtCraft combines scene composition, layers and AI image/video models in an open-source creative studio. Check plan credits, model access and output rights for your account.", "detail": "ArtCraft is a controllable AI image and video studio at getartcraft.com. Its public site describes image, layer and 3D scene composition, and its model guide lists supported image and video models. This is not evidence of a one-click product-photo ad workflow. The studio offers a free or bring-your-own-compute path alongside paid credits, but model access and output cost depend on the route. This listing has not tested a paid workspace, commercial-use terms or the quality of generated output. Compare scene control, workflow effort, model availability and effective cost before choosing.", "bestFor": ["Artists arranging layered scenes before generation", "Teams comparing open-source creative studios and model choice"], "notIdealFor": ["Buyers expecting a proven one-click product-photo ad workflow", "Teams requiring confirmed account-specific commercial rights"], "limitations": ["Model availability and credits vary by route", "No paid-workspace or output-quality test was performed", "Commercial rights and retention need account-level review"], "compareAxes": ["Scene and layer control", "Own compute versus hosted credits", "Cost and rights per usable output"], "pricingSummary": "Free or own-compute use is described publicly; paid credits and model access vary by plan." },
+        "zh": { "title": "ArtCraft：可控的 AI 圖像與影片工作室", "summary": "ArtCraft 把場景構圖、圖層與 AI 圖像和影片模型放在開源創作工作室中。選用前須按帳戶核對方案 credits、模型入口和輸出權利；本站未實測付費工作區或生成品質。", "detail": "ArtCraft 是位於 getartcraft.com 的可控 AI 圖像與影片工作室。官網介紹圖像、圖層與 3D 場景構圖，模型指南列出支援的圖像和影片模型；這並不能證明它有一鍵將商品照片變成廣告影片的流程。產品描述免費或自備算力路徑，也提供付費 credits，但模型入口與輸出成本依使用路徑而異。本條沒有測試付費工作區、商用條款或生成品質。選擇前應比較場景控制、製作步驟、模型可用性和實際成本。", "bestFor": ["生成前需要編排圖層與場景的創作者", "比較開源創作工作室及模型選擇的團隊"], "notIdealFor": ["期待已證實的一鍵商品照廣告流程的採購者", "需要已核准帳戶商用權利的團隊"], "limitations": ["模型可用性和 credits 依使用路徑變化", "尚未實測付費工作區或輸出品質", "商用權利與保留期需依帳戶核對"], "compareAxes": ["場景與圖層控制", "自備算力與託管 credits", "每件可用作品的成本與權利"], "pricingSummary": "官網描述免費或自備算力使用；付費 credits 和模型入口依方案而異。" },
+        "cn": { "title": "ArtCraft：可控的 AI 图像与视频工作室", "summary": "ArtCraft 把场景构图、图层与 AI 图像和视频模型放在开源创作工作室中。选用前需按账户核对套餐 credits、模型入口和输出权利；本站未实测付费工作区或生成质量。", "detail": "ArtCraft 是位于 getartcraft.com 的可控 AI 图像与视频工作室。官网介绍图像、图层与 3D 场景构图，模型指南列出支持的图像和视频模型；这并不能证明它有一键将商品照片变成广告视频的流程。产品描述免费或自带算力路径，也提供付费 credits，但模型入口与输出成本依使用路径而异。本条没有测试付费工作区、商用条款或生成质量。选择前应比较场景控制、制作步骤、模型可用性和实际成本。", "bestFor": ["生成前需要编排图层与场景的创作者", "比较开源创作工作室及模型选择的团队"], "notIdealFor": ["期待已证实的一键商品图广告流程的采购者", "需要已核准账户商用权利的团队"], "limitations": ["模型可用性和 credits 依使用路径变化", "尚未实测付费工作区或输出质量", "商用权利与保留期需按账户核对"], "compareAxes": ["场景与图层控制", "自带算力与托管 credits", "每件可用作品的成本与权利"], "pricingSummary": "官网描述免费或自带算力使用；付费 credits 和模型入口依套餐而异。" }
+      },
+      "claimGate": { "status": "PASS", "items": [
+        { "key": "identity", "status": "verified_public", "boundary": "Only getartcraft.com and its app subdomain are used; no artcraft.art alias.", "sourceIds": ["home"], "nextReviewDate": "2026-11-14" },
+        { "key": "creative_studio", "status": "verified_public", "boundary": "Scene composition is public product positioning, not hands-on quality evidence.", "sourceIds": ["home"], "nextReviewDate": "2026-11-14" },
+        { "key": "image_video_models", "status": "verified_public", "boundary": "Official list names supported models, but target-account entitlements are unverified.", "sourceIds": ["models"], "nextReviewDate": "2026-11-14" },
+        { "key": "plan_pricing", "status": "conditional", "boundary": "Public prices include temporary discounts; do not promise checkout totals.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-22" },
+        { "key": "credits", "status": "conditional", "boundary": "Credits and model costs vary with subscription and generation route.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-22" },
+        { "key": "commercial_rights", "status": "unknown", "boundary": "No target-account output licence was verified.", "sourceIds": [], "nextReviewDate": "2026-10-29" },
+        { "key": "privacy_retention", "status": "unknown", "boundary": "Account-specific retention and model training rules were not verified.", "sourceIds": [], "nextReviewDate": "2026-10-29" }
+      ] }
     },
     {
+      "id": "a11602ea-b9fa-4960-bc87-ce3a9f2d80d9",
       "name": "Melty",
       "officialUrl": "https://melty.gg/",
-      "status": "HOLD_CLUSTER_FIT",
-      "reason": "The current six active Tasks do not cover game mashups/mods. Melty.gg is a distinct Stella Montis Inc. game platform, not the legacy Melty AI code editor. Reusing build-app-with-ai would misstate user intent.",
-      "officialSources": ["https://melty.gg/", "https://melty.gg/terms", "https://melty.gg/privacy"],
-      "clusterRole": "First-party game-mashup/mod workflow candidate",
-      "positioning": { "en": "AI-assisted game mashup and mod platform", "cn": "AI 辅助游戏 mashup 与模组平台", "tw": "AI 輔助遊戲 mashup 與模組平台" },
-      "bestFor": { "en": "Players and mod creators with legitimate game copies and a coding agent", "cn": "拥有合法游戏副本并使用编程代理的玩家与模组作者", "tw": "擁有合法遊戲副本並使用程式代理的玩家與模組作者" },
-      "notIdealFor": { "en": "A general-purpose AI code editor or guaranteed compatibility across all games", "cn": "通用 AI 代码编辑器或保证所有游戏兼容的需求", "tw": "通用 AI 程式編輯器或保證所有遊戲相容的需求" },
-      "limitations": { "en": "Windows-first; source-game ownership and publisher mod policies still matter", "cn": "当前以 Windows 为主；原游戏所有权及发行商模组政策仍适用", "tw": "目前以 Windows 為主；原遊戲所有權及發行商模組政策仍適用" },
-      "comparePath": "Compare setup effort, supported games, safety checks and creator publishing rights with other mod platforms.",
-      "claimBoundary": { "pricing": "verified_public", "privacy": "conditional", "rights": "conditional", "commercial": "unknown" },
-      "mediaGate": "HOLD: no platform-owned, non-placeholder asset prepared while cluster fit is unresolved"
+      "categorySlug": "other", "cluster": { "role": "gap_filler" },
+      "officialSources": [
+        { "id": "home", "url": "https://melty.gg/", "claimKeys": ["identity", "game_mashups", "ai_agent_path", "free_current"] },
+        { "id": "terms", "url": "https://melty.gg/terms", "claimKeys": ["operator", "game_ownership", "marketplace_exclusivity", "free_current"] },
+        { "id": "privacy", "url": "https://melty.gg/privacy", "claimKeys": ["activity_data", "privacy_boundary"] }
+      ],
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["home", "terms"], "evidenceExcerpt": "The official game-mashup platform gives creators instructions for their coding agent to build and publish a mashup; it is not a general AI editor." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["home", "terms"], "evidenceExcerpt": "melty.gg and its current terms identify Stella Montis Inc. as the game-mashup service, distinct from the old Melty code-editor product." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Catalog-only selection checked current name and canonical identity globally; no game-mashup Task relation or legacy editor merge is claimed." }
+      },
+      "reviewedAt": "2026-10-15", "nextReviewDate": "2026-10-22",
+      "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/melty-editorial-cover.svg", "sha256": "7acd8374d11b7711cdf2ccbf3d528027bbf3b85c4f65db25e433f4eb52aace8e", "creator": "AI Best Tool editorial", "createdAt": "2026-10-15", "noVendorMarks": true },
+      "pricing": "free", "tags": ["game mods", "game mashups", "AI-assisted creation"],
+      "localized": {
+        "en": { "title": "Melty: AI-assisted game mashups and mods", "summary": "Melty is a Windows game-mashup and mod platform with a coding-agent creation route. Publishing grants Melty an exclusive marketplace licence that persists 12 months after removal.", "detail": "Melty at melty.gg is a game-mashup and mod platform operated by Stella Montis Inc., not the earlier Melty AI code editor. Players use their own legitimate game copies; creators can give Melty instructions to a coding agent and publish a mashup. Its current terms say Melty is free and mashups are currently free, but publishing grants Melty an exclusive worldwide marketplace licence while content remains on Melty and for 12 months after removal. A special transition applies to content already present before the October 14, 2026 terms. Other people's game assets keep their own licences, and publisher mod or anti-cheat rules still apply. This listing does not test compatibility, installation safety or creator earnings.", "bestFor": ["Players with legitimate game copies who want one-click mashup setup", "Mod creators who accept the publishing licence and use a coding agent"], "notIdealFor": ["Developers seeking a general AI code editor", "Creators needing to distribute the same mashup on another marketplace during exclusivity"], "limitations": ["Current desktop path is Windows-focused and requires owned games", "Publishing exclusivity lasts through availability plus 12 months after removal, subject to the stated legacy transition", "Game publisher and third-party asset rights are separate from Melty access"], "compareAxes": ["Game ownership and supported titles", "Creator distribution rights", "Install audit and compatibility evidence"], "pricingSummary": "The current terms say the service and mashups are free; future paid features may have separate terms." },
+        "zh": { "title": "Melty：AI 輔助遊戲混搭與模組平台", "summary": "Melty 是以 Windows 為主的遊戲混搭與模組平台，可透過程式代理建立作品。發布作品會授予 Melty 獨家 Marketplace 授權，內容下架後仍延續 12 個月，須先核對權利。", "detail": "melty.gg 的 Melty 是 Stella Montis Inc. 營運的遊戲混搭與模組平台，不是舊同名 AI 程式碼編輯器。玩家需擁有合法的原遊戲副本；創作者可把 Melty 指引交給程式代理製作並發布作品。現行條款稱服務及混搭作品目前免費，但發布會授予 Melty 全球獨家的 Marketplace 授權，在內容上架期間及下架後 12 個月有效；2026 年 10 月 14 日前已上架內容另有過渡安排。其他人的遊戲素材仍受原權利約束，發行商模組及反作弊規則亦適用。本站未實測相容性、安裝安全或創作者收益。", "bestFor": ["擁有合法遊戲副本並需要簡化安裝的玩家", "接受發布授權且使用程式代理的模組創作者"], "notIdealFor": ["尋找通用 AI 程式碼編輯器的開發者", "獨家期間要在其他 Marketplace 發布同一作品的創作者"], "limitations": ["目前以 Windows 為主且需要自有遊戲", "發布獨家權在上架期間和下架後 12 個月持續，舊內容有過渡安排", "遊戲發行商與第三方素材權利不因使用 Melty 消失"], "compareAxes": ["遊戲所有權和支援範圍", "創作者分發權利", "安裝稽核與相容性證據"], "pricingSummary": "現行條款稱服務與混搭作品免費；未來付費功能可能另有條款。" },
+        "cn": { "title": "Melty：AI 辅助游戏混搭与模组平台", "summary": "Melty 是以 Windows 为主的游戏混搭与模组平台，可通过编程代理建立作品。发布作品会授予 Melty 独家 Marketplace 许可，内容下架后仍延续 12 个月，需先核对权利。", "detail": "melty.gg 的 Melty 是 Stella Montis Inc. 运营的游戏混搭与模组平台，不是旧同名 AI 代码编辑器。玩家需拥有合法的原游戏副本；创作者可把 Melty 指引交给编程代理制作并发布作品。现行条款称服务及混搭作品目前免费，但发布会授予 Melty 全球独家的 Marketplace 许可，在内容上架期间及下架后 12 个月有效；2026 年 10 月 14 日前已上架内容另有过渡安排。其他人的游戏素材仍受原权利约束，发行商模组及反作弊规则也适用。本站未实测兼容性、安装安全或创作者收益。", "bestFor": ["拥有合法游戏副本并需要简化安装的玩家", "接受发布许可且使用编程代理的模组创作者"], "notIdealFor": ["寻找通用 AI 代码编辑器的开发者", "独家期间要在其他 Marketplace 发布同一作品的创作者"], "limitations": ["目前以 Windows 为主且需要自有游戏", "发布独家权在上架期间和下架后 12 个月持续，旧内容有过渡安排", "游戏发行商与第三方素材权利不因使用 Melty 消失"], "compareAxes": ["游戏所有权和支持范围", "创作者分发权利", "安装审核与兼容性证据"], "pricingSummary": "现行条款称服务与混搭作品免费；未来付费功能可能另有条款。" }
+      },
+      "claimGate": { "status": "PASS", "items": [
+        { "key": "identity", "status": "verified_public", "boundary": "This is Stella Montis' melty.gg game platform, not the old AI code editor.", "sourceIds": ["home"], "nextReviewDate": "2026-11-14" },
+        { "key": "game_mashups", "status": "verified_public", "boundary": "Product workflow is vendor-described; compatibility is untested.", "sourceIds": ["home"], "nextReviewDate": "2026-11-14" },
+        { "key": "ai_agent_path", "status": "verified_public", "boundary": "A separate coding agent follows instructions; Melty is not the base model.", "sourceIds": ["home"], "nextReviewDate": "2026-11-14" },
+        { "key": "free_current", "status": "verified_public", "boundary": "Terms say currently free, not a perpetual price guarantee.", "sourceIds": ["home", "terms"], "nextReviewDate": "2026-10-22" },
+        { "key": "marketplace_exclusivity", "status": "verified_public", "boundary": "Exclusive marketplace licence lasts while content is available and 12 months after removal; pre-2026-10-14 content has a transition.", "sourceIds": ["terms"], "nextReviewDate": "2026-10-22" },
+        { "key": "game_ownership", "status": "verified_public", "boundary": "Users need legitimate original games and must follow publisher terms.", "sourceIds": ["terms"], "nextReviewDate": "2026-11-14" },
+        { "key": "activity_data", "status": "conditional", "boundary": "Privacy policy lists activity and install reports; target-account retention is unverified.", "sourceIds": ["privacy"], "nextReviewDate": "2026-10-29" },
+        { "key": "commercial_use", "status": "unknown", "boundary": "No broad commercial-use or creator payout promise is established.", "sourceIds": [], "nextReviewDate": "2026-10-29" }
+      ] }
     },
     {
+      "id": "f949c9c1-c900-4aff-a796-347ca01ad7da",
       "name": "Cloudflare Clef",
       "officialUrl": "https://developers.cloudflare.com/workers-ai/models/clef/",
-      "status": "HOLD_CLUSTER_FIT",
-      "reason": "The current active Tasks do not cover typed decision classification or agent routing. Clef and Clef-flash are one Cloudflare model family, not general app builders and not two tools.",
-      "officialSources": ["https://blog.cloudflare.com/clef-decision-models/", "https://developers.cloudflare.com/workers-ai/models/clef/"],
-      "clusterRole": "Developer decision-model and routing candidate",
-      "positioning": { "en": "Multimodal typed decision-model family for Workers AI", "cn": "面向 Workers AI 的多模态结构化决策模型家族", "tw": "面向 Workers AI 的多模態結構化決策模型家族" },
-      "bestFor": { "en": "Developers routing agent actions using typed options and probabilities", "cn": "用结构化选项和概率路由代理动作的开发者", "tw": "用結構化選項和機率路由代理動作的開發者" },
-      "notIdealFor": { "en": "Open-ended chat, creative generation or deterministic policy enforcement", "cn": "开放式聊天、创意生成或严格确定性的政策执行", "tw": "開放式聊天、創意生成或嚴格確定性的政策執行" },
-      "limitations": { "en": "Probabilities need thresholds and human fallback; hosting, token and license terms vary by route", "cn": "概率结果需配置阈值与人工兜底；托管、token 与许可依入口变化", "tw": "機率結果需設定閾值與人工兜底；託管、token 與授權依入口變化" },
-      "comparePath": "Compare typed outputs, latency, cost and escalation policy against alternative classification models.",
-      "claimBoundary": { "pricing": "conditional", "privacy": "conditional", "rights": "verified_public", "commercial": "conditional" },
-      "mediaGate": "HOLD: no platform-owned, non-placeholder asset prepared while cluster fit is unresolved"
+      "categorySlug": "other", "cluster": { "role": "gap_filler" },
+      "officialSources": [
+        { "id": "clef", "url": "https://developers.cloudflare.com/workers-ai/models/clef/", "claimKeys": ["identity", "decision_output", "clef_modalities"] },
+        { "id": "omni", "url": "https://developers.cloudflare.com/workers-ai/models/clef-omni/", "claimKeys": ["omni_modalities", "family_members"] },
+        { "id": "changelog", "url": "https://developers.cloudflare.com/changelog/product/workers-ai/", "claimKeys": ["family_members", "hosted_prices", "context_limits"] },
+        { "id": "pricing", "url": "https://developers.cloudflare.com/workers-ai/platform/pricing/", "claimKeys": ["billing_allocation", "hosted_prices"] }
+      ],
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["clef", "omni"], "evidenceExcerpt": "Cloudflare documents typed probability decisions from state and questions, with Clef-omni adding direct audio and video input." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["clef", "changelog"], "evidenceExcerpt": "Cloudflare's Workers AI docs group Clef, Clef-flash and Clef-omni as one decision-model family under the Cloudflare namespace." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Catalog-only global tool name and official URL check found no existing Clef family entity; variants remain in one listing without Task relation." }
+      },
+      "reviewedAt": "2026-10-15", "nextReviewDate": "2026-10-22",
+      "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/cloudflare-clef-editorial-cover.svg", "sha256": "c89c44135d80d9114eabb6fcdcad70b149bb7cff19b178d26a1f0bb6257fa8fc", "creator": "AI Best Tool editorial", "createdAt": "2026-10-15", "noVendorMarks": true },
+      "pricing": "freemium", "tags": ["decision model", "classification", "Workers AI"],
+      "localized": {
+        "en": { "title": "Cloudflare Clef: typed decision-model family", "summary": "Cloudflare Clef groups Clef, Clef-flash and Clef-omni for probability-based typed decisions. Their input modalities, hosted context windows and rates differ; verify the route before use.", "detail": "Cloudflare Clef is one Workers AI decision-model family, not three separate tools. Clef handles typed probability decisions over text, JSON, images and video; Clef-flash favors lower-cost text/image routing with a shorter hosted 24K context; Clef-omni adds direct audio and video alongside text and images. The October 9 Workers AI changelog lists hosted prices of $0.240, $0.038 and $0.150 per million input tokens respectively, with 64K, 24K and 64K hosted context windows. These are provider-published rates, not a target-account bill. Media tokenization and free daily neuron allocation also affect actual cost. Threshold design and human fallback remain the user's responsibility; this listing has not benchmarked decision accuracy or checked an account contract.", "bestFor": ["Developers routing agents or support triage using typed options and probabilities", "Teams comparing text, image, audio and video decision paths"], "notIdealFor": ["Open-ended conversational generation", "Safety-critical automatic action without thresholds and human fallback"], "limitations": ["Hosted rates and context differ across three variants", "Media is billed as input tokens", "No independent accuracy benchmark or account-contract review was performed"], "compareAxes": ["Required input modality", "Hosted context and tokenized media cost", "Decision calibration and escalation policy"], "pricingSummary": "Published hosted input rates differ: Clef $0.240, Clef-flash $0.038, Clef-omni $0.150 per million tokens as of 2026-10-15; account billing may differ." },
+        "zh": { "title": "Cloudflare Clef：結構化決策模型家族", "summary": "Cloudflare Clef 將 Clef、Clef-flash 和 Clef-omni 視為同一個機率式結構化決策模型家族。三者的輸入模態、託管上下文與費率不同，選用前須依工作負載與帳戶路徑核對。", "detail": "Cloudflare Clef 是一個 Workers AI 決策模型家族，不拆成三個工具。Clef 對文字、JSON、圖像與影片輸入回傳結構化選項機率；Clef-flash 偏向低成本的文字與圖像路由，託管上下文縮至 24K；Clef-omni 在文字與圖像之外直接處理音訊和影片。10 月 9 日 Workers AI 更新列出的託管輸入費率，依序為每百萬 tokens 0.240、0.038 和 0.150 美元，上下文分別為 64K、24K 和 64K。這是供應商公開牌價，並非目標帳戶帳單；媒體 token 化及每日免費 neuron 配額也影響實際費用。閾值設計與人工兜底仍由使用者負責，本站未實測決策準確度或帳戶合約。", "bestFor": ["用結構化選項與機率路由代理或客服分流的開發者", "比較文字、圖像、音訊和影片決策路徑的團隊"], "notIdealFor": ["開放式對話生成", "沒有閾值與人工兜底的高風險自動動作"], "limitations": ["三個變體的託管價格和上下文不同", "媒體會換算為輸入 tokens 計費", "尚無獨立準確度基準或帳戶合約核驗"], "compareAxes": ["所需輸入模態", "託管上下文與媒體 token 成本", "決策校準與升級處理政策"], "pricingSummary": "截至 2026-10-15 的公開牌價：Clef、Clef-flash、Clef-omni 每百萬輸入 tokens 分別為 0.240、0.038、0.150 美元；帳戶結算仍需確認。" },
+        "cn": { "title": "Cloudflare Clef：结构化决策模型家族", "summary": "Cloudflare Clef 将 Clef、Clef-flash 和 Clef-omni 视为同一个概率式结构化决策模型家族。三者的输入模态、托管上下文与费率不同，选用前需按工作负载与账户路径核对。", "detail": "Cloudflare Clef 是一个 Workers AI 决策模型家族，不拆成三个工具。Clef 对文字、JSON、图像与视频输入返回结构化选项概率；Clef-flash 偏向低成本的文字与图像路由，托管上下文缩至 24K；Clef-omni 在文字与图像之外直接处理音频和视频。10 月 9 日 Workers AI 更新列出的托管输入费率，依次为每百万 tokens 0.240、0.038 和 0.150 美元，上下文分别为 64K、24K 和 64K。这是供应商公开标价，并非目标账户账单；媒体 token 化及每日免费 neuron 配额也影响实际费用。阈值设计与人工兜底仍由使用者负责，本站未实测决策准确度或账户合同。", "bestFor": ["用结构化选项与概率路由代理或客服分流的开发者", "比较文字、图像、音频和视频决策路径的团队"], "notIdealFor": ["开放式对话生成", "没有阈值与人工兜底的高风险自动动作"], "limitations": ["三个变体的托管价格和上下文不同", "媒体会换算为输入 tokens 计费", "尚无独立准确度基准或账户合同核验"], "compareAxes": ["所需输入模态", "托管上下文与媒体 token 成本", "决策校准与升级处理政策"], "pricingSummary": "截至 2026-10-15 的公开标价：Clef、Clef-flash、Clef-omni 每百万输入 tokens 分别为 0.240、0.038、0.150 美元；账户结算仍需确认。" }
+      },
+      "claimGate": { "status": "PASS", "items": [
+        { "key": "identity", "status": "verified_public", "boundary": "Clef, Clef-flash and Clef-omni are one Cloudflare family, not three catalog entities.", "sourceIds": ["clef"], "nextReviewDate": "2026-11-14" },
+        { "key": "family_members", "status": "verified_public", "boundary": "Cloudflare's dated Workers AI changelog lists all three hosted variants.", "sourceIds": ["omni", "changelog"], "nextReviewDate": "2026-11-14" },
+        { "key": "decision_output", "status": "verified_public", "boundary": "Model returns typed probabilities; no independent reliability guarantee.", "sourceIds": ["clef"], "nextReviewDate": "2026-11-14" },
+        { "key": "omni_modalities", "status": "verified_public", "boundary": "Audio and video support belongs to Clef-omni, not every variant.", "sourceIds": ["omni"], "nextReviewDate": "2026-11-14" },
+        { "key": "hosted_prices", "status": "conditional", "boundary": "Published per-model rates may change; media is tokenized and account billing may differ.", "sourceIds": ["changelog", "pricing"], "nextReviewDate": "2026-10-22" },
+        { "key": "context_limits", "status": "verified_public", "boundary": "Hosted 64K/24K/64K windows are distinct from self-hosted limits.", "sourceIds": ["changelog"], "nextReviewDate": "2026-10-29" },
+        { "key": "billing_allocation", "status": "conditional", "boundary": "Free neuron allocation is platform-wide, not a per-Clef guarantee.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-22" },
+        { "key": "privacy", "status": "unknown", "boundary": "No target-account data handling contract was verified.", "sourceIds": [], "nextReviewDate": "2026-10-29" },
+        { "key": "commercial_rights", "status": "unknown", "boundary": "Hosted and self-hosted licence terms require separate review.", "sourceIds": [], "nextReviewDate": "2026-10-29" }
+      ] }
     }
-  ]
+  ],
+  "holds": []
 }

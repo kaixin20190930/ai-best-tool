@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Abstract modular game-world mashup">
+  <rect width="1200" height="675" fill="#172b32"/>
+  <path d="M0 544l300-124 290 126 309-175 301 158v146H0z" fill="#3d6960"/>
+  <path d="M0 603l352-181 239 114 303-168 306 157v150H0z" fill="#80a885" opacity=".76"/>
+  <rect x="154" y="149" width="248" height="220" rx="25" fill="#ebc58c"/>
+  <rect x="796" y="149" width="248" height="220" rx="25" fill="#aac5c6"/>
+  <path d="M279 202v112m-56-56h112" stroke="#476f6e" stroke-width="21" stroke-linecap="round"/>
+  <path d="M859 278l47 42 76-102" fill="none" stroke="#476f6e" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M414 256h366" stroke="#ebc58c" stroke-width="16" stroke-linecap="round" stroke-dasharray="32 27"/>
+</svg>
