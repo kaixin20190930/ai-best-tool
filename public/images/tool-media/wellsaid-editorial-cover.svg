@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Editorial sound wave illustration">
+  <rect width="640" height="360" rx="28" fill="#e8f3ed"/>
+  <circle cx="496" cy="80" r="118" fill="#cce4d5"/>
+  <circle cx="98" cy="312" r="144" fill="#d8e9e0"/>
+  <path d="M62 180h76m364 0h76" fill="none" stroke="#245a50" stroke-linecap="round" stroke-width="9"/>
+  <path d="M168 161v38m38-73v108m38-137v166m38-196v226m38-151v76m38-110v144m38-91v38m38-126v214m38-154v80" fill="none" stroke="#245a50" stroke-linecap="round" stroke-width="16"/>
+  <path d="M168 180h304" fill="none" stroke="#8dbdae" stroke-linecap="round" stroke-width="4"/>
+</svg>

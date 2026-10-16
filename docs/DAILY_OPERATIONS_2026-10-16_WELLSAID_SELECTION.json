@@ -1,0 +1,86 @@
+{
+  "id": "dc5b66bb-e69b-472e-8566-3e4a6608ea04",
+  "name": "WellSaid",
+  "officialUrl": "https://www.wellsaid.io/",
+  "categorySlug": "other",
+  "cluster": { "role": "gap_filler" },
+  "officialSources": [
+    { "id": "home", "url": "https://www.wellsaid.io/", "claimKeys": ["identity", "studio_voice_workflow"] },
+    { "id": "generator", "url": "https://www.wellsaid.io/ai-voice-generator", "claimKeys": ["pronunciation_workflow", "studio_voice_workflow"] },
+    { "id": "pricing", "url": "https://www.wellsaid.io/ai-voice-pricing", "claimKeys": ["plan_scope", "commercial_rights", "download_minutes", "api_boundary"] }
+  ],
+  "entityGate": {
+    "status": "PASS",
+    "aiCoreCapability": {
+      "status": "PASS",
+      "sourceIds": ["home", "generator"],
+      "evidenceExcerpt": "The official WellSaid site presents Studio as a text-to-speech voiceover workspace with voice selection, editing, and shared pronunciation controls."
+    },
+    "identityCanonical": {
+      "status": "PASS",
+      "sourceIds": ["home", "generator"],
+      "evidenceExcerpt": "wellsaid.io redirects to www.wellsaid.io, where the company identifies its WellSaid Studio product. API is an access path of the same brand, not a second catalog entity."
+    },
+    "duplicateIntent": {
+      "status": "PASS",
+      "checkedToolIds": [],
+      "rationale": "Catalog-only selection; global database name, title, and canonical collision checks must still pass in the generic preflight. No Task Fit is claimed."
+    }
+  },
+  "reviewedAt": "2026-10-16",
+  "nextReviewDate": "2026-10-30",
+  "media": {
+    "mode": "platform_owned_editorial",
+    "assetPath": "/images/tool-media/wellsaid-editorial-cover.svg",
+    "sha256": "95bf4058e049c2d0b10e087de8d2ad8c9edf6aaf36be5efaf41cbabe1d1d020a",
+    "creator": "AI Best Tool editorial",
+    "createdAt": "2026-10-16",
+    "noVendorMarks": true
+  },
+  "pricing": "freemium",
+  "tags": ["AI voiceover", "text to speech", "pronunciation", "team production"],
+  "localized": {
+    "en": {
+      "title": "WellSaid Studio: AI voiceovers for reviewed scripts",
+      "summary": "WellSaid Studio turns scripts into editable AI voiceovers with voice selection and pronunciation controls. Compare paid download rights, team workflow and revision costs before choosing it.",
+      "detail": "WellSaid Studio is an AI text-to-speech workspace for producing voiceovers from scripts. Its public pages describe voice selection, line editing and a shared pronunciation library for brand terms. It is a useful candidate for training and product narration when a human can review names, pacing and final audio. This listing covers Studio, not a separate API entity, and does not claim a hands-on quality test. A trial can explore the workflow, but the official plan table says trial downloads do not include commercial rights. Paid plans have commercial use terms and allocations of finished downloaded audio; generation, download minutes, seats, export formats and language access are different dimensions. Confirm the intended plan and account before publishing or buying. Compare the same script, correction time, approved distribution channel and total usable audio with other voice tools.",
+      "bestFor": ["Teams preparing repeatable training or product narration from reviewed scripts", "Editors who need consistent pronunciation of names, acronyms and brand terms"],
+      "notIdealFor": ["Anyone expecting commercial rights from a free trial", "Teams needing verified broadcast, API or multilingual entitlements without checking the target contract"],
+      "limitations": ["No account-level output quality or checkout was tested", "Trial audio is not licensed for commercial use according to the current public plan table", "Seats, language access and downloaded-minute allowances vary by plan; API access is a separate entitlement check"],
+      "compareAxes": ["Pronunciation corrections on the same approved script", "Finished downloadable minutes and commercial distribution rights", "Seat, review and export workflow versus revision effort"],
+      "pricingSummary": "Trial and paid plans are public; exact checkout terms, quota and account eligibility require target-account confirmation."
+    },
+    "cn": {
+      "title": "WellSaid Studio：面向已审核脚本的 AI 配音",
+      "summary": "WellSaid Studio 把脚本转成可编辑的 AI 配音，支持选音色和发音控制。选择前应比较付费下载权利、团队流程与返工成本，本站未实测目标账户的输出质量。",
+      "detail": "WellSaid Studio 是把脚本转为 AI 旁白的工作台。官网介绍了音色选择、逐句编辑和用于品牌术语的共享发音库。它适合有人复核人名、节奏和成品音频的培训或产品讲解。本条只覆盖 Studio，不把 API 另算一个工具，也不宣称本站做过音质实测。试用可以探索工作流，但现行公开套餐表说明试用下载不含商用许可。付费方案的商用使用、成品下载分钟数、生成、席位、导出格式和语言范围是不同维度。正式发布或采购前，应核对目标套餐和账户。建议用同一份已审核脚本与其他语音工具比较修正时间、可发布渠道和最终可用音频量。",
+      "bestFor": ["用已审核脚本反复制作培训或产品旁白的团队", "需要统一人名、缩写和品牌术语发音的编辑人员"],
+      "notIdealFor": ["期待免费试用就拥有商用授权的用户", "未经目标合同核对就要求广播、API 或多语言权益的团队"],
+      "limitations": ["本站未实测目标账户的音质或结账", "现行公开套餐表显示试用音频没有商用许可", "席位、语言和成品下载分钟数因套餐而异；API 权益须单独核对"],
+      "compareAxes": ["同一已审核脚本的发音修正量", "最终可下载分钟数和商用传播权利", "席位、审校、导出流程与返工成本"],
+      "pricingSummary": "官网列出试用和付费方案；实际结账、额度及账户资格仍需按目标账户核对。"
+    },
+    "tw": {
+      "title": "WellSaid Studio：適合已審核腳本的 AI 配音",
+      "summary": "WellSaid Studio 將腳本轉為可編輯的 AI 配音，提供選聲音與發音控制。選擇前應比較付費下載權利、團隊流程及修改成本，本站尚未實測目標帳戶的輸出品質。",
+      "detail": "WellSaid Studio 是把腳本轉成 AI 旁白的工作台。官網介紹聲音選擇、逐句編輯，以及用於品牌術語的共用發音庫。適合有人檢查人名、節奏及成品音訊的培訓或產品解說。本條只涵蓋 Studio，不將 API 另算一個工具，也不宣稱本站完成音質實測。試用可探索工作流程，但現行公開方案表說明試用下載沒有商用許可。付費方案的商用使用、成品下載分鐘數、生成、席位、匯出格式和語言範圍是不同維度。正式發布或採購前，須核對目標方案與帳戶。建議用同一份已審核腳本，比較修正時間、允許發布的渠道和最終可用音訊量。",
+      "bestFor": ["以已審核腳本重複製作培訓或產品旁白的團隊", "需要統一人名、縮寫及品牌術語發音的編輯"],
+      "notIdealFor": ["期待免費試用即有商用授權的使用者", "未核對目標合約就要求廣播、API 或多語權益的團隊"],
+      "limitations": ["本站尚未實測目標帳戶的音質或結帳", "現行公開方案表顯示試用音訊沒有商用許可", "席位、語言和成品下載分鐘數依方案而異；API 權益須另外核對"],
+      "compareAxes": ["同一已審核腳本的發音修正量", "最終可下載分鐘數及商用傳播權利", "席位、審校、匯出流程與修改成本"],
+      "pricingSummary": "官網列出試用及付費方案；實際結帳、額度及帳戶資格仍須按目標帳戶核對。"
+    }
+  },
+  "claimGate": {
+    "status": "PASS",
+    "items": [
+      { "key": "identity", "status": "verified_public", "boundary": "Studio is one WellSaid product; do not split API into a second entity.", "sourceIds": ["home"], "nextReviewDate": "2027-01-14" },
+      { "key": "studio_voice_workflow", "status": "verified_public", "boundary": "Public workflow description, not a hands-on output-quality claim.", "sourceIds": ["home", "generator"], "nextReviewDate": "2026-12-15" },
+      { "key": "pronunciation_workflow", "status": "verified_public", "boundary": "Public pronunciation feature; plan-specific access must be checked.", "sourceIds": ["generator"], "nextReviewDate": "2026-12-15" },
+      { "key": "plan_scope", "status": "conditional", "boundary": "Pricing may depend on billing period, region and account; no universal checkout price promised.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-30" },
+      { "key": "commercial_rights", "status": "conditional", "boundary": "Public table excludes trial commercial rights; paid distribution must follow the applicable agreement and channel.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-30" },
+      { "key": "download_minutes", "status": "conditional", "boundary": "Finished downloaded audio minutes differ from generation and vary by plan.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-30" },
+      { "key": "api_boundary", "status": "unknown", "boundary": "Do not infer API key access, limits or price from Studio subscription alone.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-30" }
+    ]
+  }
+}

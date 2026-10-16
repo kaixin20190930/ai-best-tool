@@ -1,0 +1,153 @@
+{
+  "unit": "DAILY-OPERATIONS-2026-10-16",
+  "asOf": "2026-10-16",
+  "scope": "Murf, Pika and Synthesia: mutable public plan, usage and commercial-rights claims only. No checkout, account login, output test, privacy re-review or indexing decision.",
+  "hashing": "SHA-256 of JSON.stringify(to_jsonb(public.tools row) minus search_vector)",
+  "execution": {
+    "candidateOnly": true,
+    "readOnlyPreflight": "PASS: all three full-row hashes and detail hashes matched production",
+    "transactionalRollback": "PASS: full detail, maintenanceReview, applicable pricingSnapshot date and next_review_date changes were applied in one transaction and rolled back; all target detail hashes matched",
+    "productionWrites": 0,
+    "commitAllowedBeforeIndependentQa": false,
+    "indexOrSitemapChanged": false,
+    "protectedSqlTouched": false
+  },
+  "items": [
+    {
+      "slug": "murf",
+      "id": "8f2d4b5e-7481-4bb8-9f21-8d2de1c0f631",
+      "classification": "claim_due",
+      "sourceCheckedAt": "2026-10-16",
+      "preimage": {
+        "rowSha256ExcludingSearchVector": "65fdc8d3bfe3f348030ce14dd850d5a47348fda0c7993f7a08237225e68d424a",
+        "detailSha256": "9165eff3bb780d326aca84fc687c03376f52ddedcd1fa42ff1c57e28ed922312",
+        "nextReviewDate": "2026-10-15",
+        "maintenanceReview": null
+      },
+      "officialSources": [
+        {
+          "url": "https://murf.ai/pricing",
+          "observation": "Studio Free shows 10 voice-generation minutes, no downloads and no commercial rights; Creator and Business show separate annual-billed voice-generation allocations. The API, Dub and Studio tabs must not be conflated."
+        },
+        {
+          "url": "https://help.murf.ai/do-i-have-commercial-rights-over-the-voice-over-created",
+          "observation": "Paid Studio plans cover commercial voiceovers; public TV/radio broadcast rights are Enterprise-only."
+        }
+      ],
+      "claimDecision": "conditional",
+      "changeSet": {
+        "targetDetailSha256": "c7baba15b20abd2e8f36dcafdc97f0430d0e0073c3937cafd659c9f509dfe2c0",
+        "publicDetail": "Existing pricing wording remains; replace only the dated review marker in legacy storage keys en/zh/cn (zh=Simplified, cn=Traditional).",
+        "detailReplacements": [
+          { "localeKey": "en", "from": "Next review: 2026-10-15.", "to": "Next review: 2026-10-23." },
+          { "localeKey": "zh", "from": "下次复查：2026-10-15.", "to": "下次复查：2026-10-23." },
+          { "localeKey": "cn", "from": "下次复查：2026-10-15.", "to": "下次复查：2026-10-23." }
+        ],
+        "features.maintenanceReview": {
+          "checkedAt": "2026-10-16",
+          "nextReviewDate": "2026-10-23",
+          "outcome": "reviewed_no_change",
+          "scope": "Studio public plan, download-minute and commercial-rights boundaries only; no account checkout or broadcast add-on purchase.",
+          "sources": ["https://murf.ai/pricing", "https://help.murf.ai/do-i-have-commercial-rights-over-the-voice-over-created"],
+          "claims": [
+            { "id": "murf-studio-public-plan", "status": "conditional", "category": "price", "limitation": "Do not generalize one billing selector, region, checkout or account allowance.", "nextReviewDate": "2026-10-23" },
+            { "id": "murf-commercial-rights", "status": "conditional", "category": "rights", "limitation": "Paid Studio voiceover rights do not imply TV/radio broadcast rights or rights to third-party input media.", "nextReviewDate": "2026-10-30" }
+          ]
+        },
+        "next_review_date": "2026-10-23"
+      },
+      "rollback": "Restore maintenanceReview absence and next_review_date=2026-10-15 from the exact preimage; never overwrite a drifted row."
+    },
+    {
+      "slug": "pika",
+      "id": "23d1e226-15f1-568a-9906-57726d982780",
+      "classification": "claim_due",
+      "sourceCheckedAt": "2026-10-16",
+      "preimage": {
+        "rowSha256ExcludingSearchVector": "9f49203f7dbe81f37f2a19f44177e712cdf760db3282abec641f95f7688b4a1f",
+        "detailSha256": "6df5d4e29d6648b648f734049e88b5287230d387a92f0920bce2e1f9cbff9aed",
+        "nextReviewDate": "2026-10-15",
+        "maintenanceReview": null
+      },
+      "officialSources": [
+        {
+          "url": "https://pika.art/pricing",
+          "observation": "Current Pika Create comparison shows Free and Starter without commercial license, Creator and Fancy with commercial license. It also states top-up credits are for Pika Create only, not API, MCP, iOS or old.pika.art."
+        }
+      ],
+      "claimDecision": "conditional",
+      "changeSet": {
+        "targetDetailSha256": "7fc90c55f936b9f8552e66f053b725d56816818ceb372ee332bcb59790108c1a",
+        "publicDetail": "Replace only the pricing/commercial-scope sentence and old review marker in legacy storage keys en/zh/cn (zh=Simplified, cn=Traditional). Keep checkout and legacy rights unresolved.",
+        "detailReplacements": [
+          { "localeKey": "en", "from": "Pricing and rights: Credit-based plans and top-ups;  Current pricing and legacy FAQ disagree on quotas, expiry, commercial tiers and watermark paths. Migration preserves some existing subscriptions, without a complete entitlement mapping. Exact price/credit promises are withheld.", "to": "Pricing and rights: The current Pika Create table shows Free and Starter without a commercial license, and Creator and Fancy with one. Its top-up credits are for Pika Create, not API, MCP, iOS or old.pika.art. Legacy subscriptions and target-account checkout remain unverified; do not infer every paid tier is commercial or promise a universal credit cost." },
+          { "localeKey": "zh", "from": "价格与权益: 按 credits 计量，提供套餐及加购；现价页与旧 FAQ 在额度、有效期、商用档位和水印路径上不一致。迁移公告保留部分既有订阅，但未给出完整权益映射，本稿不承诺精确价格或额度。", "to": "价格与权益: 现行 Pika Create 套餐表显示 Free 和 Starter 不含商用许可，Creator 与 Fancy 含商用许可；加购 credits 仅用于 Pika Create，不适用于 API、MCP、iOS 或 old.pika.art。旧订阅和目标账户结账仍未核实，不能推断任何付费套餐均可商用，也不承诺通用生成成本。" },
+          { "localeKey": "cn", "from": "價格與權益: 採 credits 計量，提供訂閱及加購；現行價格頁與舊 FAQ 對額度、效期、商用級別及浮水印路徑的說明不同。遷移公告保留部分既有訂閱，但未提供完整權益對應，本稿不承諾精確價格或額度。", "to": "價格與權益: 現行 Pika Create 方案表顯示 Free 和 Starter 不含商用許可，Creator 與 Fancy 含商用許可；加購 credits 僅用於 Pika Create，不適用 API、MCP、iOS 或 old.pika.art。舊訂閱與目標帳戶結帳仍未核實，不能推斷所有付費方案均可商用，也不承諾通用生成成本。" },
+          { "localeKey": "en", "from": "Next review: 2026-10-15 for plan conflict", "to": "Next review: 2026-10-23 for current plan scope" },
+          { "localeKey": "zh", "from": "套餐冲突 2026-10-15 复查", "to": "现行套餐范围 2026-10-23 复查" },
+          { "localeKey": "cn", "from": "方案衝突於 2026-10-15 複查", "to": "現行方案範圍於 2026-10-23 複查" }
+        ],
+        "features.maintenanceReview": {
+          "checkedAt": "2026-10-16",
+          "nextReviewDate": "2026-10-23",
+          "outcome": "claim_boundary_changed",
+          "scope": "Current Pika Create public plan and top-up scope; not API, MCP, iOS, old.pika.art or legacy subscriber entitlement.",
+          "sources": ["https://pika.art/pricing"],
+          "claims": [
+            { "id": "pika-create-commercial-tier", "status": "conditional", "category": "rights", "limitation": "Current page distinguishes noncommercial Free/Starter from commercial Creator/Fancy; verify intended account and model before delivery.", "nextReviewDate": "2026-10-23" },
+            { "id": "pika-top-up-scope", "status": "verified_public", "category": "usage", "limitation": "Top-up credits apply to Pika Create, not API, MCP, iOS or old.pika.art; purchase eligibility was not tested.", "nextReviewDate": "2026-10-30" }
+          ]
+        },
+        "next_review_date": "2026-10-23"
+      },
+      "rollback": "Restore maintenanceReview absence, exact EN/ZH/CN detail, and next_review_date=2026-10-15 from the exact preimage; never overwrite a drifted row."
+    },
+    {
+      "slug": "synthesia",
+      "id": "87a0f886-1472-4111-a09a-6a6c781dcf42",
+      "classification": "claim_due",
+      "sourceCheckedAt": "2026-10-16",
+      "preimage": {
+        "rowSha256ExcludingSearchVector": "bce289e2dd3b465e7b3119995ac0f59f7e26782777f7bae542d8c508cb247965",
+        "detailSha256": "9739ae6d66d8f6b1f7359032c3f74919993c0d9ae686a633792f7e82edec2704",
+        "nextReviewDate": "2026-10-15",
+        "maintenanceReviewCheckedAt": "2026-10-08",
+        "pricingSnapshotCheckedAt": "2026-10-08"
+      },
+      "officialSources": [
+        {
+          "url": "https://www.synthesia.io/pricing",
+          "observation": "Current monthly cards show Basic free with 10 minutes, 3 survey responses and 500 credits; Starter $29 monthly/1,250 extra credits; Pro $89 monthly/6,000 extra credits. Annual billing and Pro tiers have distinct figures. The page describes usage as variable, not a fixed finished-video yield."
+        },
+        {
+          "url": "https://help.synthesia.io/en/articles/17217419-what-s-changing-in-synthesia-plans-on-october-1-2026",
+          "observation": "The October 1 plan change renamed Creator to Pro and split the monthly included allowances from paid extra credits."
+        }
+      ],
+      "claimDecision": "verified_public_for_monthly_selector_only",
+      "changeSet": {
+        "targetDetailSha256": "c474b3f0f7c2b5909bf3fbea33fd4878fa30f8a953c7d42f588713de96df19da",
+        "publicDetail": "Advance only the dated public-plan observation in legacy storage keys en/zh/cn; current monthly figures remain supported. No account checkout, API or license assertion is strengthened.",
+        "detailReplacements": [
+          { "localeKey": "en", "from": "checked October 8, 2026", "to": "checked October 16, 2026" },
+          { "localeKey": "zh", "from": "截至 2026 年 10 月 8 日的公开商业边界", "to": "截至 2026 年 10 月 16 日的公开商业边界" },
+          { "localeKey": "cn", "from": "截至 2026 年 10 月 8 日的公开商业边界", "to": "截至 2026 年 10 月 16 日的公开商业边界" }
+        ],
+        "features.maintenanceReview": {
+          "checkedAt": "2026-10-16",
+          "nextReviewDate": "2026-10-30",
+          "outcome": "reviewed_no_change",
+          "scope": "Current public monthly pricing and credit display; no target-account checkout, API entitlement, licensing or generation test.",
+          "sources": ["https://www.synthesia.io/pricing", "https://help.synthesia.io/en/articles/17217419-what-s-changing-in-synthesia-plans-on-october-1-2026"],
+          "claims": [
+            { "id": "synthesia-monthly-public-plans", "status": "verified_public", "category": "price", "limitation": "Applies to the current public monthly selector only; annual billing and regional/account checkout differ.", "nextReviewDate": "2026-10-30" },
+            { "id": "api-entitlement", "status": "conditional", "category": "account_rights", "limitation": "Target-account API access and rate limits remain unverified.", "nextReviewDate": "2026-10-30" }
+          ]
+        },
+        "pricingSnapshot.checkedAt": "2026-10-16",
+        "next_review_date": "2026-10-30"
+      },
+      "rollback": "Restore exact previous maintenanceReview, pricingSnapshot.checkedAt, EN/ZH/CN detail and next_review_date=2026-10-15 from the exact preimage; never overwrite a drifted row."
+    }
+  ]
+}
