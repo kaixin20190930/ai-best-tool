@@ -351,6 +351,52 @@ Claim、Update、Sponsored 和自然 Listing 使用同一个 Tool ID，但商业
 
 在上述条件满足前：不新增商业化子任务、不改现有价格、不扩建 Vendor Dashboard。自动运营只需确保 payment/sponsored 信号不进入机会评分、自然推荐、索引或 sitemap 决策。
 
+## 9C. 历史库存一次性收敛与统一生命周期
+
+### 临时治理的终点
+
+现有 `monitor/noindex`、`continue_index-but-not-indexed`、重复、失效和历史不一致页面的统一盘点与批量处置，是一次性迁移工作，不是新的永久运营管线。不得在完成后继续保留“旧工具、较旧工具、历史工具、早期工具”之类按年龄分层的流程。
+
+历史收敛完成定义：
+
+- 所有已存在 Tool ID 都有唯一 canonical、当前公开状态和来源类型；
+- 所有公开页面都归入 `monitor/noindex`、`continue_index` 或经 Owner 批准的 merge/archive 状态；
+- `continue_index-but-not-indexed` 以 Coverage/URL Inspection 原因分类，不能用零展示代替索引判断；
+- 重复、失效、改名、收购和孤立实体均形成已执行结果或唯一 Owner 授权项；
+- 每个工具的维护只依赖 Claim 类型、来源变化、nextReviewDate、搜索/站内信号和实体事件，不依赖首次收录日期；
+- 临时历史库存清单封存为审计快照，后续不再作为独立 selector 或任务来源。
+
+### 稳态只保留两种工具流程
+
+历史收敛关闭后，工具处理只有两条：
+
+1. **新工具收录**：发现/提交 → 身份与重复检查 → 机会评分 → candidate → draft → 一次最终独立 QA → `published + monitor/noindex`；符合条件的 A 级页面进入最近一次 Owner 索引授权批次。
+2. **已收录工具定期更新**：统一 selector 按变化或到期的 Claim、实体/canonical 事件、GSC/Coverage、站内消费和 Decision Cluster 需要生成批次；只核变化字段，执行 freshness、内容升级、索引状态、合并或归档建议。
+
+自动抓取、普通用户提交、Vendor 认领、付费提交和历史编辑只保留为 provenance，不产生不同的自然审核、更新、索引或推荐流程。工具一旦拥有正式 Tool ID，就统一进入“已收录工具定期更新”；不得继续走候选收录流程或因来源不同复制实体。
+
+### 两条流程中的状态动作
+
+- `monitor/noindex → continue_index` 是已收录工具的索引状态变更，需要 Owner 批次授权，不是第三条工具流程。
+- `continue_index → monitor/noindex`、merge、archive、redirect 是已收录工具的维护动作；高风险动作继续请求 Owner，不建立 Legacy 专项系统。
+- Task、Capability、Fit、Comparison 和 Decision 页面属于产品差异化内容消费，不定义另一套工具事实或工具年龄层级。
+- Market/GSC 是选择和反馈输入，不定义工具处理流程。
+
+### 统一调度
+
+- 每日：新工具正常 1 个、最多 2 个；已收录工具处理一个最多 5-10 条同类低风险 change set。
+- 每周：从统一已收录工具池生成 Harvest/内容升级、Coverage 技术恢复和最多 3-5 项 A 级索引授权候选；不再单列历史工具周。
+- 每月：对统一工具池做一次增量对账，检查身份、状态、到期 Claim、索引反馈和维护成本；不重新进行全量人工复核。
+- 工具年龄不是优先级。优先级只由用户需求、Decision Cluster、搜索/站内信号、事实风险、到期时间和维护成本决定。
+
+### 防止旧流程复活
+
+- 禁止新增 `legacy-tool-*`、`old-tool-*`、按收录年份划分的 selector、脚本、队列或 QA 标准。
+- 禁止把一次性历史库存清单复制成长期数据库层级；稳态复用现有 Tool、Claim、maintenanceReview、nextReviewDate、index state 和审计字段。
+- 历史收敛批次完成后，自动化必须移除该批次的专属待办和锁，只保留最终审计链接。
+- 同一工具不得同时出现在新工具队列和已收录更新队列；生产 Tool ID 存在即以后者为准。
+- 普通更新仍只允许一份 change set、一个开发槽、一次最终 QA；无运行时代码或路由变化不做 build/smoke。
+
 ## 10. 管线隔离与非静默失败协议
 
 ### 新工具不继承 Decision 页面门禁

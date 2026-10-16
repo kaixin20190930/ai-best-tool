@@ -2,6 +2,8 @@
 
 更新时间：2026-10-16
 
+2026-10-16 **历史库存治理被明确为一次性收敛，稳态工具流程统一为两条**：本次全部 `monitor/noindex`、Coverage 未收录、重复、失效和历史不一致页面完成分类及处置后，临时库存清单封存，不保留“旧工具/更旧工具/历史工具”永久层级。此后所有来源只保留 provenance：没有正式 Tool ID 的对象走“新工具收录”，已有 Tool ID 的对象统一走“已收录工具定期更新”；索引、noindex、merge、archive、redirect 只是后者的状态动作，Task/Comparison/Market 只是消费或反馈，不另建工具事实流程。调度保持每日 1-2 个新工具和一个最多 5-10 条的更新 change set，每周统一生成 Harvest、Coverage 恢复和 3-5 项索引授权候选，每月只做增量对账。禁止新增 legacy/年份 selector、专属脚本或不同 QA 标准。详见[自动运营 V2 第 9C 节](./AUTOMATED_OPERATIONS_V2_IMPLEMENTATION_2026-10-12_CN.md#9c-历史库存一次性收敛与统一生命周期)。
+
 2026-10-16 **免费/付费收录商业化边界已预留，但暂不进入开发**：免费与付费未来允许在响应 SLA、Vendor 身份/Claim 服务、更新次数和明确标注的 Sponsored 曝光上不同；身份、证据、安全、重复意图、自然 Decision Ranking 和 index/sitemap 门禁保持一致，付款不能购买自动通过、推荐、Google 收录或自然排名。参考主流目录的免费人工提交、付费快速审核、Verified Profile 和独立 Featured 库存，形成 `$0 / $29 Priority / $99年 Verified / $39每7天 Sponsored / $79 Launch Beta` 的待验证价格架构；现有 Stripe 与生产价格不变。只有具备 28 天流量/qualified outbound 基线、至少 5 个 Vendor 访谈和独立 Sponsored 披露/到期能力后才允许开发，避免现在为低量商业化过度设计。详见[自动运营 V2 第 9B 节](./AUTOMATED_OPERATIONS_V2_IMPLEMENTATION_2026-10-12_CN.md#9b-免费与付费收录的商业化预留暂不实施)。
 
 2026-10-16 **流量优先收录与页面资产规则已并入自动运营 V2**：候选选择从“安全发布后再观察”升级为 `已有搜索机会 → Decision Cluster 缺口 → 决策意图 → 证据成熟度 → 维护成本`。新增 100 分轻量机会评分、Harvest/Expand/Discover 三队列、Tool+Task/Comparison/Finder 消费位置的最小资产包，以及 Harvest 5 页、Catalog 5-7 工具、Decision 2 单元、Discover 1-2 候选的正常周组合。成熟 A 级页面不强制固定观察期，但 index/sitemap 仍进入每周最多 3-5 项的 Owner 集中授权批次。该升级只修改选择、排期和报告口径，不新建评分服务、Dashboard、数据库表或每工具代码；普通批次保持一份快照、一个开发槽、一次最终 QA、一次必要 smoke，R 级研究不运行 build。详见[自动运营 V2 第 9A 节](./AUTOMATED_OPERATIONS_V2_IMPLEMENTATION_2026-10-12_CN.md#9a-流量优先的收录与页面资产规则2026-10-17-生效)。
