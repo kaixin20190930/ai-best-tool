@@ -5,6 +5,13 @@ import { config } from 'dotenv';
 import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
+import {
+  buildAllowedUpdateSql,
+  replaceApprovedAtPath,
+  replaceApprovedText,
+  validateApprovedWritablePaths,
+  type ApprovedWritablePath,
+} from './existing-tools-freshness-write-policy';
 
 type Item = {
   id: string;
@@ -22,18 +29,6 @@ type Item = {
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const readSql = "SELECT to_jsonb(t) - 'search_vector' AS record FROM public.tools t WHERE id=$1 AND name=$2";
 
-function replaceAtPath(value: Record<string, any>, path: string[], from: string, to: string, postcheck: boolean) {
-  let cursor = value;
-  for (const key of path.slice(0, -1)) {
-    assert(cursor[key] && typeof cursor[key] === 'object', `Missing ${path.join('.')}`);
-    cursor = cursor[key];
-  }
-  const key = path.at(-1)!;
-  if (postcheck && cursor[key] === to) return;
-  assert.equal(cursor[key], from, `Changed preimage ${path.join('.')}`);
-  cursor[key] = to;
-}
-
 async function main() {
   const args = process.argv.slice(2);
   const mode = args.find((arg) => arg.startsWith('--mode='))?.slice(7) || 'preflight';
@@ -46,9 +41,10 @@ async function main() {
     'Unsupported argument',
   );
   const raw = fs.readFileSync(manifestPath, 'utf8');
-  const manifest = JSON.parse(raw) as { unit: string; items: Item[] };
+  const manifest = JSON.parse(raw) as { unit: string; approvedWritablePaths: ApprovedWritablePath[]; items: Item[] };
   assert(manifest.items.length > 0 && manifest.items.length <= 5, 'Batch must contain 1-5 items');
   assert.equal(new Set(manifest.items.map((item) => item.id)).size, manifest.items.length);
+  validateApprovedWritablePaths(manifest.items, manifest.approvedWritablePaths);
   if (mode === 'commit') {
     assert(qaPath, 'Independent QA report required for commit');
     const qa = JSON.parse(fs.readFileSync(qaPath, 'utf8'));
@@ -82,17 +78,17 @@ async function main() {
       const detail = structuredClone(before.detail);
       const protectedFeatures = structuredClone(before.features);
       delete protectedFeatures.maintenanceReview;
-      if (item.featureReplacements?.some((patch) => patch.path.join('.') === 'decision.freshnessSummary.en'))
+      if (item.featureReplacements?.some((patch) => patch.path.join('.') === 'decision.freshnessSummary.en')) {
         delete protectedFeatures.decision.freshnessSummary;
+      }
       assert.equal(hash(protectedFeatures), item.protectedFeaturesSha256, `${item.slug}: unrelated feature drift`);
       for (const [locale, patch] of Object.entries(item.detailReplacements || {})) {
         assert.equal(typeof detail[locale], 'string');
-        if (detail[locale].includes(patch.to) && !detail[locale].includes(patch.from)) continue;
-        assert(detail[locale].includes(patch.from), `${item.slug}: missing ${locale} detail preimage`);
-        detail[locale] = detail[locale].replace(patch.from, patch.to);
+        detail[locale] = replaceApprovedText(detail[locale], patch.from, patch.to);
       }
-      for (const patch of item.featureReplacements || [])
-        replaceAtPath(features, patch.path, patch.from, patch.to, true);
+      for (const patch of item.featureReplacements || []) {
+        replaceApprovedAtPath(features, patch.path, patch.from, patch.to);
+      }
       features.maintenanceReview = item.review;
       assert.equal(hash(detail), item.expectedDetailSha256, `${item.slug}: detail postimage drift`);
       const expected = { ...before, detail, features, next_review_date: item.nextReviewDate };
@@ -103,20 +99,38 @@ async function main() {
       if (mode === 'postcheck') assert(alreadyApplied, `${item.slug}: postimage mismatch`);
       else if (!alreadyApplied) assert.equal(hash(before), item.preimageSha256, `${item.slug}: preimage drift`);
       if ((mode === 'rollback' || mode === 'commit') && !alreadyApplied) {
+        const featurePatches = item.featureReplacements || [];
+        const writeDetail = Boolean(item.detailReplacements);
         const updated = await client.query(
-          `UPDATE public.tools AS t SET detail=$2::jsonb, features=$3::jsonb, next_review_date=$4::date, updated_at=now()
-           WHERE id=$1 AND name=$5 RETURNING to_jsonb(t) - 'search_vector' AS record`,
-          [item.id, JSON.stringify(detail), JSON.stringify(features), item.nextReviewDate, item.slug],
+          buildAllowedUpdateSql(
+            featurePatches.map((patch) => patch.path),
+            writeDetail,
+          ),
+          [
+            item.id,
+            ...(writeDetail ? [JSON.stringify(detail)] : []),
+            JSON.stringify(item.review),
+            item.nextReviewDate,
+            item.slug,
+            ...featurePatches.flatMap((patch) => [patch.path, JSON.stringify(patch.to)]),
+          ],
         );
         assert.equal(updated.rowCount, 1);
         const after = updated.rows[0].record;
         for (const key of Object.keys(before).filter(
-          (column) => !['detail', 'features', 'next_review_date', 'updated_at'].includes(column),
-        ))
+          (column) => !['detail', 'features', 'next_review_date'].includes(column),
+        )) {
           assert.deepEqual(after[key], before[key], `${item.slug}: protected ${key}`);
+        }
         assert.deepEqual(after.detail, expected.detail);
         assert.deepEqual(after.features, expected.features);
         assert.equal(after.next_review_date, expected.next_review_date);
+      }
+      const changedFields: string[] = [];
+      if (!alreadyApplied) {
+        changedFields.push('features.maintenanceReview', 'next_review_date');
+        if (item.detailReplacements) changedFields.push('detail');
+        if (item.featureReplacements) changedFields.push('features.decision.freshnessSummary');
       }
       results.push({
         slug: item.slug,
@@ -124,14 +138,7 @@ async function main() {
         alreadyApplied,
         outcome: item.review.outcome,
         nextReviewDate: item.nextReviewDate,
-        changedFields: alreadyApplied
-          ? []
-          : [
-              'features.maintenanceReview',
-              'next_review_date',
-              ...(item.detailReplacements ? ['detail'] : []),
-              ...(item.featureReplacements ? ['features.decision.freshnessSummary'] : []),
-            ],
+        changedFields,
       });
     }
     if (mode === 'commit') await client.query('COMMIT');

@@ -1,6 +1,6 @@
 # 已收录工具事实复核批次 2026-10-16 A
 
-状态：开发候选完成，生产只读 preflight 与事务 rollback 通过；**独立 QA 未完成，生产 commit 未执行**。本批是一份四项 change set，不是四条工具发布线。
+状态：原提交 `67f0dd18` 收到独立 `QA_FAIL`；本次只修执行器写入边界，生产只读 preflight 与事务 rollback 已重新通过；**等待独立 QA 复验，生产 commit 未执行**。本批是一份四项 change set，不是四条工具发布线。
 
 ## 范围和结论
 
@@ -16,8 +16,8 @@
 ## 执行和回滚
 
 - Manifest：[四项唯一写集](./EXISTING_TOOLS_FRESHNESS_BATCH_2026-10-16_A.json)。每项有独立完整行前像哈希、受保护字段哈希、来源、边界、下次日期与回滚目标。
-- 执行器：[统一已收录工具变更集入口](../scripts/run-existing-tools-freshness-change-set.ts)。`preflight` 使用只读事务；`rollback` 在同一事务模拟四项 UPDATE、逐行回读受保护字段后整批 ROLLBACK；`commit` 必须有匹配 manifest 哈希的独立 `QA_PASS` 报告；`postcheck` 验证最终拥有字段与受保护字段。前像漂移则整批停止。
-- 实际运行：`preflight` PASS、`rollback` PASS；manifest SHA-256 为 `f776dff53afe357fe0cbd3aa6957173907a1a1f4ee4d9bab36ef7d541dc59be7`；两次均报告 `productionWrites: 0`。
+- 执行器：[统一已收录工具变更集入口](../scripts/run-existing-tools-freshness-change-set.ts)。`preflight` 使用只读事务；`rollback` 在同一事务模拟四项 UPDATE、逐行回读受保护字段后整批 ROLLBACK；`commit` 必须有匹配 manifest 哈希的独立 `QA_PASS` 报告；`postcheck` 验证最终拥有字段与受保护字段。前像漂移则整批停止。写入策略由[可测试的纯函数](../scripts/existing-tools-freshness-write-policy.ts)限制：manifest 顶层逐项批准 `slug + path + from + to`，仅允许当前日期文案路径；SQL 不写 `updated_at`，对 `features` 仅执行获批嵌套 `jsonb_set`。
+- 实际运行：`preflight` PASS、`rollback` PASS；manifest SHA-256 为 `9036a381cce1791bb93b0579aa600d61245094fbafef6defaf27c7a7d0e93cb4`；两次均报告 `productionWrites: 0`。
 - 预期写入仅限 `features.maintenanceReview`、`next_review_date`，以及 ChatGPT 的复核日期文字和 Lovable 的过期 `decision.freshnessSummary`。事实主张本身不改。
 - 实际生产更新数 **0**；核查后事实零变化 **4**；工具实体 HOLD **0**；仍有精确 Claim 的 conflict/unknown/conditional 边界。生产回读前像不变。
 

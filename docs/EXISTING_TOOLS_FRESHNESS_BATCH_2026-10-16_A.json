@@ -2,6 +2,13 @@
   "unit": "EXISTING-TOOLS-FRESHNESS-BATCH-2026-10-16-A",
   "asOf": "2026-10-16",
   "scope": "Four published monitor/noindex tools; plan, price and usage Claim review only. No index, sitemap, canonical, relation or schema changes.",
+  "approvedWritablePaths": [
+    { "slug": "chatgpt", "path": "detail.en", "from": "Recheck plan and account claims by 2026-10-16.", "to": "Recheck plan and account claims by 2026-10-30." },
+    { "slug": "chatgpt", "path": "detail.zh", "from": "套餐及账号主张须在 2026-10-16 前复核。", "to": "套餐及账号主张须在 2026-10-30 前复核。" },
+    { "slug": "chatgpt", "path": "detail.cn", "from": "方案及帳號主張須於 2026-10-16 前複查。", "to": "方案及帳號主張須於 2026-10-30 前複查。" },
+    { "slug": "lovable", "path": "features.decision.freshnessSummary.en", "from": "Reviewed September 14, 2026. Next fact review: October 14, 2026; changes or conflicts trigger earlier review.", "to": "Public plan claims checked October 16, 2026. Next review: October 30, 2026; regional paid-credit terms remain conditional." },
+    { "slug": "lovable", "path": "features.decision.freshnessSummary.zh", "from": "核验于 2026-09-14；下次事实复核为 2026-10-14，变化或冲突会触发提前复核。", "to": "公开套餐主张核验于 2026-10-16；下次复核为 2026-10-30；地区付费额度仍需按账号核对。" }
+  ],
   "items": [
     {
       "id": "c6a77a90-0bce-4f37-a124-7600e81475a1",
