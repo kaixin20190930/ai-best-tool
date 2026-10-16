@@ -1,0 +1,107 @@
+{
+  "unit": "EXISTING-TOOLS-FRESHNESS-BATCH-2026-10-16-A",
+  "asOf": "2026-10-16",
+  "scope": "Four published monitor/noindex tools; plan, price and usage Claim review only. No index, sitemap, canonical, relation or schema changes.",
+  "items": [
+    {
+      "id": "c6a77a90-0bce-4f37-a124-7600e81475a1",
+      "slug": "chatgpt",
+      "preimageSha256": "277b55d2c30f3dc0a7352f38be95b3fbe33765fa1b9331dd41e192afd1be5a93",
+      "protectedSha256": "aa3f1a362f5dbd7ccd592441eeee23d230c47260d9c25658696e4f11b7facdb2",
+      "protectedFeaturesSha256": "abb22e4a4326e163c982fafe315a030ddc6cdc62a6c57b8cd60160df8029a383",
+      "expectedDetailSha256": "9c0c8d4958cd674a739ae157d11f85104977998f447ba3711d6ad78b0cfdb3a6",
+      "nextReviewDate": "2026-10-30",
+      "detailReplacements": {
+        "en": { "from": "Recheck plan and account claims by 2026-10-16.", "to": "Recheck plan and account claims by 2026-10-30." },
+        "zh": { "from": "套餐及账号主张须在 2026-10-16 前复核。", "to": "套餐及账号主张须在 2026-10-30 前复核。" },
+        "cn": { "from": "方案及帳號主張須於 2026-10-16 前複查。", "to": "方案及帳號主張須於 2026-10-30 前複查。" }
+      },
+      "review": {
+        "checkedAt": "2026-10-16",
+        "nextReviewDate": "2026-10-30",
+        "outcome": "reviewed_no_claim_change",
+        "scope": "Public plan and account-entitlement boundaries only; no signed-in account, regional checkout or usage meter tested.",
+        "changeSummary": "The existing page remains intentionally non-specific about exact plan prices, model access and quotas. Only its next-review date is synchronized.",
+        "sources": ["https://chatgpt.com/pricing/", "https://chatgpt.com/plans/free/"],
+        "claims": [
+          { "id": "plan-entitlements", "category": "account_rights", "status": "conditional", "nextReviewDate": "2026-10-30", "limitation": "Verify region, workspace and live plan in the target account." },
+          { "id": "specific-model-quota", "category": "account_rights", "status": "unknown", "nextReviewDate": "2026-10-30", "limitation": "Public pricing does not establish target-account remaining quota." }
+        ],
+        "unresolved": ["No account-level entitlement, regional checkout or remaining usage was inspected."]
+      },
+      "rollback": "Restore the exact preimage detail dates, remove the newly added maintenanceReview, and restore next_review_date=2026-10-16 only if the postimage still matches."
+    },
+    {
+      "id": "c2e3a5f4-cf8e-4564-8563-093053962ed1",
+      "slug": "elicit",
+      "preimageSha256": "3be7efe191ad1f981dd77cf519764f97db409e5f73a576ae01fc831758713881",
+      "protectedSha256": "682098bd01be8498a5422af70ddaba455ff3405fd4808b6118cfd9c6c24f4567",
+      "protectedFeaturesSha256": "085ca4b4f91e6facaf290384ec9555e040eeba40a6e22a94126b4514135d2c4a",
+      "expectedDetailSha256": "30f1c73f06e19576a63bbe423d00c79a5c3ad4be91aaf4a09099ba1abc2e1d55",
+      "nextReviewDate": "2026-10-23",
+      "review": {
+        "checkedAt": "2026-10-16",
+        "nextReviewDate": "2026-10-23",
+        "outcome": "reviewed_no_claim_change",
+        "scope": "Public Basic/Plus/Pro/Scale plan display and research usage; no selector state, target-account checkout or paid workflow tested.",
+        "changeSummary": "The page already avoids a universal exact price. The official pricing page still displays multiple plan-price blocks; retain bounded price conflict and the existing user-facing copy.",
+        "sources": ["https://elicit.com/pricing?redirected=true"],
+        "claims": [
+          { "id": "public-plan-price-display", "category": "price", "status": "conflict", "nextReviewDate": "2026-10-23", "limitation": "Industry and billing selectors are not resolved by the captured public page; do not infer a universal amount or checkout eligibility." }
+        ],
+        "unresolved": ["The selected industry/billing view and target-account price remain unverified."]
+      },
+      "rollback": "Remove the newly added maintenanceReview and restore next_review_date=2026-10-14 only if the postimage still matches."
+    },
+    {
+      "id": "8fee5c8b-f284-41d4-b691-c099e5bb230b",
+      "slug": "lovable",
+      "preimageSha256": "91b9fe38472d96c873c0686e11960c3a96118d5e51c9fa0f9641380f991f00c0",
+      "protectedSha256": "f69cfcdd1c73b3a429127ec6847abdc7664473f01c923ecb54f347e0f2f1876d",
+      "protectedFeaturesSha256": "536b1d2edfd1a8bac20d05fc5a070de23a7891f60409656856ba4dec08c34a93",
+      "expectedDetailSha256": "c43c3b821d464ec1a45b2d48d624fefea8900560026f66fd5a8c81268e73ed86",
+      "nextReviewDate": "2026-10-30",
+      "featureReplacements": [
+        { "path": ["decision", "freshnessSummary", "en"], "from": "Reviewed September 14, 2026. Next fact review: October 14, 2026; changes or conflicts trigger earlier review.", "to": "Public plan claims checked October 16, 2026. Next review: October 30, 2026; regional paid-credit terms remain conditional." },
+        { "path": ["decision", "freshnessSummary", "zh"], "from": "核验于 2026-09-14；下次事实复核为 2026-10-14，变化或冲突会触发提前复核。", "to": "公开套餐主张核验于 2026-10-16；下次复核为 2026-10-30；地区付费额度仍需按账号核对。" }
+      ],
+      "review": {
+        "checkedAt": "2026-10-16",
+        "nextReviewDate": "2026-10-30",
+        "outcome": "reviewed_no_claim_change",
+        "scope": "Public paid daily-build grants and temporary Cloud/AI/connector grants; no regional account or workspace balance tested.",
+        "changeSummary": "Official pricing FAQ still notes some regional paid-plan caps while plan documentation says Pro/Business have no monthly cap. Keep the existing bounded copy; synchronize the stale review summary only.",
+        "sources": ["https://lovable.dev/pricing", "https://docs.lovable.dev/introduction/subscription-plans", "https://docs.lovable.dev/introduction/credits-and-usage"],
+        "claims": [
+          { "id": "regional-paid-daily-build-cap", "category": "account_rights", "status": "conflict", "nextReviewDate": "2026-10-30", "limitation": "Official pricing FAQ and plan documentation differ; target region/account is unknown." },
+          { "id": "monthly-usage-specific-grants", "category": "account_rights", "status": "conditional", "nextReviewDate": "2026-10-30", "limitation": "Cloud, AI and connector grants are temporary and the target workspace balance was not inspected." }
+        ],
+        "unresolved": ["Regional paid-plan cap conflict and actual workspace balance require account-level verification."]
+      },
+      "rollback": "Restore the two exact preimage freshnessSummary strings, remove the newly added maintenanceReview, and restore next_review_date=2026-10-14 only if the postimage still matches."
+    },
+    {
+      "id": "b14c8fe0-3dc5-47ed-8dd8-9d16c9892f85",
+      "slug": "replit",
+      "preimageSha256": "4e5cfb9ff0c644e657a37e480625fd7e8e52fc688a59532a9a4ce7a4974cb9e9",
+      "protectedSha256": "f3c7d9605e02d6d9c235180f7542a477ed1c4877c95fb72699da7c7d7dbd95be",
+      "protectedFeaturesSha256": "4bccc67e668ebf85a5b0c4aae84f9fabf3e5f2bef722944380169fe73f983d2f",
+      "expectedDetailSha256": "41db2b61fba39801c69fba05e70e8965816600c991ce6d1a79c8a49adec0fb5a",
+      "nextReviewDate": "2026-10-23",
+      "review": {
+        "checkedAt": "2026-10-16",
+        "nextReviewDate": "2026-10-23",
+        "outcome": "reviewed_no_claim_change",
+        "scope": "Second public-source check of the due Core/Pro checkout and credits claim; no account access or regional checkout. The usage-control claim is not due until 2026-10-23.",
+        "changeSummary": "Public pricing still does not establish a target checkout amount. The unknown checkout claim moves to a 30-day account-unavailable cadence, while the previously scheduled usage-control review remains due 2026-10-23.",
+        "sources": ["https://replit.com/pricing", "https://docs.replit.com/billing/ai-billing", "https://docs.replit.com/billing/managing-spend"],
+        "claims": [
+          { "id": "core-pro-checkout-and-credits", "category": "price", "status": "unknown", "nextReviewDate": "2026-11-15", "limitation": "Confirm billing interval, credit tier, taxes and checkout amount in the target account." },
+          { "id": "usage-burn-and-spend-controls", "category": "account_rights", "status": "conditional", "nextReviewDate": "2026-10-23", "limitation": "Not re-reviewed in this batch; retain the existing scheduled review and account/workload limitation." }
+        ],
+        "unresolved": ["No signed-in checkout or representative workload is available; exact price and credit burn remain unverified."]
+      },
+      "rollback": "Restore the previous 2026-10-09 maintenanceReview and next_review_date=2026-10-16 only if the postimage still matches."
+    }
+  ]
+}
