@@ -7,7 +7,7 @@
 
 | 线 | 状态 | 本次实际结果 |
 | --- | --- | --- |
-| Catalog | partial | 成熟队列没有现成 READY；WellSaid Studio 经独立 QA 批准后以通用路径入队，唯一候选保持 `new`。candidate→draft preflight/rollback 通过，未导入 draft、未公开；本线写入 1。 |
+| Catalog | partial | WellSaid Studio 唯一候选经 `QA_PASS_DRAFT_BATCH` 通过通用桥导入为唯一 draft；candidate postcheck 与幂等重放零写。实际 Tool ID `749640cc-a293-488f-a55e-4d9ff0c3e441`；draft→published+monitor 仅 preflight/rollback，未公开。本线累计写入 4（入队 1、draft 导入 3）。 |
 | Freshness | completed | 全量只读 selector 原基线：95 total / 71 published / 22 due；分类 `schedule_sync=0 / claim_due=10 / entity_due=5 / manual_archive_review=7`。Murf、Pika、Synthesia 三项经独立 QA 后逐项提交，完整后像只读回验 PASS、幂等重放各 0 写；本线写入 3。 |
 | Decision | not_due | 本周 2026-10-12 至 10-18 已有 2/2 个用户可见单元；本日不建页面或关系。 |
 | Market | completed with limitation | 私有 GSC 只读快照相对标识 `.local/gsc/a2847bc96613/search-analytics-2026-10-13.json`，文件 SHA-256 `c290b9f76fac1ea0bbd1963300ce34e3d7850c11be48e10445f0b4be30d220bf`；`latestCompleteDate=2026-10-13`，7 天 3 clicks / 956 impressions，28 天 7 / 1,813。原始私有文件不提交。站内事件 unavailable，不把缺失记为零。 |
@@ -19,6 +19,9 @@
 - 试用不被描述为可商用；付费也不泛化成广播、API、多语言或任意账户的固定权益。本站没有登录、结账、音质测试或官方品牌素材授权，因此采用本站自制无商标声波图。原选择包 `freemium` 会显示为“Freemium”，可能误导为永久免费层；已仅修为 `paid`，正文及 `pricingSummary` 继续明确 free trial，需增量 QA。
 - [固定选择包](./DAILY_OPERATIONS_2026-10-16_WELLSAID_SELECTION.json) ID `dc5b66bb-e69b-472e-8566-3e4a6608ea04`，`selectionHash=45d43b43393ac22db235304800e0b3113354cd21bdf7bcb89612db033e0677cd`。独立 QA 对固定 SHA `910da846` 返回 `QA_PASS_CATALOG_ENQUEUE`；通用 enqueue commit 写入 1，postcheck 为候选 `new`、后像 `a227a988b11075ed08d6cff54c6e35ae5e40e2028f6b7164e6fb635051639b76`，相同授权重放 0 写。candidate→draft preflight 前像 `35edc23fd382c7fab12084d02db8222efa0c3cfd50600b850983fe4cfc34de2b`；rollback 拟 Tool ID `cff99f66-26bc-4030-9384-5e9277f1e705`、持续写入 0。只读回读确认唯一候选仍为 `new`、`tool_id=null`，拟 Tool ID 不存在。QA 未批准 draft commit 或公开。
 - draft 唯一 HOLD 的补充审计：2026-10-16 02:10:36 UTC 重新运行通用 candidate→draft preflight，成功通过可导入检查，因此 `preflightReady=true`（桥输出没有字面 `ready` 字段）；候选前像 `35edc23fd382c7fab12084d02db8222efa0c3cfd50600b850983fe4cfc34de2b`、`productionWrites=0`。02:11:08 UTC 同一前像作为 rollback `--expected-hash` 被通用桥接受并完成事务回滚，故 rollback 候选前像与 preflight 完全一致；本次临时拟 Tool ID `e31e47dd-5b69-44c4-8491-d174c6f6c0ea`，`productionWrites=0`。后续只读回读：候选恰好 1 条，仍为 `new`、`tool_id=null`，该拟 Tool ID 不存在。两次 rollback 的临时 ID 不同，不应视为已固定的实际 Tool ID。未执行 draft commit、公开或索引变更。
+- `QA_PASS_DRAFT_BATCH` 后再次确认候选前像 `35edc23fd382c7fab12084d02db8222efa0c3cfd50600b850983fe4cfc34de2b`，通用 candidate→draft commit 产生实际唯一 Tool ID `749640cc-a293-488f-a55e-4d9ff0c3e441`，状态 `draft`、本步写入 3。候选 postcheck 核对 imported 审计、Tool ID 与 draft 状态，写入 0；相同授权幂等重放返回 `alreadyApplied=true`、写入 0。原 rollback 中的两个拟 Tool ID 均只是临时事务产物，不是实际 ID。
+- 实际 draft 的通用发布 preflight 返回 `ready=true`、`blockers=[]`、前像 `bb5ff050efe8a4dc351b105c36eab2673b503d6bfaa04a2c096d515c3c88fcd1`、写入 0；同一前像 rollback 拟状态 `published+monitor`、持续写入 0。只读回读为 `draft + monitor`、`pricing=paid`、规范官方 URL `https://www.wellsaid.io/`、EN/简中/繁中字段齐全、候选保留 3 条官方来源和平台自制素材证据。本地 SVG SHA-256 `95bf4058e049c2d0b10e087de8d2ad8c9edf6aaf36be5efaf41cbabe1d1d020a` 与选择包一致。当前未发布，索引策略不批准该实体；生产 sitemap 126 URL，WellSaid 匹配 0。
+- **公开前 HOLD**：生产媒体 URL `/images/tool-media/wellsaid-editorial-cover.svg` 目前为 404，须先部署已批准的自有素材再公开。生产 `/ai/wellsaid` 当前返回 200 的 noindex 通用未找到壳层，不是 WellSaid 公开详情页；不得把它计为已发布或页面验收。通用发布 preflight 没有覆盖线上素材可用性。本单未执行公开 commit、未 push。
 
 ## Freshness：三项公开 Claim
 
@@ -32,9 +35,9 @@
 
 ## 安全与偏差
 
-- 生产写入总数：**4**（WellSaid 候选入队 1、Freshness 3）。新增公开工具：**0**。不把候选入队算作收录。
+- 生产写入总数：**7**（WellSaid 候选入队 1、draft 导入 3、Freshness 3）。新增公开工具：**0**。不把候选或 draft 算作收录。
 - 最近生产统计基于本日只读 selector 为 95 total / 71 published；没有本日 `continue_index`、`monitor` 和 sitemap 实时回读，不沿用昨日数字冒充实时值。
-- `PLAN_DEVIATION`：Catalog 尚未完成公开；当前 QA 只批准候选入队，draft commit 和发布不在本单授权内。Freshness 三项已结清；Decision 不到期；Market 有 GSC，但站内事件不可用。
+- `PLAN_DEVIATION`：Catalog 已完成候选与 draft，但尚未公开；本次 QA 仅批准 draft commit，发布不在授权内，且生产媒体 URL 为 404。Freshness 三项已结清；Decision 不到期；Market 有 GSC，但站内事件不可用。
 - 未增加工具专属 runtime/release 脚本；未改 index、sitemap、关系、schema/RLS、付费或账户登录。两份受保护 SQL 和 10-15 未跟踪 freshness 文件不在本单写集。
 
-下一步：总控回收本单固定 SHA，并决定 WellSaid draft→公开的下一独立 QA/发布边界；不得把本次 rollback 当成 draft commit。无需 Owner 操作。
+下一步：总控回收本单固定 SHA；先部署并核实 WellSaid 自有媒体为线上 200，再独立验收实际 draft→公开门禁。不得把本次发布 rollback 当成公开 commit。无需 Owner 操作。
