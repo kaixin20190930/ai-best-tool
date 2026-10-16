@@ -1,6 +1,7 @@
-import assert, { isDeepStrictEqual } from 'node:assert/strict';
+import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
 import { config } from 'dotenv';
 import { Client } from 'pg';
 

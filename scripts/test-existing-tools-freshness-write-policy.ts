@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
 
 import {
   buildAllowedUpdateSql,
@@ -10,6 +11,10 @@ import {
 
 const manifest = JSON.parse(fs.readFileSync('docs/EXISTING_TOOLS_FRESHNESS_BATCH_2026-10-16_A.json', 'utf8'));
 validateApprovedWritablePaths(manifest.items, manifest.approvedWritablePaths);
+
+const postimage = { next_review_date: '2026-10-30', features: { maintenanceReview: { checkedAt: '2026-10-16' } } };
+assert.equal(isDeepStrictEqual(postimage, structuredClone(postimage)), true);
+assert.equal(isDeepStrictEqual(postimage, { ...postimage, next_review_date: '2026-10-31' }), false);
 
 for (const sql of [
   buildAllowedUpdateSql([], false),
