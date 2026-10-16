@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-15
+更新时间：2026-10-16
+
+2026-10-16 **DAILY-OPERATIONS 单元受控推进**：WellSaid 选择包在固定 SHA `910da846` 上获独立 QA 的候选入队批准，通用 enqueue 提交唯一 `new` 候选 `dc5b66bb-e69b-472e-8566-3e4a6608ea04`，postcheck 与幂等重放通过；candidate→draft 只做 preflight/rollback，拟 Tool ID `cff99f66-26bc-4030-9384-5e9277f1e705` 未落库，新工具发布 0。Murf、Pika、Synthesia 的三项到期公开 Claim 经 QA 后逐项提交，完整后像与 protected fields 回验通过，幂等重放各 0 写。合计生产写入 4，未改 index/sitemap/关系，未 push；GSC 私有快照 10-13 latest complete，站内事件 unavailable。详见[当日日报](./DAILY_OPERATIONS_2026-10-16_CN.md)与[固定 freshness 批次](./FRESHNESS_CLAIM_DUE_BATCH_2026-10-16.json)。
 
 2026-10-15 **CATALOG-NEW-TOOLS-BATCH-2026-10-15 五工具已发布并完成生产验证**：Owner 指定的 Everygen、Meta Muse Wonder、ArtCraft、Melty、Cloudflare Clef 经同一通用 candidate→draft→tool bridge 和独立 `QA_PASS_PUBLISH_BATCH`，均提交为 `published + monitor/noindex`；逐项 postcheck 与幂等重放零写，关系、index、sitemap 均未批准。生产回读 93 total、71 published、17 continue_index、74 monitor；部署后 15 个 EN/CN/TW 页面为 200/self-canonical/noindex，五个自有 SVG 均为 200，sitemap 126 URL 且各 slug 0；唯一一次生产 SEO smoke 通过。详见[批次交付审计](./CATALOG_NEW_TOOLS_BATCH_DELIVERY_2026-10-15_CN.md)。
 

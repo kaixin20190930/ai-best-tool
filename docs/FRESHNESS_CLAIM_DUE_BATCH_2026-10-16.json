@@ -4,11 +4,18 @@
   "scope": "Murf, Pika and Synthesia: mutable public plan, usage and commercial-rights claims only. No checkout, account login, output test, privacy re-review or indexing decision.",
   "hashing": "SHA-256 of JSON.stringify(to_jsonb(public.tools row) minus search_vector)",
   "execution": {
-    "candidateOnly": true,
+    "candidateOnly": false,
     "readOnlyPreflight": "PASS: all three full-row hashes and detail hashes matched production",
     "transactionalRollback": "PASS: full detail, maintenanceReview, applicable pricingSnapshot date and next_review_date changes were applied in one transaction and rolled back; all target detail hashes matched",
-    "productionWrites": 0,
-    "commitAllowedBeforeIndependentQa": false,
+    "productionWrites": 3,
+    "independentQa": "QA_PASS_FRESHNESS_COMMIT at fixed SHA 910da846; Murf/Pika inherited PASS and Synthesia incremental PASS",
+    "commitResult": "Murf, Pika and Synthesia committed in isolated transactions, one row each. Each complete in-transaction postimage and protected-field comparison passed.",
+    "readOnlyPostcheck": "3/3 PASS: target detail hash, complete maintenanceReview, applicable pricingSnapshot.checkedAt, next_review_date and protected state matched. Idempotent replay: 0 writes each.",
+    "postRowSha256ExcludingSearchVector": {
+      "murf": "d41e1fc6252bf19efe13e34195c3e3b830a0e8c6669289e36e580d7256c41841",
+      "pika": "28f0aacb4c267547e9bac5df0dac149a2717b42dba95728339e1326e5b1bec8f",
+      "synthesia": "0f655c444a4cef06c78051f1a9c9f1d1f6e313feec5afc557d3736b70125f225"
+    },
     "indexOrSitemapChanged": false,
     "protectedSqlTouched": false
   },
