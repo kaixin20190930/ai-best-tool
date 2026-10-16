@@ -2,6 +2,8 @@
 
 更新时间：2026-10-16
 
+2026-10-16 **每周市场反馈与增长复盘完成**：GSC 最新完整日 2026-10-13，7 天 `3 clicks / 956 impressions / CTR 0.31% / position 13.42`，28 天 `7 / 1,813 / 0.39% / 14.40`；站内事件 unavailable。下周 Harvest 首要对象为 `/ai/n8n`（7 天 679 impressions、排名 9.27、CTR 0.15%），Lindy、Poe、DeepL 和 Woy AI 分别进入身份/决策意图/技术诊断队列。Catalog 以 Lindy、Zapier、Activepieces、Gumloop、Relay.app 为主，Bardeen、Dify 为后备；所有分数是机会评分而非搜索量或发布批准。Decision 安排 AI workflow automation 与 App builder comparison 两个端到端用户单元。本周无新的 index/sitemap 授权项，因为现有高信号页面已是 `continue_index`，Woy/Lindy 门禁未完成且逐 URL Coverage unavailable。详见[每周复盘](./WEEKLY_MARKET_GROWTH_REVIEW_2026-10-16_CN.md)。
+
 2026-10-16 **历史库存治理被明确为一次性收敛，稳态工具流程统一为两条**：本次全部 `monitor/noindex`、Coverage 未收录、重复、失效和历史不一致页面完成分类及处置后，临时库存清单封存，不保留“旧工具/更旧工具/历史工具”永久层级。此后所有来源只保留 provenance：没有正式 Tool ID 的对象走“新工具收录”，已有 Tool ID 的对象统一走“已收录工具定期更新”；索引、noindex、merge、archive、redirect 只是后者的状态动作，Task/Comparison/Market 只是消费或反馈，不另建工具事实流程。调度保持每日 1-2 个新工具和一个最多 5-10 条的更新 change set，每周统一生成 Harvest、Coverage 恢复和 3-5 项索引授权候选，每月只做增量对账。禁止新增 legacy/年份 selector、专属脚本或不同 QA 标准。详见[自动运营 V2 第 9C 节](./AUTOMATED_OPERATIONS_V2_IMPLEMENTATION_2026-10-12_CN.md#9c-历史库存一次性收敛与统一生命周期)。
 
 2026-10-16 **免费/付费收录商业化边界已预留，但暂不进入开发**：免费与付费未来允许在响应 SLA、Vendor 身份/Claim 服务、更新次数和明确标注的 Sponsored 曝光上不同；身份、证据、安全、重复意图、自然 Decision Ranking 和 index/sitemap 门禁保持一致，付款不能购买自动通过、推荐、Google 收录或自然排名。参考主流目录的免费人工提交、付费快速审核、Verified Profile 和独立 Featured 库存，形成 `$0 / $29 Priority / $99年 Verified / $39每7天 Sponsored / $79 Launch Beta` 的待验证价格架构；现有 Stripe 与生产价格不变。只有具备 28 天流量/qualified outbound 基线、至少 5 个 Vendor 访谈和独立 Sponsored 披露/到期能力后才允许开发，避免现在为低量商业化过度设计。详见[自动运营 V2 第 9B 节](./AUTOMATED_OPERATIONS_V2_IMPLEMENTATION_2026-10-12_CN.md#9b-免费与付费收录的商业化预留暂不实施)。
