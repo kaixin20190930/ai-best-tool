@@ -31,6 +31,12 @@ assert.equal(
   'schedule_sync',
 );
 assert.equal(classifyBacklog({ ...base, name: 'woy-ai' }, '2026-10-08')?.classification, 'claim_due');
+const commonPriority = classifyBacklog({ ...base, name: 'arbitrary-tool' }, '2026-10-08')?.priority;
+for (const slug of ['perplexity', 'gemini', 'github-copilot', 'codex', 'notion', 'dune', 'the-graph']) {
+  const classified = classifyBacklog({ ...base, name: slug }, '2026-10-08');
+  assert.equal(classified?.priority, commonPriority, `${slug} must not receive a slug-specific priority`);
+  assert.equal(Object.hasOwn(classified || {}, 'taskDecisionDependency'), false);
+}
 assert.equal(
   classifyBacklog({ ...base, name: 'any-tool', url: null, features: {} }, '2026-10-08')?.classification,
   'manual_archive_review',

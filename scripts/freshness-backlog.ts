@@ -12,8 +12,6 @@ export type BacklogRow = {
 };
 export type BacklogClass = 'schedule_sync' | 'claim_due' | 'entity_due' | 'manual_archive_review';
 
-const taskDependencies = new Set(['perplexity', 'gemini', 'github-copilot', 'codex', 'notion', 'dune', 'the-graph']);
-
 function dateDays(date: string, today: string): number {
   return Math.floor((Date.parse(`${today}T00:00:00Z`) - Date.parse(`${date}T00:00:00Z`)) / 86400000);
 }
@@ -68,11 +66,9 @@ export function classifyBacklog(row: BacklogRow, today: string) {
     overdueDays,
     sourceUrl: source,
     sourceAccessible,
-    taskDecisionDependency: taskDependencies.has(row.name),
     indexRisk: row.page_quality_status === 'continue_index',
     priority:
       (row.page_quality_status === 'continue_index' ? 100 : 0) +
-      (taskDependencies.has(row.name) ? 35 : 0) +
       Math.min(overdueDays, 60) +
       (sourceAccessible ? 10 : 0) -
       (classification === 'manual_archive_review' ? 20 : 0),
