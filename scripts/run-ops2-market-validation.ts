@@ -78,6 +78,8 @@ async function reviewer(id: string) {
 const productionDeps: Dependencies = { connect: () => getPool().connect(), assertReviewer: reviewer };
 
 export async function run(pack: MarketPack, options: Options, deps = productionDeps, env = process.env) {
+  if (env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION)
+    throw new Error('Market validation requires independent QA, not internal preparation');
   const client = await deps.connect();
   let transaction = false;
   try {

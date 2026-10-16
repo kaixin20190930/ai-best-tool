@@ -78,6 +78,8 @@
 8. 通用 postcheck 回读唯一实体、三语言页面、robots、canonical 和 sitemap 排除。
 9. Tool Capability、Fit、Task Page 和 index 分别进入后续独立管线，不能与工具公开捆绑。
 
+普通成熟工具从入队到 draft 是 **Catalog internal preparation**：只需真实管理员 reviewer、精确选择包/候选前像、rollback hash 和绑定对象的一次性内部授权；内部审计标记 `internal_preparation`，不冒称 QA。两个准备动作在同一端到端交付单元内自动完成，不建立阶段 SHA、阶段 QA 或阶段用户回传。工具最终公开前才做一次独立 QA，然后通过原 `published + monitor/noindex` 门禁。单独的 market validation、关系发布、索引与 sitemap 仍按原独立审核/Owner 权限执行，不能使用内部授权。一个日报和一个最终审计记录本单实际结果；旧 QA 审计不迁移。
+
 代码只维护“通用发布系统”，不再为普通工具建立同名 guard/test/release 文件。候选事实、证据和状态保存在数据库；Git 只记录 schema、通用逻辑、政策和审计摘要。
 
 ## 5. 当前实现差距

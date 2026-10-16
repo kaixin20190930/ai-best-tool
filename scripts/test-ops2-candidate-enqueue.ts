@@ -9,6 +9,7 @@ import { parseOps2Selection, selectionHash, selectionLocalizedField, selectionRa
 import { evidenceReadyDraftSql } from '../lib/services/admin/draftPublicationSql';
 import { importCollectionCandidateToDraft } from '../lib/services/admin/collection';
 import { parseOptions, parseQaReport, qaReportHash, run, verifyPlatformOwnedMedia } from './run-ops2-candidate-enqueue';
+import { assertUnusedInternalPreparationNonce } from './ops2-internal-preparation';
 
 const today = new Date().toISOString().slice(0, 10);
 const future = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10);
@@ -165,6 +166,12 @@ const client = {
         ? [clone(state.candidate)] : [];
       return { rows, rowCount: rows.length };
     }
+    if (sql.startsWith('SELECT pg_advisory_xact_lock')) return { rows: [{}], rowCount: 1 };
+    if (sql.startsWith('SELECT id FROM collection_candidates\n    WHERE raw_payload')) {
+      const audit = state.candidate?.raw_payload.ops2EnqueueAudit as Record<string, unknown> | undefined;
+      const used = audit?.internalPreparationNonce === params[0];
+      return { rows: used ? [{ id: state.candidate?.id }] : [], rowCount: used ? 1 : 0 };
+    }
     if (sql === 'SELECT id,name,url,title FROM tools') return { rows: state.tools, rowCount: state.tools.length };
     if (sql.startsWith('SELECT id FROM categories'))
       return { rows: [{ id: 'category-or-task' }], rowCount: 1 };
@@ -316,6 +323,39 @@ async function main() {
     const replay = await run(selection, parseOptions(['--mode=commit', `--expected-hash=${hash}`]), deps);
     assert.equal(replay.productionWrites, 0);
     assert.equal(state.writes, 3, 'Catalog preview, Task preview and first commit are the only inserts');
+    state.candidate = null;
+    delete process.env.OPS2_QA_REPORT;
+    delete process.env.OPS2_QA_REFERENCE;
+    delete process.env.OPS2_PUBLISH_AUTHORIZATION;
+    const internalPreflight = await run(selection, parseOptions(['--mode=preflight']), deps);
+    const internalHash = internalPreflight.preimageHash!;
+    const nonce = 'ffffffff-ffff-4fff-8fff-ffffffffffff';
+    const internalToken = `enqueue:${selection.id}:${selectionHash(selection)}:${internalHash}:${report.reviewer}:${nonce}`;
+    process.env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION = internalToken;
+    process.env.OPS2_ROLLBACK_HASH = internalHash;
+    const internalCommit = parseOptions(['--mode=commit', `--expected-hash=${internalHash}`]);
+    delete process.env.OPS2_REVIEWER_ID;
+    await assert.rejects(run(selection, internalCommit, deps), /reviewer/);
+    process.env.OPS2_REVIEWER_ID = report.reviewer;
+    delete process.env.OPS2_ROLLBACK_HASH;
+    await assert.rejects(run(selection, internalCommit, deps), /rollback/);
+    process.env.OPS2_ROLLBACK_HASH = internalHash;
+    process.env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION = `${internalToken}:extra`;
+    await assert.rejects(run(selection, internalCommit, deps), /authorization/);
+    process.env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION = internalToken;
+    const internalResult = await run(selection, internalCommit, deps);
+    assert.equal(internalResult.productionWrites, 1);
+    assert.equal((state.candidate!.raw_payload.ops2EnqueueAudit as Record<string, unknown>).reviewMode,
+      'internal_preparation');
+    assert.equal((state.candidate!.raw_payload.ops2EnqueueAudit as Record<string, unknown>).qaReportHash,
+      undefined);
+    assert.equal((await run(selection, parseOptions(['--mode=postcheck',
+      `--expected-hash=${internalHash}`, `--expected-post-hash=${internalResult.postimageHash}`]), deps))
+      .productionWrites, 0);
+    assert.equal((await run(selection, internalCommit, deps)).productionWrites, 0);
+    await assert.rejects(assertUnusedInternalPreparationNonce(client, nonce), /already been used/);
+    delete process.env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION;
+    await assert.rejects(run(selection, internalCommit, deps), /original review mode/);
     const different = parseOps2Selection({ ...fixture, name: 'Changed Fixture AI Research' });
     await assert.rejects(run(different, parseOptions(['--mode=preflight']), deps));
     state.tools = [{ id: 'existing', name: 'Fixture AI Research', url: selection.officialUrl }];
@@ -324,7 +364,8 @@ async function main() {
     if (process.argv.includes('--local-db')) await runLocalDb();
     console.log('OPS2 structured enqueue validation, collision, rollback, exact authorization, commit and replay passed.');
   } finally {
-    for (const key of ['OPS2_REVIEWER_ID', 'OPS2_QA_REFERENCE', 'OPS2_QA_REPORT', 'OPS2_ROLLBACK_HASH', 'OPS2_PUBLISH_AUTHORIZATION']) {
+    for (const key of ['OPS2_REVIEWER_ID', 'OPS2_QA_REFERENCE', 'OPS2_QA_REPORT', 'OPS2_ROLLBACK_HASH',
+      'OPS2_PUBLISH_AUTHORIZATION', 'OPS2_INTERNAL_PREPARATION_AUTHORIZATION']) {
       if (original[key] === undefined) delete process.env[key];
       else process.env[key] = original[key];
     }

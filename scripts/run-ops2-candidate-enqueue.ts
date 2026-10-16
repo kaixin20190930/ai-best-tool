@@ -10,6 +10,8 @@ import { isAdminUser } from '../lib/auth/admin';
 import { resolveCollectionCategorySlug } from '../lib/services/admin/collection';
 import { parseOps2Selection, selectionHash, selectionRawPayload, type Ops2Selection } from '../lib/services/admin/ops2Selection';
 import { createAdminClient } from '../lib/supabase/admin';
+import { assertInternalAudit, assertInternalPreparationScope,
+  assertUnusedInternalPreparationNonce, type InternalPreparationAudit } from './ops2-internal-preparation';
 
 loadEnvConfig(process.cwd());
 
@@ -191,7 +193,7 @@ async function readCandidate(client: PoolClient, selection: Ops2Selection, lock:
 }
 
 function assertApplied(row: Existing, selection: Ops2Selection, hash: string, qaHash: string,
-  reviewer: string, qaActor: string): string {
+  reviewer: string, qaActor: string, internal?: InternalPreparationAudit): string {
   assert.ok(row, 'Candidate is not enqueued');
   assert.equal(row.id, selection.id);
   assert.equal(row.status, 'new');
@@ -202,9 +204,14 @@ function assertApplied(row: Existing, selection: Ops2Selection, hash: string, qa
   assert.equal(payload.ops2EnqueueAudit?.preimageHash, hash);
   assert.equal(payload.ops2EnqueueAudit?.selectionHash, selectionHash(selection));
   assert.equal(payload.ops2EnqueueAudit?.reviewer, reviewer);
-  assert.equal(payload.ops2EnqueueAudit?.qaReference, qaActor);
-  assert.equal(payload.ops2EnqueueAudit?.qaActor, qaActor);
-  assert.equal(payload.ops2EnqueueAudit?.qaReportHash, qaHash);
+  if (payload.ops2EnqueueAudit?.reviewMode === 'internal_preparation') {
+    assertInternalAudit(payload.ops2EnqueueAudit, internal);
+  } else {
+    assert.ok(!internal, 'Internal authorization cannot replay an independent QA record');
+    assert.equal(payload.ops2EnqueueAudit?.qaReference, qaActor);
+    assert.equal(payload.ops2EnqueueAudit?.qaActor, qaActor);
+    assert.equal(payload.ops2EnqueueAudit?.qaReportHash, qaHash);
+  }
   const fingerprint = candidateFingerprint(row);
   assert.equal(payload.ops2EnqueueAudit?.postimageHash, fingerprint, 'Candidate postimage drifted');
   return fingerprint;
@@ -243,10 +250,13 @@ export async function run(selection: Ops2Selection, options: Options, deps = pro
     const existing = await readCandidate(client, selection, transaction);
     const applied = existing?.raw_payload &&
       (existing.raw_payload as Record<string, any>).ops2EnqueueAudit?.preimageHash;
+    const internalMode = Boolean(process.env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION);
     if (options.mode === 'postcheck') {
-      const qa = qaContext(selection);
-      const postimageHash = assertApplied(existing, selection, options.expectedHash!, qa.hash,
-        qa.report.reviewer, qa.report.qaActor);
+      const audit = (existing?.raw_payload as Record<string, any> | undefined)?.ops2EnqueueAudit;
+      assert.ok(audit, 'Candidate enqueue audit missing');
+      const qa = audit.reviewMode === 'internal_preparation' ? null : qaContext(selection);
+      const postimageHash = assertApplied(existing, selection, options.expectedHash!, qa?.hash || '',
+        qa?.report.reviewer || audit.reviewer, qa?.report.qaActor || '');
       assert.equal(options.expectedPostHash, postimageHash, 'Candidate postcheck fingerprint differs from commit');
       return { mode: options.mode, id: selection.id, status: existing?.status,
         postimageHash, productionWrites: 0 };
@@ -261,9 +271,21 @@ export async function run(selection: Ops2Selection, options: Options, deps = pro
         return { mode: options.mode, id: selection.id, alreadyApplied: true,
           postimageHash, productionWrites: 0 };
       }
-      const qaHash = assertEnqueueScope(selection, options, options.expectedHash!, process.env);
+      if (options.mode === 'commit')
+        assert.equal(internalMode, audit.reviewMode === 'internal_preparation',
+          'Enqueue replay must use the original review mode');
+      let internal: InternalPreparationAudit | undefined;
+      let qaHash: string | null = null;
+      if (options.mode === 'commit' && internalMode) {
+        assert.equal(options.expectedHash, audit.preimageHash);
+        internal = assertInternalPreparationScope('enqueue', selection.id, options.expectedHash!,
+          process.env.OPS2_REVIEWER_ID || '', selectionHash(selection));
+      } else {
+        qaHash = assertEnqueueScope(selection, options, options.expectedHash!, process.env);
+      }
       const postimageHash = assertApplied(existing, selection, options.expectedHash!, qaHash || audit.qaReportHash,
-        process.env.OPS2_REVIEWER_ID!, options.mode === 'commit' ? qaContext(selection).report.qaActor : audit.qaReference);
+        process.env.OPS2_REVIEWER_ID!, options.mode === 'commit' && !internal
+          ? qaContext(selection).report.qaActor : audit.qaReference, internal);
       return { mode: options.mode, id: selection.id, alreadyApplied: true,
         postimageHash, productionWrites: 0 };
     }
@@ -271,13 +293,19 @@ export async function run(selection: Ops2Selection, options: Options, deps = pro
     const hash = preimageHash(selection, existing);
     if (options.mode === 'preflight') return { mode: options.mode, id: selection.id, preimageHash: hash,
       selectionHash: selectionHash(selection), ready: true, productionWrites: 0 };
-    const qaHash = assertEnqueueScope(selection, options, hash);
+    if (options.mode === 'commit' && internalMode)
+      assert.equal(options.expectedHash, hash, 'Selection or database preimage changed');
+    const internal = options.mode === 'commit' && internalMode
+      ? assertInternalPreparationScope('enqueue', selection.id, hash,
+        process.env.OPS2_REVIEWER_ID || '', selectionHash(selection)) : undefined;
+    const qaHash = internal ? null : assertEnqueueScope(selection, options, hash);
     await deps.assertReviewer(process.env.OPS2_REVIEWER_ID!);
-    const qaActor = options.mode === 'commit' ? qaContext(selection).report.qaActor : 'rollback-preview';
+    if (internal) await assertUnusedInternalPreparationNonce(client, internal.internalPreparationNonce);
+    const qaActor = options.mode === 'commit' && !internal ? qaContext(selection).report.qaActor : 'rollback-preview';
     const payload = { ...selectionRawPayload(selection), ops2EnqueueAudit: {
       preimageHash: hash, reviewer: process.env.OPS2_REVIEWER_ID,
-      selectionHash: selectionHash(selection), qaReference: qaActor, qaActor,
-      qaReportHash: qaHash || 'rollback-preview',
+      selectionHash: selectionHash(selection),
+      ...(internal || { qaReference: qaActor, qaActor, qaReportHash: qaHash || 'rollback-preview' }),
       queuedAt: new Date().toISOString(),
     } };
     const scoreReason = `Editorial ${selection.cluster.role} for ${selection.cluster.taskSlug || 'catalog'}; two official sources`;
@@ -293,7 +321,8 @@ export async function run(selection: Ops2Selection, options: Options, deps = pro
       selection.localized.en.summary, JSON.stringify(payload), scoreReason]);
     assert.equal(inserted.rowCount, 1, 'Candidate changed or normalized URL already exists');
     const after = await readCandidate(client, selection, false);
-    assertApplied(after, selection, hash, qaHash || 'rollback-preview', process.env.OPS2_REVIEWER_ID!, qaActor);
+    assertApplied(after, selection, hash, qaHash || 'rollback-preview', process.env.OPS2_REVIEWER_ID!, qaActor,
+      internal);
     if (options.mode === 'rollback') {
       await client.query('ROLLBACK');
       transaction = false;

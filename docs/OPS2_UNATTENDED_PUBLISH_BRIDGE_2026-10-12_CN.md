@@ -1,6 +1,6 @@
 # OPS2 无浏览器发布桥
 
-状态：代码候选，未执行生产 commit，尚未授予定时任务生产写入权限。
+状态：通用桥已用于既有受控发布；本次新增 Catalog 内部准备授权仅供候选入队后的 draft 导入，不自动授予公开写入。
 
 ## 范围
 
@@ -11,16 +11,16 @@
 - `relation` 仅调用现有 Research reviewed-group RPC，要求精确的两条 Tool Capability 和一条 Fit 前像，不涉及 Task Page、工具索引或 sitemap。
 - 不为 SciSpace、v0 或任何普通工具添加专属代码、发布 JSON 或 SQL。
 
-四个模式都输出结构化 JSON 与 `productionWrites`。`preflight`、`postcheck` 默认只读。`rollback` 对 Neon 目标在单一事务内执行通用服务后回滚；Research 关系回滚需要 `SUPABASE_DB_URL`，在事务内调用同一 RPC 后回滚。`commit` 要求当前哈希与 preflight 相同，并且有精确 `OPS2_PUBLISH_AUTHORIZATION=<kind>:<id>:<hash>`、`OPS2_ROLLBACK_HASH=<hash>`、`OPS2_REVIEWER_ID=<真实管理员 UUID>` 和 `OPS2_QA_REFERENCE=codex-thread:<独立 QA UUID>`。候选、工具、关系彼此不得复用授权。重复 commit 只有与原始 QA/前像审计匹配才报告 `productionWrites=0`。
+四个模式都输出结构化 JSON 与 `productionWrites`。`preflight`、`postcheck` 默认只读。`rollback` 对 Neon 目标在单一事务内执行通用服务后回滚；Research 关系回滚需要 `SUPABASE_DB_URL`，在事务内调用同一 RPC 后回滚。`candidate` 的 commit 有两个互斥模式：原独立 QA 模式保留 `OPS2_PUBLISH_AUTHORIZATION=candidate:<id>:<hash>`、`OPS2_ROLLBACK_HASH=<hash>`、真实管理员 reviewer 与独立 QA reference；新增内部准备模式仅接受 `OPS2_INTERNAL_PREPARATION_AUTHORIZATION=candidate:<id>:<candidatePreimageHash>:<reviewerUUID>:<新随机UUID nonce>`、匹配的 rollback hash 与真实管理员 reviewer，只能写 draft，审计 `reviewMode=internal_preparation`，不得带 QA 报告/reference/公开授权。两个模式的 postcheck 和零写重放按原审计模式校验，历史 QA 审计不迁移。`tool` 公开与 `relation` 仍只能用原独立 QA 授权；内部 token 一旦出现在这两条线会被拒绝。market validation 也只接受独立 QA。index/sitemap 不受内部准备模式影响。
 
 ## 执行顺序
 
-1. 对数据库中已有候选运行 `--kind=candidate --mode=preflight`，保存输出哈希。使用同一哈希运行 `rollback`，通过后取得独立 QA，再提供四个窄授权环境变量运行 `commit` 和 `postcheck`。该步骤只生成 draft。
+1. 对数据库中已有候选运行 `--kind=candidate --mode=preflight`，保存输出哈希。使用同一哈希运行 `rollback`；普通工具可用上述精确内部准备授权运行 `commit` 和 `postcheck`，不必等待阶段 QA。既有独立 QA 授权也继续可用。该步骤只生成 draft，不允许公开。
 2. 在通用数据/Admin 编辑路径补齐真实官方来源、非占位媒体、三语言内容、Claim 边界和市场证据；不得把导入器生成的占位稿直接公开。
 3. 对 draft 的工具 UUID 运行 `--kind=tool` 同样的四步。`preflight` 会返回通用发布 blocker；只有空 blocker、rollback、独立 QA 均通过才可 commit。`postcheck` 回读 `published + monitor`、`noindex` 推导及发布审计。
 4. Research 使用 Gemini Notebook `cec78907-e2a1-4eb7-853a-a58334026280` 和 Perplexity `3d018623-85f9-4df4-bd55-9a4a0e7a2d93` 两次独立 `--kind=relation` 四步，不共享哈希或授权。RPC 再核对全部精确前像、官方证据与关系数量。
 
-这些环境变量应由总控在单次作业中设置，不能把宽泛或长期 `commit` 授权写入 `.env`。使用 service-role 只用于调用现有 RPC/审核身份；不会替代独立 QA 或放宽数据库门禁。
+授权环境变量由总控在单次作业中设置，随机 nonce 不得复用，不能把宽泛或长期 `commit` 授权写入 `.env`。普通工具的候选入队与 draft 导入作为同一交付单元的内部阶段，不创建阶段 SHA/阶段 QA/阶段用户回传；日报与最终公开审计各只汇总一次。最终工具公开仍须一次独立 QA；单独执行的 market validation 与 relation 保留各自独立 QA。使用 service-role 只用于调用现有 RPC/审核身份；内部准备不会替代最终独立 QA 或放宽数据库门禁。
 
 ## 2026-10-12 试运行发现
 

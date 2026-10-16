@@ -10,6 +10,8 @@ import { importCollectionCandidateToDraft } from '../lib/services/admin/collecti
 import { buildReadyDraftMonitorPublishSql, getMonitorPublicationBlockers } from '../lib/services/admin/submissionPublication';
 import { getToolIndexDecision } from '../lib/seo/toolIndexing';
 import { createAdminClient } from '../lib/supabase/admin';
+import { assertInternalAudit, assertInternalPreparationScope,
+  assertUnusedInternalPreparationNonce, type InternalPreparationAudit } from './ops2-internal-preparation';
 
 loadEnvConfig(process.cwd());
 
@@ -104,14 +106,22 @@ async function readCandidate(client: PoolClient, id: string, lock = false) {
   return result.rows[0] as Row;
 }
 
-export function assertCandidateAudit(candidate: Row, tool: Row | undefined, hash: string, env = process.env) {
+export function assertCandidateAudit(candidate: Row, tool: Row | undefined, hash: string, env = process.env,
+  internal?: InternalPreparationAudit) {
   const audit = candidate.raw_payload?.ops2PublicationBridge;
   assert.equal(candidate.status, 'imported');
   assert.equal(candidate.tool_id, tool?.id);
   assert.equal(tool?.status, 'draft');
   assert.equal(audit?.preimageHash, hash);
-  assert.equal(audit?.qaReference, env.OPS2_QA_REFERENCE);
-  assert.equal(audit?.reviewer, env.OPS2_REVIEWER_ID);
+  if (audit?.reviewMode === 'internal_preparation') {
+    assertInternalAudit(audit, internal);
+    assert.match(audit.reviewer || '', uuid);
+    if (env.OPS2_REVIEWER_ID) assert.equal(audit.reviewer, env.OPS2_REVIEWER_ID);
+  } else {
+    assert.ok(!internal, 'Internal authorization cannot replay an independent QA record');
+    assert.equal(audit?.reviewer, env.OPS2_REVIEWER_ID);
+    assert.equal(audit?.qaReference, env.OPS2_QA_REFERENCE);
+  }
 }
 
 export function assertToolAudit(row: Row, hash: string, env = process.env) {
@@ -191,6 +201,7 @@ async function runCandidate(options: Options, deps: ToolLineDependencies) {
     const existingTool = candidate.tool_id
       ? await client.query(`SELECT id,status FROM tools WHERE id = $1${transaction ? ' FOR UPDATE' : ''}`, [candidate.tool_id]) : null;
     const alreadyApplied = candidate.status === 'imported' && existingTool?.rowCount === 1;
+    const internalMode = options.mode === 'commit' && Boolean(process.env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION);
     if (options.mode === 'postcheck') {
       assertCandidateAudit(candidate, existingTool?.rows[0], options.expectedHash!, process.env);
       return { kind: options.kind, mode: options.mode, id: options.id, toolId: candidate.tool_id,
@@ -199,9 +210,14 @@ async function runCandidate(options: Options, deps: ToolLineDependencies) {
     assert.ok(candidate.normalized_url, 'Candidate URL is missing');
     normalizedUrl(candidate.normalized_url);
     if (alreadyApplied && (options.mode === 'commit' || options.mode === 'rollback')) {
-      if (options.mode === 'commit') assertCommitScope(options, options.expectedHash!, process.env);
-      else assertReviewScope(options, options.expectedHash!, process.env);
-      assertCandidateAudit(candidate, existingTool?.rows[0], options.expectedHash!, process.env);
+      if (options.mode === 'commit')
+        assert.equal(internalMode, candidate.raw_payload?.ops2PublicationBridge?.reviewMode === 'internal_preparation',
+          'Draft replay must use the original review mode');
+      const internal = internalMode ? assertInternalPreparationScope('candidate', options.id,
+        options.expectedHash!, process.env.OPS2_REVIEWER_ID || '') : undefined;
+      if (options.mode === 'commit' && !internal) assertCommitScope(options, options.expectedHash!, process.env);
+      else if (options.mode === 'rollback') assertReviewScope(options, options.expectedHash!, process.env);
+      assertCandidateAudit(candidate, existingTool?.rows[0], options.expectedHash!, process.env, internal);
     }
     if (!alreadyApplied) {
       assert.equal(candidate.status, 'new', 'Candidate is no longer importable');
@@ -211,24 +227,29 @@ async function runCandidate(options: Options, deps: ToolLineDependencies) {
       return { kind: options.kind, mode: options.mode, id: options.id, preimageHash: hash,
         alreadyApplied, toolId: candidate.tool_id || null, productionWrites: 0 };
     }
-    if (options.mode === 'commit') assertCommitScope(options, hash);
-    else assertReviewScope(options, hash);
+    if (internalMode) assert.equal(options.expectedHash, hash, 'Preimage changed after preflight');
+    const internal = internalMode ? assertInternalPreparationScope('candidate', options.id, hash,
+      process.env.OPS2_REVIEWER_ID || '') : undefined;
+    if (options.mode === 'commit' && !internal) assertCommitScope(options, hash);
+    else if (options.mode === 'rollback') assertReviewScope(options, hash);
     await deps.assertReviewer(process.env.OPS2_REVIEWER_ID!);
+    if (internal) await assertUnusedInternalPreparationNonce(client, internal.internalPreparationNonce);
     const imported = await deps.importCandidate(options.id, client);
     const draft = await readTool(client, imported.toolId);
     assert.equal(draft.status, 'draft', 'Candidate import must not publish a tool');
     await assertUniqueIdentity(client, draft);
+    const audit = { preimageHash: hash, reviewer: process.env.OPS2_REVIEWER_ID,
+      ...(internal || { qaReference: process.env.OPS2_QA_REFERENCE || 'rollback-preview' }) };
     const auditUpdate = await client.query(`UPDATE collection_candidates
-      SET raw_payload = COALESCE(raw_payload, '{}'::jsonb) || jsonb_build_object('ops2PublicationBridge',
-        jsonb_build_object('preimageHash',$2::text,'qaReference',$3::text,'reviewer',$4::text))
-      WHERE id = $1 AND status = 'imported' AND tool_id = $5`,
-    [options.id, hash, process.env.OPS2_QA_REFERENCE || 'rollback-preview', process.env.OPS2_REVIEWER_ID, imported.toolId]);
+      SET raw_payload = COALESCE(raw_payload, '{}'::jsonb) || jsonb_build_object('ops2PublicationBridge',$2::jsonb)
+      WHERE id = $1 AND status = 'imported' AND tool_id = $3`,
+    [options.id, JSON.stringify(audit), imported.toolId]);
     assert.equal(auditUpdate.rowCount, 1, 'Candidate changed during import');
     const afterCandidate = await readCandidate(client, options.id);
     assertCandidateAudit(afterCandidate, draft, hash, {
       OPS2_QA_REFERENCE: process.env.OPS2_QA_REFERENCE || 'rollback-preview',
       OPS2_REVIEWER_ID: process.env.OPS2_REVIEWER_ID,
-    });
+    }, internal);
     if (options.mode === 'rollback') {
       await client.query('ROLLBACK');
       transaction = false;
@@ -399,6 +420,8 @@ async function runRelation(options: Options) {
 }
 
 export async function run(options: Options, deps = productionToolLineDependencies) {
+  if (options.kind !== 'candidate' && process.env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION)
+    throw new Error('Internal preparation authorization is limited to candidate draft import');
   if (options.kind === 'candidate') return runCandidate(options, deps);
   if (options.kind === 'tool') return runTool(options, deps);
   return runRelation(options);

@@ -47,6 +47,9 @@ function mockDb(pack: MarketPack, url: string) {
 async function main() {
   const v0 = await fixture('v0');
   const sci = await fixture('scispace');
+  await assert.rejects(run(v0, parseOptions(['--mode=preflight']), mockDb(v0, v0.officialUrl).deps,
+    { OPS2_INTERNAL_PREPARATION_AUTHORIZATION: 'internal-only' } as NodeJS.ProcessEnv),
+  /requires independent QA/);
   assert.equal(v0.score, 81);
   assert.equal(sci.score, 77);
   const unsignedV0 = { ...v0, qaReport: null } satisfies MarketPack;
