@@ -1,6 +1,6 @@
 # 已收录工具事实复核批次 2026-10-16 A
 
-状态：原提交 `67f0dd18` 收到独立 `QA_FAIL`；本次只修执行器写入边界，生产只读 preflight 与事务 rollback 已重新通过；**等待独立 QA 复验，生产 commit 未执行**。本批是一份四项 change set，不是四条工具发布线。
+状态：原提交 `67f0dd18` 的写入边界问题已修复；**独立 QA 通过，生产 commit 与只读幂等 postcheck 完成**。本批是一份四项 change set，不是四条工具发布线。
 
 ## 范围和结论
 
@@ -19,8 +19,8 @@
 - 执行器：[统一已收录工具变更集入口](../scripts/run-existing-tools-freshness-change-set.ts)。`preflight` 使用只读事务；`rollback` 在同一事务模拟四项 UPDATE、逐行回读受保护字段后整批 ROLLBACK；`commit` 必须有匹配 manifest 哈希的独立 `QA_PASS` 报告；`postcheck` 验证最终拥有字段与受保护字段。前像漂移则整批停止。写入策略由[可测试的纯函数](../scripts/existing-tools-freshness-write-policy.ts)限制：manifest 顶层逐项批准 `slug + path + from + to`，仅允许当前日期文案路径；SQL 不写 `updated_at`，对 `features` 仅执行获批嵌套 `jsonb_set`。
 - 实际运行：`preflight` PASS、`rollback` PASS；manifest SHA-256 为 `9036a381cce1791bb93b0579aa600d61245094fbafef6defaf27c7a7d0e93cb4`；两次均报告 `productionWrites: 0`。
 - 预期写入仅限 `features.maintenanceReview`、`next_review_date`，以及 ChatGPT 的复核日期文字和 Lovable 的过期 `decision.freshnessSummary`。事实主张本身不改。
-- 实际生产更新数 **0**；核查后事实零变化 **4**；工具实体 HOLD **0**；仍有精确 Claim 的 conflict/unknown/conditional 边界。生产回读前像不变。
+- 实际生产维护更新数 **4**；核查后事实零变化 **4**；工具实体 HOLD **0**；仍有精确 Claim 的 conflict/unknown/conditional 边界。写入只更新获批的维护快照、下次复核日期及两处过期日期文字，不改变事实主张或索引状态。
 
 ## QA 和发布边界
 
-独立 QA 只需核对四项官方来源、manifest 差分、前像/受保护字段、Replit 最早到期日期，以及执行器的负向边界。无需全量 build 或生产页面 smoke，因为本批没有运行时页面、路由和索引代码改动。QA PASS 后由总控在同一变更集上决定是否执行显式 commit；commit 后运行 `postcheck` 并更新本记录。若任何来源或前像发生变化，原 manifest 失效，不能按旧 PASS 强行提交。
+独立 QA 对 manifest `9036a381cce1791bb93b0579aa600d61245094fbafef6defaf27c7a7d0e93cb4` 给出 `QA_PASS`。首次 QA 阻止了 `updated_at` 越权写入和未限制路径；修复后执行器只允许 manifest 明确列出的 `slug + path + from + to`，负向测试覆盖未授权路径和旧值漂移。生产 commit 写入 4 项；首次 postcheck 因 Node 导入兼容错误中止，未产生第二次写入，修复提交 `617f37f3` 后只读 postcheck 确认四项 `alreadyApplied=true`、`productionWrites=0`。无需全量 build 或生产页面 smoke，因为本批没有页面、路由或索引发布路径变化。
