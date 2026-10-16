@@ -279,6 +279,78 @@ Catalog 数量是上限和正常目标，不是牺牲质量的硬 KPI。若 Harv
 - 自动化不得为了实现本节而拆出 scoring service、dashboard、专属数据库表或连续 gate 任务；需要这些能力时，必须先用两周数据证明现有字段无法满足。
 - 单项超过 60 分钟、同类流程连续失败两次或验证成本高于用户变化时立即缩小范围，并在日报中记录 `PROCESS_BUDGET_EXCEEDED`。
 
+## 9B. 免费与付费收录的商业化预留（暂不实施）
+
+### 保留原则
+
+当前阶段不扩建付费收录系统，但所有 Catalog、Decision、索引和排序设计必须为未来商业化保留清晰边界。免费与付费可以有不同的服务标准、交付时效、资料完整度和曝光权益，但不得有不同的事实真实性、安全、重复意图、canonical、法律或用户价值底线。
+
+付款可以购买：
+
+- 更快得到接受、拒绝或补件结论的审核 SLA；
+- Vendor identity / Claim 所有权核验、资料整理和限定次数的更新服务；
+- 明确标注为 Sponsored / Featured 的固定时间曝光；
+- 发布后的透明交付报告，例如展示位置、站内点击和 outbound click；
+- 合同约定的内容制作或研究服务，但必须与自然编辑结论分开。
+
+付款不得购买：
+
+- 自动通过、降低实体/Claim 门禁或删除真实限制；
+- `continue_index`、sitemap、Google 收录或排名保证；
+- 自然 Decision Ranking、Best、Editor's Pick、推荐强度或比较结论；
+- 虚构用户评价、实测、市场采用、价格权益或独立证据；
+- 未标注广告、永久前排、dofollow SEO 效果或流量/销售保证。
+
+免费提交继续承担覆盖长尾、发现新产品和用户贡献的作用；付费提交承担确定时效、Vendor 服务和可测曝光。相同工具无论来源于自动抓取、普通用户、Vendor 或付费订单，最终实体身份只能有一个，必须查重并归入同一 canonical。
+
+### 可借鉴但不照搬的市场模式
+
+- Future Tools 保留免费人工提交，同时把 Featured、Banner 和 Newsletter Sponsorship 作为独立且明确标注的广告库存；其自然 Top 20、Review 和编辑推荐不出售。
+- Futurepedia 将一次性加速发布、Verified/Enhanced Listing 与企业营销包分层，同时声明所有提交仍受编辑审批；拒绝时退款。
+- Toolify 采用一次性付费快速上线和 Featured 曝光，适合目录流量销售，但其永久链接、快速上线和 SEO 价值承诺不适合直接成为本产品的 Evidence-backed 标准。
+
+本产品只借鉴“免费入口 + 付费时效/服务 + 独立广告库存 + 清楚披露”的流程，不采用“付款即收录”“买自然排名”或“卖 Google 索引”。
+
+### 未来产品结构
+
+未来启用时，将商业产品简化为四类，避免当前小额 SKU 和 3/7/14 天组合过碎：
+
+1. **Free Editorial Submission**：免费、best effort 队列，不承诺审核时间、收录、索引或曝光。
+2. **Priority Editorial Review**：购买响应 SLA 和一次结构化补件机会，不购买通过；只有自动资格预检通过后才展示付款入口。
+3. **Verified Vendor Profile**：仅表示 Vendor 身份/域名/Claim 管理权已核验，包含约定次数的资料更新；不得解释为产品质量背书。
+4. **Sponsored Launch / Featured Window**：独立广告位，固定周期、明确 Sponsored 标签、与自然排序和 Decision Card 分离，并提供可验证的交付报告。
+
+Claim、Update、Sponsored 和自然 Listing 使用同一个 Tool ID，但商业订单、广告窗口和编辑证据分别记录；广告到期只撤下付费展示，不删除自然工具页或改变自然评价。
+
+### 暂定价格架构，仅供未来验证
+
+当前自然流量和 qualified outbound click 尚不足以支持高价流量承诺，因此价格先按人工交付成本和可验证服务设计，不按竞品流量报价照抄：
+
+| 产品 | Beta 建议价 | 可交付结果 |
+| --- | ---: | --- |
+| Free Editorial Submission | `$0` | best effort 队列，状态可查 |
+| Priority Editorial Review | `$29` 一次性 | 2 个工作日内给出接受/拒绝/补件结论；不保证发布 |
+| Verified Vendor Profile | `$99/年` | 身份/域名/Claim 权限核验及每年 2 次受控资料更新；不影响自然排序 |
+| Sponsored Featured | `$39/7天` Beta | 独立 Sponsored 位置和基础交付数据；不保证点击 |
+| Launch Bundle | `$79` Beta | Priority Review + 14 天 Sponsored + 一份交付报告 |
+
+这些数字不是生产价格决定。正式启用前必须用最近 28 天的 qualified impressions、outbound clicks、人工审核时间、支付/退款成本和至少 5 个 Vendor 访谈重新定价。达到稳定流量后，可按真实库存和中位点击价值提升 Sponsored 价格；不得用无法交付的访问量承诺支撑高价。
+
+现有生产价格 `$9` Priority、`+$9/$19/$29` 三档 Featured 和 `$39` Bundle 暂不因本节自动修改。未来重构应优先减少 SKU、提高审核服务价值、取消 3 天碎片窗口，并把“付费审核”和“Sponsored 曝光”从概念和结算上彻底分开。
+
+### 启用条件与最小实现边界
+
+只有满足以下条件才启动开发：
+
+- 最近 28 天具备稳定的页面曝光、站内 Featured 展示和 qualified outbound click 基线；
+- 至少 5 个真实 Vendor 访谈或支付意向记录支持价格和交付内容；
+- Sponsored 展示有独立组件、明确标签、起止时间和自动到期；
+- 自然排序、Decision 结论、index/sitemap selector 明确忽略 payment status；
+- 退款、拒绝、更新次数、素材责任和广告披露条款已形成可执行政策；
+- 现有 Stripe 与 Submit/Claim 数据路径能复用，确认不能复用后才允许新增最小字段或迁移。
+
+在上述条件满足前：不新增商业化子任务、不改现有价格、不扩建 Vendor Dashboard。自动运营只需确保 payment/sponsored 信号不进入机会评分、自然推荐、索引或 sitemap 决策。
+
 ## 10. 管线隔离与非静默失败协议
 
 ### 新工具不继承 Decision 页面门禁
