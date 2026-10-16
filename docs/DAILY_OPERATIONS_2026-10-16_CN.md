@@ -10,14 +10,14 @@
 | Catalog | partial | 成熟队列没有现成 READY；首位 WellSaid Studio 已核 `www.wellsaid.io` 单一规范域、AI 配音与发音工作流、官方产品/定价互补来源、EN/CN/TW 决策内容及本站自制中性素材。通用入队 preflight 和事务 rollback 通过，生产写入 0。候选尚未入队、导入 draft 或公开。 |
 | Freshness | partial | 全量只读 selector：95 total / 71 published / 22 due；分类 `schedule_sync=0 / claim_due=10 / entity_due=5 / manual_archive_review=7`。仅处理 Murf、Pika、Synthesia 三项到期公开可变 Claim，逐项前像与目标明细哈希匹配；完整事务预演后全部 rollback，写入 0。仍须独立 QA，故不得提交整批。 |
 | Decision | not_due | 本周 2026-10-12 至 10-18 已有 2/2 个用户可见单元；本日不建页面或关系。 |
-| Market | completed with limitation | 继承本次已成功的 GSC 只读快照，最新完整数据日 2026-10-13：7 天 3 clicks / 956 impressions；28 天 7 / 1,813。站内事件 unavailable，不把缺失记为零。 |
+| Market | completed with limitation | 私有 GSC 只读快照相对标识 `.local/gsc/a2847bc96613/search-analytics-2026-10-13.json`，文件 SHA-256 `c290b9f76fac1ea0bbd1963300ce34e3d7850c11be48e10445f0b4be30d220bf`；`latestCompleteDate=2026-10-13`，7 天 3 clicks / 956 impressions，28 天 7 / 1,813。原始私有文件不提交。站内事件 unavailable，不把缺失记为零。 |
 
 ## Catalog：WellSaid
 
 - 单一对象为 WellSaid Studio；API 只是单独核对权益的使用路径，不另建实体。`https://wellsaid.io/` 301 到 `https://www.wellsaid.io/`，选择包只使用后者。
 - [官方首页](https://www.wellsaid.io/)与[AI 配音功能页](https://www.wellsaid.io/ai-voice-generator)支持脚本转语音、选音色、编辑和发音控制。[现行定价页](https://www.wellsaid.io/ai-voice-pricing)区分试用、付费下载分钟、商用范围和套餐权益。
-- 试用不被描述为可商用；付费也不泛化成广播、API、多语言或任意账户的固定权益。本站没有登录、结账、音质测试或官方品牌素材授权，因此采用本站自制无商标声波图。
-- [固定选择包](./DAILY_OPERATIONS_2026-10-16_WELLSAID_SELECTION.json) ID `dc5b66bb-e69b-472e-8566-3e4a6608ea04`，`preimageHash=039565bcf0dc4a044b0a15d7e20bb259faa9cde752dce2202bfdd5ebe81a2dcf`，`selectionHash=201c50e7c2616e352350f3d82ff2006b77a122c9d37f7c58359b23f23f1cf691`。通用 enqueue `preflight` 返回 `ready=true, productionWrites=0`；同一前像 `rollback` 返回 `productionWrites=0`。独立 QA 前不执行 enqueue `commit`。
+- 试用不被描述为可商用；付费也不泛化成广播、API、多语言或任意账户的固定权益。本站没有登录、结账、音质测试或官方品牌素材授权，因此采用本站自制无商标声波图。原选择包 `freemium` 会显示为“Freemium”，可能误导为永久免费层；已仅修为 `paid`，正文及 `pricingSummary` 继续明确 free trial，需增量 QA。
+- [固定选择包](./DAILY_OPERATIONS_2026-10-16_WELLSAID_SELECTION.json) ID `dc5b66bb-e69b-472e-8566-3e4a6608ea04`，修正后 `preimageHash=4d7a7dbe012c35c985510c367e1ce0f05a8670fbe1ef9b1f14894a6fc27a69bc`，`selectionHash=45d43b43393ac22db235304800e0b3113354cd21bdf7bcb89612db033e0677cd`。通用 enqueue `preflight` 返回 `ready=true, productionWrites=0`；同一前像 `rollback` 返回 `productionWrites=0`。原 QA PASS 仅覆盖旧 selectionHash；修正后的入队须增量 QA 才能 commit。
 
 ## Freshness：三项公开 Claim
 

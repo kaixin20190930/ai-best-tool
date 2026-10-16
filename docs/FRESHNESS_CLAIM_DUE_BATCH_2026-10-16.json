@@ -111,8 +111,28 @@
         "rowSha256ExcludingSearchVector": "bce289e2dd3b465e7b3119995ac0f59f7e26782777f7bae542d8c508cb247965",
         "detailSha256": "9739ae6d66d8f6b1f7359032c3f74919993c0d9ae686a633792f7e82edec2704",
         "nextReviewDate": "2026-10-15",
-        "maintenanceReviewCheckedAt": "2026-10-08",
-        "pricingSnapshotCheckedAt": "2026-10-08"
+        "maintenanceReview": {
+          "scope": "Official pricing, credits and avatar consent since 2026-09-08; no checkout, API account or video generation.",
+          "claims": [
+            { "id": "api-entitlement", "status": "conditional", "category": "account_rights", "limitation": "Verify target-account API access and rate limits.", "nextReviewDate": "2026-10-15" },
+            { "id": "checkout-addons", "status": "unknown", "category": "price", "limitation": "Verify target checkout and add-on pricing.", "nextReviewDate": "2026-10-15" }
+          ],
+          "outcome": "fact_updated",
+          "sources": ["https://www.synthesia.io/pricing", "https://docs.synthesia.io/docs/user-licenses", "https://docs.synthesia.io/docs/personal-avatars", "https://docs.synthesia.io/reference/introduction"],
+          "checkedAt": "2026-10-08",
+          "unresolved": ["API entitlement and rate limits must be confirmed in the target account; legacy Creator claims are suppressed.", "Checkout and add-on prices may depend on billing selection."],
+          "changeSummary": "Basic/Starter/Pro credits and packaging changed materially; replace stale plan paragraph with bounded current public summary. API entitlement remains conditional pending account verification.",
+          "nextReviewDate": "2026-10-15"
+        },
+        "pricingSnapshot": {
+          "pro": "$89/mo billed monthly; 6,000 credits/mo",
+          "basic": "$0/mo; 500 credits/mo plus separate 10-minute video/dubbing allowance",
+          "starter": "$29/mo billed monthly; 1,250 credits/mo",
+          "warning": "Public pricing only; checkout, API access, seats and add-ons require account verification.",
+          "checkedAt": "2026-10-08",
+          "enterprise": "Custom pricing"
+        },
+        "protectedFields": { "status": "published", "pageQualityStatus": "monitor", "pricing": "freemium", "url": "https://www.synthesia.io/" }
       },
       "officialSources": [
         {
@@ -147,7 +167,7 @@
         "pricingSnapshot.checkedAt": "2026-10-16",
         "next_review_date": "2026-10-30"
       },
-      "rollback": "Restore exact previous maintenanceReview, pricingSnapshot.checkedAt, EN/ZH/CN detail and next_review_date=2026-10-15 from the exact preimage; never overwrite a drifted row."
+      "rollback": "Restore the exact preimage.maintenanceReview object and preimage.pricingSnapshot object above, EN/ZH/CN detail guarded by preimage.detailSha256, and next_review_date=2026-10-15; never overwrite a drifted row."
     }
   ]
 }
