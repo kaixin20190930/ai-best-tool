@@ -82,5 +82,24 @@
       { "key": "download_minutes", "status": "conditional", "boundary": "Finished downloaded audio minutes differ from generation and vary by plan.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-30" },
       { "key": "api_boundary", "status": "unknown", "boundary": "Do not infer API key access, limits or price from Studio subscription alone.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-30" }
     ]
+  },
+  "draftGateAudit": {
+    "candidateId": "dc5b66bb-e69b-472e-8566-3e4a6608ea04",
+    "preflightCheckedAtUtc": "2026-10-16T02:10:36.383Z",
+    "preflightReady": true,
+    "preflightReadyBasis": "The generic candidate bridge preflight passed all importability assertions; its output does not contain a literal ready field.",
+    "preflightCandidatePreimageHash": "35edc23fd382c7fab12084d02db8222efa0c3cfd50600b850983fe4cfc34de2b",
+    "rollbackCheckedAtUtc": "2026-10-16T02:11:08.204Z",
+    "rollbackCandidatePreimageHash": "35edc23fd382c7fab12084d02db8222efa0c3cfd50600b850983fe4cfc34de2b",
+    "rollbackHashBasis": "The generic bridge accepted this exact --expected-hash and completed its transaction rollback; rollback output does not repeat the hash.",
+    "preimageHashesMatch": true,
+    "proposedToolId": "e31e47dd-5b69-44c4-8491-d174c6f6c0ea",
+    "proposedToolIdIsEphemeral": true,
+    "candidateCount": 1,
+    "candidateStatusAfterRollback": "new",
+    "candidateToolIdAfterRollback": null,
+    "proposedToolExistsAfterRollback": false,
+    "productionWrites": 0,
+    "draftCommitPerformed": false
   }
 }

@@ -18,6 +18,7 @@
 - [官方首页](https://www.wellsaid.io/)与[AI 配音功能页](https://www.wellsaid.io/ai-voice-generator)支持脚本转语音、选音色、编辑和发音控制。[现行定价页](https://www.wellsaid.io/ai-voice-pricing)区分试用、付费下载分钟、商用范围和套餐权益。
 - 试用不被描述为可商用；付费也不泛化成广播、API、多语言或任意账户的固定权益。本站没有登录、结账、音质测试或官方品牌素材授权，因此采用本站自制无商标声波图。原选择包 `freemium` 会显示为“Freemium”，可能误导为永久免费层；已仅修为 `paid`，正文及 `pricingSummary` 继续明确 free trial，需增量 QA。
 - [固定选择包](./DAILY_OPERATIONS_2026-10-16_WELLSAID_SELECTION.json) ID `dc5b66bb-e69b-472e-8566-3e4a6608ea04`，`selectionHash=45d43b43393ac22db235304800e0b3113354cd21bdf7bcb89612db033e0677cd`。独立 QA 对固定 SHA `910da846` 返回 `QA_PASS_CATALOG_ENQUEUE`；通用 enqueue commit 写入 1，postcheck 为候选 `new`、后像 `a227a988b11075ed08d6cff54c6e35ae5e40e2028f6b7164e6fb635051639b76`，相同授权重放 0 写。candidate→draft preflight 前像 `35edc23fd382c7fab12084d02db8222efa0c3cfd50600b850983fe4cfc34de2b`；rollback 拟 Tool ID `cff99f66-26bc-4030-9384-5e9277f1e705`、持续写入 0。只读回读确认唯一候选仍为 `new`、`tool_id=null`，拟 Tool ID 不存在。QA 未批准 draft commit 或公开。
+- draft 唯一 HOLD 的补充审计：2026-10-16 02:10:36 UTC 重新运行通用 candidate→draft preflight，成功通过可导入检查，因此 `preflightReady=true`（桥输出没有字面 `ready` 字段）；候选前像 `35edc23fd382c7fab12084d02db8222efa0c3cfd50600b850983fe4cfc34de2b`、`productionWrites=0`。02:11:08 UTC 同一前像作为 rollback `--expected-hash` 被通用桥接受并完成事务回滚，故 rollback 候选前像与 preflight 完全一致；本次临时拟 Tool ID `e31e47dd-5b69-44c4-8491-d174c6f6c0ea`，`productionWrites=0`。后续只读回读：候选恰好 1 条，仍为 `new`、`tool_id=null`，该拟 Tool ID 不存在。两次 rollback 的临时 ID 不同，不应视为已固定的实际 Tool ID。未执行 draft commit、公开或索引变更。
 
 ## Freshness：三项公开 Claim
 
