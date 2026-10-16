@@ -2,6 +2,8 @@
 
 更新时间：2026-10-16
 
+2026-10-16 **流量优先收录与页面资产规则已并入自动运营 V2**：候选选择从“安全发布后再观察”升级为 `已有搜索机会 → Decision Cluster 缺口 → 决策意图 → 证据成熟度 → 维护成本`。新增 100 分轻量机会评分、Harvest/Expand/Discover 三队列、Tool+Task/Comparison/Finder 消费位置的最小资产包，以及 Harvest 5 页、Catalog 5-7 工具、Decision 2 单元、Discover 1-2 候选的正常周组合。成熟 A 级页面不强制固定观察期，但 index/sitemap 仍进入每周最多 3-5 项的 Owner 集中授权批次。该升级只修改选择、排期和报告口径，不新建评分服务、Dashboard、数据库表或每工具代码；普通批次保持一份快照、一个开发槽、一次最终 QA、一次必要 smoke，R 级研究不运行 build。详见[自动运营 V2 第 9A 节](./AUTOMATED_OPERATIONS_V2_IMPLEMENTATION_2026-10-12_CN.md#9a-流量优先的收录与页面资产规则2026-10-17-生效)。
+
 2026-10-16 **DAILY-OPERATIONS 单元最终收口**：WellSaid Studio 通过通用候选入队、draft 导入及唯一最终 `QA_PASS_TOOL_PUBLICATION`，实际 Tool ID `749640cc-a293-488f-a55e-4d9ff0c3e441` 已发布为 `published + monitor/noindex`。公开 commit 写入 1，postcheck 与幂等重放零写；EN/CN/TW 页面 200、自指 canonical、noindex，媒体 200，sitemap 126 URL 且 WellSaid 0 条。内部准备流程简化 `d7eb92a2` 已部署，不再为入队和 draft 分别要求 QA；最终公开仍有独立 QA。Murf、Pika、Synthesia 的三项到期公开 Claim 已逐项提交并回验，幂等重放均零写。全单生产写入 8（入队 1、draft 3、公开 1、freshness 3）；只读回读 96 total / 72 published / 17 continue_index / 77 monitor。未改 index/sitemap/关系；GSC 私有快照 latest complete 10-13，站内事件 unavailable。详见[当日日报](./DAILY_OPERATIONS_2026-10-16_CN.md)与[固定 freshness 批次](./FRESHNESS_CLAIM_DUE_BATCH_2026-10-16.json)。
 
 2026-10-15 **CATALOG-NEW-TOOLS-BATCH-2026-10-15 五工具已发布并完成生产验证**：Owner 指定的 Everygen、Meta Muse Wonder、ArtCraft、Melty、Cloudflare Clef 经同一通用 candidate→draft→tool bridge 和独立 `QA_PASS_PUBLISH_BATCH`，均提交为 `published + monitor/noindex`；逐项 postcheck 与幂等重放零写，关系、index、sitemap 均未批准。生产回读 93 total、71 published、17 continue_index、74 monitor；部署后 15 个 EN/CN/TW 页面为 200/self-canonical/noindex，五个自有 SVG 均为 200，sitemap 126 URL 且各 slug 0；唯一一次生产 SEO smoke 通过。详见[批次交付审计](./CATALOG_NEW_TOOLS_BATCH_DELIVERY_2026-10-15_CN.md)。
