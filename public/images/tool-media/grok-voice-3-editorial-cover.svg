@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Abstract real-time voice signal">
+  <rect width="1200" height="630" fill="#071d2a"/>
+  <path d="M0 470C220 370 360 520 600 420S970 310 1200 430V630H0Z" fill="#12394a"/>
+  <circle cx="600" cy="302" r="194" fill="none" stroke="#34d3c7" stroke-width="2" opacity=".45"/>
+  <circle cx="600" cy="302" r="142" fill="none" stroke="#34d3c7" stroke-width="2" opacity=".65"/>
+  <path d="M160 310h130l40-70 54 142 54-198 50 238 51-150 42 82 55-112 48 78 60-44 42 34h124" fill="none" stroke="#a8f9e8" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="76" y="95" fill="#c8fcf0" font-family="Georgia,serif" font-size="42">REAL-TIME VOICE</text>
+  <text x="77" y="545" fill="#8ec0c7" font-family="Georgia,serif" font-size="24">Speech in · speech out · API</text>
+</svg>

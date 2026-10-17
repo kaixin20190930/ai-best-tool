@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Abstract open-source code review illustration">
+  <rect width="1200" height="630" fill="#f0eee8"/>
+  <rect x="95" y="98" width="1010" height="430" rx="18" fill="#172b32"/>
+  <circle cx="146" cy="139" r="8" fill="#db7957"/><circle cx="177" cy="139" r="8" fill="#e6bf6c"/><circle cx="208" cy="139" r="8" fill="#7bc2a8"/>
+  <path d="M160 220h300M160 269h500M160 318h420M160 367h270M160 416h370" fill="none" stroke="#7caaab" stroke-width="10" stroke-linecap="round"/>
+  <path d="M833 219l115 45v83c0 79-43 118-115 149-72-31-115-70-115-149v-83Z" fill="#c8e2d7"/>
+  <path d="m785 348 36 36 68-81" fill="none" stroke="#2d695e" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="94" y="585" fill="#36565d" font-family="Georgia,serif" font-size="28">OPEN SOURCE · MODEL-GENERATED FINDINGS</text>
+</svg>

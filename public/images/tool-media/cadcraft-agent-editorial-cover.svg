@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Abstract CAD drawing and external agent connection">
+  <rect width="1200" height="630" fill="#ece6dc"/>
+  <path d="M0 100h1200M0 205h1200M0 310h1200M0 415h1200M0 520h1200M100 0v630M250 0v630M400 0v630M550 0v630M700 0v630M850 0v630M1000 0v630M1150 0v630" stroke="#d6cfc2" stroke-width="2"/>
+  <path d="M232 460V198h290l135 92v170Z" fill="#f8f5ef" stroke="#244651" stroke-width="9"/>
+  <path d="M232 290h425M522 198v262M345 290v170" fill="none" stroke="#244651" stroke-width="6"/>
+  <circle cx="825" cy="315" r="82" fill="#244651"/>
+  <path d="M744 315h-86M906 315h95M825 233v-83M825 397v79" stroke="#bb603e" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="825" cy="315" r="24" fill="#eac184"/>
+  <text x="92" y="92" fill="#244651" font-family="Georgia,serif" font-size="36">CAD + EXTERNAL AGENTS</text>
+  <text x="94" y="574" fill="#566971" font-family="Georgia,serif" font-size="24">MCP · CLI · drawing control</text>
+</svg>

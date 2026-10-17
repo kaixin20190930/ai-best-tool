@@ -1,0 +1,245 @@
+{
+  "unit": "CATALOG-GROK-OSS-CADCRAFT-2026-10-17",
+  "checkedAt": "2026-10-17",
+  "opportunities": [
+    {
+      "candidateId": "936df4c3-1e86-47c6-8ff1-e753a9b3706c",
+      "queue": "Discover",
+      "cluster": "real-time-voice-agents",
+      "role": "anchor",
+      "comparators": ["ElevenLabs Conversational AI", "Murf Studio"],
+      "downstream": "voice-agent Tool Intelligence and future real-time voice API comparison",
+      "queryOrBehavior": "grok voice 3.0 api; voice api pricing; compare voice-agent API clickthrough",
+      "demand": "web.cafe relative heat 0.088, not monthly search volume; GSC page signal unavailable",
+      "score": { "searchDemand": 14, "decisionIntent": 23, "clusterLeverage": 18, "evidenceMaturity": 15, "recency": 10, "riskDeduction": 3, "total": 77 },
+      "indexTier": "B",
+      "indexReason": "Version-new API has an untested account-billing boundary and no observed page signal; public monitor is separate from index approval."
+    },
+    {
+      "candidateId": "fd369271-a175-41c1-9c81-8f4912361673",
+      "queue": "Discover",
+      "cluster": "open-source-vulnerability-triage",
+      "role": "gap_filler",
+      "comparators": ["Claude Security", "GitHub Copilot Autofix"],
+      "downstream": "security-scanning Tool Intelligence and a future maintainer triage comparison",
+      "queryOrBehavior": "anthropic oss scanner eligibility; oss scanner human review; enrollment outbound click",
+      "demand": "web.cafe relative heat 0.005, not monthly search volume; GSC page signal unavailable",
+      "score": { "searchDemand": 8, "decisionIntent": 23, "clusterLeverage": 15, "evidenceMaturity": 15, "recency": 10, "riskDeduction": 4, "total": 67 },
+      "indexTier": "B",
+      "indexReason": "Evidence is mature but niche eligibility and currently unobserved demand require a distinct search-intent check before any index request."
+    },
+    {
+      "candidateId": "0ce0d5bc-c055-4e5c-ae15-d3126b2d65b0",
+      "queue": "Discover",
+      "cluster": "agent-controlled-cad",
+      "role": "gap_filler",
+      "comparators": ["FreeCAD", "Onshape"],
+      "downstream": "MCP/agent-tool Tool Intelligence and a future CAD automation comparison",
+      "queryOrBehavior": "cadcraft mcp; cadcraft cli; external-agent setup click",
+      "demand": "web.cafe relative heat 0.002, not monthly search volume; GSC page signal unavailable",
+      "score": { "searchDemand": 5, "decisionIntent": 16, "clusterLeverage": 12, "evidenceMaturity": 14, "recency": 6, "riskDeduction": 6, "total": 47 },
+      "indexTier": "C",
+      "indexReason": "This is CAD software exposing MCP/CLI to external AI agents, not a bundled generative-AI product. Standalone AI-tool search value remains unproven; never auto-index."
+    }
+  ],
+  "selections": [
+    {
+      "id": "936df4c3-1e86-47c6-8ff1-e753a9b3706c",
+      "name": "Grok Voice 3.0",
+      "officialUrl": "https://docs.x.ai/developers/models/grok-voice-3.0",
+      "officialDomainGroup": { "canonicalProductDomain": "docs.x.ai", "parentBrandDomains": ["x.ai"], "identitySourceIds": ["model", "launch"] },
+      "categorySlug": "productivity",
+      "cluster": { "role": "anchor" },
+      "officialSources": [
+        { "id": "model", "url": "https://docs.x.ai/developers/models/grok-voice-3.0", "claimKeys": ["identity", "speech_to_speech", "api_model"] },
+        { "id": "launch", "url": "https://x.ai/news/grok-voice-3", "claimKeys": ["identity", "brand_relationship", "api_availability", "launch_price"] },
+        { "id": "voice_api", "url": "https://x.ai/api/voice", "claimKeys": ["voice_agent_workflow", "current_price_boundary"] }
+      ],
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["model", "launch"], "evidenceExcerpt": "xAI identifies Grok Voice 3.0 as a speech-to-speech model for real-time voice agents available through its Voice Agent API; no independent latency or accuracy test is claimed." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["model", "launch"], "evidenceExcerpt": "The xAI model documentation and launch announcement name the same Grok Voice 3.0 API model. This is not a separate generic Grok chat application." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Production tool and candidate inventory found only this existing discovery candidate and no Grok Voice Tool ID; the model/API intent is distinct from general chat." }
+      },
+      "reviewedAt": "2026-10-17",
+      "nextReviewDate": "2026-10-31",
+      "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/grok-voice-3-editorial-cover.svg", "sha256": "5a4e5c1bbdbc3bed2a7c63360109292f9c0173a8ec8e3cac478ee924ddd554bd", "creator": "AI Best Tool editorial", "createdAt": "2026-10-17", "noVendorMarks": true },
+      "pricing": "paid",
+      "tags": ["speech-to-speech", "real-time voice API", "voice agents", "xAI"],
+      "localized": {
+        "en": {
+          "title": "Grok Voice 3.0: real-time speech-to-speech API",
+          "summary": "Grok Voice 3.0 is xAI's real-time speech-to-speech model for voice agents. Compare API integration, interruption handling and measured task cost with ElevenLabs and Murf before deployment.",
+          "detail": "Grok Voice 3.0 is an xAI speech-to-speech model exposed through its Voice Agent API, not a separate Grok chat app. It suits developers building live spoken agents that need bidirectional audio and text. Compare its integration path, interruption handling, tool use and representative task cost with ElevenLabs Conversational AI and Murf Studio. Both xAI's October 14 launch announcement and its Voice API page list USD 0.08 per minute at this review date. This is public pricing evidence, not a guaranteed account checkout. This directory has not reproduced latency, benchmark scores, safety behavior or actual billing in an account. Verify current model routing, regional terms, data handling and billable minutes before production use.",
+          "bestFor": ["Developers building live speech-to-speech voice agents", "Teams able to benchmark latency and cost in their own API account"],
+          "notIdealFor": ["People seeking a turnkey no-code voice assistant", "Teams requiring independently reproduced benchmarks or guaranteed account pricing"],
+          "limitations": ["No independent latency, accuracy or account billing test was performed", "Public pricing is current at review date but is not verified in a target account", "Model alias, data terms and regional access should be checked in the target account"],
+          "compareAxes": ["Bidirectional audio and interruption handling", "Voice-agent integration and tool-use path", "Real billable cost for one representative call"],
+          "pricingSummary": "Paid API; the October 14 announcement quotes a version-specific rate, but confirm current target-account pricing and usage units."
+        },
+        "cn": {
+          "title": "Grok Voice 3.0：实时语音交互 API",
+          "summary": "Grok Voice 3.0 是 xAI 面向语音代理的实时语音到语音模型。上线前应与 ElevenLabs、Murf 比较 API 接入、打断处理和实际任务成本。",
+          "detail": "Grok Voice 3.0 是 xAI 通过 Voice Agent API 提供的语音到语音模型，不是另一个通用 Grok 聊天应用。它适合需要双向音频与文本的实时语音代理开发者。与 ElevenLabs Conversational AI、Murf Studio 比较时，应看集成路径、用户打断、工具调用和代表性任务成本。xAI 10 月 14 日发布公告及通用 Voice API 页面在本次复核时均列出每分钟 0.08 美元。这是有日期的公开价格证据，不代表目标账户结账价格。本站未独立复现延迟、基准分数、安全表现或账单。生产使用前应核对模型路由、地区条款、数据处理和计费分钟。",
+          "bestFor": ["构建实时语音到语音代理的开发者", "能在自身 API 账户测试延迟与成本的团队"],
+          "notIdealFor": ["寻找开箱即用免代码语音助手的人", "要求已有独立基准复现或保证账户价格的团队"],
+          "limitations": ["本站未实测延迟、准确率或账户账单", "公开价格仅对应本次复核日期，未在目标账户确认", "应在目标账户核对模型别名、数据条款和地区可用性"],
+          "compareAxes": ["双向音频与打断处理", "语音代理集成和工具调用路径", "代表性通话的真实计费成本"],
+          "pricingSummary": "付费 API；10 月 14 日公告给出特定版本费率，当前账户价格和计费单位须再次确认。"
+        },
+        "tw": {
+          "title": "Grok Voice 3.0：即時語音互動 API",
+          "summary": "Grok Voice 3.0 是 xAI 用於語音代理的即時語音到語音模型。上線前應與 ElevenLabs、Murf 比較 API 整合、打斷處理和實際任務成本。",
+          "detail": "Grok Voice 3.0 是 xAI 透過 Voice Agent API 提供的語音到語音模型，不是另一個通用 Grok 聊天應用。適合需要雙向音訊與文字的即時語音代理開發者。與 ElevenLabs Conversational AI、Murf Studio 比較時，應檢查整合路徑、使用者打斷、工具呼叫和代表性任務成本。xAI 10 月 14 日發布公告及通用 Voice API 頁面在本次複核時都列出每分鐘 0.08 美元。這是有日期的公開價格證據，不是目標帳戶結帳價格。本站未獨立重現延遲、基準分數、安全表現或帳單。正式使用前應核對模型路由、地區條款、資料處理和計費分鐘。",
+          "bestFor": ["建立即時語音到語音代理的開發者", "可在自身 API 帳戶測試延遲與成本的團隊"],
+          "notIdealFor": ["尋找免程式碼現成語音助理的人", "要求已有獨立基準重現或保證帳戶價格的團隊"],
+          "limitations": ["本站未實測延遲、準確度或帳戶帳單", "公開價格僅對應本次複核日期，未在目標帳戶確認", "應在目標帳戶核對模型別名、資料條款和地區可用性"],
+          "compareAxes": ["雙向音訊與打斷處理", "語音代理整合和工具呼叫路徑", "代表性通話的實際計費成本"],
+          "pricingSummary": "付費 API；10 月 14 日公告列出特定版本費率，目前帳戶價格和計費單位仍須確認。"
+        }
+      },
+      "claimGate": { "status": "PASS", "items": [
+        { "key": "identity", "status": "verified_public", "boundary": "One xAI Grok Voice 3.0 model/API, not a generic Grok chat application.", "sourceIds": ["model", "launch"], "nextReviewDate": "2027-01-15" },
+        { "key": "speech_to_speech", "status": "verified_public", "boundary": "Vendor-documented real-time modality, not independently measured performance.", "sourceIds": ["model"], "nextReviewDate": "2026-12-16" },
+        { "key": "api_model", "status": "verified_public", "boundary": "Documented model identity; target-account route and alias still need verification.", "sourceIds": ["model"], "nextReviewDate": "2026-12-16" },
+        { "key": "api_availability", "status": "conditional", "boundary": "Vendor says available in API; account and regional entitlement not independently checked.", "sourceIds": ["launch"], "nextReviewDate": "2026-10-31" },
+        { "key": "launch_price", "status": "conditional", "boundary": "USD 0.08/min is the October 14 version announcement only, not target-account checkout.", "sourceIds": ["launch"], "nextReviewDate": "2026-10-24" },
+        { "key": "voice_agent_workflow", "status": "verified_public", "boundary": "Official workflow description only; no independent task-success test.", "sourceIds": ["voice_api"], "nextReviewDate": "2026-12-16" },
+        { "key": "current_price_boundary", "status": "conditional", "boundary": "Launch and generic Voice API pages both list USD 0.08/min at review date, but account checkout and contract rate are unverified.", "sourceIds": ["voice_api"], "nextReviewDate": "2026-10-24" }
+      ] }
+    },
+    {
+      "id": "fd369271-a175-41c1-9c81-8f4912361673",
+      "name": "Anthropic OSS Scanner",
+      "officialUrl": "https://red.anthropic.com/oss-scanner/",
+      "officialDomainGroup": { "canonicalProductDomain": "red.anthropic.com", "parentBrandDomains": ["anthropic.com", "github.com"], "identitySourceIds": ["service", "launch"] },
+      "categorySlug": "other",
+      "cluster": { "role": "gap_filler" },
+      "officialSources": [
+        { "id": "service", "url": "https://red.anthropic.com/oss-scanner/", "claimKeys": ["identity", "eligibility", "human_review_boundary", "scan_frequency"] },
+        { "id": "launch", "url": "https://www.anthropic.com/research/launching-opt-in-vuln-finding-service-for-open-source", "claimKeys": ["identity", "brand_relationship", "model_scanning", "free_scope"] },
+        { "id": "enroll", "url": "https://github.com/anthropics/oss-scanner", "claimKeys": ["enrollment", "report_format", "human_review_boundary"] }
+      ],
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["service", "launch"], "evidenceExcerpt": "Anthropic describes an opt-in service using its language models to scan eligible open-source repositories and email model-generated vulnerability findings to maintainers." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["service", "launch"], "evidenceExcerpt": "Anthropic's Frontier Red Team page and launch article link the same OSS Scanner service and enrollment repository; unrelated ossscanner.org is not this product." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Production has only the existing Anthropic discovery candidate and no OSS Scanner Tool ID. It is not the broad-access Claude Security offering." }
+      },
+      "reviewedAt": "2026-10-17",
+      "nextReviewDate": "2026-10-31",
+      "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/anthropic-oss-scanner-editorial-cover.svg", "sha256": "62919b36e32f521e981820384cbfdf6a30702dbd639241fb5fd660307fe8dc20", "creator": "AI Best Tool editorial", "createdAt": "2026-10-17", "noVendorMarks": true },
+      "pricing": "free",
+      "tags": ["open-source security", "AI vulnerability scanning", "maintainer triage", "Anthropic"],
+      "localized": {
+        "en": {
+          "title": "Anthropic OSS Scanner: opt-in AI security reports for eligible projects",
+          "summary": "Anthropic OSS Scanner offers no-cost model-driven security scans to eligible critical open-source projects. Core maintainers apply by PR, and fast-track reports are not human-reviewed.",
+          "detail": "Anthropic OSS Scanner is an opt-in vulnerability-finding service for established open-source projects with critical infrastructure or user-security impact. Core maintainers request enrollment through the official repository with project configuration and a Dockerfile; Anthropic reviews signup identity and project scope. Accepted projects receive periodic model-generated findings by email at no charge. The fast-track reports themselves are not human-reviewed or validated before delivery, so maintainers must verify reproductions, severity and patches. This differs from Anthropic's separate Claude Security enterprise offering. Compare it with Claude Security and GitHub Copilot Autofix on eligibility, control of scan scope, human triage, report volume and remediation workflow. The directory has not enrolled a project or audited report accuracy. Selection and future scan frequency are conditional, and the service is not open scanning for arbitrary private repositories.",
+          "bestFor": ["Core maintainers of eligible critical and widely used open-source projects", "Security teams able to triage unvalidated model-generated findings"],
+          "notIdealFor": ["Private-code teams expecting self-service enterprise scanning", "Small new projects or maintainers lacking capacity to verify reports"],
+          "limitations": ["Eligibility and acceptance are case-by-case and require maintainer verification", "Fast-track reports are model-generated and not human-reviewed", "No enrollment, scan cadence or report accuracy was independently tested"],
+          "compareAxes": ["Eligibility and submission steps versus commercial scanners", "Human review boundary and false-positive triage burden", "Report delivery, remediation and disclosure workflow"],
+          "pricingSummary": "No charge for accepted eligible open-source projects; not general free access for any repository."
+        },
+        "cn": {
+          "title": "Anthropic OSS Scanner：符合条件开源项目的 AI 安全扫描",
+          "summary": "Anthropic OSS Scanner 免费为符合资格的关键开源项目提供模型驱动安全扫描。核心维护者通过 PR 申请，快速通道报告未经人工审核，维护者须自行核验报告。",
+          "detail": "Anthropic OSS Scanner 是面向成熟且对基础设施或用户安全有关键影响的开源项目的自愿漏洞发现服务。核心维护者需向官方仓库提交包含项目配置和 Dockerfile 的 PR；Anthropic 会人工核对申请身份和项目扫描范围。获接纳项目可免费定期收到模型生成的漏洞报告邮件。但快速通道报告本身在送达前没有人工审核或验证，维护者必须自行复现问题、判断严重度并核对补丁。它与 Anthropic 面向企业的 Claude Security 是不同产品。与 Claude Security、GitHub Copilot Autofix 比较时，应看资格、扫描范围、人工分诊、报告数量和修复工作流。本站未申请项目，也未实测报告准确率。获选资格和后续扫描频率有条件限制，不能把它宣传为任意私有仓库的开放式扫描。",
+          "bestFor": ["符合资格、被广泛使用的关键开源项目核心维护者", "有能力分诊未经验证模型报告的安全团队"],
+          "notIdealFor": ["需要自助扫描私有代码的企业团队", "无力核实报告的新小项目或维护者"],
+          "limitations": ["项目资格和接纳需个案判断并验证维护者身份", "快速通道报告由模型生成，未经人工审核", "本站未实测申请、扫描频率或报告准确率"],
+          "compareAxes": ["相对商业扫描器的资格与申请步骤", "人工审核边界和误报分诊成本", "报告交付、修复及披露工作流"],
+          "pricingSummary": "符合条件并获接纳的开源项目免费；不是任意仓库都可使用的免费扫描服务。"
+        },
+        "tw": {
+          "title": "Anthropic OSS Scanner：合資格開源專案的 AI 安全掃描",
+          "summary": "Anthropic OSS Scanner 免費為合資格的關鍵開源專案提供模型驅動安全掃描。核心維護者透過 PR 申請，快速通道報告未經人工審核，維護者須自行查證報告。",
+          "detail": "Anthropic OSS Scanner 是針對成熟且對基礎設施或使用者安全有關鍵影響的開源專案，自願加入的漏洞發現服務。核心維護者須向官方儲存庫提交包含專案設定與 Dockerfile 的 PR；Anthropic 會人工確認申請身分及掃描範圍。獲接納專案可免費定期收到模型產生的漏洞報告郵件。然而快速通道報告本身在送達前沒有人工審核或驗證，維護者必須自行重現問題、判斷嚴重度並核對修補。它與 Anthropic 面向企業的 Claude Security 是不同產品。與 Claude Security、GitHub Copilot Autofix 比較時，應檢查資格、掃描範圍、人工分診、報告數量與修復流程。本站未申請專案，也未實測報告準確度。接納資格和後續掃描頻率有條件限制，不能把它描述為任意私有儲存庫的開放式掃描。",
+          "bestFor": ["合資格且廣泛使用的關鍵開源專案核心維護者", "能分診未驗證模型報告的安全團隊"],
+          "notIdealFor": ["需要自行掃描私有程式碼的企業團隊", "無力查證報告的新小專案或維護者"],
+          "limitations": ["專案資格和接納須個案判斷並驗證維護者身分", "快速通道報告由模型產生且未經人工審核", "本站未實測申請、掃描頻率或報告準確度"],
+          "compareAxes": ["相對商業掃描器的資格與申請步驟", "人工審核邊界及誤報分診成本", "報告交付、修復及揭露流程"],
+          "pricingSummary": "合資格且獲接納的開源專案免費；不是任意儲存庫都能使用的免費掃描服務。"
+        }
+      },
+      "claimGate": { "status": "PASS", "items": [
+        { "key": "identity", "status": "verified_public", "boundary": "Anthropic OSS Scanner, distinct from unrelated similarly named sites and Claude Security.", "sourceIds": ["service", "launch"], "nextReviewDate": "2027-01-15" },
+        { "key": "model_scanning", "status": "verified_public", "boundary": "Vendor-described model-based vulnerability scans, not independently tested detection performance.", "sourceIds": ["launch"], "nextReviewDate": "2026-12-16" },
+        { "key": "eligibility", "status": "conditional", "boundary": "Case-by-case acceptance for established security-critical open-source projects; not open access.", "sourceIds": ["service"], "nextReviewDate": "2026-10-31" },
+        { "key": "enrollment", "status": "verified_public", "boundary": "Core maintainer PR with project.yaml and Dockerfile; approval is not guaranteed.", "sourceIds": ["enroll"], "nextReviewDate": "2026-10-31" },
+        { "key": "human_review_boundary", "status": "verified_public", "boundary": "Human signup verification is distinct from fast-track model reports, which are not human-reviewed.", "sourceIds": ["service", "enroll"], "nextReviewDate": "2026-10-31" },
+        { "key": "free_scope", "status": "conditional", "boundary": "No charge for accepted eligible projects, not arbitrary private repository use.", "sourceIds": ["launch"], "nextReviewDate": "2026-10-31" },
+        { "key": "scan_frequency", "status": "conditional", "boundary": "Periodic future scans depend on program capacity and project factors; no fixed SLA.", "sourceIds": ["service"], "nextReviewDate": "2026-10-31" },
+        { "key": "report_format", "status": "conditional", "boundary": "Current email report workflow and patch availability may change; no result validity guarantee.", "sourceIds": ["enroll"], "nextReviewDate": "2026-10-31" }
+      ] }
+    },
+    {
+      "id": "0ce0d5bc-c055-4e5c-ae15-d3126b2d65b0",
+      "name": "CADCraft",
+      "officialUrl": "https://getartcraft.com/apps/cadcraft",
+      "officialDomainGroup": { "canonicalProductDomain": "getartcraft.com", "parentBrandDomains": ["github.com"], "identitySourceIds": ["product", "repo"] },
+      "categorySlug": "design-art",
+      "cluster": { "role": "gap_filler" },
+      "officialSources": [
+        { "id": "product", "url": "https://getartcraft.com/apps/cadcraft", "claimKeys": ["identity", "cad_editor", "free_release", "agent_ready"] },
+        { "id": "repo", "url": "https://github.com/storytold/cadcraft", "claimKeys": ["identity", "brand_relationship", "mcp_cli", "external_agent_boundary", "format_loss", "license"] },
+        { "id": "releases", "url": "https://github.com/storytold/cadcraft/releases", "claimKeys": ["release_status"] }
+      ],
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["product", "repo"], "evidenceExcerpt": "CADCraft is a CAD editor with an MCP server and CLI designed for external AI agents to control drawings. Its agent integration, not bundled generative inference, is the relevant AI-tool capability." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["product", "repo"], "evidenceExcerpt": "The ArtCraft product page links the storytold/cadcraft source repository and the repository README links back to the same getartcraft.com product page. cadcraft.org is not canonical." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Production has one existing CADCraft discovery candidate and no Tool ID. ArtCraft is a parent creative platform, not the same CAD/MCP utility entity." }
+      },
+      "reviewedAt": "2026-10-17",
+      "nextReviewDate": "2026-11-16",
+      "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/cadcraft-agent-editorial-cover.svg", "sha256": "edebd74554c2e88f2f6f09e0f15652d82419fcdb60e86cba83db4504b8b9b6b9", "creator": "AI Best Tool editorial", "createdAt": "2026-10-17", "noVendorMarks": true },
+      "pricing": "free",
+      "tags": ["CAD", "MCP server", "external AI agents", "open source"],
+      "localized": {
+        "en": {
+          "title": "CADCraft: open-source CAD control for external AI agents",
+          "summary": "CADCraft is a free open-source CAD editor with MCP, JSON control and CLI surfaces for external agents. It does not bundle a generative AI model; compare file fidelity and setup before use.",
+          "detail": "CADCraft is ArtCraft's open-source CAD and drafting application, available as a native app and through a browser build. It exposes drawing operations through an MCP server, JSON control channel and CLI so an external AI agent can inspect, edit and render a drawing. CADCraft itself does not bundle or provide a generative AI model; the AI decision layer comes from the connected client or agent. Compare it with FreeCAD and Onshape on automation surface, setup effort, format round-trip and review of agent-made edits. The official project describes an early, fast-changing release; some CAD entities it does not model can be lost when saving. Use copies of important drawings and inspect exported files. This directory has not run a CAD round-trip, measured browser performance or tested an MCP client. The ArtCraft product page and storytold repository link to one another; cadcraft.org is an independent community guide, not the canonical product site.",
+          "bestFor": ["Developers who need a local CAD tool callable by an external MCP agent", "Drafting teams willing to verify AI-assisted edits and file round-trips"],
+          "notIdealFor": ["Buyers expecting bundled text-to-CAD generation without an external model", "Critical drawings that cannot tolerate unverified format loss"],
+          "limitations": ["No bundled generative AI inference; an external agent supplies that capability", "Unsupported CAD entities may not survive a save operation", "No independent CAD round-trip or MCP integration test was performed"],
+          "compareAxes": ["MCP/CLI agent control versus conventional CAD automation", "DXF/DWG round-trip fidelity and export behavior", "Local deployment and human review of agent edits"],
+          "pricingSummary": "The official product and repository describe free open-source CAD software; external AI agent and hosting costs are separate."
+        },
+        "cn": {
+          "title": "CADCraft：供外部 AI 代理调用的开源 CAD 工具",
+          "summary": "CADCraft 是免费开源 CAD 编辑器，向外部代理开放 MCP、JSON 控制与 CLI。它自身不提供生成式 AI 模型，使用前应比较文件保真和接入成本。",
+          "detail": "CADCraft 是 ArtCraft 推出的开源 CAD 与制图应用，提供原生应用和浏览器版本。它通过 MCP server、JSON 控制通道和 CLI 暴露绘图操作，让外部 AI 代理检查、编辑和渲染图纸。CADCraft 自身不捆绑或提供生成式 AI 模型；AI 决策能力来自连接的客户端或代理。与 FreeCAD、Onshape 比较时，应看自动化接口、配置工作量、格式往返保真和对代理修改的人工复核。官方项目说明当前仍在快速开发；未建模的某些 CAD 实体在保存时可能丢失。请用图纸副本并检查导出结果。本站未进行 CAD 往返、浏览器性能或 MCP 客户端实测。ArtCraft 产品页与 storytold 仓库互相链接；cadcraft.org 是独立社区指南，不是官方 canonical。",
+          "bestFor": ["需要本地 CAD 工具并通过外部 MCP 代理调用的开发者", "愿意核对代理修改和文件往返结果的制图团队"],
+          "notIdealFor": ["期待无需外部模型即可文字生成 CAD 的采购者", "无法容忍未经核实格式损失的关键图纸工作流"],
+          "limitations": ["不内置生成式 AI 推理，需由外部代理提供", "不支持的 CAD 实体保存后可能丢失", "本站未独立实测 CAD 往返或 MCP 集成"],
+          "compareAxes": ["MCP/CLI 代理控制与传统 CAD 自动化", "DXF/DWG 往返保真与导出行为", "本地部署和代理修改的人工复核"],
+          "pricingSummary": "官网与仓库描述其为免费开源 CAD 软件；外部 AI 代理和托管成本另计。"
+        },
+        "tw": {
+          "title": "CADCraft：供外部 AI 代理呼叫的開源 CAD 工具",
+          "summary": "CADCraft 是免費開源 CAD 編輯器，向外部代理提供 MCP、JSON 控制及 CLI。它本身不提供生成式 AI 模型，使用前應比較檔案保真與整合成本。",
+          "detail": "CADCraft 是 ArtCraft 推出的開源 CAD 與製圖應用，提供原生程式和瀏覽器版本。它透過 MCP server、JSON 控制通道和 CLI 暴露繪圖操作，讓外部 AI 代理檢查、編輯與渲染圖紙。CADCraft 本身不捆綁或提供生成式 AI 模型；AI 決策能力來自連接的用戶端或代理。與 FreeCAD、Onshape 比較時，應檢查自動化介面、設定工作量、格式往返保真和對代理修改的人工複核。官方專案說明目前仍在快速開發；未建模的某些 CAD 實體在儲存時可能遺失。請使用圖紙副本並檢查匯出結果。本站未進行 CAD 往返、瀏覽器效能或 MCP 用戶端實測。ArtCraft 產品頁與 storytold 儲存庫互相連結；cadcraft.org 是獨立社群指南，不是官方 canonical。",
+          "bestFor": ["需要本地 CAD 工具並由外部 MCP 代理呼叫的開發者", "願意核對代理修改及檔案往返結果的製圖團隊"],
+          "notIdealFor": ["期待不靠外部模型就能文字生成 CAD 的採購者", "無法容忍未核實格式損失的關鍵圖紙流程"],
+          "limitations": ["不內建生成式 AI 推理，需由外部代理提供", "不支援的 CAD 實體儲存後可能遺失", "本站未獨立實測 CAD 往返或 MCP 整合"],
+          "compareAxes": ["MCP/CLI 代理控制與傳統 CAD 自動化", "DXF/DWG 往返保真與匯出行為", "本地部署及代理修改的人工複核"],
+          "pricingSummary": "官網與儲存庫描述為免費開源 CAD 軟體；外部 AI 代理及託管成本另計。"
+        }
+      },
+      "claimGate": { "status": "PASS", "items": [
+        { "key": "identity", "status": "verified_public", "boundary": "Official ArtCraft product page and storytold/cadcraft repository reciprocally link the same project.", "sourceIds": ["product", "repo"], "nextReviewDate": "2027-01-15" },
+        { "key": "cad_editor", "status": "verified_public", "boundary": "CAD drafting application, not by itself a generative model.", "sourceIds": ["product"], "nextReviewDate": "2026-12-16" },
+        { "key": "agent_ready", "status": "verified_public", "boundary": "Official site describes agent-oriented design; effectiveness not independently tested.", "sourceIds": ["product"], "nextReviewDate": "2026-12-16" },
+        { "key": "mcp_cli", "status": "verified_public", "boundary": "Documented MCP server, JSON control and CLI; no connected-agent integration test.", "sourceIds": ["repo"], "nextReviewDate": "2026-12-16" },
+        { "key": "external_agent_boundary", "status": "conditional", "boundary": "Repository documents external agent control but no bundled generative model; verify chosen client's model and permissions.", "sourceIds": ["repo"], "nextReviewDate": "2026-11-16" },
+        { "key": "format_loss", "status": "verified_public", "boundary": "Repository warns unsupported entities are not retained on save; no independent round-trip test.", "sourceIds": ["repo"], "nextReviewDate": "2026-11-16" },
+        { "key": "free_release", "status": "verified_public", "boundary": "Official product describes free and open source; external agent charges are separate.", "sourceIds": ["product"], "nextReviewDate": "2026-11-16" },
+        { "key": "license", "status": "verified_public", "boundary": "Repository states MIT or Apache-2.0 for source code, not third-party model services.", "sourceIds": ["repo"], "nextReviewDate": "2026-11-16" },
+        { "key": "release_status", "status": "conditional", "boundary": "Early release evolves; do not guarantee platform parity or file compatibility.", "sourceIds": ["releases"], "nextReviewDate": "2026-11-16" }
+      ] }
+    }
+  ]
+}
