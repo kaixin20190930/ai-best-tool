@@ -49,3 +49,11 @@
 - `PLAN_DEVIATION`：公开曾因媒体 404 等待部署，但没有创建阶段任务；同一单元一次 QA 后完成。没有用旧候选或第二个工具补数。研究/实体批次未跑多余专项测试；因详情渲染源码有差分，仅运行一次 TypeScript、一次完整 build 和部署后一次生产 smoke。
 - 提交 `79bedb1c` 已推送 `origin/main`；三份受保护脏文件未加入提交。EN/CN/TW Lindy 页面均为 200、自指 canonical、`noindex, follow`，自有媒体 200，sitemap 0 条。
 - **唯一下一步**：下一次自动运行继续处理余下 7 条一次性身份/实体核查，并保持 Catalog/Freshness/Market 独立续跑；2 条合并/归档候选证据核清后集中请求 Owner 授权。当前无需用户操作。
+
+## Owner 点名 Catalog 追加批次
+
+- Grok Voice 3.0 与 Anthropic OSS Scanner 已在同一个端到端批次完成开发、一次独立 QA、媒体部署、通用发布 commit 和零写 postcheck。两项均为 `published + monitor/noindex`；EN/CN/TW 页面 200、自指 canonical、`noindex, follow`，sitemap 各 0 条。
+- CADCraft 已完成同批资料、唯一身份、媒体、draft 和独立 QA，保持 draft；下一运营日可复用本次 PASS 和未变化前像直接发布，不重新开发或验收。
+- 提交 `d487f6b4` 已推送并部署，三张自有媒体均为 200；本批一次生产 SEO smoke 通过，sitemap 仍为 126 URLs。
+- 最新生产只读统计：101 个 Tool ID、76 个 published、17 个 `continue_index`、82 个 monitor、10 个 draft。
+- `PLAN_DEVIATION`：当日先前已有 Lindy 发布，本批又公开 2 项，实际新增共 3 项，超过常规每日最多 2 项。没有自动索引或 sitemap 写入；后续发布桥前必须读取当日全局发布计数，而不是只计算当前批次。

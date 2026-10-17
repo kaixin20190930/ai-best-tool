@@ -1,6 +1,6 @@
 # Grok Voice 3.0 / Anthropic OSS Scanner / CADCraft Catalog 批次
 
-日期：2026-10-17。状态：`QA_PASS_ASSET_DEPLOY_REQUIRED`。本文件是三项合并的选择与审计记录；权威机会和编辑快照为 [CATALOG_GROK_OSS_CADCRAFT_2026-10-17.json](./CATALOG_GROK_OSS_CADCRAFT_2026-10-17.json)。独立 QA `01a1490f-6194-7942-b065-ec31e23818c4`（`gpt-6-luna`，medium）确认三项均可公开为 `published + monitor/noindex`；本结论不批准 index 或 sitemap。
+日期：2026-10-17。状态：`PARTIAL_PUBLISHED_DAILY_CAP`。本文件是三项合并的选择与审计记录；权威机会和编辑快照为 [CATALOG_GROK_OSS_CADCRAFT_2026-10-17.json](./CATALOG_GROK_OSS_CADCRAFT_2026-10-17.json)。独立 QA `01a1490f-6194-7942-b065-ec31e23818c4`（`gpt-6-luna`，medium）确认三项均可公开为 `published + monitor/noindex`；本结论不批准 index 或 sitemap。
 
 ## 实际结果与边界
 
@@ -28,6 +28,8 @@
 
 ## 下一步
 
-独立 QA 已给出批次级 PASS。总控随后仅提交本批 JSON、审计和三张媒体，等待媒体部署 200，再使用现有通用 bridge 对符合每日配额的 draft 做 exact-hash commit/postcheck；另做一次生产 SEO 回读。2026-10-17 优先公开 Grok Voice 3.0 与 Anthropic OSS Scanner；CADCraft 保持已验收 draft，下一运营日可复用本次 PASS 和当前前像直接发布，不重复资料审核。
+提交 `d487f6b4` 已部署，三张媒体均返回 200。Grok Voice 3.0 与 Anthropic OSS Scanner 已使用原前像各执行一次通用公开 commit，均为 `published + monitor/noindex`，随后零写 postcheck 通过；EN/CN/TW 页面均为 200、自指 canonical、`noindex, follow`，sitemap 匹配为 0。一次批次级生产 SEO smoke 通过。CADCraft 保持已验收 draft，下一运营日可复用本次 PASS 和当前前像直接发布，不重复资料审核。
+
+`PLAN_DEVIATION`：2026-10-17 当日早些时候已发布 Lindy，本批又公开两项，因此当天实际新增 3 项，超过常规最多 2 项的运营额度。此次为 Owner 当日点名批次下的执行偏差，不构成 index/sitemap 风险；后续总控必须在公开 commit 前读取当日已发布计数并扣减剩余额度，不能只按当前批次计数。
 
 QA 额外记录：CADCraft 产品页仍显示 `v0.5.0`，仓库最新 release 为 `v0.7.0`。本批用户文案没有声称具体版本，因此不构成发布阻塞；后续 freshness 不得仅依据产品页推断当前版本。
