@@ -770,45 +770,43 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
     return isChinese
       ? {
           label: '官方事实快照',
-          title: '价格、用量和人工确认边界',
-          summary: '以下信息来自 Lindy 官方定价与用量文档；价格和额度可能变化，购买前应再次打开官方页面确认。',
-          checkedAt: '2026-09-01',
+          title: 'AI 队友的席位、用量和人工确认边界',
+          summary: '以下是 Lindy 当前官方公开范围，不是本站的账户实测；请在购买前核对实际结账、权限和任务消耗。',
+          checkedAt: '2026-10-17',
           facts: [
-            { label: '试用与套餐', value: '7 天试用；Plus $49.99/月、Pro $99.99/月、Max $199.99/月。' },
+            { label: '试用与套餐', value: '免费 credits 仅供短期试用；Team 按活跃席位收费，Enterprise 需单独洽谈。' },
             {
               label: '用量计算',
-              value: '自定义 Agent 按任务消耗 credits，模型、复杂度、付费动作和运行时间都会影响成本。',
+              value: '团队共用 credits 池；查询、更新、深度研究和电话等工作消耗不同，不能用固定单价推算所有任务。',
             },
-            { label: '运行边界', value: '额度用尽后 Agent 会暂停；未用额度不会结转，敏感邮件和消息应保留人工确认。' },
+            { label: '运行边界', value: '官网描述了外部影响动作的审批与额度不足时暂停；本站未验证目标工作区的权限和每种动作。' },
           ],
           sources: [
             { label: '官方定价', href: 'https://www.lindy.ai/pricing' },
-            { label: 'Credits 说明', href: 'https://docs.lindy.ai/account-billing/credits' },
             { label: '用量与暂停规则', href: 'https://docs.lindy.ai/account-billing/usage' },
           ],
         }
       : {
           label: 'Official fact snapshot',
-          title: 'Pricing, usage, and human-control boundaries',
+          title: 'AI teammate seats, usage, and approval boundaries',
           summary:
-            'These facts come from Lindy pricing and usage documentation. Recheck the official pages before buying because prices and allowances can change.',
-          checkedAt: '2026-10-09',
+            'This is Lindy\'s current public scope, not an account-level test. Confirm checkout, permissions, and task consumption before buying.',
+          checkedAt: '2026-10-17',
           facts: [
-            { label: 'Trial and plans', value: '7-day trial; Plus $49.99/mo, Pro $99.99/mo, and Max $199.99/mo.' },
+            { label: 'Trial and plans', value: 'Free credits are a short trial; Team bills active seats and Enterprise requires a separate quote.' },
             {
               label: 'Usage model',
               value:
-                'Custom-agent tasks consume credits based on model choice, complexity, premium actions, and duration.',
+                'A team shares a credit pool; lookups, updates, deep research, and calls consume different amounts. There is no universal per-task price.',
             },
             {
               label: 'Operating boundary',
               value:
-                'Agents pause when usage is exhausted, unused allowance does not roll over, and sensitive sends should retain human review.',
+                'The public site describes approval for externally impactful actions and pauses when credits run low; this directory has not tested target-workspace permissions.',
             },
           ],
           sources: [
             { label: 'Official pricing', href: 'https://www.lindy.ai/pricing' },
-            { label: 'Credits documentation', href: 'https://docs.lindy.ai/account-billing/credits' },
             { label: 'Usage and pause rules', href: 'https://docs.lindy.ai/account-billing/usage' },
           ],
         };
@@ -1895,7 +1893,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: '官方事实快照',
           title: 'Execution 成本、部署责任和许可证边界',
           summary: '以下为官方来源核验，并非实测；价格按年付展示，套餐、AI credits 和功能分配应在购买前复核。',
-          checkedAt: '2026-09-04',
+          checkedAt: '2026-10-17',
           facts: [
             {
               label: 'Cloud 套餐',
@@ -1928,7 +1926,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             { label: 'Community 与付费版本', href: 'https://docs.n8n.io/deploy/host-n8n/community-edition-features/' },
             {
               label: 'Sustainable Use License',
-              href: 'https://docs.n8n.io/privacy-and-security/sustainable-use-license',
+              href: 'https://support.n8n.io/article/can-i-use-your-license-for-my-use-case',
             },
           ],
         }
@@ -1937,7 +1935,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Execution cost, deployment ownership, and license boundaries',
           summary:
             'This is an official-source review, not a hands-on test. Prices use annual billing; recheck plans, AI credits, and feature allocation before purchasing.',
-          checkedAt: '2026-09-04',
+          checkedAt: '2026-10-17',
           facts: [
             {
               label: 'Cloud plans',
@@ -1973,7 +1971,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
             },
             {
               label: 'Sustainable Use License',
-              href: 'https://docs.n8n.io/privacy-and-security/sustainable-use-license',
+              href: 'https://support.n8n.io/article/can-i-use-your-license-for-my-use-case',
             },
           ],
         };
@@ -2459,28 +2457,28 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
   if (key === 'lindy') {
     return isChinese
       ? {
-          metadataTitle: 'Lindy AI Agent：功能、工作流、价格与限制',
+          metadataTitle: 'Lindy AI 队友：跨工具任务、费用与限制',
           metadataDescription:
-            '了解 Lindy 如何构建 AI Agent 和自动化工作流，并重点比较集成范围、人工确认、运行额度、失败处理与适用团队。',
-          label: 'AI Agent 判断重点',
-          summary: '评估 Lindy 时，应先确认它能否稳定执行你的真实流程，而不是只看 Agent 演示是否顺畅。',
+            '评估 Lindy 的跨工具团队任务、人工审批和按席位加 credits 的成本，并与 n8n、Make 比较配置与维护责任。',
+          label: 'AI 队友判断重点',
+          summary: '评估 Lindy 时，要核对目标工作区的实际权限、消耗和结果，而不只看官网演示。',
           checkpoints: [
-            '触发器、集成和多步骤流程是否覆盖需求',
-            '人工确认、权限和失败重试是否可控',
-            '运行额度与长期维护成本是否合理',
+            '连接工具、共享上下文和例行任务能否覆盖需求',
+            '人工审批、权限和失败恢复是否可控',
+            '席位费用与可变 credits 消耗是否合理',
           ],
         }
       : {
-          metadataTitle: 'Lindy AI Agent: Features, Workflows, Pricing & Limits',
+          metadataTitle: 'Lindy AI Teammate: Workflows, Pricing & Limits',
           metadataDescription:
-            'Review Lindy for AI agents and workflow automation, focusing on integrations, human approval, usage limits, failure handling, and the teams it fits best.',
-          label: 'AI agent decision',
+            'Assess Lindy for connected team work, approvals, and per-seat plus credit costs; compare setup and maintenance with n8n and Make.',
+          label: 'AI teammate decision',
           summary:
-            'Evaluate Lindy on whether it can execute a real workflow reliably, not just whether the agent demo looks smooth.',
+            'Evaluate actual target-workspace permissions, consumption, and results, not only the public demo.',
           checkpoints: [
-            'Trigger, integration, and multi-step workflow coverage',
+            'Connected tools, shared context, and scheduled-routine coverage',
             'Human approval, permissions, and failure recovery',
-            'Usage limits and long-term maintenance cost',
+            'Per-seat pricing and variable credit cost',
           ],
         };
   }

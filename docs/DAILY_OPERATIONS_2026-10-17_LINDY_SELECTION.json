@@ -1,0 +1,89 @@
+{
+  "id": "2eee5d34-1267-4ea8-a446-d51c1f2a37a5",
+  "name": "Lindy",
+  "officialUrl": "https://www.lindy.ai/",
+  "categorySlug": "other",
+  "cluster": { "role": "anchor" },
+  "officialSources": [
+    { "id": "home", "url": "https://www.lindy.ai/", "claimKeys": ["identity", "ai_teammate_workflow", "connected_tools"] },
+    { "id": "pricing", "url": "https://www.lindy.ai/pricing", "claimKeys": ["trial_boundary", "seat_pricing", "approval_boundary", "data_boundary"] },
+    { "id": "usage", "url": "https://docs.lindy.ai/account-billing/usage", "claimKeys": ["usage_variability", "credit_pool", "usage_pause"] }
+  ],
+  "entityGate": {
+    "status": "PASS",
+    "aiCoreCapability": {
+      "status": "PASS",
+      "sourceIds": ["home", "usage"],
+      "evidenceExcerpt": "Lindy describes an AI teammate that works across connected tools, performs recurring tasks, and uses a shared team credit pool for work. The public pages describe the workflow, not measured reliability."
+    },
+    "identityCanonical": {
+      "status": "PASS",
+      "sourceIds": ["home", "pricing"],
+      "evidenceExcerpt": "The official lindy.ai homepage and pricing page identify one Lindy AI teammate product. The existing /ai/lindy result is a noindex site fallback shell, not a separate database Tool ID."
+    },
+    "duplicateIntent": {
+      "status": "PASS",
+      "checkedToolIds": [],
+      "rationale": "Catalog-only record with no Task Fit. Production read-only tools and collection_candidates checks found no Lindy name or domain entity; generic enqueue must repeat canonical and name collision checks."
+    }
+  },
+  "reviewedAt": "2026-10-17",
+  "nextReviewDate": "2026-10-31",
+  "media": {
+    "mode": "platform_owned_editorial",
+    "assetPath": "/images/tool-media/lindy-editorial-cover.svg",
+    "sha256": "c1ec3512164c12356531e3a179cdeb72ed1da67d8211e39dd6a1411fe67e44bd",
+    "creator": "AI Best Tool editorial",
+    "createdAt": "2026-10-17",
+    "noVendorMarks": true
+  },
+  "pricing": "paid",
+  "tags": ["AI teammate", "workflow automation", "connected tools", "team routines"],
+  "localized": {
+    "en": {
+      "title": "Lindy: AI teammate for connected team work",
+      "summary": "Lindy is an AI teammate for delegated work across connected tools, shared context and scheduled routines. Compare approvals, credit use and per-seat cost with n8n and Make before choosing it.",
+      "detail": "Lindy now presents itself as an AI teammate for teams rather than only a visual agent builder. Its public pages describe work across connected tools, shared context, meeting follow-up and recurring routines. This is a candidate when a team wants to delegate repeatable operational work and can review what the assistant is allowed to read or change. Compare it with n8n and Make on setup effort, integration scope, human approval, failure recovery and total running cost. Lindy's public pricing offers a short free-credit trial and paid seats drawing from a shared credit pool; credit consumption varies by task. This directory has not tested account checkout, connected-app permissions, task accuracy or data processing in a real workspace. Confirm approvals, contract terms and actual credit use in your target account before relying on an irreversible workflow. The earlier noindex search shell at this URL is not evidence of a separate listed entity or a successful product test.",
+      "bestFor": ["Teams delegating recurring cross-tool operational work with human oversight", "Teams willing to measure credit use and review connected-app permissions"],
+      "notIdealFor": ["Buyers seeking a permanently free plan after the short trial", "Teams needing independently tested reliability or exact account-level costs before deployment"],
+      "limitations": ["No account-level checkout, reliability or permissions test was performed", "The free credits are time-limited and paid seats share a usage pool", "Actual credits and approval behavior depend on the task and workspace configuration"],
+      "compareAxes": ["Human approval and connected-app permission scope", "Setup effort and failure recovery versus n8n and Make", "Per-seat price plus variable credit use for one representative workflow"],
+      "pricingSummary": "The official site lists a time-limited free-credit trial and paid seats; confirm current checkout and task-level credit use for your account."
+    },
+    "cn": {
+      "title": "Lindy：跨工具协作的 AI 队友",
+      "summary": "Lindy 面向团队委派跨工具任务，提供共享上下文和定时例行工作。选择前应与 n8n、Make 比较人工审批、credits 消耗和按席位成本，本站尚未做账户实测。",
+      "detail": "Lindy 目前将自身定位为团队 AI 队友，而不只是可视化 Agent 构建器。官网介绍了跨连接工具工作、共享上下文、会议后续处理和定时例行任务。它适合愿意核对助手可读取或修改权限、并对重复运营任务保留人工监督的团队。与 n8n、Make 比较时，应看配置成本、集成边界、人工审批、失败恢复及持续费用。官网公开的是短期免费 credits 试用以及共用 credit 池的付费席位；实际任务消耗不固定。本站未在真实工作区验证结账、连接应用权限、任务准确率或数据处理。不可逆流程上线前，请在目标账户核查审批、合同和真实 credits 消耗。本站此前同 URL 的 noindex 搜索壳不代表正式独立工具收录或产品实测。",
+      "bestFor": ["需要人工监督跨工具重复运营工作的团队", "愿意测量 credits 消耗并检查连接应用权限的团队"],
+      "notIdealFor": ["期待短期试用结束后仍永久免费的采购者", "部署前要求已有独立可靠性实测或精确账户费用的团队"],
+      "limitations": ["本站未实测目标账户结账、可靠性或连接权限", "免费 credits 有时限，付费席位共用用量池", "实际消耗和审批行为取决于任务及工作区设置"],
+      "compareAxes": ["人工审批与连接应用权限范围", "相对 n8n 和 Make 的设置工作量与失败恢复", "代表性流程的席位费用加可变 credits 消耗"],
+      "pricingSummary": "官网列出短期免费 credits 试用与付费席位；目标账户结账和逐任务消耗仍需核对。"
+    },
+    "tw": {
+      "title": "Lindy：跨工具協作的 AI 隊友",
+      "summary": "Lindy 協助團隊委派跨工具工作，提供共用脈絡和定時例行任務。選擇前應與 n8n、Make 比較人工審批、credits 消耗和席位成本；本站尚未做帳戶實測。",
+      "detail": "Lindy 目前把自己定位為團隊 AI 隊友，而不只是視覺化 Agent 建立器。官網介紹跨連接工具工作、共用脈絡、會議後續處理和定時例行任務。適合願意核對助理可讀取或修改的權限，並為重複營運工作保留人工監督的團隊。與 n8n、Make 比較時，應檢查設定成本、整合邊界、人工審批、失敗恢復和持續費用。官網列出短期免費 credits 試用，以及共用 credit 池的付費席位；實際任務消耗不固定。本站未在真實工作區驗證結帳、連接應用權限、任務準確度或資料處理。不可逆流程上線前，請在目標帳戶核對審批、合約和真實 credits 消耗。本站此前同一 URL 的 noindex 搜尋殼，不代表正式獨立工具收錄或產品實測。",
+      "bestFor": ["需要人工監督跨工具重複營運工作的團隊", "願意測量 credits 消耗並檢查連接應用權限的團隊"],
+      "notIdealFor": ["期待短期試用結束後仍永久免費的採購者", "部署前要求已有獨立可靠性實測或精確帳戶費用的團隊"],
+      "limitations": ["本站未實測目標帳戶結帳、可靠性或連接權限", "免費 credits 有時限，付費席位共用用量池", "實際消耗和審批行為取決於任務及工作區設定"],
+      "compareAxes": ["人工審批與連接應用權限範圍", "相對 n8n 和 Make 的設定工作量與失敗恢復", "代表性流程的席位費用加可變 credits 消耗"],
+      "pricingSummary": "官網列出短期免費 credits 試用與付費席位；目標帳戶結帳和逐任務消耗仍需核對。"
+    }
+  },
+  "claimGate": {
+    "status": "PASS",
+    "items": [
+      { "key": "identity", "status": "verified_public", "boundary": "One Lindy AI teammate product, not a second entity for the existing fallback shell.", "sourceIds": ["home"], "nextReviewDate": "2027-01-15" },
+      { "key": "ai_teammate_workflow", "status": "verified_public", "boundary": "Official workflow description; no hands-on accuracy or reliability claim.", "sourceIds": ["home"], "nextReviewDate": "2026-12-16" },
+      { "key": "connected_tools", "status": "conditional", "boundary": "Integration access and write permissions depend on the connected account and configuration.", "sourceIds": ["home"], "nextReviewDate": "2026-11-16" },
+      { "key": "trial_boundary", "status": "verified_public", "boundary": "Free credits last seven days; do not imply a permanent free tier.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-31" },
+      { "key": "seat_pricing", "status": "conditional", "boundary": "Public prices are not a verified target-account checkout or regional contract.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-31" },
+      { "key": "approval_boundary", "status": "conditional", "boundary": "Public approval promise is not an account-level test of every connected action.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-31" },
+      { "key": "data_boundary", "status": "conditional", "boundary": "Public FAQ is not proof of every workspace, vendor or contract data-processing term.", "sourceIds": ["pricing"], "nextReviewDate": "2026-10-31" },
+      { "key": "usage_variability", "status": "verified_public", "boundary": "Task effort varies; no fixed credits per workflow are promised.", "sourceIds": ["usage"], "nextReviewDate": "2026-10-31" },
+      { "key": "credit_pool", "status": "verified_public", "boundary": "Credits are shared in a workspace; actual spend depends on seat and task configuration.", "sourceIds": ["usage"], "nextReviewDate": "2026-10-31" },
+      { "key": "usage_pause", "status": "verified_public", "boundary": "Official usage warning and pause behavior is not a guarantee against all overages.", "sourceIds": ["usage"], "nextReviewDate": "2026-10-31" }
+    ]
+  }
+}

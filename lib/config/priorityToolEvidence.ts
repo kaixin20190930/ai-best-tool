@@ -92,14 +92,14 @@ export const PRIORITY_TOOL_EVIDENCE: Record<string, PriorityToolEvidence> = {
     ],
   },
   lindy: {
-    checkedAt: '2026-08-31',
+    checkedAt: '2026-10-17',
     limitation: {
-      en: 'Credit use varies by model and task complexity; unused credits do not roll over, and credit-consuming tasks pause when the balance runs out.',
-      zh: 'Credits 消耗取决于模型和任务复杂度；未使用额度不会结转，额度耗尽后相关任务会暂停。',
+      en: 'The free credits last seven days. Paid seats share a workspace credit pool, task consumption varies, and credit-using work pauses when the pool runs out. Verify approvals and permissions in your own workspace.',
+      zh: '免费 credits 仅持续七天。付费席位共用工作区额度池，实际任务消耗会变化，额度用尽后相关工作暂停；审批和权限仍应在自己的工作区核对。',
     },
     sources: [
       { label: 'Current official pricing', url: 'https://www.lindy.ai/pricing' },
-      { label: 'Official credit documentation', url: 'https://docs.lindy.ai/account-billing/credits' },
+      { label: 'Official usage documentation', url: 'https://docs.lindy.ai/account-billing/usage' },
     ],
   },
   'luma-ai': {
