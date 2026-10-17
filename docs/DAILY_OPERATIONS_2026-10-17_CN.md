@@ -57,3 +57,12 @@
 - 提交 `d487f6b4` 已推送并部署，三张自有媒体均为 200；本批一次生产 SEO smoke 通过，sitemap 仍为 126 URLs。
 - 最新生产只读统计：101 个 Tool ID、76 个 published、17 个 `continue_index`、82 个 monitor、10 个 draft。
 - `PLAN_DEVIATION`：当日先前已有 Lindy 发布，本批又公开 2 项，实际新增共 3 项，超过常规每日最多 2 项。没有自动索引或 sitemap 写入；后续发布桥前必须读取当日全局发布计数，而不是只计算当前批次。
+
+## A 级快速索引收口
+
+- 统一 selector 扫描全部 57 个 `published + monitor`，仅 Grok Voice 3.0 满足本日 A 级快速通道；未使用 B/C 级工具补足 5 个名额。
+- Grok 证据 manifest 已通过独立 QA、精确前像写入和结构化幂等 postcheck。最终索引 batch hash 为 `6ad4306172ec644c8bec6df749ae859b8cd162a629648665ae6205206206a106`；事务 rollback 零写，批次级独立 QA PASS 后唯一 commit 写入 1，postcheck 零写。
+- 生产 policy 已变为每日 5、每周 25；2026-10-17 实际使用 1，本周使用 1。Grok 当前为 `published + continue_index`。全站交叉矩阵据此变为：101 个 Tool ID；lifecycle 仍为 76 published、10 draft、4 pending、11 rejected；page quality 为 18 continue_index、81 monitor、2 archive。不同维度不可相加。
+- 当前可索引语言是英文与简中：两页 200、自指 canonical、无 robots noindex，并进入 sitemap；繁中按既有语言政策仍为 `noindex, follow`。sitemap 从 126 增至 128。一次 production SEO smoke 通过。
+- GSC 主动提交未完成：生产 monitor API 的本地 token 与生产不匹配而返回 401，当前本地 OAuth refresh token 返回 400。没有把失败伪报为成功；Google 仍可从公开 sitemap 抓取，但修复凭据后应重提 sitemap，并在第 3/7/14/28 天观察 URL Inspection/Coverage。
+- 每日与每周自动化已改为：真正 A 级最多 5/日、25/周，无需逐批 Owner 授权；额度是上限，不凑数。关系、迁移/RLS、删除/合并/重定向、付费和不可逆动作仍需单独授权。

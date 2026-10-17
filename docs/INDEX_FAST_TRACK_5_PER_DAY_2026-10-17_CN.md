@@ -2,7 +2,7 @@
 
 日期：2026-10-17（Asia/Shanghai）
 单元：`INDEX-FAST-TRACK-5-PER-DAY-2026-10-17`
-状态：`EVIDENCE_COMMITTED_POSTCHECK_REPAIRED_NO_PRODUCTION_INDEX_WRITE`
+状态：`COMPLETE_QA_PASS_GROK_INDEX_APPROVED_PRODUCTION_VERIFIED`
 
 ## 结论与边界
 
@@ -45,4 +45,12 @@
 3. 对新 hash 执行一次统一批次 rollback。仍为 A 级且额度可用时，单次事务提交 5/25 迁移、索引状态与审批审计，并 postcheck；失败则保持 monitor。
 4. 部署后一次 production SEO smoke，核对 EN/CN/TW `index,follow`、self-canonical、sitemap 仅增加预期 URL、审批账本及远端 SHA。Google 实际编入索引由后续 GSC/Coverage 观察，不能宣称当天保证收录。
 
-本开发单元不执行第 2-4 步的生产 commit，不 commit/push Git。受保护的两份 SQL 和一份未跟踪 freshness JSON 保持原样。
+上述顺序已在同一交付单元内完成；受保护的两份 SQL 和一份未跟踪 freshness JSON 保持原样。
+
+## 生产收口
+
+- 批次级独立 QA `01a14932-f2f6-7921-a4b5-5705383d4d77` 对最终 hash `6ad4306172ec644c8bec6df749ae859b8cd162a629648665ae6205206206a106` 返回 `QA_PASS`；机器凭证见 `INDEX_FAST_TRACK_BATCH_QA_2026-10-17.json`。
+- 单一事务写入 Grok 索引批准 1 次，并把共享 policy 从每日/每周 `1/5` 迁移为 `5/25`。幂等 postcheck 为零写；审批账本显示 2026-10-17 已用 `1/5`、本周 `1/25`。
+- 生产英文与简中页面返回 200、自指 canonical，已无 robots noindex；繁中按现有语言索引政策继续 `noindex, follow`。sitemap 从 126 增至 128，且只新增 Grok 的 EN/CN URL。全站 production SEO smoke 通过。
+- GSC sitemap 自动提交没有伪报成功：生产 monitor API 因本地缺少匹配的 `MONITOR_API_TOKEN` 返回 401；直接使用当前本地 OAuth 刷新令牌返回 400。页面与 sitemap 已公开可抓取，但 GSC 主动重提暂为凭据阻塞，需修复 token 后重试。普通页面不使用 Google Indexing API。
+- 全量 57 个 `published + monitor` 工具本日只有 Grok 通过 A 级；额度上限不是发布 KPI，其余 56 个保持原状态。

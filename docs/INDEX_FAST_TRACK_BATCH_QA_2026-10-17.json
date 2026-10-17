@@ -1,0 +1,8 @@
+{
+  "status": "QA_PASS",
+  "unit": "INDEX-FAST-TRACK-5-PER-DAY-2026-10-17",
+  "batchHash": "6ad4306172ec644c8bec6df749ae859b8cd162a629648665ae6205206206a106",
+  "qaActor": "codex-thread:01a14932-f2f6-7921-a4b5-5705383d4d77",
+  "checkedAt": "2026-10-17T10:06:29Z",
+  "scope": "Read-only final differential QA for the sole eligible Grok Voice 3.0 batch after a zero-write rollback. This approval does not apply to any other monitor tool."
+}
