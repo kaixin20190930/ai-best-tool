@@ -116,6 +116,24 @@ async function main() {
       assert.equal(await count(), 1);
       console.log(`PASS: concurrent ${isolation} approvals cannot exceed quota`);
     }
+
+    await reset();
+    const fastTrackMigration = fs.readFileSync('db/neon/20261017_index_fast_track_quota.sql', 'utf8')
+      .replaceAll('public.', `${q}.`);
+    await a.query(fastTrackMigration);
+    await a.query(fastTrackMigration);
+    const fastPolicy = (await a.query(`SELECT daily_limit, weekly_limit FROM ${q}.tool_index_release_policy`)).rows[0];
+    assert.deepEqual(fastPolicy, { daily_limit: 5, weekly_limit: 25 });
+    for (let index = 0; index < 5; index++) await insert(a, `fast-${index}`);
+    await assert.rejects(insert(a, 'fast-sixth'), /INDEX_RELEASE_DAILY_LIMIT/);
+    assert.equal(await count(), 5);
+    await reset();
+    await a.query(`INSERT INTO ${q}.tool_index_release_log(tool_id,tool_slug,entry_type,release_day,source)
+      SELECT gen_random_uuid(),'weekly-cap','historical_observed',
+        date_trunc('week',(clock_timestamp() AT TIME ZONE 'Asia/Shanghai'))::date,'test'
+      FROM generate_series(1,25)`);
+    await assert.rejects(insert(a, 'fast-weekly-26'), /INDEX_RELEASE_WEEKLY_LIMIT/);
+    console.log('PASS: fast-track migration idempotent; daily five and weekly 25 enforced by shared trigger');
   } finally {
     await a.query('ROLLBACK');
     await b.query('ROLLBACK');

@@ -81,21 +81,12 @@ export function deriveIndexReviewEvidence(featuresValue: unknown): {
   const independentUrls = (Array.isArray(evidence.independent) ? evidence.independent : [])
     .map((item) => record(item).url)
     .filter((url): url is string => typeof url === 'string' && url.length > 0);
-  const marketUrls = Array.isArray(market.evidenceUrls)
-    ? market.evidenceUrls.filter((url): url is string => typeof url === 'string' && url.length > 0)
-    : [];
-  const strongSignals = Array.isArray(market.strongSignals) ? market.strongSignals : [];
-  const supportingSignals = Array.isArray(market.supportingSignals) ? market.supportingSignals : [];
-
   return {
     officialSourceCount: new Set(officialUrls).size,
-    independentSignalCount: Math.max(
-      new Set([...independentUrls, ...marketUrls]).size,
-      strongSignals.length + supportingSignals.length,
-    ),
+    independentSignalCount: new Set(independentUrls.filter((url) => !officialUrls.includes(url))).size,
     decisionContentComplete:
-      localizedList(audience.bestFit).length > 0 &&
-      localizedList(audience.notIdealFor).length > 0 &&
+      localizedList(audience.bestFit ?? features.bestFit).length > 0 &&
+      localizedList(audience.notIdealFor ?? features.notIdealFor).length > 0 &&
       localizedList(decision.compareAxes).length > 0 &&
       localizedList(decision.limitations).length > 0,
     marketValidated: isMarketValidatedForIndex(market),

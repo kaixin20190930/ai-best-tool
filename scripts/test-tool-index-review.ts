@@ -118,6 +118,24 @@ assert.deepEqual(releasedPayloadEvidence, {
   marketValidated: true,
   editorialReviewed: true,
 });
+const ops2PayloadEvidence = deriveIndexReviewEvidence({
+  bestFit: { en: ['Voice developers'] },
+  notIdealFor: { en: ['No-code buyers'] },
+  decision: { compareAxes: { en: ['Latency'] }, limitations: { en: ['Account pricing unknown'] } },
+  evidence: {
+    official: [{ url: 'https://x.ai/news/grok-voice-3' }, { url: 'https://docs.x.ai/developers/models/grok-voice-3.0' }],
+    independent: [{ url: 'https://artificialanalysis.ai/speech-to-speech/arena' }],
+  },
+  marketValidation: {
+    verdict: 'validated', reviewedAt: '2026-10-17',
+    evidenceUrls: ['https://artificialanalysis.ai/speech-to-speech/arena'],
+    strongSignals: ['Independent benchmark', 'Independent benchmark restated elsewhere'], score: 90,
+  },
+});
+assert.equal(ops2PayloadEvidence.decisionContentComplete, true);
+assert.equal(ops2PayloadEvidence.officialSourceCount, 2);
+assert.equal(ops2PayloadEvidence.independentSignalCount, 1,
+  'Restatements and signal labels must not inflate independent-source count');
 for (const marketValidation of [
   { verdict: 'validated', reviewedAt: '', evidenceUrls: ['https://reviews.example/tool'], strongSignals: ['adoption'], score: 80 },
   { verdict: 'validated', reviewedAt: '2026-09-20', evidenceUrls: [], strongSignals: ['adoption'], score: 80 },

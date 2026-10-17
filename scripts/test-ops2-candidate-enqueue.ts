@@ -440,6 +440,11 @@ async function runLocalDb() {
       assert.deepEqual(tool.features.collection, {});
       assert.equal(tool.features.ops2Selection, undefined);
       assert.equal(tool.features.claimGate, undefined);
+      assert.equal(tool.features.evidence.official.length, selection.officialSources.length);
+      assert.equal(tool.features.indexIdentity.duplicateIntent.status, 'PASS');
+      assert.deepEqual(tool.features.audience.bestFit.en, selection.localized.en.bestFor);
+      assert.equal(tool.features.claimBoundaries.length, selection.claimGate.items.length);
+      assert.ok(!JSON.stringify(tool.features.claimBoundaries).includes('accountEvidenceRef'));
       assert.equal(tool.features.marketValidation, undefined);
       assert.ok(!JSON.stringify(tool).includes('ops2EnqueueAudit'));
       assert.ok(!JSON.stringify(tool).includes('qaReportHash'));

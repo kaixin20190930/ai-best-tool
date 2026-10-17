@@ -1491,7 +1491,28 @@ export async function importCollectionCandidateToDraft(
       summary: selection ? selectedText('summary') : { en: summary, zh: summary },
       trustNote: { en: sourceSummary, zh: sourceSummary },
     },
-    ...(!selection ? { marketValidation } : {}),
+    ...(selection ? {
+      evidence: {
+        official: selection.officialSources.map((source) => ({
+          url: source.url,
+          sourceId: source.id,
+          claimKeys: source.claimKeys,
+          reviewedAt: selection.reviewedAt,
+        })),
+      },
+      claimBoundaries: selection.claimGate.items.map(({ key, status, boundary, sourceIds, nextReviewDate }) =>
+        ({ key, status, boundary, sourceIds, nextReviewDate })),
+      indexIdentity: {
+        officialUrl: selection.officialUrl,
+        duplicateIntent: selection.entityGate.duplicateIntent,
+        reviewedAt: selection.reviewedAt,
+      },
+      audience: {
+        bestFit: selectedList('bestFor'),
+        notIdealFor: selectedList('notIdealFor'),
+      },
+    } : {}),
+    ...(Object.keys(marketValidation).length > 0 ? { marketValidation } : {}),
     bestFit: selection ? selectedList('bestFor') : localizedList(classification.useCases),
     notIdealFor: selection ? selectedList('notIdealFor') : localizedList(notIdealFor),
     decision: {
@@ -1532,7 +1553,10 @@ export async function importCollectionCandidateToDraft(
           tags = $8,
           pricing = $9,
           use_cases = $10::jsonb,
-          features = COALESCE(features, '{}'::jsonb) || $11::jsonb,
+          features = COALESCE(features, '{}'::jsonb) || $11::jsonb ||
+            jsonb_build_object('evidence',
+              COALESCE(features->'evidence', '{}'::jsonb) ||
+              COALESCE($11::jsonb->'evidence', '{}'::jsonb)),
           next_review_date = COALESCE($12::date, next_review_date),
           updated_at = NOW()
       WHERE id = $1 AND status = 'draft'

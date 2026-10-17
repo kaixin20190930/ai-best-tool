@@ -1,0 +1,56 @@
+{
+  "unit": "INDEX-FAST-TRACK-5-PER-DAY-2026-10-17",
+  "items": [
+    {
+      "id": "a5691eb1-64d8-45d0-ba4d-b991c0018bfd",
+      "slug": "grok-voice-3-0",
+      "updatedAt": "2026-10-17 08:58:37.021309+00",
+      "featuresMd5": "cd2c8d39df7411d7bd2e0d940d83e930",
+      "patch": {
+        "evidence": {
+          "official": [
+            { "url": "https://docs.x.ai/developers/models/grok-voice-3.0", "claimKeys": ["identity", "speech_to_speech", "api_model"], "reviewedAt": "2026-10-17" },
+            { "url": "https://x.ai/news/grok-voice-3", "claimKeys": ["identity", "api_availability", "launch_price"], "reviewedAt": "2026-10-17" },
+            { "url": "https://x.ai/api/voice", "claimKeys": ["voice_agent_workflow", "current_price_boundary"], "reviewedAt": "2026-10-17" }
+          ],
+          "independent": [
+            { "url": "https://artificialanalysis.ai/speech-to-speech/arena", "kind": "independent_benchmark", "scope": "Grok Voice 3.0 appears on a third-party speech-agent leaderboard; performance is benchmark-specific, not a site test.", "reviewedAt": "2026-10-17" },
+            { "url": "https://www.eesel.ai/blog/grok-voice-3-review", "kind": "independent_editorial_analysis", "scope": "Editorial comparison discusses deployment trade-offs and cites Artificial Analysis numbers; not a second independent benchmark or a site test.", "reviewedAt": "2026-10-17" },
+            { "url": "https://siliconangle.com/2026/10/14/grok-voice-3-0-from-spacexsi-outscores-openai-and-google-on-speech-to-speech-index/", "kind": "independent_publisher_coverage", "scope": "Separate technology publisher covers buyer context and API price, while reporting Artificial Analysis results rather than rerunning them.", "reviewedAt": "2026-10-17" }
+          ]
+        },
+        "audience": {
+          "bestFit": { "en": ["Developers building live speech-to-speech voice agents"], "cn": ["构建实时语音到语音代理的开发者"], "zh": ["构建实时语音到语音代理的开发者"], "tw": ["建立即時語音到語音代理的開發者"] },
+          "notIdealFor": { "en": ["People seeking a turnkey no-code voice assistant"], "cn": ["寻找开箱即用免代码语音助手的人"], "zh": ["寻找开箱即用免代码语音助手的人"], "tw": ["尋找免程式碼現成語音助理的人"] }
+        },
+        "indexIdentity": {
+          "officialUrl": "https://docs.x.ai/developers/models/grok-voice-3.0",
+          "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "checkedAt": "2026-10-17", "checkedScope": { "nameQuery": "grok voice", "officialUrl": "https://docs.x.ai/developers/models/grok-voice-3.0", "taskMode": "published_fits" }, "productionMatchCount": 0, "rationale": "Production tool name/title/URL, collection candidate and shared published Task Fit match sets must all be empty on re-query; general Grok chat is a separate intent." },
+          "reviewedAt": "2026-10-17"
+        },
+        "marketValidation": {
+          "verdict": "validated",
+          "reviewedAt": "2026-10-17",
+          "score": 80,
+          "evidenceUrls": ["https://artificialanalysis.ai/speech-to-speech/arena", "https://www.eesel.ai/blog/grok-voice-3-review", "https://siliconangle.com/2026/10/14/grok-voice-3-0-from-spacexsi-outscores-openai-and-google-on-speech-to-speech-index/"],
+          "strongSignals": ["Artificial Analysis independently benchmarks Grok Voice 3.0 with 637 Speech Agent Arena samples at review date.", "eesel and SiliconANGLE cover voice-agent buyer/deployment choices from separate publisher domains; both cite Artificial Analysis figures rather than running another benchmark."],
+          "supportingSignals": ["xAI publicly launched the named API model on 2026-10-14; launch publicity is not independent demand measurement."],
+          "limitation": "No verified search-volume estimate, own account billing test, or site-run latency test. Editorial coverage is not independent benchmark replication. Market score is an editorial readiness assessment, not a traffic forecast.",
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-17",
+            "brand": { "established": true, "url": "https://x.ai/news/grok-voice-3", "checkedAt": "2026-10-17", "scope": "Existing xAI Grok Voice API brand and named third-generation model, not verified search volume for this exact page." },
+            "decisionIntents": ["api", "pricing", "vs"],
+            "independentSignals": [
+              { "type": "independent_benchmark", "url": "https://artificialanalysis.ai/speech-to-speech/arena", "checkedAt": "2026-10-17", "scope": "Artificial Analysis Speech Agent Arena lists 637 Grok Voice 3.0 samples; benchmark-specific, not our test.", "nonDuplication": "Only primary independent benchmark in this record; editorial figures trace back here." },
+              { "type": "editorial_buyer_coverage", "url": "https://www.eesel.ai/blog/grok-voice-3-review", "checkedAt": "2026-10-17", "scope": "Separate publisher discusses deployment and buyer selection trade-offs without retesting the model.", "nonDuplication": "Buyer/deployment attention rather than another benchmark; Artificial Analysis supplies cited figures.", "independentRetest": false },
+              { "type": "editorial_buyer_coverage", "url": "https://siliconangle.com/2026/10/14/grok-voice-3-0-from-spacexsi-outscores-openai-and-google-on-speech-to-speech-index/", "checkedAt": "2026-10-17", "scope": "Unaffiliated technology publisher independently covers model launch, enterprise use and API price.", "nonDuplication": "Different publisher from eesel; reports rather than reproduces Artificial Analysis testing.", "independentRetest": false }
+            ],
+            "nonDuplication": "One benchmark source plus two unaffiliated publisher/editorial signals across three domains; not three tests, and no search-demand estimate."
+          }
+        }
+      }
+    }
+  ]
+}
