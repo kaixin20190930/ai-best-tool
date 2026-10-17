@@ -2,6 +2,8 @@
 
 更新时间：2026-10-17
 
+2026-10-17 **快速索引规则已收紧为 A/B/C 三档**：成熟、唯一意图、内容与证据完整的 A 级工具不再经历固定观察期，一次最终 QA 同时产出公开与索引资格结论，发布当天进入集中 Owner 授权包；B 级只修一个明确缺口，目标 3-7 天；C 级保持 noindex 并进入合并/归档/重构。现有 monitor 库存只做一次统一分层，不再逐工具重复完整 QA。当前保护额度保持每天 1 个、每周 5 个并立即用于真实 A 级候选；连续两个健康周后再单独申请调整到每天 2 个、每周 8 个。普通工具页不使用仅适用于招聘/直播的 Google Indexing API。详见[工具页索引发布政策](./TOOL_INDEX_RELEASE_POLICY_CN.md#2026-10-17-快速索引规则)。
+
 2026-10-17 **单开发槽四线日报完成**：Lindy 已沿通用链路进入唯一实体（Tool ID `df16d4cc-a1f6-454e-971f-fcfe7dca31c7`）；独立 QA `01a147ba-4b0e-7542-859e-5bd4732a969f` 通过后，提交 `79bedb1c` 部署、自有媒体回验 200，并按原前像唯一发布为 `published + monitor/noindex`，postcheck 零写，index/sitemap 未变。五条 OpenAI 家族与企业品牌实体核查形成一份保守处置清单，未做自动归档。GSC 只读刷新至 10-14 完整日；n8n 失效官方许可证链接与 Lindy 旧套餐事实已上线修正。最终状态 97 Tool ID / 74 published / 17 continue_index；`prohoster-2` 的外部发布不计今天成果。详见[当日日报](./DAILY_OPERATIONS_2026-10-17_CN.md)。
 
 2026-10-16 **每周市场反馈与增长复盘完成**：GSC 最新完整日 2026-10-13，7 天 `3 clicks / 956 impressions / CTR 0.31% / position 13.42`，28 天 `7 / 1,813 / 0.39% / 14.40`；站内事件 unavailable。下周 Harvest 首要对象为 `/ai/n8n`（7 天 679 impressions、排名 9.27、CTR 0.15%），Lindy、Poe、DeepL 和 Woy AI 分别进入身份/决策意图/技术诊断队列。Catalog 以 Lindy、Zapier、Activepieces、Gumloop、Relay.app 为主，Bardeen、Dify 为后备；所有分数是机会评分而非搜索量或发布批准。Decision 安排 AI workflow automation 与 App builder comparison 两个端到端用户单元。本周无新的 index/sitemap 授权项，因为现有高信号页面已是 `continue_index`，Woy/Lindy 门禁未完成且逐 URL Coverage unavailable。详见[每周复盘](./WEEKLY_MARKET_GROWTH_REVIEW_2026-10-16_CN.md)。
