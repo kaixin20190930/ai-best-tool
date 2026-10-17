@@ -10,7 +10,7 @@ export function normalizeEvidenceUrl(value: string): string {
   const url = new URL(value);
   url.hostname = url.hostname.toLowerCase().replace(/^www\./, '');
   url.hash = '';
-  for (const key of [...url.searchParams.keys()]) {
+  for (const key of Array.from(url.searchParams.keys())) {
     if (/^(utm_|fbclid$|gclid$)/i.test(key)) url.searchParams.delete(key);
   }
   url.searchParams.sort();
@@ -101,7 +101,7 @@ export function hasVerifiedFastTrackEligibility(value: unknown, asOf: string): b
   }
   return kinds.has('independent_benchmark') && kinds.has('editorial_buyer_coverage') &&
     editorialPublishers >= 2 && domains.size >= 3 &&
-    ![...domains].some((domain) => domain === 'x.ai' || domain.endsWith('.x.ai'));
+    !Array.from(domains).some((domain) => domain === 'x.ai' || domain.endsWith('.x.ai'));
 }
 
 export function selectIndexReleaseTrack(marketValidation: unknown, asOf: string): {
