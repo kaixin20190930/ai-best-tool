@@ -1,3 +1,5 @@
+import { isDeepStrictEqual } from 'node:util';
+
 type JsonRecord = Record<string, any>;
 
 function record(value: unknown): JsonRecord {
@@ -50,6 +52,10 @@ export function mergeIndexEvidence(existingValue: unknown, patchValue: unknown):
     }
   }
   return merged;
+}
+
+export function indexEvidencePostimageMatches(actual: unknown, expected: unknown): boolean {
+  return isDeepStrictEqual(actual, expected);
 }
 
 const validDate = (value: unknown, asOf: string) =>

@@ -1,0 +1,8 @@
+{
+  "status": "QA_PASS",
+  "unit": "INDEX-FAST-TRACK-5-PER-DAY-2026-10-17",
+  "manifestSha256": "f04a8e98b8d41fb756cbd472e7c4ecad082e1b1b1248af565788ca74301154d1",
+  "qaActor": "codex-thread:01a14932-f2f6-7921-a4b5-5705383d4d77",
+  "checkedAt": "2026-10-17T09:35:00Z",
+  "scope": "Grok evidence merge, explicit fast-track qualification, duplicate-intent production snapshot, and no-index preimage"
+}

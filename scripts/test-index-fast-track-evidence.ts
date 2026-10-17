@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { hasVerifiedFastTrackEligibility, mergeIndexEvidence, selectIndexReleaseTrack,
+import { hasVerifiedFastTrackEligibility, indexEvidencePostimageMatches, mergeIndexEvidence, selectIndexReleaseTrack,
   validateDuplicateIntentSnapshot } from '../lib/services/indexFastTrackEvidence';
 
 const oldOfficial = { url: 'https://x.ai/news/grok-voice-3', reviewedAt: '2026-10-16', claimKeys: ['old'] };
@@ -20,6 +20,17 @@ assert.deepEqual(mergeIndexEvidence({ evidence: { official: [{ legacy: true }] }
   { evidence: { official: [{ url: 'https://x.ai/api/voice' }] } }).evidence.official,
 [{ legacy: true }, { url: 'https://x.ai/api/voice' }]);
 assert.throws(() => mergeIndexEvidence({}, { evidence: { independent: [{ claim: 'no url' }] } }));
+const jsonbOrder = { marketValidation: { score: 80, verdict: 'validated' },
+  evidence: { official: [{ reviewedAt: '2026-10-17', url: 'https://x.ai/api/voice' }], independent: [] } };
+const patchOrder = { evidence: { official: [{ url: 'https://x.ai/api/voice', reviewedAt: '2026-10-17' }] },
+  marketValidation: { verdict: 'validated', score: 80 } };
+const reordered = mergeIndexEvidence(jsonbOrder, patchOrder);
+const pgRoundTrip = { evidence: { independent: [], official: [{ url: 'https://x.ai/api/voice', reviewedAt: '2026-10-17' }] },
+  marketValidation: { verdict: 'validated', score: 80 } };
+assert.notEqual(JSON.stringify(reordered), JSON.stringify(pgRoundTrip));
+assert.equal(indexEvidencePostimageMatches(reordered, pgRoundTrip), true);
+assert.equal(indexEvidencePostimageMatches({ ...reordered, marketValidation: { score: 81, verdict: 'validated' } }, jsonbOrder), false);
+assert.equal(indexEvidencePostimageMatches({ ...reordered, evidence: { ...reordered.evidence, official: [] } }, jsonbOrder), false);
 
 const fastTrack = {
   status: 'PASS', basis: 'brand_decision_signals', checkedAt: '2026-10-17',

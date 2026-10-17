@@ -5,7 +5,7 @@ import { config } from 'dotenv';
 import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
-import { mergeIndexEvidence } from '../lib/services/indexFastTrackEvidence';
+import { indexEvidencePostimageMatches, mergeIndexEvidence } from '../lib/services/indexFastTrackEvidence';
 
 type Manifest = {
   unit: string;
@@ -64,7 +64,7 @@ async function main() {
         assert(value && typeof value === 'object' && !Array.isArray(value));
       }
       const merged = mergeIndexEvidence(row.features, item.patch);
-      const applied = hash(merged) === hash(row.features);
+      const applied = indexEvidencePostimageMatches(merged, row.features);
       if (mode === 'postcheck') assert(applied, `${item.slug}: expected evidence postimage missing`);
       if (!applied) {
         assert.equal(row.updated_at, item.updatedAt, `${item.slug}: updated_at drift`);
