@@ -54,3 +54,7 @@
 - 生产英文与简中页面返回 200、自指 canonical，已无 robots noindex；繁中按现有语言索引政策继续 `noindex, follow`。sitemap 从 126 增至 128，且只新增 Grok 的 EN/CN URL。全站 production SEO smoke 通过。
 - GSC sitemap 自动提交没有伪报成功：生产 monitor API 因本地缺少匹配的 `MONITOR_API_TOKEN` 返回 401；直接使用当前本地 OAuth 刷新令牌返回 400。页面与 sitemap 已公开可抓取，但 GSC 主动重提暂为凭据阻塞，需修复 token 后重试。普通页面不使用 Google Indexing API。
 - 全量 57 个 `published + monitor` 工具本日只有 Grok 通过 A 级；额度上限不是发布 KPI，其余 56 个保持原状态。
+
+## 2026-10-18 后续规则说明
+
+以上 Grok 的三条独立信号及当日 QA/生产结果是历史记录，不是所有成熟品牌的最低模板。此后 `brand_decision_signals` 按 [现行索引政策](./TOOL_INDEX_RELEASE_POLICY_CN.md)接受成熟 SaaS/消费产品的其他真实决策意图和独立市场信号；最低为两种受控决策意图、两个不同非官方域名的非重复信号，不强制 API+价格、benchmark、两家媒体和三域名。通用 A 级硬门槛与 `measured_search_demand` 不变。本规则修订本身没有重判历史候选、写入生产或执行索引提交。

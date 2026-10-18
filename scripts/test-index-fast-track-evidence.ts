@@ -57,9 +57,39 @@ assert.deepEqual(selectIndexReleaseTrack({ score: 100, observationComplete: fals
 assert.deepEqual(selectIndexReleaseTrack({ score: 100, ownerDirection: 'fast', observationComplete: true }, '2026-10-17'),
   { releaseTrack: 'standard', observationComplete: true });
 assert.equal(hasVerifiedFastTrackEligibility(undefined, '2026-10-17'), false);
-assert.equal(hasVerifiedFastTrackEligibility({ ...fastTrack, independentSignals: fastTrack.independentSignals.slice(0, 2) }, '2026-10-17'), false);
+const saasSignals = [
+  { type: 'editorial_buyer_coverage', url: 'https://buyers.example.net/saas-review', checkedAt: '2026-10-17',
+    scope: 'Independent buyer comparison of the SaaS product',
+    nonDuplication: 'Original buyer coverage from this publisher.' },
+  { type: 'public_adoption_market_signal', url: 'https://market.example.org/app/saas', checkedAt: '2026-10-17',
+    scope: 'Public app-store adoption count for the product',
+    nonDuplication: 'Separate adoption count, not copied buyer coverage.' },
+];
+const saasTrack = { ...fastTrack, brand: { established: true, url: 'https://saas.example.com/about', checkedAt: '2026-10-17' },
+  decisionIntents: ['pricing', 'alternatives'], independentSignals: saasSignals };
+assert.equal(hasVerifiedFastTrackEligibility(saasTrack, '2026-10-17'), true);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, decisionIntents: ['review', 'best_for'] }, '2026-10-17'), true);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
+  { ...saasSignals[1], type: 'editorial_buyer_coverage' }] }, '2026-10-17'), true);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: saasSignals.slice(0, 1) }, '2026-10-17'), false);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, brand: { ...saasTrack.brand, established: false } }, '2026-10-17'), false);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, decisionIntents: ['pricing', 'pricing'] }, '2026-10-17'), false);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, decisionIntents: ['pricing', 'brand_awareness'] }, '2026-10-17'), false);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
+  { ...saasSignals[1], url: 'https://buyers.example.net/another-review' }] }, '2026-10-17'), false);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
+  { ...saasSignals[1], url: 'https://blog.saas.example.com/adoption' }] }, '2026-10-17'), false);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
+  { ...saasSignals[1], type: 'brand_press_release' }] }, '2026-10-17'), false);
+assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
+  { ...saasSignals[1], url: 'http://market.example.org/app/saas' }] }, '2026-10-17'), false);
 assert.equal(hasVerifiedFastTrackEligibility({ ...fastTrack, decisionIntents: ['api'] }, '2026-10-17'), false);
 assert.equal(hasVerifiedFastTrackEligibility({ ...fastTrack, checkedAt: '2026-09-01' }, '2026-10-17'), false);
+const measuredTrack = { status: 'PASS', basis: 'measured_search_demand', checkedAt: '2026-10-17',
+  nonDuplication: 'Measured demand is a separate search signal, not brand inference.',
+  searchDemand: { type: 'gsc_page_impressions', value: 12, url: 'https://search.google.com/search-console', checkedAt: '2026-10-17' } };
+assert.equal(hasVerifiedFastTrackEligibility(measuredTrack, '2026-10-17'), true);
+assert.equal(hasVerifiedFastTrackEligibility({ ...measuredTrack, searchDemand: { ...measuredTrack.searchDemand, value: 0 } }, '2026-10-17'), false);
 const scope = { nameQuery: 'grok voice', officialUrl: 'https://docs.x.ai/developers/models/grok-voice-3.0', taskMode: 'published_fits' };
 const duplicate = { status: 'PASS', checkedAt: '2026-10-17', checkedScope: scope,
   checkedToolIds: [], productionMatchCount: 0 };

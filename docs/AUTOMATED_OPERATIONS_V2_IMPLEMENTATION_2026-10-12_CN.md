@@ -260,6 +260,8 @@ Catalog 数量是上限和正常目标，不是牺牲质量的硬 KPI。若 Harv
 
 **2026-10-17 Owner 更新**：对已公开且真实通过全部 A 级硬门槛的工具，长期授权通用流水线每天最多批准 5 个、上海时区 ISO 周最多 25 个，无需逐工具重复询问。首次生产额度迁移和索引提交仍需同一交付单元独立 QA PASS；后续按相同通用门禁自主执行。额度是上限，不是 KPI；零合格则批准零项，不以品牌或质量分代替市场、证据、意图和 SEO 检查。GSC 快照超过 14 天、站点健康 blocked/unknown、policy paused 或任何硬门槛失败时继续 noindex。成熟高需求对象不强制等待观察期，普通对象仍须满足原观察门禁。
 
+**2026-10-18 快速资格口径**：`measured_search_demand` 保持不变；成熟品牌可用 `brand_decision_signals`，要求 established 品牌、至少两种不同的受控决策意图（API、价格、对比、替代、评测、场景适配、集成或商用），及至少两个不同非官方域名的真实独立信号。信号类型限独立 benchmark、独立编辑/买方覆盖、公开采用/应用商店市场信号；不强制 API+价格、benchmark、两家媒体或三域名，但单纯品牌知名度、官方宣传、转载或仅上架不能通过。完整类型值、来源记录与不变的通用 A 级硬门槛见 [工具页索引政策](./TOOL_INDEX_RELEASE_POLICY_CN.md)。本修订不自动写生产数据或批准任何单页索引。
+
 批准后，现有 `continue_index` 契约负责输出 index/robots 并进入现有 sitemap；不创建第二套 sitemap，也不向普通工具页调用 Google Indexing API。每次批次必须有精确前像、统一额度锁、事务 rollback、最终独立 QA、审批账本和幂等 postcheck。用户授权不能绕过公开证据与索引资格，也不能使 Google 保证收录。
 
 Google 普通页面的发现和编入索引通常需要数天；自动化只能保证授权后立即输出 `index,follow`、唯一 canonical、sitemap 和可抓取内链，不能保证 Google 当天收录。禁止对普通工具页使用仅适用于招聘和直播页面的 Google Indexing API。

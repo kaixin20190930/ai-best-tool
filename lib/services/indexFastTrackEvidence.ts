@@ -62,6 +62,24 @@ const validDate = (value: unknown, asOf: string) =>
   typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) &&
   Number.isFinite(Date.parse(`${value}T00:00:00Z`)) && value <= asOf;
 
+const decisionIntentTypes = new Set([
+  'api', 'pricing', 'vs', 'alternatives', 'review', 'best_for', 'integrations', 'commercial_use',
+]);
+const independentSignalTypes = new Set([
+  'independent_benchmark', 'editorial_buyer_coverage', 'public_adoption_market_signal',
+]);
+
+function evidenceDomain(value: string): string | null {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== 'https:' || !url.hostname || url.username || url.password) return null;
+    const labels = url.hostname.toLowerCase().replace(/^www\./, '').split('.');
+    if (labels.length < 2) return null;
+    const suffixLength = labels.length >= 3 && ['co.uk', 'org.uk', 'com.au', 'co.jp'].includes(labels.slice(-2).join('.')) ? 3 : 2;
+    return labels.slice(-suffixLength).join('.');
+  } catch { return null; }
+}
+
 export function hasVerifiedFastTrackEligibility(value: unknown, asOf: string): boolean {
   const eligibility = record(value);
   if (eligibility.status !== 'PASS' || !validDate(eligibility.checkedAt, asOf) ||
@@ -79,29 +97,23 @@ export function hasVerifiedFastTrackEligibility(value: unknown, asOf: string): b
   const brand = record(eligibility.brand);
   const intents = Array.isArray(eligibility.decisionIntents) ? eligibility.decisionIntents : [];
   const signals = Array.isArray(eligibility.independentSignals) ? eligibility.independentSignals : [];
-  if (brand.established !== true || typeof brand.url !== 'string' || !brand.url.startsWith('https://') ||
-      !validDate(brand.checkedAt, asOf) ||
-      !intents.includes('api') || !intents.includes('pricing') || signals.length < 2) return false;
+  const brandDomain = typeof brand.url === 'string' ? evidenceDomain(brand.url) : null;
+  if (brand.established !== true || !brandDomain || !validDate(brand.checkedAt, asOf) ||
+      intents.length < 2 || intents.some((intent) => !decisionIntentTypes.has(intent)) ||
+      new Set(intents).size < 2 || signals.length < 2) return false;
   const domains = new Set<string>();
-  const kinds = new Set<string>();
-  let editorialPublishers = 0;
-  for (const item of signals) {
+  const signalsValid = signals.every((item) => {
     const signal = record(item);
-    if (!['independent_benchmark', 'editorial_buyer_coverage'].includes(signal.type) ||
+    if (!independentSignalTypes.has(signal.type) ||
         typeof signal.url !== 'string' || !validDate(signal.checkedAt, asOf) ||
         typeof signal.scope !== 'string' || signal.scope.length < 20 ||
         typeof signal.nonDuplication !== 'string' || signal.nonDuplication.length < 20) return false;
-    try { domains.add(new URL(signal.url).hostname.replace(/^www\./, '').toLowerCase()); }
-    catch { return false; }
-    if (signal.type === 'editorial_buyer_coverage') {
-      if (signal.independentRetest !== false) return false;
-      editorialPublishers += 1;
-    }
-    kinds.add(signal.type);
-  }
-  return kinds.has('independent_benchmark') && kinds.has('editorial_buyer_coverage') &&
-    editorialPublishers >= 2 && domains.size >= 3 &&
-    !Array.from(domains).some((domain) => domain === 'x.ai' || domain.endsWith('.x.ai'));
+    const domain = evidenceDomain(signal.url);
+    if (!domain || domain === brandDomain || domains.has(domain)) return false;
+    domains.add(domain);
+    return true;
+  });
+  return signalsValid && domains.size >= 2;
 }
 
 export function selectIndexReleaseTrack(marketValidation: unknown, asOf: string): {

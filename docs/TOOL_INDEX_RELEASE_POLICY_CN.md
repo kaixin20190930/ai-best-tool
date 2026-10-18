@@ -16,6 +16,15 @@
 
 不得因为价格、额度或账户权益的可变 Claim 未能账户实测就把成熟实体降为 B/C；只要页面省略不确定精确值或明确披露适用边界，该 Claim 不阻止 A 级实体进入索引评审。A 级也不得用品牌知名度代替原创决策价值、来源和唯一意图。
 
+### 成熟品牌快速资格的证据组合（2026-10-18 修订）
+
+快速资格只取消固定观察期，不代表 A 级自动通过。`measured_search_demand` 轨道维持原有可核查搜索需求规则。`brand_decision_signals` 轨道允许成熟 SaaS、消费产品及 API 产品使用同一规则，不再强制 `api + pricing`、独立 benchmark、两家编辑媒体或三个域名：
+
+- 品牌须有可复核的 established 证据；至少两种不同的真实决策意图，限于 `api`、`pricing`、`vs`、`alternatives`、`review`、`best_for`、`integrations`、`commercial_use`。品牌词本身不是决策意图。
+- 至少两条可回溯、非重复的独立信号，来自至少两个不同的非官方域名。受控类型限于 `independent_benchmark`、`editorial_buyer_coverage`、`public_adoption_market_signal`；可同类型，但不能把转载、同一市场数据的转述、官方宣传或仅有应用商店上架事实冒充两条独立市场验证。
+- 每条信号记录 HTTPS 来源、核查日、与本工具有关的具体范围和不重复说明。来源域名必须独立于品牌官方域名；两个子域名不能充作两个独立域名。资格快照仍按现有 14 天有效期复查。
+- 通用 A 级硬门槛不变：`published`、质量与合法素材、互补官方来源、真实限制、完整 Decision 内容、唯一 canonical、生产重复意图为零、SEO/GSC/站点政策与原子额度均须通过。没有测得搜索量时不得把品牌轨道写成“已验证搜索量”。
+
 ### 现有库存一次性加速
 
 现有全部 `published + monitor/noindex` 只做一次统一分层，输出 `FAST_INDEX_READY / REPAIR_ONE_GAP / PERMANENT_NOINDEX_OR_DISPOSITION`。复用已有实体 PASS、来源和页面后像；没有来源变化、到期、代码影响或生产异常时不得重复验证。该清单完成后不再保留历史工具索引流程，新工具与已收录工具都使用同一三档规则。
