@@ -1,0 +1,8 @@
+{
+  "status": "QA_PASS",
+  "unit": "EXISTING-TOOLS-FRESHNESS-BATCH-2026-10-18",
+  "manifestSha256": "087f213b9207d3f90813feb7899d114a15c8f50fd5bc431e943696519a54601d",
+  "qaActor": "codex-thread:01a14c8e-6673-7172-9a3c-f521a9b9b8b0",
+  "checkedAt": "2026-10-18T01:13:47Z",
+  "scope": "Independent delta review of the final Anyword, Canva and Scite freshness manifest after the bounded Canva wording repair and explicit metadata side-effect declaration."
+}

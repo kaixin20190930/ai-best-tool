@@ -1,0 +1,197 @@
+{
+  "unit": "EXISTING-TOOLS-FRESHNESS-BATCH-2026-10-18",
+  "asOf": "2026-10-18",
+  "scope": "One bounded claim_due batch for Anyword, Canva and Scite. Public claim wording changes only where the current official source disproves the old wording. No index, sitemap, canonical, relation, schema, privacy or account-level entitlement change.",
+  "approvedWritablePaths": [
+    {
+      "slug": "canva",
+      "path": "detail.en",
+      "from": "Canva AI 2.0 was announced as a research preview; do not assume every announced workflow is generally available.",
+      "to": "Canva AI 2.0 is launched; the official launch announcement initially described it as a research preview. Current Help Center guidance lists eligibility for some plan features, while actual access may vary by plan, tool and account. Free and Education users can access Canva AI 1.0 features and selected tools with limited monthly usage; verify current access in your account."
+    },
+    {
+      "slug": "canva",
+      "path": "detail.cn",
+      "from": "Canva AI 2.0 公告稱為 research preview，不應假設所有已公布流程均已普遍開放。",
+      "to": "Canva AI 2.0 已發布；官方發布公告最初將其描述為 research preview。當前幫助中心列出部分方案的功能資格，但具體開放情況會因方案、工具與帳戶而異。Free 和 Education 使用者可使用 Canva AI 1.0 功能及部分工具，但月度用量有限；請在帳戶中確認當前資格。"
+    },
+    {
+      "slug": "scite",
+      "path": "detail.en",
+      "from": "The public page lists Basic, Pro, Team and Enterprise, but this review makes no exact price, credit, export or API allowance promise. Check the target account and billing screen before purchase.",
+      "to": "The current pricing cards list Basic, Pro and Enterprise, not Team. The same page FAQ still mentions Team for API access, so plan-specific API entitlement remains unresolved; no exact price, credit, export or API allowance is promised here. Check the target account and confirm API eligibility with Scite before purchase."
+    },
+    {
+      "slug": "scite",
+      "path": "detail.cn",
+      "from": "公開頁列出 Basic、Pro、Team 與 Enterprise，但本稿不承諾精確價格、點數、匯出或 API 額度。購買前確認目標帳戶與結帳頁面。",
+      "to": "目前定價卡列出 Basic、Pro 和 Enterprise，未列 Team；但同一頁 FAQ 仍稱 API 權益適用 Pro 和 Team，因此 API 方案資格尚未釐清。本頁不承諾精確價格、點數、匯出或 API 額度。購買前核對目標帳戶，並向 Scite 確認 API 資格。"
+    }
+  ],
+  "declaredMetadataWrites": [
+    {
+      "slug": "anyword",
+      "paths": ["features.maintenanceReview", "next_review_date"],
+      "nextReviewDate": "2026-10-25",
+      "executorBoundary": "Fixed side effect in scripts/run-existing-tools-freshness-change-set.ts; outside approvedWritablePaths."
+    },
+    {
+      "slug": "canva",
+      "paths": ["features.maintenanceReview", "next_review_date"],
+      "nextReviewDate": "2026-10-24",
+      "executorBoundary": "Fixed side effect in scripts/run-existing-tools-freshness-change-set.ts; outside approvedWritablePaths."
+    },
+    {
+      "slug": "scite",
+      "paths": ["features.maintenanceReview", "next_review_date"],
+      "nextReviewDate": "2026-10-24",
+      "executorBoundary": "Fixed side effect in scripts/run-existing-tools-freshness-change-set.ts; outside approvedWritablePaths."
+    }
+  ],
+  "items": [
+    {
+      "id": "4555627d-2de9-4614-a850-fa073388f869",
+      "slug": "anyword",
+      "preimageSha256": "a9164aac66c919073145e8a270ab339f07f4124e8af0f6bbd9ef751206f1ef8c",
+      "protectedSha256": "b94e59e509c2a32dd98b4231492ea90e99205498c0b602ecefe2f0f5d5b2a497",
+      "protectedFeaturesSha256": "422f1a0a9001b2c35cdaf709cea501abb1ba9d0e1e96d49f1d56e9d6341028a7",
+      "expectedDetailSha256": "f779c4e930f18ddbcfec03789eb367421be81636fbb39869c17b2c7d9624cc9e",
+      "nextReviewDate": "2026-10-25",
+      "review": {
+        "checkedAt": "2026-10-18",
+        "nextReviewDate": "2026-10-25",
+        "outcome": "reviewed_no_public_claim_change",
+        "scope": "Official public pricing display and plan names only; no signed-in checkout, account, trial activation or entitlement test.",
+        "changeSummary": "The current official pricing page still names Starter, Data-Driven, Business and Enterprise, matching the existing public copy. Monthly and yearly-billed price displays vary; the listing intentionally retains no exact price or allowance.",
+        "sources": [
+          "https://www.anyword.com/pricing"
+        ],
+        "sourceObservations": [
+          "The official page exposes monthly and yearly displays and currently shows Starter and Data-Driven public prices alongside custom-priced Business and Enterprise. These page displays are not a target-account checkout verification."
+        ],
+        "claims": [
+          {
+            "id": "public-plan-and-price-display",
+            "category": "price",
+            "status": "conditional",
+            "nextReviewDate": "2026-11-01",
+            "limitation": "Plan names match the current page; exact checkout price, currency, billing interval, seats, prediction allowance and trial eligibility remain account-dependent and were not tested."
+          }
+        ],
+        "unresolved": [
+          "No target-account checkout, paid workspace, trial activation or live prediction balance was inspected; account/data claims remain on their existing 2026-10-25 review schedule."
+        ]
+      },
+      "rollback": "Restore maintenanceReview absence and next_review_date=2026-10-18 only if the postimage still matches; do not overwrite any row drift."
+    },
+    {
+      "id": "7f37933d-7e61-4a47-bc6e-85bc1bc224c4",
+      "slug": "canva",
+      "preimageSha256": "a8dcd4d05f2c5dd4a56fcf1452560c96ce478f49097bff40d9ff43fa6a5ee945",
+      "protectedSha256": "03f8be5c2b52d4bf8fd8ed736294fb4c3f81de245e362f232988513f2fad37b8",
+      "protectedFeaturesSha256": "560dbb8290981d61c14636a728ff15b5ff472db5bc84b953049fc3203b8129a7",
+      "expectedDetailSha256": "35cda1a2ee2c36a6897edb7dbc939b06134197f501f2693d2b29510e37d137d6",
+      "nextReviewDate": "2026-10-24",
+      "detailReplacements": {
+        "en": {
+          "from": "Canva AI 2.0 was announced as a research preview; do not assume every announced workflow is generally available.",
+          "to": "Canva AI 2.0 is launched; the official launch announcement initially described it as a research preview. Current Help Center guidance lists eligibility for some plan features, while actual access may vary by plan, tool and account. Free and Education users can access Canva AI 1.0 features and selected tools with limited monthly usage; verify current access in your account."
+        },
+        "cn": {
+          "from": "Canva AI 2.0 公告稱為 research preview，不應假設所有已公布流程均已普遍開放。",
+          "to": "Canva AI 2.0 已發布；官方發布公告最初將其描述為 research preview。當前幫助中心列出部分方案的功能資格，但具體開放情況會因方案、工具與帳戶而異。Free 和 Education 使用者可使用 Canva AI 1.0 功能及部分工具，但月度用量有限；請在帳戶中確認當前資格。"
+        }
+      },
+      "review": {
+        "checkedAt": "2026-10-18",
+        "nextReviewDate": "2026-10-24",
+        "outcome": "clarified_launch_announcement_and_current_eligibility_boundary",
+        "scope": "Official plan display, Canva AI launch/eligibility and shared AI allowance only; no signed-in account, regional eligibility, usage meter, privacy or output-rights test.",
+        "changeSummary": "The detail now preserves the launch timeline: the official announcement initially described Canva AI 2.0 as a research preview, while current Help Center guidance lists eligibility for some plan features. It does not claim the preview label is obsolete or that all workflows are generally available; actual access may vary by plan, tool and account.",
+        "sources": [
+          "https://www.canva.com/pricing/",
+          "https://www.canva.com/help/ai-access/",
+          "https://www.canva.com/en_au/help/using-canva-ai/",
+          "https://www.canva.com/newsroom/news/canva-create-2026-ai/"
+        ],
+        "sourceObservations": [
+          "Pricing distinguishes Free, Pro, Business and Enterprise; its FAQ says Canva Teams is no longer open for new sign-ups or upgrades.",
+          "The official launch announcement initially described Canva AI 2.0 as a research preview; current Help Center guidance lists some plan eligibility, with access varying by plan, tool and account.",
+          "AI allowance is shared across tiers and varies by tool, task complexity, plan and account; no account meter was inspected."
+        ],
+        "claims": [
+          {
+            "id": "canva-ai-2-launch-and-plan-boundary",
+            "category": "core_capability/account_rights",
+            "status": "conditional",
+            "nextReviewDate": "2026-11-01",
+            "limitation": "The launch announcement and current Help Center describe different stages of availability; exact feature rollout and account eligibility remain plan-, tool- and account-dependent."
+          },
+          {
+            "id": "shared-ai-allowance",
+            "category": "account_rights",
+            "status": "conditional",
+            "nextReviewDate": "2026-11-01",
+            "limitation": "Published usage estimates depend on tier, task complexity and selected tool; actual account remaining balance was not tested."
+          }
+        ],
+        "unresolved": [
+          "Output rights, privacy settings and account-specific allowance remain outside this review and retain their existing 2026-10-24 review date."
+        ]
+      },
+      "rollback": "Restore the exact preimage Canva AI 2.0 availability sentence in detail.en and detail.cn, remove the newly added maintenanceReview, and restore next_review_date=2026-10-17 only if the full postimage still matches."
+    },
+    {
+      "id": "13aa730f-4a82-4fc6-b9fa-93855aa8d921",
+      "slug": "scite",
+      "preimageSha256": "63eedb2a95d895017158f837a6c859f7dca8bdcd34df5924b8c61d0525584a57",
+      "protectedSha256": "547cd4b2698a93ae0390f45092d3ae2f66b078f1926360d4b27a19ccb4adf6cd",
+      "protectedFeaturesSha256": "a876ce304dd4e38efbcdf26b168d16e9b75c477b0b57909ed762612e4417267a",
+      "expectedDetailSha256": "c8240535cf2092b1024531f5d00a4fc09cbd1030d2299fb8d87b24141ca7ebd3",
+      "nextReviewDate": "2026-10-24",
+      "detailReplacements": {
+        "en": {
+          "from": "The public page lists Basic, Pro, Team and Enterprise, but this review makes no exact price, credit, export or API allowance promise. Check the target account and billing screen before purchase.",
+          "to": "The current pricing cards list Basic, Pro and Enterprise, not Team. The same page FAQ still mentions Team for API access, so plan-specific API entitlement remains unresolved; no exact price, credit, export or API allowance is promised here. Check the target account and confirm API eligibility with Scite before purchase."
+        },
+        "cn": {
+          "from": "公開頁列出 Basic、Pro、Team 與 Enterprise，但本稿不承諾精確價格、點數、匯出或 API 額度。購買前確認目標帳戶與結帳頁面。",
+          "to": "目前定價卡列出 Basic、Pro 和 Enterprise，未列 Team；但同一頁 FAQ 仍稱 API 權益適用 Pro 和 Team，因此 API 方案資格尚未釐清。本頁不承諾精確價格、點數、匯出或 API 額度。購買前核對目標帳戶，並向 Scite 確認 API 資格。"
+        }
+      },
+      "review": {
+        "checkedAt": "2026-10-18",
+        "nextReviewDate": "2026-10-24",
+        "outcome": "corrected_plan_cards_and_preserved_api_conflict",
+        "scope": "Current public pricing cards and the on-page API FAQ only; no checkout, API key, account, export or institutional contract test.",
+        "changeSummary": "The pricing cards currently present Basic, Pro and Enterprise; the old public detail incorrectly included Team as a current plan. The same page FAQ still says API access is included with Pro and Team, so API plan eligibility is explicitly left unresolved rather than inferred from the plan cards.",
+        "sources": [
+          "https://scite.ai/pricing"
+        ],
+        "sourceObservations": [
+          "Current pricing cards display Basic, Pro and Enterprise; the page FAQ separately retains the wording that API access is included with Pro and Team."
+        ],
+        "claims": [
+          {
+            "id": "current-pricing-card-plan-names",
+            "category": "price",
+            "status": "verified_public",
+            "nextReviewDate": "2026-11-01",
+            "limitation": "This verifies only the plan names displayed on the public pricing cards, not checkout amounts or billing eligibility."
+          },
+          {
+            "id": "api-plan-eligibility",
+            "category": "account_rights",
+            "status": "conflict",
+            "nextReviewDate": "2026-11-01",
+            "limitation": "Pricing cards omit Team while the page FAQ still associates API access with Pro and Team; do not promise a plan-specific API entitlement without account/vendor confirmation."
+          }
+        ],
+        "unresolved": [
+          "The official pricing page is internally inconsistent about Team/API. Account-level API access, credits, checkout price and institutional terms were not verified; other account/privacy claims retain their existing 2026-10-24 review date."
+        ]
+      },
+      "rollback": "Restore the exact preimage Team plan paragraph in detail.en and detail.cn, remove the newly added maintenanceReview, and restore next_review_date=2026-10-17 only if the full postimage still matches."
+    }
+  ]
+}
