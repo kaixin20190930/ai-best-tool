@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Abstract image composition with a controlled text layout">
+  <rect width="1200" height="675" fill="#f1eee7"/>
+  <circle cx="1000" cy="125" r="180" fill="#d4e0d8"/>
+  <path d="M0 498 220 376l178 92 208-188 229 139 172-107 193 111v252H0Z" fill="#9bb5a8"/>
+  <path d="m0 556 235-102 163 82 233-118 204 128 182-86 183 102v113H0Z" fill="#476d69"/>
+  <rect x="112" y="104" width="420" height="266" rx="22" fill="#fffdf8" stroke="#284c50" stroke-width="5"/>
+  <rect x="151" y="143" width="240" height="20" rx="10" fill="#284c50"/>
+  <rect x="151" y="183" width="338" height="13" rx="6" fill="#a5b7ad"/>
+  <rect x="151" y="211" width="289" height="13" rx="6" fill="#a5b7ad"/>
+  <rect x="151" y="262" width="139" height="66" rx="12" fill="#e8c58c"/>
+  <rect x="304" y="262" width="185" height="66" rx="12" fill="#d9e6df"/>
+  <path d="M640 204h276M778 66v276" stroke="#f7f4ec" stroke-width="4" stroke-dasharray="10 14" opacity=".9"/>
+  <circle cx="778" cy="204" r="82" fill="#e8c58c"/>
+  <path d="M738 204h80M778 164v80" stroke="#284c50" stroke-width="9" stroke-linecap="round"/>
+  <rect x="650" y="421" width="372" height="96" rx="20" fill="#f7f4ec" opacity=".94"/>
+  <path d="M696 469h280" stroke="#476d69" stroke-width="12" stroke-linecap="round"/>
+</svg>

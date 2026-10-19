@@ -1,0 +1,95 @@
+{
+  "id": "dfb7f502-b034-41ae-8d3f-4377d91c0a73",
+  "name": "OmniRoute",
+  "officialUrl": "https://www.omniroute.online/",
+  "officialDomainGroup": {
+    "canonicalProductDomain": "omniroute.online",
+    "parentBrandDomains": ["github.com"],
+    "identitySourceIds": ["repository"]
+  },
+  "categorySlug": "other",
+  "cluster": { "role": "alternative" },
+  "officialSources": [
+    { "id": "repository", "url": "https://github.com/diegosouzapw/OmniRoute", "claimKeys": ["identity", "brand_relationship", "license", "gateway", "routing", "upstream_cost"] },
+    { "id": "mcp-guide", "url": "https://github.com/diegosouzapw/OmniRoute/blob/release/v3.8.53/docs/frameworks/MCP-SERVER.md", "claimKeys": ["mcp_boundary", "security", "auth_scopes"] },
+    { "id": "environment-guide", "url": "https://github.com/diegosouzapw/OmniRoute/blob/release/v3.8.53/docs/reference/ENVIRONMENT.md", "claimKeys": ["security", "deployment", "configuration"] }
+  ],
+  "entityGate": {
+    "status": "PASS",
+    "aiCoreCapability": {
+      "status": "PASS",
+      "sourceIds": ["repository", "mcp-guide"],
+      "evidenceExcerpt": "The official repository describes OmniRoute as a self-hosted AI gateway with a unified endpoint, configurable provider/model routing and fallback. Its MCP and A2A surfaces expose OmniRoute's own gateway controls and tools."
+    },
+    "identityCanonical": {
+      "status": "PASS",
+      "sourceIds": ["repository"],
+      "evidenceExcerpt": "The official GitHub repository links https://www.omniroute.online/ as the product website. This selection represents the diegosouzapw/OmniRoute project and that www canonical as one entity, not similarly named repositories."
+    },
+    "duplicateIntent": {
+      "status": "PASS",
+      "checkedToolIds": [],
+      "rationale": "Catalog-only selection; the generic production enqueue preflight must repeat global name, canonical and candidate collision checks. No Task Fit is claimed."
+    }
+  },
+  "reviewedAt": "2026-10-19",
+  "nextReviewDate": "2026-11-19",
+  "media": {
+    "mode": "platform_owned_editorial",
+    "assetPath": "/images/tool-media/omniroute-editorial-cover.svg",
+    "sha256": "106549d58f68feb389abfbdacb3975d39cd5562a8c86d0d2baf1442a537c1a62",
+    "creator": "AI Best Tool editorial",
+    "createdAt": "2026-10-19",
+    "noVendorMarks": true
+  },
+  "pricing": "free",
+  "tags": ["AI gateway", "self-hosted", "model routing", "provider fallback", "MCP", "A2A"],
+  "localized": {
+    "en": {
+      "title": "OmniRoute: self-hosted AI gateway and model router",
+      "summary": "OmniRoute provides a self-hosted gateway for routing AI requests across configured providers. The MIT software is free to use; upstream credentials, quotas and model charges remain separate.",
+      "detail": "OmniRoute is an open-source, self-hosted AI gateway that presents a unified endpoint and lets operators configure provider/model routing and fallback. The repository is MIT-licensed; that license covers the software, not third-party model inference, provider accounts or their usage fees. Provider credentials, quotas, availability and terms remain provider-specific, so the project must not be described as making every model free. Its MCP and A2A interfaces expose OmniRoute's own gateway functions and agent protocols; this is not a claim that it aggregates arbitrary external MCP servers. Deployment requires the operator to secure credentials, select authentication and scopes, and review network exposure. Compare it with OpenRouter, LiteLLM and Portkey on managed versus self-hosted operation, credential control, routing/fallback behavior, observability and total upstream cost. No account-level provider setup or security audit was performed by this directory.",
+      "bestFor": ["Developers who want to operate and configure their own multi-provider AI gateway", "Teams comparing routing, fallback and local control across model providers"],
+      "notIdealFor": ["Users seeking a fully managed gateway without server or credential administration", "Buyers expecting every provider/model to be free or available without account-specific credentials"],
+      "limitations": ["MIT covers the gateway software, not upstream provider usage or model charges", "Provider credentials, quotas, terms and availability vary; some routes may be billable or unavailable", "MCP/A2A describe OmniRoute's own server interfaces and do not imply arbitrary external MCP aggregation", "Security depends on deployment configuration, secret handling, authentication scopes and network exposure; no independent security audit was performed"],
+      "compareAxes": ["Self-hosted control versus OpenRouter managed routing", "Provider/model coverage, routing and fallback behavior versus LiteLLM and Portkey", "Credential administration, observability and total upstream cost for the same workload"],
+      "pricingSummary": "The gateway software is MIT-licensed. Upstream provider accounts, credentials, quotas and inference charges are separate and depend on each provider."
+    },
+    "cn": {
+      "title": "OmniRoute：自托管 AI 网关与模型路由器",
+      "summary": "OmniRoute 提供可自托管的 AI 网关，可在已配置的供应商之间路由请求。MIT 软件可使用，但上游凭据、额度和模型费用另计。可与 OpenRouter、LiteLLM、Portkey 比较自托管控制与托管服务；本站未实配账户或做安全审计。",
+      "detail": "OmniRoute 是开源自托管 AI 网关，通过统一入口让运营者配置供应商/模型路由与故障回退。仓库采用 MIT 许可证，但许可证只针对软件，不包含第三方模型推理、供应商账户或使用费用。上游凭据、额度、可用性和条款由各供应商决定，因此不能描述成所有模型都免费。MCP 和 A2A 接口提供的是 OmniRoute 自身网关功能与 Agent 协议入口，不代表它能聚合任意外部 MCP Server。部署者需要自行保护凭据、配置身份验证与权限范围，并检查网络暴露面。可与 OpenRouter、LiteLLM、Portkey 比较托管与自托管方式、凭据控制、路由/回退、可观测性和上游总成本。本站未进行供应商账户实配或安全审计。",
+      "bestFor": ["希望自行运行并配置多供应商 AI 网关的开发者", "需要比较不同模型供应商路由、回退和本地控制的团队"],
+      "notIdealFor": ["不想管理服务器或凭据、希望完全托管网关的用户", "期待所有供应商和模型免费或无需账户凭据即可使用的采购者"],
+      "limitations": ["MIT 许可覆盖网关软件，不覆盖上游供应商用量或模型费用", "供应商凭据、额度、条款和可用性各不相同；部分路由可能收费或不可用", "MCP/A2A 指 OmniRoute 自身服务接口，不代表可以聚合任意外部 MCP", "安全性取决于部署配置、密钥管理、认证权限和网络暴露；本站未做独立安全审计"],
+      "compareAxes": ["与 OpenRouter 托管路由相比的自托管控制权", "与 LiteLLM、Portkey 比较供应商/模型覆盖、路由和故障回退", "相同工作负载下的凭据管理、可观测性与上游总成本"],
+      "pricingSummary": "网关软件采用 MIT 许可证；上游供应商账户、凭据、额度和推理费用另计，并由各供应商决定。"
+    },
+    "tw": {
+      "title": "OmniRoute：自架 AI 閘道與模型路由器",
+      "summary": "OmniRoute 提供可自架的 AI 閘道，可在已設定的供應商間路由請求。MIT 軟體可使用，但上游憑證、額度與模型費用另計。可與 OpenRouter、LiteLLM、Portkey 比較自架控制和託管服務；本站未實際設定帳戶或進行安全稽核。",
+      "detail": "OmniRoute 是開源自架 AI 閘道，透過統一入口讓營運者設定供應商/模型路由與故障回退。儲存庫採 MIT 授權，但授權只涵蓋軟體，不包含第三方模型推論、供應商帳戶或使用費用。上游憑證、額度、可用性與條款由各供應商決定，因此不可描述為所有模型都免費。MCP 與 A2A 介面提供的是 OmniRoute 自身閘道功能及 Agent 協定入口，不代表它能聚合任意外部 MCP Server。部署者須自行保護憑證、設定身分驗證與權限範圍，並檢查網路暴露面。可與 OpenRouter、LiteLLM、Portkey 比較託管與自架方式、憑證控制、路由/回退、可觀測性及上游總成本。本平台未進行供應商帳戶實際設定或安全稽核。",
+      "bestFor": ["希望自行運行並設定多供應商 AI 閘道的開發者", "需要比較不同模型供應商路由、回退與本機控制的團隊"],
+      "notIdealFor": ["不想管理伺服器或憑證、希望完全託管閘道的使用者", "期待所有供應商和模型免費或不需帳戶憑證即可使用的採購者"],
+      "limitations": ["MIT 授權涵蓋閘道軟體，不涵蓋上游供應商用量或模型費用", "供應商憑證、額度、條款與可用性各異；部分路由可能收費或不可用", "MCP/A2A 指 OmniRoute 自身服務介面，不代表可聚合任意外部 MCP", "安全性取決於部署設定、密鑰管理、驗證權限及網路暴露；本站未做獨立安全稽核"],
+      "compareAxes": ["與 OpenRouter 託管路由相比的自架控制權", "與 LiteLLM、Portkey 比較供應商/模型範圍、路由及故障回退", "相同工作負載下的憑證管理、可觀測性與上游總成本"],
+      "pricingSummary": "閘道軟體採 MIT 授權；上游供應商帳戶、憑證、額度和推論費用另計，由各供應商決定。"
+    }
+  },
+  "claimGate": {
+    "status": "PASS",
+    "items": [
+      { "key": "identity", "status": "verified_public", "boundary": "This selection is the diegosouzapw/OmniRoute repository and its linked official website, treated as one product entity.", "sourceIds": ["repository"], "nextReviewDate": "2027-01-18" },
+      { "key": "brand_relationship", "status": "verified_public", "boundary": "The official repository links omniroute.online as the product website; this does not imply separate ownership or a second catalog item.", "sourceIds": ["repository"], "nextReviewDate": "2027-01-18" },
+      { "key": "license", "status": "verified_public", "boundary": "MIT applies to the repository software; do not extend it to upstream models or provider services.", "sourceIds": ["repository"], "nextReviewDate": "2027-01-18" },
+      { "key": "gateway", "status": "verified_public", "boundary": "Official repository describes a unified, self-hosted AI gateway; no independent reliability test is claimed.", "sourceIds": ["repository"], "nextReviewDate": "2026-12-19" },
+      { "key": "routing", "status": "verified_public", "boundary": "Provider/model routing and fallback are product-described features; actual routes depend on configuration and provider availability.", "sourceIds": ["repository"], "nextReviewDate": "2026-11-19" },
+      { "key": "upstream_cost", "status": "conditional", "boundary": "Gateway software license does not determine upstream provider pricing, credentials, quotas or free-tier eligibility.", "sourceIds": ["repository"], "nextReviewDate": "2026-11-03" },
+      { "key": "mcp_boundary", "status": "verified_public", "boundary": "Official MCP documentation describes OmniRoute's own MCP server/tools; arbitrary external MCP aggregation is not asserted.", "sourceIds": ["mcp-guide"], "nextReviewDate": "2026-11-19" },
+      { "key": "security", "status": "conditional", "boundary": "Security posture depends on documented auth/scopes, secret handling and deployment/network configuration; no independent audit or secure-by-default guarantee is claimed.", "sourceIds": ["mcp-guide", "environment-guide"], "nextReviewDate": "2026-11-19" },
+      { "key": "auth_scopes", "status": "verified_public", "boundary": "Official MCP documentation describes scoped access and local-only behavior for remote surfaces; operators must verify settings for their deployed version.", "sourceIds": ["mcp-guide"], "nextReviewDate": "2026-11-19" },
+      { "key": "deployment", "status": "verified_public", "boundary": "The project documents configurable environment and deployment settings; no account-specific hosted service is implied.", "sourceIds": ["environment-guide"], "nextReviewDate": "2026-11-19" },
+      { "key": "configuration", "status": "conditional", "boundary": "Available controls and secure configuration are version-dependent; review the selected release's environment documentation before deployment.", "sourceIds": ["environment-guide"], "nextReviewDate": "2026-11-19" }
+    ]
+  }
+}

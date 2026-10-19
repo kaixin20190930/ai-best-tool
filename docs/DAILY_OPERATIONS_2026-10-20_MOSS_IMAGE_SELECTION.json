@@ -1,0 +1,90 @@
+{
+  "id": "0402f14b-539f-4477-9f2c-253a5723441f",
+  "name": "MOSS-Image",
+  "officialUrl": "https://github.com/OpenMOSS/MOSS-Image",
+  "officialDomainGroup": {
+    "canonicalProductDomain": "github.com",
+    "parentBrandDomains": ["huggingface.co"],
+    "identitySourceIds": ["repository", "model-card"]
+  },
+  "categorySlug": "design-art",
+  "cluster": { "role": "gap_filler" },
+  "officialSources": [
+    { "id": "repository", "url": "https://github.com/OpenMOSS/MOSS-Image", "claimKeys": ["identity", "brand_relationship", "model_scope", "capabilities", "license", "runtime"] },
+    { "id": "model-card", "url": "https://huggingface.co/OpenMOSS-Team/MOSS-Image-Base", "claimKeys": ["identity", "brand_relationship", "model_scope", "capabilities", "license", "runtime", "hosting"] }
+  ],
+  "entityGate": {
+    "status": "PASS",
+    "aiCoreCapability": {
+      "status": "PASS",
+      "sourceIds": ["repository", "model-card"],
+      "evidenceExcerpt": "The official repository and model card describe MOSS-Image as a 5B text-to-image model family with text/layout controls, downloadable weights and local inference instructions. These are vendor-described capabilities, not independent quality results."
+    },
+    "identityCanonical": {
+      "status": "PASS",
+      "sourceIds": ["repository", "model-card"],
+      "evidenceExcerpt": "The OpenMOSS GitHub repository links to the OpenMOSS-Team model card and identifies the same MOSS-Image family. The catalog canonical is the official project repository; the Hugging Face page is its model distribution page, not a second tool."
+    },
+    "duplicateIntent": {
+      "status": "PASS",
+      "checkedToolIds": [],
+      "rationale": "Catalog-only selection; production name, canonical and candidate collision checks must be repeated by the generic enqueue preflight. No Task Fit or independent benchmark is claimed."
+    }
+  },
+  "reviewedAt": "2026-10-19",
+  "nextReviewDate": "2026-11-03",
+  "media": {
+    "mode": "platform_owned_editorial",
+    "assetPath": "/images/tool-media/moss-image-editorial-cover.svg",
+    "sha256": "72b84e517063408eccf350db78b5431b572f3d364c73f0cdb9c6031eea10b491",
+    "creator": "AI Best Tool editorial",
+    "createdAt": "2026-10-19",
+    "noVendorMarks": true
+  },
+  "pricing": "free",
+  "tags": ["text-to-image", "open weights", "layout control", "ComfyUI", "self-hosted inference"],
+  "localized": {
+    "en": {
+      "title": "MOSS-Image: open-weight text-to-image with layout control",
+      "summary": "MOSS-Image is a 5B open-weight image model with text and layout controls. Local inference requires compatible compute; no unified hosted API or price has been verified.",
+      "detail": "MOSS-Image is an OpenMOSS text-to-image model family with Base and SFT variants. Its official repository and model card describe text rendering, JSON layout control, fine-tuning and a ComfyUI integration. The model weights and bundled inference code are Apache-2.0, but this is not a hosted image-generation subscription: the documented local path requires an NVIDIA GPU with CUDA and incurs the operator's compute and infrastructure costs. We did not verify a unified hosted API, API price, account access, or independent output-quality benchmark. Compare it with FLUX, Stable Diffusion and Ideogram on text placement, layout adherence, hardware and setup burden, and whether you need a hosted service or local control. Treat quality statements as official claims until tested on the same prompts.",
+      "bestFor": ["Creators and developers able to run image models on compatible local or managed GPU infrastructure", "Workflows that need prompt-driven text placement or structured layout inputs"],
+      "notIdealFor": ["People expecting a ready-to-use free online image generator", "Teams without CUDA-compatible compute that need predictable hosted API pricing"],
+      "limitations": ["5B model weights and inference code are Apache-2.0; license does not provide free hosted compute", "Official quick start specifies Python and NVIDIA CUDA GPU requirements; actual memory and speed depend on resolution and hardware", "No unified hosted inference API or price was verified", "Text rendering and layout benefits are official claims, not an independent benchmark"],
+      "compareAxes": ["Text rendering and layout adherence versus FLUX, Stable Diffusion and Ideogram", "Local GPU ownership, setup effort and inference cost versus hosted access", "Model variants, resolution and repeatability on the same prompt set"],
+      "pricingSummary": "Weights and inference code are publicly available under Apache-2.0. Users still pay or provide compute; no unified hosted API price was verified."
+    },
+    "cn": {
+      "title": "MOSS-Image：支持布局控制的开放权重文生图模型",
+      "summary": "MOSS-Image 是 5B 开放权重图像模型，支持文字与布局控制。本地推理需要兼容算力；尚未核实统一托管 API 或价格。选择前可与 FLUX、Stable Diffusion、Ideogram 比较文字渲染和布局遵循；本站未实测输出质量。",
+      "detail": "MOSS-Image 是 OpenMOSS 的文生图模型系列，包含 Base 与 SFT 版本。官方仓库和模型卡介绍了文字渲染、JSON 布局控制、微调及 ComfyUI 集成。模型权重和随附推理代码采用 Apache-2.0，但它不是托管式图片生成订阅：官方本地运行路径要求支持 CUDA 的 NVIDIA GPU，算力和基础设施成本由运行者承担。本站未核实统一托管推理 API、API 价格、账户访问，也未进行独立输出质量基准测试。可与 FLUX、Stable Diffusion、Ideogram 比较文字位置、布局遵循、硬件和部署成本，以及你需要托管服务还是本地控制。相同提示词实测前，质量相关表述只能视为官方声明。",
+      "bestFor": ["能够使用兼容本地或托管 GPU 基础设施的创作者与开发者", "需要提示词文字排布或结构化布局输入的工作流"],
+      "notIdealFor": ["期待开箱即用且免费的在线图片生成器的用户", "没有 CUDA 兼容算力、但需要可预测托管 API 价格的团队"],
+      "limitations": ["5B 模型权重和推理代码采用 Apache-2.0，但许可证不包含免费的托管算力", "官方快速开始要求 Python 与支持 CUDA 的 NVIDIA GPU；实际显存和速度取决于分辨率与硬件", "尚未核实统一托管推理 API 或价格", "文字渲染与布局效果属于官方声明，尚无独立基准测试"],
+      "compareAxes": ["与 FLUX、Stable Diffusion、Ideogram 比较文字渲染和布局遵循", "自备 GPU、部署成本与托管服务对比", "相同提示词下的模型版本、分辨率和可重复性"],
+      "pricingSummary": "模型权重和推理代码以 Apache-2.0 公开；使用者仍需承担或提供算力，尚未核实统一托管 API 价格。"
+    },
+    "tw": {
+      "title": "MOSS-Image：具版面控制的開放權重文字生圖模型",
+      "summary": "MOSS-Image 是 5B 開放權重圖像模型，支援文字與版面控制。本機推論需要相容算力；尚未核實統一託管 API 或價格。選用前可與 FLUX、Stable Diffusion、Ideogram 比較文字渲染及版面遵循；本站尚未實測輸出品質。",
+      "detail": "MOSS-Image 是 OpenMOSS 的文字生圖模型系列，包含 Base 與 SFT 版本。官方儲存庫和模型卡介紹文字渲染、JSON 版面控制、微調及 ComfyUI 整合。模型權重與隨附推論程式碼採 Apache-2.0，但它不是託管式圖片生成訂閱：官方本機執行路徑要求支援 CUDA 的 NVIDIA GPU，算力與基礎設施成本由執行者承擔。本平台未核實統一託管推論 API、API 價格或帳戶存取，也未做獨立輸出品質基準測試。可與 FLUX、Stable Diffusion、Ideogram 比較文字位置、版面遵循、硬體與部署成本，以及你需要託管服務還是本機控制。未以相同提示詞實測前，品質相關說法只視為官方聲明。",
+      "bestFor": ["能使用相容本機或託管 GPU 基礎設施的創作者與開發者", "需要提示詞文字排版或結構化版面輸入的工作流程"],
+      "notIdealFor": ["期待開箱即用且免費的線上圖片生成器的使用者", "沒有 CUDA 相容算力、但需要可預測託管 API 價格的團隊"],
+      "limitations": ["5B 模型權重與推論程式碼採 Apache-2.0，但授權不包含免費託管算力", "官方快速開始要求 Python 與支援 CUDA 的 NVIDIA GPU；實際記憶體與速度取決於解析度和硬體", "尚未核實統一託管推論 API 或價格", "文字渲染與版面效果屬官方說法，尚無獨立基準測試"],
+      "compareAxes": ["與 FLUX、Stable Diffusion、Ideogram 比較文字渲染及版面遵循", "自備 GPU、部署成本與託管服務比較", "相同提示詞下的模型版本、解析度及可重複性"],
+      "pricingSummary": "模型權重與推論程式碼以 Apache-2.0 公開；使用者仍須承擔或提供算力，尚未核實統一託管 API 價格。"
+    }
+  },
+  "claimGate": {
+    "status": "PASS",
+    "items": [
+      { "key": "identity", "status": "verified_public", "boundary": "One OpenMOSS MOSS-Image model family; the GitHub project and Hugging Face model card are not separate catalog tools.", "sourceIds": ["repository", "model-card"], "nextReviewDate": "2026-11-19" },
+      { "key": "brand_relationship", "status": "verified_public", "boundary": "The repository identifies OpenMOSS and links the OpenMOSS-Team model distribution; this is identity evidence, not a claim about a separate hosted service.", "sourceIds": ["repository", "model-card"], "nextReviewDate": "2026-11-19" },
+      { "key": "model_scope", "status": "verified_public", "boundary": "Official sources describe the 5B Base/SFT text-to-image family; no comparative quality superiority is asserted.", "sourceIds": ["repository", "model-card"], "nextReviewDate": "2026-11-03" },
+      { "key": "capabilities", "status": "verified_public", "boundary": "Text rendering, layout control, fine-tuning and ComfyUI support are vendor-described capabilities, not independently benchmarked outcomes.", "sourceIds": ["repository", "model-card"], "nextReviewDate": "2026-11-03" },
+      { "key": "license", "status": "verified_public", "boundary": "Model card identifies Apache-2.0 for weights and bundled inference code; this does not include free compute or hosted usage.", "sourceIds": ["model-card"], "nextReviewDate": "2027-01-18" },
+      { "key": "runtime", "status": "verified_public", "boundary": "Documented quick start uses Python and CUDA/NVIDIA GPU; resource needs vary by hardware, resolution and offload mode.", "sourceIds": ["repository", "model-card"], "nextReviewDate": "2026-11-19" },
+      { "key": "hosting", "status": "unknown", "boundary": "No unified hosted inference API or price was verified; do not imply free online generation.", "sourceIds": ["model-card"], "nextReviewDate": "2026-11-03" }
+    ]
+  }
+}

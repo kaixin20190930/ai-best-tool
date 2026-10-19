@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Abstract self-hosted model routing network">
+  <rect width="1200" height="675" fill="#edf1f5"/>
+  <path d="M0 0h1200v675H0z" fill="#edf1f5"/>
+  <circle cx="600" cy="337" r="184" fill="#18334b"/>
+  <circle cx="600" cy="337" r="118" fill="#f5f0e5"/>
+  <path d="M600 246v182M509 337h182" stroke="#1d6472" stroke-width="19" stroke-linecap="round"/>
+  <path d="M600 153V86M600 522v67M416 337h-78M784 337h78M470 207l-52-52M730 467l52 52M730 207l52-52M470 467l-52 52" stroke="#18334b" stroke-width="12" stroke-linecap="round"/>
+  <rect x="105" y="96" width="230" height="112" rx="24" fill="#fff" stroke="#cbd5df" stroke-width="4"/>
+  <rect x="865" y="96" width="230" height="112" rx="24" fill="#fff" stroke="#cbd5df" stroke-width="4"/>
+  <rect x="105" y="467" width="230" height="112" rx="24" fill="#fff" stroke="#cbd5df" stroke-width="4"/>
+  <rect x="865" y="467" width="230" height="112" rx="24" fill="#fff" stroke="#cbd5df" stroke-width="4"/>
+  <path d="M156 152h126M916 152h126M156 523h126M916 523h126" stroke="#78909f" stroke-width="10" stroke-linecap="round"/>
+  <path d="M335 152h124l87 105M865 152H741l-87 105M335 523h124l87-105M865 523H741l-87-105" fill="none" stroke="#1d6472" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="600" cy="337" r="19" fill="#d38a54"/>
+</svg>
