@@ -1,0 +1,89 @@
+{
+  "unit": "MOSS-IMAGE-INDEX-FAST-TRACK-2026-10-20",
+  "toolId": "96ea73cc-904d-46bc-8206-78d905b4d521",
+  "slug": "moss-image",
+  "reviewedAt": "2026-10-20",
+  "classification": "REPAIR_ONE_GAP",
+  "decision": {
+    "fastIndexReady": false,
+    "basis": null,
+    "singleGap": {
+      "key": "NO_VALID_FAST_TRACK_QUALIFICATION",
+      "summary": "Neither permitted fast-track route is currently evidenced: no positive absolute measured_search_demand was found, and brand_decision_signals cannot be used because MOSS-Image was released on 2026-10-16 and current evidence does not establish MOSS-Image as a mature, established brand. Two early independent test signals are accepted as evidence of emerging buyer/editorial attention only; they do not substitute for established-brand status or absolute search demand.",
+      "repairAction": "At a later review, either provide a dated, reproducible positive absolute search-volume measurement from a query-data source, or reassess the brand_decision_signals route only after independent evidence supports established MOSS-Image brand status. Reuse the existing entity, page, localization and media PASS; do not repeat catalog acceptance."
+    }
+  },
+  "brandDecisionAssessment": {
+    "established": "NOT_ESTABLISHED_MODEL_TOO_NEW",
+    "releaseDate": "2026-10-16",
+    "rationale": "This assessment is about the MOSS-Image product, not whether OpenMOSS or its institutional partners are established organizations. The model was released four days before this review. OpenMOSS/GitHub attention, repository stars, release velocity and the existence of other team projects are not accepted as proof that this particular model has an established buyer brand.",
+    "decisionIntents": ["review", "best_for"],
+    "intentAssessment": "Early editorial tests discuss model selection and use cases, but intent coverage does not cure the missing established-brand prerequisite."
+  },
+  "independentSignals": [
+    {
+      "type": "independent_benchmark",
+      "url": "https://vram16.ullu-egg.com/en/models/moss-image/",
+      "checkedAt": "2026-10-20",
+      "scope": "The publisher reports a MOSS-Image test on 2026-10-19 using a fixed seed and shared prompts across models, with generation settings, outputs and timing. This is a small, publisher-specific local-generation benchmark, not a broad quality ranking or an AI Best Tool test.",
+      "nonDuplication": "Distinct non-official registrable domain and a repeatable local GPU comparison methodology; not derived from the Creative AI Show browser-demo test.",
+      "acceptance": "ACCEPTED_AS_ONE_EARLY_INDEPENDENT_SIGNAL"
+    },
+    {
+      "type": "editorial_buyer_coverage",
+      "url": "https://creativeaishow.com/moss-image-is-free-and-apache-2-0-a-5b-ai-image-generator-with-json-layout-control-hands-on-test/",
+      "checkedAt": "2026-10-20",
+      "scope": "The publisher reports running a specific text-rendering prompt through the shared Hugging Face demo and documents observed output, queue-based inference and layout/hardware trade-offs. The test is narrow and does not establish general model quality.",
+      "nonDuplication": "Different non-official registrable domain and browser-demo prompt test, distinct from VRAM16's fixed-seed local-GPU comparison.",
+      "acceptance": "ACCEPTED_AS_ONE_EARLY_INDEPENDENT_SIGNAL"
+    }
+  ],
+  "measuredSearchDemand": {
+    "status": "UNAVAILABLE",
+    "positiveAbsoluteVolumeVerified": false,
+    "relativeTrendSource": {
+      "url": "https://new.web.cafe/keywords/moss-image-605bd3",
+      "acceptedAs": "ONE_RELATIVE_TREND_CANDIDATE_SIGNAL_ONLY",
+      "reason": "The supplied trend is relative change/multiplier data, not a positive absolute query-volume measurement. It cannot satisfy measured_search_demand."
+    },
+    "note": "No dated query-volume report or other reproducible positive absolute search-demand measurement was provided or verified. Unavailable does not mean zero search demand."
+  },
+  "excludedSources": [
+    {
+      "url": "https://github.com/OpenMOSS/MOSS-Image",
+      "reason": "Official repository; usable for identity and technical claims only, not as an independent market signal or proof of established MOSS-Image brand status."
+    },
+    {
+      "url": "https://huggingface.co/OpenMOSS-Team/MOSS-Image-Base",
+      "reason": "Official model card; usable for model identity, license and technical boundaries only, not an independent market signal."
+    },
+    {
+      "url": "https://note.com/sepiablue/n/n5668bd275105",
+      "reason": "First-person individual creator post. Although it describes a specific ComfyUI test, it is excluded conservatively under the task's author-post exclusion and is not needed to reach the two-domain signal count."
+    },
+    {
+      "url": "https://roukaisen.info/2026/10/18/moss-image-codex/",
+      "reason": "Personal author blog/tutorial describing a narrow self-test; excluded conservatively as an author post rather than counted as independent editorial buyer coverage."
+    },
+    {
+      "url": "https://paperium.net/article/library/25833/moss-image-technical-report",
+      "reason": "Automated-looking report summary of the model's technical paper, not independent buyer coverage or a separate adoption signal."
+    },
+    {
+      "url": "https://huggingface.co/realrebelai/MOSS-Image_GGUFs",
+      "reason": "Third-party model-file/quantization listing without an independently scoped buyer evaluation; excluded as an adoption signal."
+    },
+    {
+      "url": "https://kurokumasoft.com/2026/10/18/moss-image/",
+      "reason": "How-to/tutorial and first-person generated examples; excluded conservatively as creator-post/tutorial evidence rather than counted toward the independent-signal minimum."
+    }
+  ],
+  "scope": {
+    "existingEntityPageLocalizationAndMediaPassReused": true,
+    "entityReReviewed": false,
+    "productionWrites": 0,
+    "indexOrSitemapChanges": 0,
+    "runtimeCodeChanges": 0,
+    "protectedFilesTouched": false
+  }
+}

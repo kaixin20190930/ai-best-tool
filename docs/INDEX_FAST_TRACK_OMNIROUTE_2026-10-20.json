@@ -1,0 +1,100 @@
+{
+  "unit": "OMNIROUTE-INDEX-FAST-TRACK-2026-10-20",
+  "toolId": "c4fcd52e-ca68-4522-a46b-32b9f3d0d6b0",
+  "slug": "omniroute",
+  "reviewedAt": "2026-10-20",
+  "classification": "REPAIR_ONE_GAP",
+  "decision": {
+    "fastIndexReady": false,
+    "basis": null,
+    "reason": "The measured_search_demand route has no verified absolute search-demand value or query-volume source. The brand_decision_signals route has two distinct controlled intents and two eligible independent editorial signals, but the evidence does not establish a mature, established brand strongly enough to claim this route. GitHub star counts and growth are awareness/adoption clues, not proof of established buyer demand or measured search volume.",
+    "nextAction": "Obtain one independent, reproducible established-brand/adoption signal that is not merely a restatement of repository star counts, or obtain a positive absolute search-demand measurement from a documented query-data source. Re-evaluate only this missing qualification; reuse the existing entity, page, localization and media PASS.",
+    "excludedAsSearchDemand": [
+      {
+        "url": "https://new.web.cafe/keywords/omniroute",
+        "reason": "Accepted only as one external trend candidate signal. The reported +12% and multiplier are relative trend measures, not an absolute search-volume value; the source does not provide a reproducible positive query-volume figure in this review."
+      }
+    ]
+  },
+  "brandDecisionAssessment": {
+    "established": "NOT_ESTABLISHED_BY_CURRENT_EVIDENCE",
+    "rationale": "The project appears to have substantial awareness, but the available evidence describes a fast-growing project launched in 2026 and largely reports repository popularity. The reviewed sources do not independently establish sustained buyer adoption, and the current policy supplies no numeric star-count threshold that would justify treating repository popularity alone as established-brand proof.",
+    "decisionIntents": ["review", "vs"],
+    "intentEvidence": [
+      {
+        "intent": "review",
+        "urls": [
+          "https://mrkeyoor.com/repos/omniroute/",
+          "https://www.xp812.cn/omniroute-self-hosted-ai-gateway-review/"
+        ],
+        "note": "Both are original buyer-oriented evaluations on different non-official domains."
+      },
+      {
+        "intent": "vs",
+        "urls": [
+          "https://rohitraj.tech/notes/omniroute-ai-gateway-review-2026",
+          "https://www.xp812.cn/omniroute-self-hosted-ai-gateway-review/"
+        ],
+        "note": "Both discuss alternatives or comparison choices; this confirms decision intent, not established-brand status."
+      }
+    ]
+  },
+  "independentSignals": [
+    {
+      "type": "editorial_buyer_coverage",
+      "url": "https://mrkeyoor.com/repos/omniroute/",
+      "checkedAt": "2026-10-20",
+      "scope": "Original hands-on evaluation reports a fresh sandbox install, memory footprint, production-build failure and test timeout, and identifies appropriate buyer profiles and alternatives. These are that publisher's observed results, not an AI Best Tool test.",
+      "nonDuplication": "Distinct non-official domain and hands-on method. It provides installation/build/resource observations rather than merely repeating vendor feature claims.",
+      "acceptance": "ACCEPTED_AS_ONE_INDEPENDENT_DECISION_SIGNAL"
+    },
+    {
+      "type": "editorial_buyer_coverage",
+      "url": "https://www.xp812.cn/omniroute-self-hosted-ai-gateway-review/",
+      "checkedAt": "2026-10-20",
+      "scope": "Original buyer-oriented source and documentation review dated 2026-09-02. It states that it did not perform a local runtime test, identifies material unknowns, and recommends a controlled pilot for specified technical buyers.",
+      "nonDuplication": "Different non-official registrable domain and a source/documentation-review method, not the sandbox installation evaluation published by MrKeyoor.",
+      "acceptance": "ACCEPTED_AS_ONE_INDEPENDENT_DECISION_SIGNAL"
+    }
+  ],
+  "excludedSources": [
+    {
+      "url": "https://github.com/diegosouzapw/OmniRoute",
+      "reason": "Official project repository. Valid for product identity and technical claims, but excluded from the required non-official independent-signal count. Repository stars are not measured search demand."
+    },
+    {
+      "url": "https://www.omniroute.online/",
+      "reason": "Official product website. Valid for identity and product claims, but excluded from independent market signals."
+    },
+    {
+      "url": "https://rohitraj.tech/notes/omniroute-ai-gateway-review-2026",
+      "reason": "Original comparison coverage confirms review/vs intent, but this page prominently markets the author's consulting services and relies heavily on repository/maintainer claims. Excluded from the two-signal minimum to avoid overstating independent adoption evidence."
+    },
+    {
+      "url": "https://www.reddit.com/r/MacOSApps/comments/1umorcu/macos_omniroute_a_free_opensource_ai_gateway/",
+      "reason": "The post discloses that the author is the maintainer, so it is self-promotion rather than an independent signal."
+    },
+    {
+      "url": "https://www.ugliai.com/en/ai-tools/omniroute/",
+      "reason": "Directory/listing-style tool page; not accepted as independent editorial buyer coverage or a specific adoption-market signal."
+    }
+  ],
+  "measuredSearchDemand": {
+    "status": "UNAVAILABLE",
+    "positiveAbsoluteVolumeVerified": false,
+    "sourcesChecked": [
+      "https://new.web.cafe/keywords/omniroute",
+      "https://mrkeyoor.com/repos/omniroute/",
+      "https://www.xp812.cn/omniroute-self-hosted-ai-gateway-review/"
+    ],
+    "note": "No reproducible absolute search-volume value, dated query report, or positive measured query demand was present in the reviewed evidence. This is unavailable evidence, not a finding of zero demand."
+  },
+  "scope": {
+    "existingEntityPageLocalizationAndMediaPassReused": true,
+    "entityReReviewed": false,
+    "productionWrites": 0,
+    "indexOrSitemapChanges": 0,
+    "runtimeCodeChanges": 0,
+    "protectedFilesTouched": false
+  }
+}
