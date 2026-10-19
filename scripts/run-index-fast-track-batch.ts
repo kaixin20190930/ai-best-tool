@@ -62,9 +62,10 @@ async function uniqueIdentity(db: Client, tool: ToolRow, rows: ToolRow[], featur
     intent = validateDuplicateIntentSnapshot(identity.duplicateIntent, scope,
       { toolIds: toolMatches, candidateIds: candidateMatches, taskFitToolIds }, asOf);
     intentAudit = { checkedAt: asOf, checkedScope: scope,
-      productionMatchCount: toolMatches.length + candidateMatches.length + taskFitToolIds.length,
+      productionMatchCount: new Set([...toolMatches, ...candidateMatches]).size,
       toolMatchCount: toolMatches.length, candidateMatchCount: candidateMatches.length,
-      taskFitMatchCount: taskFitToolIds.length, manifestMatched: intent };
+      taskFitMatchCount: taskFitToolIds.length, relatedTaskFitToolIds: taskFitToolIds.sort(),
+      manifestMatched: intent };
   }
   return { canonical: Boolean(canonical), intent: Boolean(intent), intentAudit };
 }

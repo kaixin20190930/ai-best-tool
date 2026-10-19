@@ -8,7 +8,7 @@
 
 - 当前 101 个 Tool ID 中，76 个 published；57 个 published+monitor、17 个 published+continue_index、2 个 published+archive。57 个公开 monitor 均经统一只读 selector 扫描，只有 Grok Voice 3.0 在本次 staged 证据补充后满足全部 A 级检查。没有为了每天 5 项补数。
 - Grok Tool ID `a5691eb1-64d8-45d0-ba4d-b991c0018bfd`，现仍为 `published + monitor/noindex`，三语言页面 200/self-canonical/noindex；生产 sitemap 实时回读为 126 URLs，Grok 匹配 0。站点级 GSC 最新完整日 2026-10-14，健康为 warning；这不是 Grok 页面自身的搜索量证据。
-- 当前生产 policy 仍是 `paused=false, daily_limit=1, weekly_limit=5`；本日和本周非 baseline release log 均为 0。Grok 证据已在独立 QA 后写入一行；本次修复没有再次写入生产，也没有改变工具索引、sitemap 或审批日志。
+- 迁移前生产 policy 为 `paused=false, daily_limit=1, weekly_limit=5`；本日和本周非 baseline release log 均为 0。Grok 证据已在独立 QA 后写入一行；本次修复没有再次写入生产，也没有改变工具索引、sitemap 或审批日志。后续同一交付单元已将额度迁移为 `5/25`，见下文最终提交记录。
 - Grok 的 `marketValidation.score=80` 是编辑成熟度判断，不是搜索量预测。快速资格现在单独记录 `fastTrackEligibility` 的依据、来源、类型、核查日与非重复说明，绝不由质量分或 Owner 意愿推导。本次走 **established xAI/Grok Voice 品牌 + 明确 API/价格/对比意图 + 两类独立信号**，不是“已验证搜索量”。[Artificial Analysis 语音代理榜单](https://artificialanalysis.ai/speech-to-speech/arena)在核查时列出 Grok Voice 3.0 的 637 个 Arena samples，这是唯一计入的独立 benchmark。[eesel 部署评测](https://www.eesel.ai/blog/grok-voice-3-review)与另一无隶属关系的出版者 [SiliconANGLE 报道](https://siliconangle.com/2026/10/14/grok-voice-3-0-from-spacexsi-outscores-openai-and-google-on-speech-to-speech-index/)是跨域编辑/买方关注，不是第二、第三次实测；两者的 benchmark 数字均源自 Artificial Analysis。本站未实测性能、账单或账户权益。官方来源为 [xAI 模型文档](https://docs.x.ai/developers/models/grok-voice-3.0)、[发布公告](https://x.ai/news/grok-voice-3)、[Voice API 页](https://x.ai/api/voice)。
 
 ## 通用变更
@@ -32,7 +32,7 @@
 
 - 独立 QA 后，Grok evidence commit 已成功写入 1 行，但原 postcheck 以 `SHA256(JSON.stringify(merge(current, patch)))` 对比 `SHA256(JSON.stringify(current))`，错误报告后像缺失。只读生产结构比对结果：原始哈希不同，规范化结构哈希相同，差异路径为空，官方/独立来源各 3 条；`jsonb` 回读键顺序是唯一差异。生产当前 `features_md5=f97bafcfa3cba96589a36be281412a0a`、`updated_at=2026-10-17 09:55:35.066929+00`。证据本身正确，不回滚。
 - Executor 只把“已应用”判断换成对象结构深等；manifest SHA、字段白名单、精确前像和写入条件不变。新增键顺序变化仍 PASS、事实值或来源数组变化必须 FAIL 的回归测试。修复后生产只读 `postcheck` 与 `preflight` 均返回 `alreadyApplied=true, productionWrites=0`，未实际重复 commit；定点测试通过，未重跑 build。
-- 当前 Grok 仍是 `published + monitor/noindex`；政策仍 `paused=false, daily_limit=1, weekly_limit=5`，当天/当周非 baseline 索引审批日志均为 0。索引/sitemap 尚未执行。
+- 该阶段 Grok 仍是 `published + monitor/noindex`；政策尚为 `paused=false, daily_limit=1, weekly_limit=5`，当天/当周非 baseline 索引审批日志均为 0。随后已在同一交付单元迁移额度并完成索引提交，不能把这段阶段性前像当作当前生产状态。
 
 ## 下批候选
 

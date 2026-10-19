@@ -1,8 +1,10 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-17
+更新时间：2026-10-19
 
-2026-10-17 **快速索引规则已收紧为 A/B/C 三档**：成熟、唯一意图、内容与证据完整的 A 级工具不再经历固定观察期，一次最终 QA 同时产出公开与索引资格结论，发布当天进入集中 Owner 授权包；B 级只修一个明确缺口，目标 3-7 天；C 级保持 noindex 并进入合并/归档/重构。现有 monitor 库存只做一次统一分层，不再逐工具重复完整 QA。当前保护额度保持每天 1 个、每周 5 个并立即用于真实 A 级候选；连续两个健康周后再单独申请调整到每天 2 个、每周 8 个。普通工具页不使用仅适用于招聘/直播的 Google Indexing API。详见[工具页索引发布政策](./TOOL_INDEX_RELEASE_POLICY_CN.md#2026-10-17-快速索引规则)。
+2026-10-19 **成熟工具快速索引共享门禁修复并完成三项生产放行**：修复了把同一 published Task Fit 下的竞品误计为重复意图的问题；Task Fit 现在保留为比较上下文审计，真实 tool/candidate 身份碰撞仍硬阻断。Descript、HeyGen、Lovable 使用同一成熟品牌证据批次，通过独立 `QA_PASS_RELEASE`、证据 commit/零写 postcheck、最终 selector、rollback 与唯一索引 commit，均成为 `published + continue_index`。生产 sitemap 从 128 增至 134，英文和简中各新增三条 URL，一次生产 SEO smoke 通过；繁中继续不进 sitemap。生产当前 101 Tool ID / 77 published / 21 continue_index / 78 monitor / 2 archive，今日与本周索引使用量为 3/3。GSC 最新完整日仍为 10-14，OAuth refresh 400，未伪造更新数据。详见[当日日报](./DAILY_OPERATIONS_2026-10-19_CN.md)。
+
+2026-10-17 **快速索引规则已收紧为 A/B/C 三档**：成熟、唯一意图、内容与证据完整的 A 级工具不再经历固定观察期，一次最终 QA 同时产出公开与索引资格结论；B 级只修一个明确缺口，目标 3-7 天；C 级保持 noindex 并进入合并/归档/重构。现有 monitor 库存只做一次统一分层，不再逐工具重复完整 QA。该日后续同一交付单元已把数据库保护额度从旧 `1/5` 迁移为现行 `5/25`，且 Owner 长期授权真实 A 级对象在此范围内自主提交；额度不是产量目标。普通工具页不使用仅适用于招聘/直播的 Google Indexing API。详见[工具页索引发布政策](./TOOL_INDEX_RELEASE_POLICY_CN.md#2026-10-17-快速索引规则)。
 
 2026-10-17 **单开发槽四线日报完成**：Lindy 已沿通用链路进入唯一实体（Tool ID `df16d4cc-a1f6-454e-971f-fcfe7dca31c7`）；独立 QA `01a147ba-4b0e-7542-859e-5bd4732a969f` 通过后，提交 `79bedb1c` 部署、自有媒体回验 200，并按原前像唯一发布为 `published + monitor/noindex`，postcheck 零写，index/sitemap 未变。五条 OpenAI 家族与企业品牌实体核查形成一份保守处置清单，未做自动归档。GSC 只读刷新至 10-14 完整日；n8n 失效官方许可证链接与 Lindy 旧套餐事实已上线修正。最终状态 97 Tool ID / 74 published / 17 continue_index；`prohoster-2` 的外部发布不计今天成果。详见[当日日报](./DAILY_OPERATIONS_2026-10-17_CN.md)。
 

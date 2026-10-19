@@ -95,7 +95,16 @@ const duplicate = { status: 'PASS', checkedAt: '2026-10-17', checkedScope: scope
   checkedToolIds: [], productionMatchCount: 0 };
 const empty = { toolIds: [], candidateIds: [], taskFitToolIds: [] };
 assert.equal(validateDuplicateIntentSnapshot(duplicate, scope, empty, '2026-10-17'), true);
+const competitor = { ...empty, taskFitToolIds: ['competitor-b', 'competitor-a'] };
+assert.equal(validateDuplicateIntentSnapshot({ ...duplicate,
+  relatedTaskFitToolIds: ['competitor-a', 'competitor-b'] }, scope, competitor, '2026-10-17'), true);
+assert.equal(validateDuplicateIntentSnapshot(duplicate, scope, competitor, '2026-10-17'), false);
+assert.equal(validateDuplicateIntentSnapshot({ ...duplicate,
+  relatedTaskFitToolIds: ['competitor-a'] }, scope, competitor, '2026-10-17'), false);
 assert.equal(validateDuplicateIntentSnapshot({ ...duplicate, checkedScope: undefined }, scope, empty, '2026-10-17'), false);
 assert.equal(validateDuplicateIntentSnapshot({ ...duplicate, productionMatchCount: 1 }, scope, empty, '2026-10-17'), false);
 assert.equal(validateDuplicateIntentSnapshot(duplicate, scope, { ...empty, candidateIds: ['one'] }, '2026-10-17'), false);
+assert.equal(validateDuplicateIntentSnapshot(duplicate, scope, { ...empty, toolIds: ['other-tool'] }, '2026-10-17'), false);
+assert.equal(validateDuplicateIntentSnapshot({ ...duplicate, productionMatchCount: 1,
+  checkedToolIds: ['other-tool'] }, scope, { ...empty, toolIds: ['other-tool'] }, '2026-10-17'), false);
 console.log('index fast-track evidence tests passed');

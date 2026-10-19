@@ -1,0 +1,16 @@
+{
+  "status": "QA_PASS",
+  "unit": "INDEX-FAST-TRACK-MATURE-BATCH-2026-10-19",
+  "qaActor": "codex-thread:01a151b1-0ab8-7e90-b2e6-bb2d6ca9d012",
+  "manifestSha256": "178bbc7f42b9cc9ac9a073e54c1f67690b796c5aefdf7de0c6d405de2fd2d7af",
+  "stagedBatchHash": "cf70dd62387ce4511b7800353cbc55cf602d198fa87f2b87a6db25fb32008758",
+  "batchHash": "e7ec37d502a842a6b0556a3eda26b97a76ed576c01107482aea40b8304c730f9",
+  "approvedToolIds": [
+    "a8c41d20-6b48-4f75-9f17-7e34c84619d2",
+    "4f26ce1c-08fd-4f99-97c9-21864c35bf94",
+    "8fee5c8b-f284-41d4-b691-c099e5bb230b"
+  ],
+  "reviewedAt": "2026-10-19",
+  "result": "QA_PASS_RELEASE",
+  "scope": "Exact duplicate identity remains blocked; related published Task Fits are audited comparison context. Evidence commit and a fresh production selector must pass before index commit."
+}

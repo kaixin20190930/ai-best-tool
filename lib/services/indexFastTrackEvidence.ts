@@ -140,6 +140,12 @@ export function validateDuplicateIntentSnapshot(
       scope.taskMode !== expectedScope.taskMode ||
       !Number.isInteger(check.productionMatchCount) ||
       !Array.isArray(check.checkedToolIds)) return false;
-  const count = actual.toolIds.length + actual.candidateIds.length + actual.taskFitToolIds.length;
-  return check.productionMatchCount === count && count === 0 && check.checkedToolIds.length === 0;
+  const exactMatches = Array.from(new Set([...actual.toolIds, ...actual.candidateIds]));
+  const relatedFits = Array.from(new Set(actual.taskFitToolIds)).sort();
+  const auditedFits = check.relatedTaskFitToolIds;
+  if (auditedFits !== undefined && (!Array.isArray(auditedFits) ||
+      !isDeepStrictEqual([...auditedFits].sort(), relatedFits))) return false;
+  if (relatedFits.length > 0 && auditedFits === undefined) return false;
+  return check.productionMatchCount === exactMatches.length && exactMatches.length === 0 &&
+    check.checkedToolIds.length === 0;
 }

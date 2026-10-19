@@ -1,0 +1,110 @@
+{
+  "unit": "INDEX-FAST-TRACK-MATURE-BATCH-2026-10-19",
+  "items": [
+    {
+      "id": "a8c41d20-6b48-4f75-9f17-7e34c84619d2",
+      "slug": "descript",
+      "updatedAt": "2026-09-28 23:58:57.215854+00",
+      "featuresMd5": "e61f1760f55a0e14c47d6069a54ef653",
+      "patch": {
+        "indexIdentity": {
+          "officialUrl": "https://www.descript.com/",
+          "reviewedAt": "2026-10-19",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-19",
+            "checkedScope": { "nameQuery": "descript", "officialUrl": "https://www.descript.com/", "taskMode": "published_fits" },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": [],
+            "productionMatchCount": 0,
+            "rationale": "Production exact identity/name/URL collision query found only this Tool ID; no collection candidate matched. Shared Task Fits are comparison context, not duplicate entities."
+          }
+        },
+        "marketValidation": {
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-19",
+            "brand": { "established": true, "url": "https://www.descript.com/pricing", "checkedAt": "2026-10-19", "scope": "Maintained transcript-led editing and AI media product; this is not measured search volume." },
+            "decisionIntents": ["pricing", "review"],
+            "independentSignals": [
+              { "type": "public_adoption_market_signal", "url": "https://www.g2.com/sellers/descript", "checkedAt": "2026-10-19", "scope": "G2 lists 929 Descript reviews at inspection; review volume signals adoption, not site-tested product quality.", "nonDuplication": "G2 review platform; no claim of unique reviewers across platforms." },
+              { "type": "public_adoption_market_signal", "url": "https://www.trustpilot.com/review/descript.com", "checkedAt": "2026-10-19", "scope": "Trustpilot lists 290 Descript reviews and substantial credit/support complaints; not a positive recommendation.", "nonDuplication": "Separate review platform and complaint signal, not another benchmark." }
+            ],
+            "nonDuplication": "Two separate public review domains establish buyer activity, not independent product testing or measured search traffic."
+          }
+        }
+      }
+    },
+    {
+      "id": "4f26ce1c-08fd-4f99-97c9-21864c35bf94",
+      "slug": "heygen",
+      "updatedAt": "2026-09-21 02:37:40.056916+00",
+      "featuresMd5": "886c1809c329fe695393cb3ccea1d3b8",
+      "patch": {
+        "indexIdentity": {
+          "officialUrl": "https://www.heygen.com/",
+          "reviewedAt": "2026-10-19",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-19",
+            "checkedScope": { "nameQuery": "heygen", "officialUrl": "https://www.heygen.com/", "taskMode": "published_fits" },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": [],
+            "productionMatchCount": 0,
+            "rationale": "Production exact identity/name/URL collision query found only this Tool ID; no collection candidate matched. Shared Task Fits are comparison context, not duplicate entities."
+          }
+        },
+        "marketValidation": {
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-19",
+            "brand": { "established": true, "url": "https://www.heygen.com/pricing", "checkedAt": "2026-10-19", "scope": "Maintained AI avatar/video product and public plan comparison; no measured search-demand claim." },
+            "decisionIntents": ["pricing", "review"],
+            "independentSignals": [
+              { "type": "public_adoption_market_signal", "url": "https://www.g2.com/products/heygen/reviews", "checkedAt": "2026-10-19", "scope": "G2 hosts a large HeyGen review corpus; review count is a platform signal, not a site usability test.", "nonDuplication": "Public review platform independent of the vendor and Axios coverage." },
+              { "type": "editorial_buyer_coverage", "url": "https://www.axios.com/2023/09/01/personal-deepfake-ai-video-avatar", "checkedAt": "2026-10-19", "scope": "Axios directly described creating a personal HeyGen avatar and the consent process in 2023; historic workflow coverage, not current pricing proof.", "nonDuplication": "Original reporter experience, not a restatement of G2 review volume." }
+            ],
+            "nonDuplication": "A public review corpus and an original but older reporter workflow are separate signals; neither proves current account entitlements."
+          }
+        }
+      }
+    },
+    {
+      "id": "8fee5c8b-f284-41d4-b691-c099e5bb230b",
+      "slug": "lovable",
+      "updatedAt": "2026-09-14 03:14:21.572026+00",
+      "featuresMd5": "989acc88692f665c8aaea48e8b05f1aa",
+      "patch": {
+        "indexIdentity": {
+          "officialUrl": "https://lovable.dev/",
+          "reviewedAt": "2026-10-19",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-19",
+            "checkedScope": { "nameQuery": "lovable", "officialUrl": "https://lovable.dev/", "taskMode": "published_fits" },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": ["04570837-c50d-4aa2-b8aa-a11738046fe5", "2d598569-ba06-4f65-966b-dde8df1161cc"],
+            "productionMatchCount": 0,
+            "rationale": "Production exact identity/name/URL collision query found only this Tool ID and no collection candidate. Two other tools share a published build-app Task Fit as alternatives, not duplicate entities."
+          }
+        },
+        "marketValidation": {
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-19",
+            "brand": { "established": true, "url": "https://lovable.dev/pricing", "checkedAt": "2026-10-19", "scope": "Maintained AI app-builder product with public plans; not a search-volume estimate." },
+            "decisionIntents": ["pricing", "review"],
+            "independentSignals": [
+              { "type": "editorial_buyer_coverage", "url": "https://www.techradar.com/pro/software-services/lovable-review", "checkedAt": "2026-10-19", "scope": "TechRadar reports a hands-on app-building review and trade-offs; one reviewer workflow, not a comprehensive benchmark.", "nonDuplication": "Original hands-on editorial review, independent of vendor adoption claims." },
+              { "type": "public_adoption_market_signal", "url": "https://techcrunch.com/2026/06/09/lovable-says-it-has-hit-500m-in-annualized-revenue-with-1-million-new-projects-a-week/", "checkedAt": "2026-10-19", "scope": "TechCrunch reports Lovable-provided usage and revenue figures; vendor self-report, not independently audited adoption.", "nonDuplication": "Separate publisher reporting a vendor statement, not a second hands-on test." }
+            ],
+            "nonDuplication": "One hands-on review and a separate report of vendor-provided adoption figures; no independent audit or measured search traffic."
+          }
+        }
+      }
+    }
+  ]
+}
