@@ -1,0 +1,18 @@
+{
+  "status": "QA_PASS",
+  "unit": "INDEX-FAST-TRACK-GLEAN-FIREFLIES-2026-10-20",
+  "qaActor": "codex-thread:01a15520-57b9-7ee3-89fb-11acf964d82a",
+  "manifestSha256": "332b526edeb09d493e7f14426ff2b4616596de73bfb45d355cec2f790ceb7203",
+  "batchHash": "751746cb6b93fa9b9b816728cd2b225272eb32343310c736e3f879b710273aa2",
+  "reviewedAt": "2026-10-20",
+  "scope": [
+    "glean",
+    "fireflies"
+  ],
+  "notes": [
+    "Manifest hash computed as SHA256(JSON.stringify(JSON.parse(file))).",
+    "Staged read-only selector returned both requested tools eligible on mature_high_demand; blocked=[] and productionWrites=0.",
+    "Evidence postimage selector without staged evidence independently confirmed both eligible; preimage hashes matched and final batchHash=751746cb6b93fa9b9b816728cd2b225272eb32343310c736e3f879b710273aa2; productionWrites=0.",
+    "Duplicate-intent audit found zero tool and collection-candidate matches for both; Fireflies had two related published Task Fits, treated only as comparison context."
+  ]
+}

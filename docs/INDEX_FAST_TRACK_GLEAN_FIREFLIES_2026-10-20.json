@@ -1,0 +1,120 @@
+{
+  "unit": "INDEX-FAST-TRACK-GLEAN-FIREFLIES-2026-10-20",
+  "items": [
+    {
+      "id": "fd861409-8228-4deb-9802-a9f807d66256",
+      "slug": "glean",
+      "updatedAt": "2026-09-20 13:27:02.635565+00",
+      "featuresMd5": "5c69c24acccb1a2e50fcb2768a5fab9f",
+      "patch": {
+        "indexIdentity": {
+          "officialUrl": "https://www.glean.com/",
+          "reviewedAt": "2026-10-20",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-20",
+            "checkedScope": {
+              "nameQuery": "glean",
+              "officialUrl": "https://www.glean.com/",
+              "taskMode": "published_fits"
+            },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": [],
+            "productionMatchCount": 0,
+            "rationale": "Exact production identity/name/title/official-URL query plus non-self collection-candidate query; published Task Fits are listed only as comparison context, never counted as duplicate entities."
+          }
+        },
+        "marketValidation": {
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-20",
+            "brand": {
+              "established": true,
+              "url": "https://www.glean.com/",
+              "checkedAt": "2026-10-20",
+              "scope": "Established enterprise AI/search brand with an active official product platform and customer stories; this is not measured search volume."
+            },
+            "decisionIntents": ["review", "vs"],
+            "independentSignals": [
+              {
+                "type": "public_adoption_market_signal",
+                "url": "https://www.g2.com/sellers/glean-technologies-db5ca3dc-c8a9-4900-9065-0c1ab979908a",
+                "checkedAt": "2026-10-20",
+                "scope": "G2 currently lists 336 Glean reviews, including recent validated reviewers; review activity indicates buyer adoption and feedback, not independently measured product quality.",
+                "nonDuplication": "G2 review-platform activity is one signal; no claim that reviewers are unique across platforms or that ratings prove performance."
+              },
+              {
+                "type": "public_adoption_market_signal",
+                "url": "https://www.reddit.com/r/SaaS/comments/1tnz9lm/we_evaluated_glean_60x_and_guru_for_internal/",
+                "checkedAt": "2026-10-20",
+                "scope": "A practitioner post describes a reported 400-person firm evaluating Glean against 60x and Guru and choosing Glean; treat it as an unverified first-person buyer account, not audited deployment evidence.",
+                "nonDuplication": "A single practitioner evaluation/comparison narrative, distinct from G2 review-platform activity; the account is self-reported and not independently corroborated."
+              }
+            ],
+            "nonDuplication": "Two distinct non-vendor domains and evidence mechanisms: aggregated software-review activity and a self-reported multi-vendor buyer evaluation. Neither measures aibesttool.com search demand or guarantees outcomes."
+          }
+        }
+      }
+    },
+    {
+      "id": "57b270b9-78cf-41f8-8b74-dec46400cd65",
+      "slug": "fireflies",
+      "updatedAt": "2026-10-19 08:52:55.348296+00",
+      "featuresMd5": "a304438c5c26e4dc3aa5c4db3ba17c14",
+      "patch": {
+        "indexIdentity": {
+          "officialUrl": "https://fireflies.ai/",
+          "reviewedAt": "2026-10-20",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-20",
+            "checkedScope": {
+              "nameQuery": "fireflies",
+              "officialUrl": "https://fireflies.ai/",
+              "taskMode": "published_fits"
+            },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": [
+              "b8d6a9bd-d9cd-4690-b801-15b1c1fe0a49",
+              "7ae4bbb2-847f-45cc-9294-e96663fa02a3"
+            ],
+            "productionMatchCount": 0,
+            "rationale": "Exact production identity/name/title/official-URL query plus non-self collection-candidate query; published Task Fits are listed only as comparison context, never counted as duplicate entities."
+          }
+        },
+        "marketValidation": {
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-20",
+            "brand": {
+              "established": true,
+              "url": "https://fireflies.ai/",
+              "checkedAt": "2026-10-20",
+              "scope": "Established AI meeting assistant brand with active official product and public pricing pages; this is not measured search volume."
+            },
+            "decisionIntents": ["pricing", "review"],
+            "independentSignals": [
+              {
+                "type": "public_adoption_market_signal",
+                "url": "https://www.g2.com/sellers/fireflies-ai",
+                "checkedAt": "2026-10-20",
+                "scope": "G2 currently lists more than 750 Fireflies.ai reviews and recent verified-user feedback; this indicates buyer activity, not a controlled accuracy or quality test.",
+                "nonDuplication": "G2 review-platform activity is distinct from editorial hands-on coverage; no uniqueness or performance claim is inferred."
+              },
+              {
+                "type": "editorial_buyer_coverage",
+                "url": "https://www.techradar.com/best/best-ai-tools",
+                "checkedAt": "2026-10-20",
+                "scope": "TechRadar's 2026 guide reports hands-on use of Fireflies in meetings and discusses recap utility and limitations; editorial test coverage, not an independent benchmark.",
+                "nonDuplication": "Original editorial workflow coverage on a separate publisher domain, not another G2 review count or vendor claim."
+              }
+            ],
+            "nonDuplication": "Separate G2 user-review activity and TechRadar hands-on editorial coverage; neither is treated as a controlled benchmark or measured site search demand."
+          }
+        }
+      }
+    }
+  ]
+}
