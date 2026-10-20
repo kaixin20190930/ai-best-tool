@@ -1,0 +1,284 @@
+{
+  "unit": "INDEX-FAST-TRACK-V0-SCISPACE-WRITER-2026-10-20",
+  "items": [
+    {
+      "id": "2d598569-ba06-4f65-966b-dde8df1161cc",
+      "slug": "v0-by-vercel",
+      "updatedAt": "2026-10-13 05:39:04.094414+00",
+      "featuresMd5": "f4dce6c0adb73fe0cbb3dcfaa9372df9",
+      "patch": {
+        "evidence": {
+          "official": [
+            {
+              "url": "https://v0.app/docs/faqs",
+              "label": "v0 official FAQs",
+              "checkedAt": "2026-10-20",
+              "scope": "Current official documentation for account, data use, output ownership and product limitations."
+            },
+            {
+              "url": "https://api2.v0.dev/pricing",
+              "label": "v0 official pricing",
+              "checkedAt": "2026-10-20",
+              "scope": "Current official plan and model pricing; exact account entitlements remain plan-dependent."
+            }
+          ],
+          "independent": [
+            {
+              "url": "https://hostadvice.com/ai-app-builders/v0-review/",
+              "label": "HostAdvice hands-on review",
+              "checkedAt": "2026-10-20",
+              "type": "editorial_buyer_coverage",
+              "scope": "September 2026 hands-on build of a database-connected app, including prompt-limit and debugging limitations.",
+              "nonDuplication": "Original test by a separate reviewer/publisher; not a restatement of the TechRadar workflow."
+            },
+            {
+              "url": "https://softcrit.com/review/v0-review/",
+              "label": "SoftCrit v0 hands-on review",
+              "checkedAt": "2026-10-20",
+              "type": "editorial_buyer_coverage",
+              "scope": "September 2026 update reports three weeks of free and paid workspace testing across UI generation, imports, GitHub sync and deployment, with credit and backend-wiring limitations.",
+              "nonDuplication": "Distinct publisher and test workflow from HostAdvice; affiliate disclosure is explicit, and the review is not treated as a benchmark or search-volume signal."
+            }
+          ]
+        },
+        "indexIdentity": {
+          "officialUrl": "https://v0.app/",
+          "reviewedAt": "2026-10-20",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-20",
+            "checkedScope": {
+              "nameQuery": "v0 by",
+              "officialUrl": "https://v0.app/",
+              "taskMode": "published_fits"
+            },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": [
+              "04570837-c50d-4aa2-b8aa-a11738046fe5",
+              "8fee5c8b-f284-41d4-b691-c099e5bb230b"
+            ],
+            "productionMatchCount": 0,
+            "rationale": "Read-only production query used the selector's exact name/title/official-URL and collection-candidate scope. No other Tool or candidate matched. Two shared published Task Fits are comparison context, not duplicate entities."
+          }
+        },
+        "marketValidation": {
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-20",
+            "brand": {
+              "established": true,
+              "url": "https://v0.app/",
+              "checkedAt": "2026-10-20",
+              "scope": "Established Vercel v0 product with current official documentation, API and plan pages; this is not measured search volume."
+            },
+            "decisionIntents": ["pricing", "review"],
+            "independentSignals": [
+              {
+                "type": "editorial_buyer_coverage",
+                "url": "https://hostadvice.com/ai-app-builders/v0-review/",
+                "checkedAt": "2026-10-20",
+                "scope": "Recent hands-on review built a database-connected application and reports usability and technical limitations.",
+                "nonDuplication": "HostAdvice's own tested workflow; separate publisher and test from TechRadar."
+              },
+              {
+                "type": "editorial_buyer_coverage",
+                "url": "https://softcrit.com/review/v0-review/",
+                "checkedAt": "2026-10-20",
+                "scope": "Current 2026 hands-on review documents three weeks of testing and limits around credit use and external backend wiring.",
+                "nonDuplication": "Distinct SoftCrit test and publisher, not a copy of HostAdvice or a measured demand/adoption claim."
+              }
+            ],
+            "nonDuplication": "Two distinct non-vendor publishers and hands-on workflows support current product-evaluation interest; neither measures adoption, aibesttool.com search demand or guaranteed outcomes."
+          }
+        }
+      }
+    },
+    {
+      "id": "ec03d7b2-e6c7-44f0-9ae2-9ac23f156f16",
+      "slug": "scispace",
+      "updatedAt": "2026-10-15 11:15:39.493711+00",
+      "featuresMd5": "7e32c3ac7a4c4e89a120b2cab0af5717",
+      "patch": {
+        "evidence": {
+          "official": [
+            {
+              "url": "https://scispace.com/t/about/",
+              "label": "SciSpace official about page",
+              "checkedAt": "2026-10-20",
+              "scope": "Official product identity and research-paper discovery/reading workspace."
+            },
+            {
+              "url": "https://scispace.com/help/en/articles/10706821-how-scispace-search-works",
+              "label": "SciSpace official search documentation",
+              "checkedAt": "2026-10-20",
+              "scope": "Official explanation of semantic and text search, source corpus and ranking approach."
+            },
+            {
+              "url": "https://scispace.com/pricing",
+              "label": "SciSpace official pricing page",
+              "checkedAt": "2026-10-20",
+              "scope": "Current public plans and usage boundaries; account-specific credits are not inferred."
+            }
+          ],
+          "independent": [
+            {
+              "url": "https://journals.sagepub.com/doi/10.1177/01678329261425828",
+              "label": "Education for Information comparative applied study",
+              "checkedAt": "2026-10-20",
+              "type": "independent_benchmark",
+              "scope": "Peer-published 2026 applied study compares seven AI tools for scientific literature reviews using predefined weighted criteria and reports SciSpace-specific results.",
+              "nonDuplication": "Independent academic comparison on a different domain; it evaluates literature-review functionality, not adoption, citation accuracy or current account entitlements."
+            },
+            {
+              "url": "https://www.educatorstechnology.com/2026/09/scispace-review.html",
+              "label": "Educators Technology researcher review",
+              "checkedAt": "2026-10-20",
+              "type": "editorial_buyer_coverage",
+              "scope": "September 2026 review by an education researcher discusses literature discovery, PDF reading, extraction and the need to verify generated claims.",
+              "nonDuplication": "Independent editorial workflow analysis on a separate domain, distinct from G2 reviewer feedback."
+            }
+          ]
+        },
+        "indexIdentity": {
+          "officialUrl": "https://scispace.com/",
+          "reviewedAt": "2026-10-20",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-20",
+            "checkedScope": {
+              "nameQuery": "scispace",
+              "officialUrl": "https://scispace.com/",
+              "taskMode": "published_fits"
+            },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": [],
+            "productionMatchCount": 0,
+            "rationale": "Read-only production query used the selector's exact name/title/official-URL and collection-candidate scope. No other Tool, candidate or related published Task Fit matched."
+          }
+        },
+        "marketValidation": {
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-20",
+            "brand": {
+              "established": true,
+              "url": "https://scispace.com/",
+              "checkedAt": "2026-10-20",
+              "scope": "Established research-workflow product with current official product, search-help and pricing pages; this is not measured search volume."
+            },
+            "decisionIntents": ["pricing", "review"],
+            "independentSignals": [
+              {
+                "type": "independent_benchmark",
+                "url": "https://journals.sagepub.com/doi/10.1177/01678329261425828",
+                "checkedAt": "2026-10-20",
+                "scope": "A 2026 comparative applied study evaluates SciSpace for scientific-review preparation under predefined weighted criteria.",
+                "nonDuplication": "Peer-published comparative evidence is distinct from the separately authored educator review; no adoption, citation-accuracy or market-size inference."
+              },
+              {
+                "type": "editorial_buyer_coverage",
+                "url": "https://www.educatorstechnology.com/2026/09/scispace-review.html",
+                "checkedAt": "2026-10-20",
+                "scope": "Recent researcher-oriented review discusses specific literature-review, reading and extraction workflows and verification caveats.",
+                "nonDuplication": "Independent editorial review from a separate registrable domain, not a repost of user reviews."
+              }
+            ],
+            "nonDuplication": "Distinct academic-comparison and researcher-editorial evidence supports a current literature-review decision use case, not citation accuracy, active-user volume or aibesttool.com search demand."
+          }
+        }
+      }
+    },
+    {
+      "id": "d2e93327-aaa4-47a1-a890-71024e4b13d0",
+      "slug": "writer",
+      "updatedAt": "2026-10-15 02:34:29.531146+00",
+      "featuresMd5": "e811bcaab833209ffd7d3df2789fbcbb",
+      "patch": {
+        "evidence": {
+          "official": [
+            {
+              "url": "https://writer.com/plans/",
+              "label": "WRITER official plans and pricing",
+              "checkedAt": "2026-10-20",
+              "scope": "Current Starter and Enterprise plan boundaries, features and seat distinctions."
+            },
+            {
+              "url": "https://writer.com/blog/writer-agent/",
+              "label": "WRITER Agent product announcement",
+              "checkedAt": "2026-10-20",
+              "scope": "Official product capabilities for agentic workflows, playbooks, routines, connectors and governance."
+            }
+          ],
+          "independent": [
+            {
+              "url": "https://agent-finder.co/reviews/writer",
+              "label": "Agent Finder WRITER hands-on review",
+              "checkedAt": "2026-10-20",
+              "type": "editorial_buyer_coverage",
+              "scope": "May 2026 review, updated through August pricing checks, reports a four-week test across content, RFP and internal knowledge workflows and states untested enterprise-only boundaries.",
+              "nonDuplication": "Independent review domain with disclosed AI-assisted preparation and human testing/editing; not treated as audited adoption, plan entitlement proof or a universal benchmark."
+            },
+            {
+              "url": "https://computertech.co/writer-com-review/",
+              "label": "ComputerTech WRITER enterprise review",
+              "checkedAt": "2026-10-20",
+              "type": "editorial_buyer_coverage",
+              "scope": "March 2026 tested editorial assessment describes WRITER as governed enterprise content infrastructure and covers Agent, Knowledge Graph, playbooks and implementation overhead.",
+              "nonDuplication": "Separate publisher and editorial scope from Agent Finder; affiliate disclosure applies, and feature or customer statements are not elevated into audited adoption evidence."
+            }
+          ]
+        },
+        "indexIdentity": {
+          "officialUrl": "https://writer.com/",
+          "reviewedAt": "2026-10-20",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-20",
+            "checkedScope": {
+              "nameQuery": "writer",
+              "officialUrl": "https://writer.com/",
+              "taskMode": "published_fits"
+            },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": [],
+            "productionMatchCount": 0,
+            "rationale": "Read-only production query used the selector's exact name/title/official-URL and collection-candidate scope. No other Tool, candidate or related published Task Fit matched."
+          }
+        },
+        "marketValidation": {
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-20",
+            "brand": {
+              "established": true,
+              "url": "https://writer.com/",
+              "checkedAt": "2026-10-20",
+              "scope": "Established enterprise WRITER agent platform with current official product and plan documentation; this is not measured search volume."
+            },
+            "decisionIntents": ["pricing", "review"],
+            "independentSignals": [
+              {
+                "type": "editorial_buyer_coverage",
+                "url": "https://agent-finder.co/reviews/writer",
+                "checkedAt": "2026-10-20",
+                "scope": "A current 2026 hands-on review reports testing content, RFP and internal knowledge workflows and records setup and enterprise-tier limitations.",
+                "nonDuplication": "Agent Finder's disclosed editorial test is separate from ComputerTech; it does not establish audited adoption or universal performance."
+              },
+              {
+                "type": "editorial_buyer_coverage",
+                "url": "https://computertech.co/writer-com-review/",
+                "checkedAt": "2026-10-20",
+                "scope": "A separate 2026 tested editorial review evaluates governed enterprise content operations, Agent-related components and implementation overhead.",
+                "nonDuplication": "Separate publisher/domain and content-governance emphasis from Agent Finder; not counted as customer adoption or official entitlement evidence."
+              }
+            ],
+            "nonDuplication": "Two separate non-vendor 2026 editorial assessments document decision-relevant workflows and trade-offs; they do not quantify active users, validate every enterprise feature or measure aibesttool.com search demand."
+          }
+        }
+      }
+    }
+  ]
+}

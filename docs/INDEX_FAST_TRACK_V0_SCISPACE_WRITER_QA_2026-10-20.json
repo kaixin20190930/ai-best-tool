@@ -1,0 +1,14 @@
+{
+  "status": "QA_PASS",
+  "unit": "INDEX-FAST-TRACK-V0-SCISPACE-WRITER-2026-10-20",
+  "qaActor": "codex-thread:01a156e7-780f-7d12-906d-cba7aaaebfda",
+  "manifestSha256": "2a4d2e3b19d88582b2caca11e206ad95e16d38719806eba4e7db92dab9972aaf",
+  "batchHash": "b45d8873f986e57c16c09b355711d25399ea5f4c6797cbdd061f1c01d11c0cc9",
+  "reviewedAt": "2026-10-20",
+  "notes": "evidence postimage selector",
+  "scope": [
+    "v0-by-vercel",
+    "scispace",
+    "writer"
+  ]
+}
