@@ -1,0 +1,144 @@
+{
+  "id": "faac3f69-8d83-4ae7-91b2-0aeb32f16119",
+  "name": "Kling AI",
+  "officialUrl": "https://kling.ai/",
+  "officialDomainGroup": {
+    "canonicalProductDomain": "kling.ai",
+    "parentBrandDomains": ["ir.kuaishou.com"],
+    "identitySourceIds": ["app-home", "kuaishou-announcement"]
+  },
+  "categorySlug": "design-art",
+  "cluster": {
+    "taskSlug": "product-image-to-short-video",
+    "role": "anchor"
+  },
+  "officialSources": [
+    {
+      "id": "app-home",
+      "url": "https://kling.ai/app/subscribe",
+      "claimKeys": ["identity", "product_boundary", "membership_entry", "pricing"]
+    },
+    {
+      "id": "kuaishou-announcement",
+      "url": "https://ir.kuaishou.com/news-releases/news-release-details/kling-ai-officially-launches-next-generation-kling-40-raising",
+      "claimKeys": ["identity", "brand_relationship", "brand_affiliation", "product_boundary"]
+    },
+    {
+      "id": "video-feature",
+      "url": "https://kling.ai/feature/ai-video-generator",
+      "claimKeys": ["identity", "text_to_video", "image_to_video", "models", "watermark", "region_access", "pricing", "commercial_use"]
+    },
+    {
+      "id": "user-policy",
+      "url": "https://kling.ai/docs/user-policy",
+      "claimKeys": ["input_rights", "commercial_use", "output_attribution", "privacy_boundary"]
+    },
+    {
+      "id": "payment-policy",
+      "url": "https://kling.ai/docs/payment-policy",
+      "claimKeys": ["membership_billing", "auto_renewal", "credit_auto_recharge", "cancellation", "pricing"]
+    },
+    {
+      "id": "privacy-policy",
+      "url": "https://kling.ai/docs/privacy-policy",
+      "claimKeys": ["privacy_boundary", "data_handling"]
+    }
+  ],
+  "entityGate": {
+    "status": "PASS",
+    "aiCoreCapability": {
+      "status": "PASS",
+      "sourceIds": ["video-feature"],
+      "evidenceExcerpt": "The current official AI video feature page describes text-to-video and image-to-video generation, with model-dependent duration, reference, audio, credit and export conditions. This is the consumer creative app, not the separate API platform or an individual Kling model."
+    },
+    "identityCanonical": {
+      "status": "PASS",
+      "sourceIds": ["app-home", "video-feature", "kuaishou-announcement"],
+      "evidenceExcerpt": "The official Kling AI consumer creative app is presented on kling.ai and includes image and video creation. Kuaishou Technology's official announcement identifies Kling 4.0 as a new-generation video model of Kling AI and announces its launch. This supports brand affiliation, not a claim about the legal operating entity or every API route. The listing canonical is the official brand root; API documentation, third-party API resellers and individual model versions are excluded as separate products."
+    },
+    "duplicateIntent": {
+      "status": "PASS",
+      "checkedToolIds": ["711df152-fdcf-4a19-930c-ab866b67605f"],
+      "rationale": "Read-only production check on 2026-10-22 found no Tool row matching Kling/Kling AI/KlingAI names or the kling.ai/klingai.com official domains and no matching collection_candidates row. Existing Task Fit tool 711df152-fdcf-4a19-930c-ab866b67605f is included as related comparison context, not as a duplicate entity. Exact name/title/url and normalized canonical checks must be repeated by generic enqueue preflight; no model/API alias is proposed as a separate entry."
+    }
+  },
+  "reviewedAt": "2026-10-22",
+  "nextReviewDate": "2026-11-05",
+  "media": {
+    "mode": "platform_owned_editorial",
+    "assetPath": "/images/tool-media/kling-ai-editorial-cover.svg",
+    "sha256": "5f47088d6c9d0d976aae0a2f6481ebbf5e3c1914f511023a7f6c619b118c8546",
+    "creator": "AI Best Tool editorial",
+    "createdAt": "2026-10-22",
+    "noVendorMarks": true
+  },
+  "pricing": "freemium",
+  "tags": ["AI video generator", "image to video", "text to video", "motion control", "reference images", "creative workflow"],
+  "localized": {
+    "en": {
+      "title": "Kling AI: image-to-video and generative video studio",
+      "summary": "Kling AI is a consumer creative studio for generating and editing video and images from text and visual references. Free availability, credits, model access, watermark removal and commercial-use terms depend on account, region, offer and applicable plan terms.",
+      "detail": "Kling AI is a consumer-facing image and video creation studio from Kuaishou, not the separate Kling API platform and not one particular Kling model. Its official feature guide describes text-to-video and image-to-video workflows, reference-guided scenes, camera controls and model-dependent audio and clip duration. These are vendor-described capabilities; this directory has not tested generation quality, product-image fidelity, consistency or usable-output rate.\n\nPricing and access: Kling offers free generation options to eligible users, but credits, model access, duration, resolution, speed and promotional benefits vary by account, region and current offer. Paid membership and separately configured credit auto-recharge are distinct billing behaviors. Check the signed-in plan and checkout before purchase; no universal price or free-credit allowance is promised here.\n\nWatermark and rights: the official feature guide says free-tier exports generally include a watermark and lists watermark removal among membership benefits. The official general User Policy restricts commercial use of outputs without written permission, while the feature guide points to eligible outputs under applicable paid-service terms. These sources create a scope-dependent rights boundary, so this listing does not promise blanket commercial rights: verify the target account, output, plan and applicable terms in writing before commercial delivery. Users remain responsible for rights to uploaded reference images, people, music, logos and other third-party material.\n\nRegion and privacy: the public pages do not establish universal availability or identical terms in every region. Check local product access, payment availability, privacy and retention terms in the target jurisdiction and workspace.\n\nBest for: creators comparing reference-guided short-video generation and iterative scene direction; teams willing to review outputs and confirm rights, credits and region before production.\n\nNot ideal for: users who need guaranteed product/logo fidelity, predictable per-clip costs, unwatermarked free exports, or blanket commercial permissions without checking plan-specific terms.\n\nCompare Kling with Pika and Runway for image-reference control, motion/editing workflow, cost predictability, watermark and rights boundaries. Downstream destination: Tool Intelligence for the product-image-to-short-video Task cluster; no Task Fit or Task Page publication is implied by this selection.",
+      "bestFor": ["Creators comparing image-reference-guided short-video generation", "Teams able to review generated footage and confirm account-specific cost and rights before production"],
+      "notIdealFor": ["Users requiring guaranteed product, packaging or logo fidelity", "Buyers requiring predictable cost, watermark-free free exports or blanket commercial rights without checking their account terms"],
+      "limitations": ["Free generation eligibility, credits, models, resolution, duration and promotions may depend on account and region", "The official feature page says free outputs generally carry a watermark; removal is described as a membership benefit, not a universal entitlement", "General User Policy and paid-service guidance express different scopes for commercial use; obtain applicable written/account-specific terms before commercial use", "No target account, regional checkout, generation quality, product-image fidelity or output watermark was tested", "Users must have rights to reference images, likenesses, logos, music and other uploaded material"],
+      "compareAxes": ["Reference-image and scene control versus Pika and Runway", "Model-dependent duration, audio and credit consumption", "Watermark removal, account/region access and commercial-rights wording", "Iteration and usable-output economics for a concrete product-video workflow"],
+      "pricingSummary": "Freemium options are described for eligible accounts; exact plans, credits, prices, regions and model access can vary. Confirm the current signed-in plan and checkout. Commercial-use permissions are not stated here as a blanket right because official policy scopes differ."
+    },
+    "cn": {
+      "title": "Kling AI：图像转视频与生成式视频创作平台",
+      "summary": "Kling AI 是面向创作者的图像与视频生成/编辑工作区，可比较文生与图生视频流程。免费资格、credits、模型权限、水印去除和商用条款取决于账户、地区、优惠及适用套餐条款；本站未测试账户权益或生成质量。",
+      "detail": "Kling AI 是快手旗下的消费者/创作者图像与视频工作区，不是独立 Kling API 平台，也不等同于某一个 Kling 模型。官方功能指南介绍了文生视频、图生视频、参考素材引导、镜头控制，以及因模型而异的音频和片段时长。这些属于厂商描述；本站没有实测生成质量、商品图保真度、人物/物体一致性或可用成片率。\n\n价格与访问：官方资料称符合条件的用户可使用免费生成，但 credits、模型、时长、分辨率、速度和促销权益可能随账户、地区和当前活动变化。付费会员订阅与单独开启的 credits 自动充值是不同的扣费行为。购买前请查看登录后的套餐和结账页；本文不承诺统一价格或固定免费额度。\n\n水印与权利：官方功能页称免费层导出通常带水印，并把去水印列为会员权益。一般《用户政策》要求未经书面许可不得将输出用于商业目的，而功能页又称符合条件的输出可按适用付费服务条款商用。两处资料的适用范围存在边界差异，因此本站不承诺无条件商用：用于商业交付前，应按目标账户、输出类型、套餐和适用条款取得明确书面确认。用户还需自行确保上传的参考图片、人物肖像、音乐、商标及其他第三方素材有合法使用权。\n\n地区与隐私：公开页面不足以证明所有地区的访问、支付和条款完全相同。请核对目标地区/工作区的产品入口、支付可用性、隐私与保留规则。\n\n适合：比较参考图驱动短视频生成和镜头迭代的创作者；能人工检查输出，并在生产前确认账户费用与权利边界的团队。\n\n不适合：要求商品、包装或 Logo 必须准确复现的用户；要求精确单条成本、免费无水印导出或无需核对套餐条款即可获得普遍商用许可的采购者。\n\n可与 Pika、Runway 比较参考图控制、运动/编辑流程、成本可预测性、水印和权利边界。下游位置：`product-image-to-short-video` Task Cluster 的 Tool Intelligence；本候选不代表已创建 Task Fit 或发布 Task Page。",
+      "bestFor": ["比较参考图驱动短视频生成方式的创作者", "能够人工检查成片，并在生产前核实账户费用和权利的团队"],
+      "notIdealFor": ["要求商品、包装或商标必须准确还原的用户", "要求固定单条成本、免费无水印导出或不核对账户条款即可商用的用户"],
+      "limitations": ["免费资格、credits、模型、分辨率、时长和促销权益可能随账户与地区变化", "官方功能页称免费导出通常带水印；去水印是会员权益描述，不等于所有账户均可享有", "一般用户政策与付费服务说明对商用权利的表述范围不同；商用前须取得适用的书面/账户级确认", "本站未测试目标账户、地区结账、生成质量、商品图保真度或实际水印", "用户需确保参考图、肖像、Logo、音乐等输入素材权利合法"],
+      "compareAxes": ["与 Pika、Runway 比较参考图控制和场景运动", "模型对应的时长、音频与 credits 消耗", "去水印权益、地区访问与商用条款", "具体商品视频任务中的迭代成本与可用成片率"],
+      "pricingSummary": "符合条件的账户可能有免费生成；套餐、credits、价格、地区和模型权限以登录后的当前页面为准。官方条款范围存在差异，本文不作无条件商用承诺。"
+    },
+    "tw": {
+      "title": "Kling AI：圖片轉影片與生成式影片創作平台",
+      "summary": "Kling AI 是供創作者使用的圖片與影片生成/編輯工作區，可比較文字與圖片生影片流程。免費資格、credits、模型權限、浮水印移除及商用條款取決於帳戶、地區、優惠和適用方案條款；本站未測試帳戶權益或生成品質。",
+      "detail": "Kling AI 是快手旗下的消費者/創作者圖片與影片工作區，不是獨立 Kling API 平台，也不等同於單一 Kling 模型。官方功能指南介紹文字生影片、圖片生影片、參考素材引導、鏡頭控制，以及依模型而異的音訊與片段長度。這些是廠商描述；本平台未實測生成品質、商品圖片保真度、人物/物件一致性或可用成片率。\n\n價格與使用：官方資料表示符合資格的使用者可使用免費生成，但 credits、模型、長度、解析度、速度和促銷權益可能依帳戶、地區與當期活動而不同。付費會員訂閱與另外啟用的 credits 自動加值是不同扣款行為。購買前請查看登入後的方案與結帳頁；本文不承諾統一價格或固定免費額度。\n\n浮水印與權利：官方功能頁表示免費層匯出通常帶有浮水印，並將移除浮水印列為會員權益。一般《使用者政策》要求未取得書面許可前不得將輸出用於商業目的；功能頁則表示符合條件的輸出可依適用付費服務條款商用。兩份資料的適用範圍有差異，因此本站不承諾無條件商用：商業交付前，應依目標帳戶、輸出類型、方案及適用條款取得明確書面確認。使用者亦須確保參考圖片、肖像、音樂、商標及其他第三方素材具有合法使用權。\n\n地區與隱私：公開頁面不足以證明各地區的存取、付款與條款完全相同。請核對目標地區/工作區的產品入口、付款可用性、隱私和資料保留規則。\n\n適合：比較參考圖片驅動短影片生成和鏡頭迭代的創作者；能人工檢查輸出，並在正式製作前確認帳戶費用與權利界線的團隊。\n\n不適合：要求商品、包裝或 Logo 必須精確還原的使用者；要求精確單支成本、免費無浮水印匯出，或不核對方案條款即可取得普遍商用許可的採購者。\n\n可與 Pika、Runway 比較參考圖片控制、動態/編輯流程、成本可預測性、浮水印與權利界線。下游位置：`product-image-to-short-video` Task Cluster 的 Tool Intelligence；本候選不代表已建立 Task Fit 或發布 Task Page。",
+      "bestFor": ["比較參考圖片驅動短影片生成方式的創作者", "能人工檢查成片並在正式製作前核實帳戶費用與權利的團隊"],
+      "notIdealFor": ["要求商品、包裝或商標必須精確還原的使用者", "要求固定單支成本、免費無浮水印匯出或不核對帳戶條款即可商用的使用者"],
+      "limitations": ["免費資格、credits、模型、解析度、長度和促銷權益可能依帳戶與地區變動", "官方功能頁表示免費匯出通常帶浮水印；移除浮水印是會員權益描述，不代表每個帳戶都適用", "一般使用者政策與付費服務說明對商用權利的表述範圍不同；商用前須取得適用的書面/帳戶級確認", "本站未測試目標帳戶、地區結帳、生成品質、商品圖片保真度或實際浮水印", "使用者須確保參考圖片、肖像、Logo、音樂等輸入素材權利合法"],
+      "compareAxes": ["與 Pika、Runway 比較參考圖片控制與場景動態", "依模型而異的長度、音訊與 credits 消耗", "移除浮水印權益、地區存取與商用條款", "具體商品影片工作流程中的迭代成本與可用成片率"],
+      "pricingSummary": "符合資格的帳戶可能提供免費生成；方案、credits、價格、地區與模型權限以登入後的當前頁面為準。官方條款適用範圍有差異，本文不作無條件商用承諾。"
+    }
+  },
+  "claimGate": {
+    "status": "PASS",
+    "items": [
+      {"key":"identity","status":"verified_public","boundary":"This candidate is the consumer Kling AI creative app at kling.ai; Kuaishou Technology's announcement identifies Kling 4.0 as a Kling AI video model. The source supports brand affiliation, not a legal-entity or every-API-route claim; third-party resellers and individual model pages remain excluded.","sourceIds":["app-home","video-feature","kuaishou-announcement"],"nextReviewDate":"2026-11-05"},
+      {"key":"brand_relationship","status":"verified_public","boundary":"Kuaishou Technology's official investor-relations announcement identifies Kling 4.0 as a new-generation Kling AI video model and announces its launch. This supports public brand relationship only; it does not establish the legal operating entity for every service or API route.","sourceIds":["kuaishou-announcement"],"nextReviewDate":"2026-11-05"},
+      {"key":"brand_affiliation","status":"verified_public","boundary":"Kuaishou Technology's official investor-relations announcement identifies Kling 4.0 as a new-generation Kling AI video model and announces its launch. This supports public brand affiliation only; it does not establish the legal operating entity for every service or API route.","sourceIds":["kuaishou-announcement"],"nextReviewDate":"2026-11-05"},
+      {"key":"text_to_video","status":"verified_public","boundary":"Official documentation describes text-prompt video generation; this is not an independent quality or reliability result.","sourceIds":["video-feature"],"nextReviewDate":"2026-11-05"},
+      {"key":"image_to_video","status":"verified_public","boundary":"Official documentation describes uploading an image and directing video motion; product/logo fidelity has not been tested by this directory.","sourceIds":["video-feature"],"nextReviewDate":"2026-11-05"},
+      {"key":"pricing","status":"conditional","boundary":"Free access and paid offerings exist, but exact prices, credits, account eligibility, region, promotions and plan entitlements must be checked in the target account; no exact amount is asserted.","sourceIds":["app-home","payment-policy","video-feature"],"nextReviewDate":"2026-11-05"},
+      {"key":"watermark","status":"conditional","boundary":"The official feature guide says free exports generally have a watermark and membership benefits may remove it; verify the selected model, export path and account plan.","sourceIds":["video-feature"],"nextReviewDate":"2026-11-05"},
+      {"key":"commercial_use","status":"conflict","boundary":"The general User Policy restricts commercial use without written permission, while the feature guide points to eligible outputs under applicable paid-service terms. Do not promise blanket commercial rights; resolve the target plan/output scope in writing.","sourceIds":["user-policy","video-feature"],"nextReviewDate":"2026-10-29"},
+      {"key":"region_access","status":"unknown","boundary":"Official public pages reviewed do not establish universal availability, payment or identical account terms across regions.","sourceIds":[],"nextReviewDate":"2026-11-05"},
+      {"key":"input_rights","status":"verified_public","boundary":"The user policy places responsibility on users to hold rights or obtain authorization for uploaded input; verify third-party permissions for each production workflow.","sourceIds":["user-policy"],"nextReviewDate":"2026-11-05"},
+      {"key":"privacy_boundary","status":"conditional","boundary":"The public policy is the governing source but no signed-in account, retention setting or regional contract was tested.","sourceIds":["privacy-policy","user-policy"],"nextReviewDate":"2026-11-05"}
+    ]
+  },
+  "selectionAudit": {
+    "reviewedAt": "2026-10-22",
+    "duplicateIntent": {
+      "queryInputs": {
+        "nameQueries": ["Kling", "Kling AI", "KlingAI", "Kling video"],
+        "officialUrl": "https://kling.ai/",
+        "alternateHosts": ["kling.ai", "klingai.com", "app.klingai.com"],
+        "taskMode": "catalog_identity_and_collection_candidates"
+      },
+      "productionReadOnlyResult": {"matchingToolIds":[],"matchingCandidateIds":[],"checkedAt":"2026-10-22"},
+      "genericEnqueueMustRepeatExactNameTitleUrlAndNormalizedCanonicalChecks": true
+    },
+    "comparisonObjects": [
+      {"slug":"pika","path":"/ai/pika","comparisonReason":"Compare image-reference video generation, model-dependent credits, watermark and output rights."},
+      {"slug":"runway","path":"/ai/runway","comparisonReason":"Compare reference control, editing workflow, model/credit costs, watermark and usage-rights boundaries."}
+    ],
+    "downstreamDestination": {"surface":"Tool Intelligence","taskSlug":"product-image-to-short-video","role":"anchor","taskPageOrFitCreated":false},
+    "publicationBoundary": {"recommendedLifecycle":"published","recommendedPageQualityStatus":"monitor","robots":"noindex, follow","sitemapEligible":false,"productionWrites":0,"indexApproved":false,"relationPublished":false}
+  }
+}

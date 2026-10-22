@@ -1,110 +1,327 @@
 import assert from 'node:assert/strict';
-import { hasVerifiedFastTrackEligibility, indexEvidencePostimageMatches, mergeIndexEvidence, selectIndexReleaseTrack,
-  validateDuplicateIntentSnapshot } from '../lib/services/indexFastTrackEvidence';
+
+import {
+  hasVerifiedFastTrackEligibility,
+  indexEvidencePostimageMatches,
+  mergeIndexEvidence,
+  selectIndexReleaseTrack,
+  validateDuplicateIntentSnapshot,
+} from '../lib/services/indexFastTrackEvidence';
 
 const oldOfficial = { url: 'https://x.ai/news/grok-voice-3', reviewedAt: '2026-10-16', claimKeys: ['old'] };
 const oldIndependent = { url: 'https://artificialanalysis.ai/speech-to-speech/arena', reviewedAt: '2026-10-16' };
-const merged = mergeIndexEvidence({ evidence: { official: [oldOfficial], independent: [oldIndependent], note: 'keep' },
-  audience: { bestFit: ['old'] } }, { evidence: {
-  official: [{ url: 'https://www.x.ai/news/grok-voice-3/?utm_source=test', claimKeys: ['replace'] },
-    { url: 'https://x.ai/api/voice' }],
-  independent: [{ url: 'https://artificialanalysis.ai/speech-to-speech/arena#rank' },
-    { url: 'https://siliconangle.com/voice' }],
-}, audience: { notIdealFor: ['new'] } });
+const merged = mergeIndexEvidence(
+  {
+    evidence: { official: [oldOfficial], independent: [oldIndependent], note: 'keep' },
+    audience: { bestFit: ['old'] },
+  },
+  {
+    evidence: {
+      official: [
+        { url: 'https://www.x.ai/news/grok-voice-3/?utm_source=test', claimKeys: ['replace'] },
+        { url: 'https://x.ai/api/voice' },
+      ],
+      independent: [
+        { url: 'https://artificialanalysis.ai/speech-to-speech/arena#rank' },
+        { url: 'https://siliconangle.com/voice' },
+      ],
+    },
+    audience: { notIdealFor: ['new'] },
+  },
+);
 assert.deepEqual(merged.evidence.official, [oldOfficial, { url: 'https://x.ai/api/voice' }]);
 assert.deepEqual(merged.evidence.independent, [oldIndependent, { url: 'https://siliconangle.com/voice' }]);
 assert.equal(merged.evidence.note, 'keep');
 assert.deepEqual(merged.audience, { bestFit: ['old'], notIdealFor: ['new'] });
 assert.deepEqual(mergeIndexEvidence(merged, { evidence: { official: [{ url: 'https://x.ai/api/voice' }] } }), merged);
-assert.deepEqual(mergeIndexEvidence({ evidence: { official: [{ legacy: true }] } },
-  { evidence: { official: [{ url: 'https://x.ai/api/voice' }] } }).evidence.official,
-[{ legacy: true }, { url: 'https://x.ai/api/voice' }]);
+const localizedDecisionPatch = {
+  compareAxes: { en: ['Workflow control'], cn: ['工作流控制'], zh: ['工作流程控制'], tw: ['工作流程控制'] },
+  limitations: {
+    en: ['Plan limits vary'],
+    cn: ['套餐限制可能不同'],
+    zh: ['方案限制可能不同'],
+    tw: ['方案限制可能不同'],
+  },
+};
+const decisionMerged = mergeIndexEvidence(
+  { decision: { bestFor: ['preserve me'], stale: true } },
+  { decision: localizedDecisionPatch },
+);
+assert.deepEqual(decisionMerged.decision, { bestFor: ['preserve me'], stale: true, ...localizedDecisionPatch });
+assert.throws(
+  () => mergeIndexEvidence({}, { decision: { compareAxes: localizedDecisionPatch.compareAxes } }),
+  /exactly compareAxes and limitations/,
+);
+assert.throws(
+  () => mergeIndexEvidence({}, { decision: { ...localizedDecisionPatch, score: 80 } }),
+  /exactly compareAxes and limitations/,
+);
+assert.throws(
+  () =>
+    mergeIndexEvidence(
+      {},
+      { decision: { ...localizedDecisionPatch, limitations: { ...localizedDecisionPatch.limitations, tw: [] } } },
+    ),
+  /non-empty array/,
+);
+assert.throws(
+  () =>
+    mergeIndexEvidence(
+      {},
+      {
+        decision: {
+          ...localizedDecisionPatch,
+          compareAxes: { ...localizedDecisionPatch.compareAxes, fr: ['extra locale'] },
+        },
+      },
+    ),
+  /exactly en, cn, zh and tw/,
+);
+assert.deepEqual(
+  mergeIndexEvidence(
+    { evidence: { official: [{ legacy: true }] } },
+    { evidence: { official: [{ url: 'https://x.ai/api/voice' }] } },
+  ).evidence.official,
+  [{ legacy: true }, { url: 'https://x.ai/api/voice' }],
+);
 assert.throws(() => mergeIndexEvidence({}, { evidence: { independent: [{ claim: 'no url' }] } }));
-const jsonbOrder = { marketValidation: { score: 80, verdict: 'validated' },
-  evidence: { official: [{ reviewedAt: '2026-10-17', url: 'https://x.ai/api/voice' }], independent: [] } };
-const patchOrder = { evidence: { official: [{ url: 'https://x.ai/api/voice', reviewedAt: '2026-10-17' }] },
-  marketValidation: { verdict: 'validated', score: 80 } };
+const jsonbOrder = {
+  marketValidation: { score: 80, verdict: 'validated' },
+  evidence: { official: [{ reviewedAt: '2026-10-17', url: 'https://x.ai/api/voice' }], independent: [] },
+};
+const patchOrder = {
+  evidence: { official: [{ url: 'https://x.ai/api/voice', reviewedAt: '2026-10-17' }] },
+  marketValidation: { verdict: 'validated', score: 80 },
+};
 const reordered = mergeIndexEvidence(jsonbOrder, patchOrder);
-const pgRoundTrip = { evidence: { independent: [], official: [{ url: 'https://x.ai/api/voice', reviewedAt: '2026-10-17' }] },
-  marketValidation: { verdict: 'validated', score: 80 } };
+const pgRoundTrip = {
+  evidence: { independent: [], official: [{ url: 'https://x.ai/api/voice', reviewedAt: '2026-10-17' }] },
+  marketValidation: { verdict: 'validated', score: 80 },
+};
 assert.notEqual(JSON.stringify(reordered), JSON.stringify(pgRoundTrip));
 assert.equal(indexEvidencePostimageMatches(reordered, pgRoundTrip), true);
-assert.equal(indexEvidencePostimageMatches({ ...reordered, marketValidation: { score: 81, verdict: 'validated' } }, jsonbOrder), false);
-assert.equal(indexEvidencePostimageMatches({ ...reordered, evidence: { ...reordered.evidence, official: [] } }, jsonbOrder), false);
+assert.equal(
+  indexEvidencePostimageMatches({ ...reordered, marketValidation: { score: 81, verdict: 'validated' } }, jsonbOrder),
+  false,
+);
+assert.equal(
+  indexEvidencePostimageMatches({ ...reordered, evidence: { ...reordered.evidence, official: [] } }, jsonbOrder),
+  false,
+);
 
 const fastTrack = {
-  status: 'PASS', basis: 'brand_decision_signals', checkedAt: '2026-10-17',
+  status: 'PASS',
+  basis: 'brand_decision_signals',
+  checkedAt: '2026-10-17',
   brand: { established: true, url: 'https://x.ai/news/grok-voice-3', checkedAt: '2026-10-17' },
   decisionIntents: ['api', 'pricing'],
   independentSignals: [
-    { type: 'independent_benchmark', url: 'https://artificialanalysis.ai/speech-to-speech/arena',
-      checkedAt: '2026-10-17', scope: '637 Speech Agent Arena samples for this model',
-      nonDuplication: 'Primary independent benchmark, not a publisher retest.' },
-    { type: 'editorial_buyer_coverage', url: 'https://www.eesel.ai/blog/grok-voice-3-review',
-      checkedAt: '2026-10-17', scope: 'Buyer and deployment decision coverage, no direct retest',
-      nonDuplication: 'Editorial attention citing the primary benchmark.', independentRetest: false },
-    { type: 'editorial_buyer_coverage', url: 'https://siliconangle.com/grok-voice-3',
-      checkedAt: '2026-10-17', scope: 'Another publisher discussing API pricing and usage',
-      nonDuplication: 'Separate publisher, no independent reproduction.', independentRetest: false },
+    {
+      type: 'independent_benchmark',
+      url: 'https://artificialanalysis.ai/speech-to-speech/arena',
+      checkedAt: '2026-10-17',
+      scope: '637 Speech Agent Arena samples for this model',
+      nonDuplication: 'Primary independent benchmark, not a publisher retest.',
+    },
+    {
+      type: 'editorial_buyer_coverage',
+      url: 'https://www.eesel.ai/blog/grok-voice-3-review',
+      checkedAt: '2026-10-17',
+      scope: 'Buyer and deployment decision coverage, no direct retest',
+      nonDuplication: 'Editorial attention citing the primary benchmark.',
+      independentRetest: false,
+    },
+    {
+      type: 'editorial_buyer_coverage',
+      url: 'https://siliconangle.com/grok-voice-3',
+      checkedAt: '2026-10-17',
+      scope: 'Another publisher discussing API pricing and usage',
+      nonDuplication: 'Separate publisher, no independent reproduction.',
+      independentRetest: false,
+    },
   ],
   nonDuplication: 'One benchmark plus two different editorial publishers; no search volume asserted.',
 };
 assert.equal(hasVerifiedFastTrackEligibility(fastTrack, '2026-10-17'), true);
-assert.deepEqual(selectIndexReleaseTrack({ fastTrackEligibility: fastTrack }, '2026-10-17'),
-  { releaseTrack: 'mature_high_demand', observationComplete: false });
-assert.deepEqual(selectIndexReleaseTrack({ score: 100, observationComplete: false }, '2026-10-17'),
-  { releaseTrack: 'standard', observationComplete: false });
-assert.deepEqual(selectIndexReleaseTrack({ score: 100, ownerDirection: 'fast', observationComplete: true }, '2026-10-17'),
-  { releaseTrack: 'standard', observationComplete: true });
+assert.deepEqual(selectIndexReleaseTrack({ fastTrackEligibility: fastTrack }, '2026-10-17'), {
+  releaseTrack: 'mature_high_demand',
+  observationComplete: false,
+});
+assert.deepEqual(selectIndexReleaseTrack({ score: 100, observationComplete: false }, '2026-10-17'), {
+  releaseTrack: 'standard',
+  observationComplete: false,
+});
+assert.deepEqual(
+  selectIndexReleaseTrack({ score: 100, ownerDirection: 'fast', observationComplete: true }, '2026-10-17'),
+  { releaseTrack: 'standard', observationComplete: true },
+);
 assert.equal(hasVerifiedFastTrackEligibility(undefined, '2026-10-17'), false);
 const saasSignals = [
-  { type: 'editorial_buyer_coverage', url: 'https://buyers.example.net/saas-review', checkedAt: '2026-10-17',
+  {
+    type: 'editorial_buyer_coverage',
+    url: 'https://buyers.example.net/saas-review',
+    checkedAt: '2026-10-17',
     scope: 'Independent buyer comparison of the SaaS product',
-    nonDuplication: 'Original buyer coverage from this publisher.' },
-  { type: 'public_adoption_market_signal', url: 'https://market.example.org/app/saas', checkedAt: '2026-10-17',
+    nonDuplication: 'Original buyer coverage from this publisher.',
+  },
+  {
+    type: 'public_adoption_market_signal',
+    url: 'https://market.example.org/app/saas',
+    checkedAt: '2026-10-17',
     scope: 'Public app-store adoption count for the product',
-    nonDuplication: 'Separate adoption count, not copied buyer coverage.' },
+    nonDuplication: 'Separate adoption count, not copied buyer coverage.',
+  },
 ];
-const saasTrack = { ...fastTrack, brand: { established: true, url: 'https://saas.example.com/about', checkedAt: '2026-10-17' },
-  decisionIntents: ['pricing', 'alternatives'], independentSignals: saasSignals };
+const saasTrack = {
+  ...fastTrack,
+  brand: { established: true, url: 'https://saas.example.com/about', checkedAt: '2026-10-17' },
+  decisionIntents: ['pricing', 'alternatives'],
+  independentSignals: saasSignals,
+};
 assert.equal(hasVerifiedFastTrackEligibility(saasTrack, '2026-10-17'), true);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, decisionIntents: ['review', 'best_for'] }, '2026-10-17'), true);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
-  { ...saasSignals[1], type: 'editorial_buyer_coverage' }] }, '2026-10-17'), true);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: saasSignals.slice(0, 1) }, '2026-10-17'), false);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, brand: { ...saasTrack.brand, established: false } }, '2026-10-17'), false);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, decisionIntents: ['pricing', 'pricing'] }, '2026-10-17'), false);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, decisionIntents: ['pricing', 'brand_awareness'] }, '2026-10-17'), false);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
-  { ...saasSignals[1], url: 'https://buyers.example.net/another-review' }] }, '2026-10-17'), false);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
-  { ...saasSignals[1], url: 'https://blog.saas.example.com/adoption' }] }, '2026-10-17'), false);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
-  { ...saasSignals[1], type: 'brand_press_release' }] }, '2026-10-17'), false);
-assert.equal(hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: [saasSignals[0],
-  { ...saasSignals[1], url: 'http://market.example.org/app/saas' }] }, '2026-10-17'), false);
+assert.equal(
+  hasVerifiedFastTrackEligibility({ ...saasTrack, decisionIntents: ['review', 'best_for'] }, '2026-10-17'),
+  true,
+);
+assert.equal(
+  hasVerifiedFastTrackEligibility(
+    { ...saasTrack, independentSignals: [saasSignals[0], { ...saasSignals[1], type: 'editorial_buyer_coverage' }] },
+    '2026-10-17',
+  ),
+  true,
+);
+assert.equal(
+  hasVerifiedFastTrackEligibility({ ...saasTrack, independentSignals: saasSignals.slice(0, 1) }, '2026-10-17'),
+  false,
+);
+assert.equal(
+  hasVerifiedFastTrackEligibility({ ...saasTrack, brand: { ...saasTrack.brand, established: false } }, '2026-10-17'),
+  false,
+);
+assert.equal(
+  hasVerifiedFastTrackEligibility({ ...saasTrack, decisionIntents: ['pricing', 'pricing'] }, '2026-10-17'),
+  false,
+);
+assert.equal(
+  hasVerifiedFastTrackEligibility({ ...saasTrack, decisionIntents: ['pricing', 'brand_awareness'] }, '2026-10-17'),
+  false,
+);
+assert.equal(
+  hasVerifiedFastTrackEligibility(
+    {
+      ...saasTrack,
+      independentSignals: [saasSignals[0], { ...saasSignals[1], url: 'https://buyers.example.net/another-review' }],
+    },
+    '2026-10-17',
+  ),
+  false,
+);
+assert.equal(
+  hasVerifiedFastTrackEligibility(
+    {
+      ...saasTrack,
+      independentSignals: [saasSignals[0], { ...saasSignals[1], url: 'https://blog.saas.example.com/adoption' }],
+    },
+    '2026-10-17',
+  ),
+  false,
+);
+assert.equal(
+  hasVerifiedFastTrackEligibility(
+    { ...saasTrack, independentSignals: [saasSignals[0], { ...saasSignals[1], type: 'brand_press_release' }] },
+    '2026-10-17',
+  ),
+  false,
+);
+assert.equal(
+  hasVerifiedFastTrackEligibility(
+    {
+      ...saasTrack,
+      independentSignals: [saasSignals[0], { ...saasSignals[1], url: 'http://market.example.org/app/saas' }],
+    },
+    '2026-10-17',
+  ),
+  false,
+);
 assert.equal(hasVerifiedFastTrackEligibility({ ...fastTrack, decisionIntents: ['api'] }, '2026-10-17'), false);
 assert.equal(hasVerifiedFastTrackEligibility({ ...fastTrack, checkedAt: '2026-09-01' }, '2026-10-17'), false);
-const measuredTrack = { status: 'PASS', basis: 'measured_search_demand', checkedAt: '2026-10-17',
+const measuredTrack = {
+  status: 'PASS',
+  basis: 'measured_search_demand',
+  checkedAt: '2026-10-17',
   nonDuplication: 'Measured demand is a separate search signal, not brand inference.',
-  searchDemand: { type: 'gsc_page_impressions', value: 12, url: 'https://search.google.com/search-console', checkedAt: '2026-10-17' } };
+  searchDemand: {
+    type: 'gsc_page_impressions',
+    value: 12,
+    url: 'https://search.google.com/search-console',
+    checkedAt: '2026-10-17',
+  },
+};
 assert.equal(hasVerifiedFastTrackEligibility(measuredTrack, '2026-10-17'), true);
-assert.equal(hasVerifiedFastTrackEligibility({ ...measuredTrack, searchDemand: { ...measuredTrack.searchDemand, value: 0 } }, '2026-10-17'), false);
-const scope = { nameQuery: 'grok voice', officialUrl: 'https://docs.x.ai/developers/models/grok-voice-3.0', taskMode: 'published_fits' };
-const duplicate = { status: 'PASS', checkedAt: '2026-10-17', checkedScope: scope,
-  checkedToolIds: [], productionMatchCount: 0 };
+assert.equal(
+  hasVerifiedFastTrackEligibility(
+    { ...measuredTrack, searchDemand: { ...measuredTrack.searchDemand, value: 0 } },
+    '2026-10-17',
+  ),
+  false,
+);
+const scope = {
+  nameQuery: 'grok voice',
+  officialUrl: 'https://docs.x.ai/developers/models/grok-voice-3.0',
+  taskMode: 'published_fits',
+};
+const duplicate = {
+  status: 'PASS',
+  checkedAt: '2026-10-17',
+  checkedScope: scope,
+  checkedToolIds: [],
+  productionMatchCount: 0,
+};
 const empty = { toolIds: [], candidateIds: [], taskFitToolIds: [] };
 assert.equal(validateDuplicateIntentSnapshot(duplicate, scope, empty, '2026-10-17'), true);
 const competitor = { ...empty, taskFitToolIds: ['competitor-b', 'competitor-a'] };
-assert.equal(validateDuplicateIntentSnapshot({ ...duplicate,
-  relatedTaskFitToolIds: ['competitor-a', 'competitor-b'] }, scope, competitor, '2026-10-17'), true);
+assert.equal(
+  validateDuplicateIntentSnapshot(
+    { ...duplicate, relatedTaskFitToolIds: ['competitor-a', 'competitor-b'] },
+    scope,
+    competitor,
+    '2026-10-17',
+  ),
+  true,
+);
 assert.equal(validateDuplicateIntentSnapshot(duplicate, scope, competitor, '2026-10-17'), false);
-assert.equal(validateDuplicateIntentSnapshot({ ...duplicate,
-  relatedTaskFitToolIds: ['competitor-a'] }, scope, competitor, '2026-10-17'), false);
-assert.equal(validateDuplicateIntentSnapshot({ ...duplicate, checkedScope: undefined }, scope, empty, '2026-10-17'), false);
-assert.equal(validateDuplicateIntentSnapshot({ ...duplicate, productionMatchCount: 1 }, scope, empty, '2026-10-17'), false);
-assert.equal(validateDuplicateIntentSnapshot(duplicate, scope, { ...empty, candidateIds: ['one'] }, '2026-10-17'), false);
-assert.equal(validateDuplicateIntentSnapshot(duplicate, scope, { ...empty, toolIds: ['other-tool'] }, '2026-10-17'), false);
-assert.equal(validateDuplicateIntentSnapshot({ ...duplicate, productionMatchCount: 1,
-  checkedToolIds: ['other-tool'] }, scope, { ...empty, toolIds: ['other-tool'] }, '2026-10-17'), false);
+assert.equal(
+  validateDuplicateIntentSnapshot(
+    { ...duplicate, relatedTaskFitToolIds: ['competitor-a'] },
+    scope,
+    competitor,
+    '2026-10-17',
+  ),
+  false,
+);
+assert.equal(
+  validateDuplicateIntentSnapshot({ ...duplicate, checkedScope: undefined }, scope, empty, '2026-10-17'),
+  false,
+);
+assert.equal(
+  validateDuplicateIntentSnapshot({ ...duplicate, productionMatchCount: 1 }, scope, empty, '2026-10-17'),
+  false,
+);
+assert.equal(
+  validateDuplicateIntentSnapshot(duplicate, scope, { ...empty, candidateIds: ['one'] }, '2026-10-17'),
+  false,
+);
+assert.equal(
+  validateDuplicateIntentSnapshot(duplicate, scope, { ...empty, toolIds: ['other-tool'] }, '2026-10-17'),
+  false,
+);
+assert.equal(
+  validateDuplicateIntentSnapshot(
+    { ...duplicate, productionMatchCount: 1, checkedToolIds: ['other-tool'] },
+    scope,
+    { ...empty, toolIds: ['other-tool'] },
+    '2026-10-17',
+  ),
+  false,
+);
 console.log('index fast-track evidence tests passed');

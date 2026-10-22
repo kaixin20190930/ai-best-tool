@@ -1,0 +1,452 @@
+{
+  "unit": "INDEX_FAST_TRACK_REPLIT_OTTER_2026-10-22",
+  "items": [
+    {
+      "id": "b14c8fe0-3dc5-47ed-8dd8-9d16c9892f85",
+      "slug": "replit",
+      "updatedAt": "2026-10-09 14:29:49.311992+00",
+      "featuresMd5": "f61706420b7d8b0e43041e68404c9ece",
+      "reviewDates": {
+        "productionEditorialReviewedAt": "2026-09-09",
+        "productionNextReviewDate": "2026-10-23",
+        "reviewedAt": "2026-10-22",
+        "proposedNextReviewDate": "2026-11-05",
+        "nextReviewPatchable": false
+      },
+      "decisionContentAudit": {
+        "status": "STAGED_LOCALIZED_PATCH",
+        "featuresDecisionPresent": false,
+        "requiredFields": [
+          "compareAxes",
+          "limitations"
+        ],
+        "indexEvidenceExecutorAllowedPatchKeys": [
+          "evidence",
+          "audience",
+          "indexIdentity",
+          "marketValidation",
+          "decision"
+        ],
+        "eligibleAfterThisManifest": true
+      },
+      "patch": {
+        "evidence": {
+          "official": [
+            {
+              "url": "https://replit.com/pricing",
+              "label": "Replit official pricing",
+              "checkedAt": "2026-10-22",
+              "scope": "Current plan and included usage descriptions; regional tax, usage and exact account entitlements can vary."
+            },
+            {
+              "url": "https://replit.com/products/agent",
+              "label": "Replit Agent official product page",
+              "checkedAt": "2026-10-22",
+              "scope": "Official description of Replit Agent's app-building workflow; generated output still requires review."
+            },
+            {
+              "url": "https://docs.replit.com/billing/ai-billing",
+              "label": "Replit official AI billing documentation",
+              "checkedAt": "2026-10-22",
+              "scope": "AI usage and billing boundaries; costs depend on plan, task and usage."
+            }
+          ],
+          "independent": [
+            {
+              "url": "https://www.techradar.com/pro/software-services/replit-no-code-review",
+              "label": "TechRadar hands-on Replit review",
+              "checkedAt": "2026-10-22",
+              "type": "editorial_buyer_coverage",
+              "scope": "Independent app-building workflow test examines prompt-to-app creation, code access, deployment and practical trade-offs; not a search-volume estimate.",
+              "nonDuplication": "TechRadar's tested task and editorial analysis are distinct from aggregated buyer reviews."
+            },
+            {
+              "url": "https://www.gartner.com/reviews/product/replit-2119961945",
+              "label": "Gartner Peer Insights Replit reviews",
+              "checkedAt": "2026-10-22",
+              "type": "editorial_buyer_coverage",
+              "scope": "Verified enterprise-buyer reviews include both favorable and critical views of agent-generated apps, editing and deployment; review activity is a decision signal, not product truth.",
+              "nonDuplication": "Aggregated verified buyer feedback differs from TechRadar's hands-on app-build test and is not treated as an independent benchmark."
+            }
+          ]
+        },
+        "audience": {
+          "bestFit": {
+            "en": [
+              "People who want to prototype and deploy apps in a browser workspace with AI assistance and access to the generated code"
+            ],
+            "cn": [
+              "希望在浏览器工作区借助 AI 创建并部署应用，同时保留代码访问能力的用户"
+            ],
+            "zh": [
+              "希望在瀏覽器工作區借助 AI 建立並部署應用，同時保留程式碼存取能力的使用者"
+            ],
+            "tw": [
+              "希望在瀏覽器工作區借助 AI 建立並部署應用，同時保留程式碼存取能力的使用者"
+            ]
+          },
+          "notIdealFor": {
+            "en": [
+              "Users who need deterministic production-ready code, predictable pay-as-you-go cost or deployment without technical review"
+            ],
+            "cn": [
+              "要求代码必然可直接用于生产、按任务成本完全可预测，或无需技术复核即可部署的用户"
+            ],
+            "zh": [
+              "要求程式碼必然可直接用於正式環境、按任務成本完全可預測，或無需技術複核即可部署的使用者"
+            ],
+            "tw": [
+              "要求程式碼必然可直接用於正式環境、按任務成本完全可預測，或無需技術複核即可部署的使用者"
+            ]
+          }
+        },
+        "decision": {
+          "compareAxes": {
+            "en": [
+              "Prompt-to-app browser workspace versus code-first local development",
+              "Ability to inspect and revise generated application code",
+              "Task/effort-based AI billing and spend controls",
+              "Review effort before production deployment"
+            ],
+            "cn": [
+              "提示词生成应用的浏览器工作区与代码优先的本地开发方式",
+              "检查和修改生成应用代码的能力",
+              "按任务/工作量计费的 AI 用量与支出控制",
+              "生产部署前所需的复核工作"
+            ],
+            "zh": [
+              "提示詞生成應用的瀏覽器工作區與程式碼優先的本機開發方式",
+              "檢查及修改生成應用程式碼的能力",
+              "依任務/工作量計費的 AI 用量與支出控制",
+              "正式部署前所需的複核工作"
+            ],
+            "tw": [
+              "提示詞生成應用的瀏覽器工作區與程式碼優先的本機開發方式",
+              "檢查及修改生成應用程式碼的能力",
+              "依任務/工作量計費的 AI 用量與支出控制",
+              "正式部署前所需的複核工作"
+            ]
+          },
+          "limitations": {
+            "en": [
+              "Generated apps can contain errors and require technical review before production use",
+              "AI costs depend on task effort, plan and account usage; confirm the current billing rules",
+              "Plan-specific allowances and deployment capabilities may differ",
+              "This listing did not independently test task success rate or production reliability"
+            ],
+            "cn": [
+              "生成应用可能包含错误，投入生产前需要技术复核",
+              "AI 成本取决于任务工作量、套餐和账户用量，需核对当前计费规则",
+              "不同套餐的额度和部署能力可能不同",
+              "本站未独立测试任务成功率或生产可靠性"
+            ],
+            "zh": [
+              "生成應用可能包含錯誤，投入正式環境前需要技術複核",
+              "AI 成本取決於任務工作量、方案和帳戶用量，須核對目前計費規則",
+              "不同方案的額度與部署能力可能不同",
+              "本站未獨立測試任務成功率或正式環境可靠性"
+            ],
+            "tw": [
+              "生成應用可能包含錯誤，投入正式環境前需要技術複核",
+              "AI 成本取決於任務工作量、方案和帳戶用量，須核對目前計費規則",
+              "不同方案的額度與部署能力可能不同",
+              "本站未獨立測試任務成功率或正式環境可靠性"
+            ]
+          }
+        },
+        "indexIdentity": {
+          "officialUrl": "https://replit.com/",
+          "reviewedAt": "2026-10-22",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-22",
+            "checkedScope": {
+              "nameQuery": "replit",
+              "officialUrl": "https://replit.com/",
+              "taskMode": "published_fits"
+            },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": [],
+            "productionMatchCount": 0,
+            "rationale": "Read-only production name/title/official URL and collection-candidate checks for the selector's exact Replit scope returned no second entity. This refers to the Replit platform/Agent under its canonical product identity."
+          }
+        },
+        "marketValidation": {
+          "verdict": "validated",
+          "reviewedAt": "2026-10-22",
+          "score": 75,
+          "evidenceUrls": [
+            "https://www.techradar.com/pro/software-services/replit-no-code-review",
+            "https://www.gartner.com/reviews/product/replit-2119961945"
+          ],
+          "strongSignals": [
+            "An independent hands-on app-build review and verified enterprise-buyer review activity provide distinct decision signals; neither measures aibesttool.com traffic."
+          ],
+          "supportingSignals": [
+            "Replit publishes current first-party Agent, pricing and AI billing material."
+          ],
+          "limitation": "Editorial readiness threshold only; no search-volume estimate or claim that generated applications are production-ready. Billing and generated results are task/account dependent.",
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-22",
+            "brand": {
+              "established": true,
+              "url": "https://replit.com/",
+              "checkedAt": "2026-10-22",
+              "scope": "Established browser-based development platform with current official Agent, plan and billing documentation; not a search-volume finding."
+            },
+            "decisionIntents": [
+              "pricing",
+              "review"
+            ],
+            "independentSignals": [
+              {
+                "type": "editorial_buyer_coverage",
+                "url": "https://www.techradar.com/pro/software-services/replit-no-code-review",
+                "checkedAt": "2026-10-22",
+                "scope": "Hands-on prompt-to-app review evaluates code access, deployment and application workflow.",
+                "nonDuplication": "A tested workflow from a technology publisher, not aggregated rating data."
+              },
+              {
+                "type": "editorial_buyer_coverage",
+                "url": "https://www.gartner.com/reviews/product/replit-2119961945",
+                "checkedAt": "2026-10-22",
+                "scope": "Verified enterprise buyer feedback includes recent positive and critical Replit experience reports.",
+                "nonDuplication": "Distinct verified-review dataset, not the TechRadar product test or a benchmark."
+              }
+            ],
+            "nonDuplication": "Two different domains and evidence methods support a mature decision-intent brand signal, not measured search demand."
+          }
+        }
+      }
+    },
+    {
+      "id": "b8d6a9bd-d9cd-4690-b801-15b1c1fe0a49",
+      "slug": "otter-ai",
+      "updatedAt": "2026-10-10 01:46:59.601287+00",
+      "featuresMd5": "af0fbc82ea12db523b1eb222ec9ab8a2",
+      "reviewDates": {
+        "productionEditorialReviewedAt": "2026-09-10",
+        "productionNextReviewDate": "2026-10-24",
+        "reviewedAt": "2026-10-22",
+        "proposedNextReviewDate": "2026-11-05",
+        "nextReviewPatchable": false
+      },
+      "decisionContentAudit": {
+        "status": "STAGED_LOCALIZED_PATCH",
+        "featuresDecisionPresent": false,
+        "requiredFields": [
+          "compareAxes",
+          "limitations"
+        ],
+        "indexEvidenceExecutorAllowedPatchKeys": [
+          "evidence",
+          "audience",
+          "indexIdentity",
+          "marketValidation",
+          "decision"
+        ],
+        "eligibleAfterThisManifest": true
+      },
+      "patch": {
+        "evidence": {
+          "official": [
+            {
+              "url": "https://otter.ai/pricing",
+              "label": "Otter official pricing",
+              "checkedAt": "2026-10-22",
+              "scope": "Current plan allowances, import limits, transcription minutes, integrations and enterprise features; billing cadence and account eligibility matter."
+            },
+            {
+              "url": "https://help.otter.ai/hc/en-us/articles/360047872833-Otter-ai-features",
+              "label": "Otter official feature documentation",
+              "checkedAt": "2026-10-22",
+              "scope": "Official meeting transcription, Notetaker, AI chat, collaboration and workspace feature descriptions; plan availability varies."
+            },
+            {
+              "url": "https://otter.ai/privacy-security",
+              "label": "Otter official privacy and security page",
+              "checkedAt": "2026-10-22",
+              "scope": "Official privacy/security statements and participant-consent responsibilities; verify organizational and jurisdiction-specific requirements."
+            }
+          ],
+          "independent": [
+            {
+              "url": "https://www.capterra.com/p/202799/Otter/",
+              "label": "Capterra verified Otter buyer reviews",
+              "checkedAt": "2026-10-22",
+              "type": "editorial_buyer_coverage",
+              "scope": "Verified-user review activity and buyer feedback about Otter.ai; ratings and reviews are user reports, not a controlled transcription-accuracy test.",
+              "nonDuplication": "Independent review-platform feedback is distinct from Reuters' company/market reporting."
+            },
+            {
+              "url": "https://www.reuters.com/business/otterai-raises-320-million-in-non-equity-financing-to-expand-enterprise-business/",
+              "label": "Reuters Otter financing and company-scale report",
+              "checkedAt": "2026-10-22",
+              "type": "public_adoption_market_signal",
+              "scope": "Reuters reports the company's October 2026 financing, enterprise expansion plans and company-reported cumulative user milestone; this is a durability/scale signal, not independent product-quality verification.",
+              "nonDuplication": "Independent financial/business reporting, not the same evidence as Capterra user reviews; user count is attributed to the company."
+            }
+          ]
+        },
+        "audience": {
+          "bestFit": {
+            "en": [
+              "Individuals and teams that need meeting capture, searchable transcripts, summaries and follow-up workflows across supported conferencing tools"
+            ],
+            "cn": [
+              "需要在支持的会议平台中录音转写、检索会议内容、生成摘要并跟进任务的个人和团队"
+            ],
+            "zh": [
+              "需要在支援的會議平台中錄音轉寫、搜尋會議內容、產生摘要並追蹤後續工作的個人與團隊"
+            ],
+            "tw": [
+              "需要在支援的會議平台中錄音轉寫、搜尋會議內容、產生摘要並追蹤後續工作的個人與團隊"
+            ]
+          },
+          "notIdealFor": {
+            "en": [
+              "Users who cannot obtain participant consent, need guaranteed perfect transcripts or require retention/privacy controls without checking their plan and organization settings"
+            ],
+            "cn": [
+              "无法取得参会者同意、要求转写绝对准确，或不核对套餐及组织设置就要求特定数据保留/隐私控制的用户"
+            ],
+            "zh": [
+              "無法取得與會者同意、要求逐字稿絕對準確，或不核對方案與組織設定就要求特定資料保留/隱私控制的使用者"
+            ],
+            "tw": [
+              "無法取得與會者同意、要求逐字稿絕對準確，或不核對方案與組織設定就要求特定資料保留/隱私控制的使用者"
+            ]
+          }
+        },
+        "decision": {
+          "compareAxes": {
+            "en": [
+              "Meeting capture across supported Zoom, Meet and Teams workflows",
+              "Live transcription, summaries, searchable meeting content and AI chat",
+              "Plan-dependent import minutes, meeting length and collaboration limits",
+              "Participant consent, privacy settings and retention requirements"
+            ],
+            "cn": [
+              "在支持的 Zoom、Meet、Teams 流程中的会议采集能力",
+              "实时转写、摘要、会议内容检索与 AI 对话",
+              "因套餐而异的导入分钟数、会议时长与协作限制",
+              "参会者同意、隐私设置与数据保留要求"
+            ],
+            "zh": [
+              "在支援的 Zoom、Meet、Teams 流程中的會議擷取能力",
+              "即時轉寫、摘要、會議內容搜尋與 AI 對話",
+              "依方案而異的匯入分鐘數、會議長度與協作限制",
+              "與會者同意、隱私設定與資料保留要求"
+            ],
+            "tw": [
+              "在支援的 Zoom、Meet、Teams 流程中的會議擷取能力",
+              "即時轉寫、摘要、會議內容搜尋與 AI 對話",
+              "依方案而異的匯入分鐘數、會議長度與協作限制",
+              "與會者同意、隱私設定與資料保留要求"
+            ]
+          },
+          "limitations": {
+            "en": [
+              "Meeting recording/transcription requires appropriate participant notice and consent; responsibilities depend on jurisdiction and context",
+              "Transcripts, speaker attribution and summaries can be imperfect and need review",
+              "Import minutes, meeting duration and integrations vary by plan and account",
+              "Verify organization-specific privacy, retention and security settings before processing sensitive meetings"
+            ],
+            "cn": [
+              "录制/转写会议前需按适用法律与场景通知并取得参会者同意",
+              "转写、说话人识别和摘要可能不准确，需要复核",
+              "导入分钟数、会议时长和集成能力因套餐及账户而异",
+              "处理敏感会议前需核对组织专属的隐私、保留和安全设置"
+            ],
+            "zh": [
+              "錄製/轉寫會議前須依適用法律與情境通知並取得與會者同意",
+              "轉寫、講者識別和摘要可能不準確，需要複核",
+              "匯入分鐘數、會議長度和整合能力依方案及帳戶而異",
+              "處理敏感會議前須核對組織專屬的隱私、保留和安全設定"
+            ],
+            "tw": [
+              "錄製/轉寫會議前須依適用法律與情境通知並取得與會者同意",
+              "轉寫、講者識別和摘要可能不準確，需要複核",
+              "匯入分鐘數、會議長度和整合能力依方案及帳戶而異",
+              "處理敏感會議前須核對組織專屬的隱私、保留和安全設定"
+            ]
+          }
+        },
+        "indexIdentity": {
+          "officialUrl": "https://otter.ai/",
+          "reviewedAt": "2026-10-22",
+          "duplicateIntent": {
+            "status": "PASS",
+            "checkedAt": "2026-10-22",
+            "checkedScope": {
+              "nameQuery": "otter ai",
+              "officialUrl": "https://otter.ai/",
+              "taskMode": "published_fits"
+            },
+            "checkedToolIds": [],
+            "relatedTaskFitToolIds": [
+              "57b270b9-78cf-41f8-8b74-dec46400cd65",
+              "7ae4bbb2-847f-45cc-9294-e96663fa02a3"
+            ],
+            "productionMatchCount": 0,
+            "rationale": "Read-only production name/title/official URL and collection-candidate checks found no second Otter AI entity. Two existing shared Task Fit tool IDs were preserved in the duplicate snapshot; they are related alternatives, not duplicate entities."
+          }
+        },
+        "marketValidation": {
+          "verdict": "validated",
+          "reviewedAt": "2026-10-22",
+          "score": 75,
+          "evidenceUrls": [
+            "https://www.capterra.com/p/202799/Otter/",
+            "https://www.reuters.com/business/otterai-raises-320-million-in-non-equity-financing-to-expand-enterprise-business/"
+          ],
+          "strongSignals": [
+            "Capterra hosts verified-user buyer feedback, while Reuters reports recent financing and company-reported scale; these are distinct review and business-durability signals, not a transcription benchmark."
+          ],
+          "supportingSignals": [
+            "Otter publishes current plans, feature and privacy/security material."
+          ],
+          "limitation": "Editorial readiness threshold only; the reported cumulative user count is company-reported, not independently audited. No search-volume or transcription-accuracy claim is made. Recording consent and plan-specific limits remain important.",
+          "fastTrackEligibility": {
+            "status": "PASS",
+            "basis": "brand_decision_signals",
+            "checkedAt": "2026-10-22",
+            "brand": {
+              "established": true,
+              "url": "https://otter.ai/",
+              "checkedAt": "2026-10-22",
+              "scope": "Established meeting-assistant product with current official plans, feature help and privacy/security documentation; not a search-volume measurement."
+            },
+            "decisionIntents": [
+              "pricing",
+              "review"
+            ],
+            "independentSignals": [
+              {
+                "type": "editorial_buyer_coverage",
+                "url": "https://www.capterra.com/p/202799/Otter/",
+                "checkedAt": "2026-10-22",
+                "scope": "Verified buyer feedback informs a meeting-assistant purchase decision but does not establish transcript accuracy.",
+                "nonDuplication": "Distinct verified user-review platform, not company-financing reporting."
+              },
+              {
+                "type": "public_adoption_market_signal",
+                "url": "https://www.reuters.com/business/otterai-raises-320-million-in-non-equity-financing-to-expand-enterprise-business/",
+                "checkedAt": "2026-10-22",
+                "scope": "Recent independent business reporting covers enterprise expansion and company-reported cumulative user scale.",
+                "nonDuplication": "Business durability/scale reporting differs from Capterra's verified buyer feedback; user figures remain company-attributed."
+              }
+            ],
+            "nonDuplication": "Two distinct evidence types and domains support mature-brand decision interest, not independently audited adoption or measured search demand."
+          }
+        }
+      }
+    }
+  ],
+  "batchLimit": 2,
+  "preparedAt": "2026-10-22",
+  "productionWrites": 0,
+  "indexOrSitemapChanges": 0
+}

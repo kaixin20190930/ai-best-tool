@@ -18,7 +18,7 @@ type Manifest = {
   }[];
 };
 
-const allowed = new Set(['evidence', 'audience', 'indexIdentity', 'marketValidation']);
+const allowed = new Set(['evidence', 'audience', 'indexIdentity', 'marketValidation', 'decision']);
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
 async function main() {
@@ -35,7 +35,10 @@ async function main() {
     assert(/^[0-9a-f-]{36}$/i.test(item.id) && /^[a-z0-9-]+$/.test(item.slug));
     assert(/^[0-9a-f]{32}$/i.test(item.featuresMd5));
     assert(Object.keys(item.patch).length > 0);
-    assert(Object.keys(item.patch).every((key) => allowed.has(key)), 'Unsupported index evidence patch');
+    assert(
+      Object.keys(item.patch).every((key) => allowed.has(key)),
+      'Unsupported index evidence patch',
+    );
   }
   if (mode === 'commit') {
     assert(qaPath, 'Independent QA report required');
@@ -53,14 +56,16 @@ async function main() {
     await client.query("SET LOCAL lock_timeout='5s'");
     await client.query("SET LOCAL statement_timeout='30s'");
     for (const item of manifest.items) {
-      const row = (await client.query(
-        `SELECT id, name, status, page_quality_status, features, updated_at::text AS updated_at,
+      const row = (
+        await client.query(
+          `SELECT id, name, status, page_quality_status, features, updated_at::text AS updated_at,
                 md5(features::text) AS features_md5
            FROM public.tools WHERE id=$1${mode === 'rollback' || mode === 'commit' ? ' FOR UPDATE' : ''}`,
-        [item.id],
-      )).rows[0];
+          [item.id],
+        )
+      ).rows[0];
       assert(row && row.name === item.slug && row.status === 'published' && row.page_quality_status === 'monitor');
-      for (const [key, value] of Object.entries(item.patch)) {
+      for (const value of Object.values(item.patch)) {
         assert(value && typeof value === 'object' && !Array.isArray(value));
       }
       const merged = mergeIndexEvidence(row.features, item.patch);
@@ -82,9 +87,19 @@ async function main() {
       result.push({ slug: item.slug, alreadyApplied: applied, changedKeys: Object.keys(item.patch) });
     }
     await client.query(mode === 'commit' ? 'COMMIT' : 'ROLLBACK');
-    console.log(JSON.stringify({ unit: manifest.unit, mode, manifestSha256: hash(manifest),
-      productionWrites: mode === 'commit' ? result.filter((item) => !item.alreadyApplied).length : 0,
-      result }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          unit: manifest.unit,
+          mode,
+          manifestSha256: hash(manifest),
+          productionWrites: mode === 'commit' ? result.filter((item) => !item.alreadyApplied).length : 0,
+          result,
+        },
+        null,
+        2,
+      ),
+    );
   } catch (error) {
     await client.query('ROLLBACK');
     throw error;
@@ -93,4 +108,7 @@ async function main() {
   }
 }
 
-main().catch((error) => { console.error(error); process.exitCode = 1; });
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

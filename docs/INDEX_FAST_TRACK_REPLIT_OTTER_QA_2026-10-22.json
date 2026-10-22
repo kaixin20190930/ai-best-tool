@@ -1,0 +1,55 @@
+{
+  "status": "QA_PASS",
+  "unit": "INDEX_FAST_TRACK_REPLIT_OTTER_2026-10-22",
+  "manifestSha256": "cf34835a2aecfb3feae6d4185803aa3d3f09fc88f409cfeeb6c1d3c633363d5f",
+  "qaActor": "codex-thread:01a1614a-c2c0-7db2-8504-bc52e4c5edd4",
+  "eligible": [
+    {
+      "id": "b8d6a9bd-d9cd-4690-b801-15b1c1fe0a49",
+      "slug": "otter-ai",
+      "preimageHash": "076861a8373af49cf4e6f493cf65ad297556cbd67711a2d55d206fc6f6e4f373"
+    },
+    {
+      "id": "b14c8fe0-3dc5-47ed-8dd8-9d16c9892f85",
+      "slug": "replit",
+      "preimageHash": "6828a1d9465d3567b82ec08cf710abcedc67e44cd0b5966a225e3734d30ae6df"
+    }
+  ],
+  "batchHash": "be82bcb3c724cf5333fc5a6e5f23d042a7147e8d301a07363286804965539f4c",
+  "checks": {
+    "manifestItemsExactly": ["replit", "otter-ai"],
+    "evidenceManifestCommitted": true,
+    "evidenceIdempotentPostcheck": "PASS",
+    "productionExactIdSelector": "PASS",
+    "productionRollback": "PASS",
+    "selectorEligibleCount": 2,
+    "selectorBlockedCount": 0,
+    "productionWrites": 0,
+    "genericDecisionPatchValidation": "PASS",
+    "scopedEvidenceTest": "PASS",
+    "typescript": "PASS",
+    "stagedSelectorEligibleCount": 2,
+    "stagedSelectorReviewedCount": 51,
+    "siteHealth": "warning",
+    "gscDate": "2026-10-14"
+  },
+  "evidenceManifestPreimages": [
+    {
+      "id": "b14c8fe0-3dc5-47ed-8dd8-9d16c9892f85",
+      "slug": "replit",
+      "updatedAt": "2026-10-09 14:29:49.311992+00",
+      "featuresMd5": "f61706420b7d8b0e43041e68404c9ece"
+    },
+    {
+      "id": "b8d6a9bd-d9cd-4690-b801-15b1c1fe0a49",
+      "slug": "otter-ai",
+      "updatedAt": "2026-10-10 01:46:59.601287+00",
+      "featuresMd5": "af0fbc82ea12db523b1eb222ec9ab8a2"
+    }
+  ],
+  "scopeLimitations": [
+    "No production commit or index/sitemap change was performed.",
+    "Cursor, Runway and Gamma were deferred and excluded from this unit.",
+    "No full build or production smoke was run."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "selectionHash": "eb66b216e60b6d89e224d288c45648dfe07663a609ecff7e1678da39a651f023",
+  "preimageHash": "082b560572738cf8f0d283f863d569bf08f66e83b1da68190872ac9b3a32f7b2",
+  "rollbackPostimageHash": "39c3b5276ec3a7a7031316f2147053f1036320d68ca66ae6c643565c4a44ed4a",
+  "mediaSha256": "5f47088d6c9d0d976aae0a2f6481ebbf5e3c1914f511023a7f6c619b118c8546",
+  "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+  "qaActor": "codex-thread:01a1614a-c2c0-7db2-8504-bc52e4c5edd4",
+  "qaReference": "codex-thread:01a1614a-c2c0-7db2-8504-bc52e4c5edd4",
+  "qaThread": "codex-thread:01a1614a-c2c0-7db2-8504-bc52e4c5edd4",
+  "checkedAt": "2026-10-22T02:10:05.000Z",
+  "scope": {
+    "operation": "enqueue",
+    "candidateId": "faac3f69-8d83-4ae7-91b2-0aeb32f16119",
+    "canonicalUrl": "https://kling.ai/"
+  },
+  "checks": {
+    "genericPreflight": "PASS",
+    "genericRollback": "PASS",
+    "productionWrites": 0,
+    "brandRelationshipSource": "Kuaishou official announcement linked and claim-typed as brand_relationship",
+    "localizedContent": ["en", "cn", "tw"],
+    "platformOwnedMedia": "PASS",
+    "duplicateIntentCheckedToolIds": ["711df152-fdcf-4a19-930c-ab866b67605f"],
+    "matchingProductionTools": 0,
+    "matchingProductionCandidates": 0,
+    "publicationBoundary": {
+      "lifecycle": "published",
+      "pageQualityStatus": "monitor",
+      "robots": "noindex, follow",
+      "sitemapEligible": false,
+      "indexApproved": false
+    },
+    "commercialRights": "Conflict retained; no blanket commercial-use claim"
+  }
+}
