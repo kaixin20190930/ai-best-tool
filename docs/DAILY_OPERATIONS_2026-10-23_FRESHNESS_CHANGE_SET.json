@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "unit": "DAILY-OPERATIONS-2026-10-23-HAILUO-FRESHNESS",
+  "asOf": "2026-10-23",
+  "selector": {
+    "command": "pnpm exec tsx scripts/audit-freshness-backlog.ts --date=2026-10-23",
+    "readOnly": true,
+    "totalTools": 113,
+    "published": 80,
+    "duePublished": 53,
+    "counts": { "schedule_sync": 0, "claim_due": 41, "entity_due": 12, "manual_archive_review": 0 },
+    "selected": ["midjourney", "openrouter", "elevenlabs", "fireflies", "glean"]
+  },
+  "items": [],
+  "selectedItemDisposition": {
+    "midjourney": {
+      "classification": "claim_due",
+      "result": "HOLD_NO_WRITABLE_DELTA",
+      "reason": "Current official plan comparison and video documentation retain the recorded scope; no confirmed factual change was established beyond the expired review date. The row is continue_index and the generic freshness writer rejects non-monitor rows. No date-only refresh."
+    },
+    "openrouter": {
+      "classification": "claim_due",
+      "result": "HOLD_WRITER_SCOPE",
+      "observedDelta": "Official current pricing specifies free-model limits of 20 requests/minute and 50/day, with the daily cap rising to 1,000 after at least $10 in credit purchases; failed free-model attempts count toward the daily cap. The existing copy records 50/day but omits these conditions.",
+      "source": "https://openrouter.ai/pricing",
+      "reason": "A bounded detail update is supportable, but the production row is continue_index. The shared run-existing-tools-freshness-change-set preflight requires page_quality_status=monitor and failed closed before mutation. No indexed-row bypass is authorized by this unit; therefore there is no writable change set and no rollback/postcheck input."
+    },
+    "elevenlabs": {
+      "classification": "claim_due",
+      "result": "HOLD_NO_WRITABLE_DELTA",
+      "reason": "Current official pricing and billing pages match the recorded plan prices, included credits, rollover and usage boundaries; no new fact in the scoped claims was identified. Account-specific checkout remains unverified. The row is continue_index, so no date-only refresh."
+    },
+    "fireflies": {
+      "classification": "claim_due",
+      "result": "HOLD_NO_WRITABLE_DELTA",
+      "reason": "Current official billing FAQ confirms the recorded seat billing, separate AI Credits add-on/trial and billing boundaries; no material new fact in the scoped claims was identified. Account/workspace entitlements remain unverified. The row is continue_index, so no date-only refresh."
+    },
+    "glean": {
+      "classification": "claim_due",
+      "result": "HOLD_NO_WRITABLE_DELTA",
+      "reason": "Current official Enterprise Search and product pages confirm the recorded enterprise search/assistant scope. No official self-serve price or account entitlement change was found. The row is continue_index, so no date-only refresh."
+    }
+  },
+  "executionBoundary": {
+    "changeSetItemCount": 0,
+    "productionWrites": 0,
+    "freshnessPreflight": "HOLD_WRITER_SCOPE for OpenRouter; the generic script accepts monitor rows only",
+    "rollback": "not applicable: no writable manifest",
+    "postcheck": "not applicable: no production change",
+    "indexOrSitemapChange": false
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "unit": "DAILY-OPERATIONS-2026-10-23-HAILUO-FRESHNESS",
+  "id": "b814b5d2-4a57-4c53-b02b-10cfc76a7da8",
+  "name": "Hailuo AI",
+  "officialUrl": "https://hailuoai.video/",
+  "officialDomainGroup": {
+    "canonicalProductDomain": "hailuoai.video",
+    "parentBrandDomains": ["minimax.io"],
+    "identitySourceIds": ["app-home", "minimax-product-announcement"]
+  },
+  "categorySlug": "design-art",
+  "cluster": { "taskSlug": "product-image-to-short-video", "role": "alternative" },
+  "officialSources": [
+    {
+      "id": "app-home",
+      "url": "https://hailuoai.video/",
+      "claimKeys": ["identity", "image_to_video", "text_to_video"]
+    },
+    {
+      "id": "image-to-video-guide",
+      "url": "https://hailuoai.video/tools/image-to-video",
+      "claimKeys": ["image_to_video", "workflow_scope", "quality_boundary"]
+    },
+    {
+      "id": "service-terms",
+      "url": "https://hailuoai.video/doc/terms-of-service.html",
+      "claimKeys": ["operator", "input_rights", "output_rights", "commercial_use", "privacy_boundary", "ai_labeling"]
+    },
+    {
+      "id": "payment-policy",
+      "url": "https://hailuoai.video/doc/payment-policy.html",
+      "claimKeys": ["pricing", "credits", "watermark", "commercial_use"]
+    },
+    {
+      "id": "privacy-policy",
+      "url": "https://hailuoai.video/doc/privacy-policy.html",
+      "claimKeys": ["privacy_boundary", "face_data", "data_collection"]
+    },
+    {
+      "id": "minimax-product-announcement",
+      "url": "https://www.minimax.io/news/minimax-hailuo-23",
+      "claimKeys": ["identity", "brand_relationship", "image_to_video", "text_to_video", "media_agent"]
+    }
+  ],
+  "entityGate": {
+    "status": "PASS",
+    "aiCoreCapability": {
+      "status": "PASS",
+      "sourceIds": ["app-home", "image-to-video-guide", "minimax-product-announcement"],
+      "evidenceExcerpt": "The Hailuo application presents photo and text-to-video creation. MiniMax's official Hailuo 2.3 announcement describes image-to-video and text-to-video across the Hailuo AI website and app, and separates the consumer app from its Open Platform API. Product-image fidelity and output quality remain untested."
+    },
+    "identityCanonical": {
+      "status": "PASS",
+      "sourceIds": ["app-home", "service-terms", "minimax-product-announcement"],
+      "evidenceExcerpt": "This selection is the Hailuo AI video and image creator at hailuoai.video. Its current service terms name Nanonoble Pte. Ltd. as the contracting company; MiniMax's official product announcement links Hailuo AI as the consumer website and identifies Hailuo as its video model/product family. The MiniMax Open Platform API, China-market service, Hailuo model IDs and third-party hosts are excluded as separate catalog entities. Canonical is the hailuoai.video root."
+    },
+    "duplicateIntent": {
+      "status": "PASS",
+      "checkedToolIds": ["711df152-fdcf-4a19-930c-ab866b67605f"],
+      "rationale": "Read-only production query on 2026-10-23 found no tool row matching Hailuo names/titles or the hailuoai.video host, and no collection candidate matching Hailuo or that host. The generic enqueue preflight repeats exact name/title/URL and normalized-canonical collision checks. Existing reviewed/published Fit tool 711df152-fdcf-4a19-930c-ab866b67605f is included as required comparison context, not as a duplicate entity. Hailuo/Hailuo 2.3 model names, MiniMax API, and third-party model hosts are not proposed as separate entities."
+    }
+  },
+  "reviewedAt": "2026-10-23",
+  "nextReviewDate": "2026-11-06",
+  "media": {
+    "mode": "platform_owned_editorial",
+    "assetPath": "/images/tool-media/hailuo-ai-editorial-cover.svg",
+    "sha256": "f6a76672acbb3b86b65a769dd27e2c66ae99796e589a64d0da7913155497f5a3",
+    "creator": "AI Best Tool editorial",
+    "createdAt": "2026-10-23",
+    "noVendorMarks": true
+  },
+  "pricing": "freemium",
+  "tags": ["AI video generator", "image to video", "text to video", "reference images", "video creation", "Media Agent"],
+  "localized": {
+    "en": {
+      "title": "Hailuo AI: image-to-video creation and AI video workspace",
+      "summary": "Hailuo AI is a video and image creation workspace for turning images or text into short videos. Plans, credits, watermark-free downloads and output rights depend on the current plan and applicable terms; this listing does not claim product-image fidelity or account-tested entitlements.",
+      "detail": "Hailuo AI is the creator-facing video and image application at hailuoai.video. Its current service terms identify Nanonoble Pte. Ltd. as the contracting company, while MiniMax's official product announcement links Hailuo AI as its consumer website and describes the Hailuo video model family. This listing covers the Hailuo AI application only; MiniMax's Open Platform API, China-market service, individual model versions and third-party hosts are separate products or access paths.\n\nThe official product and image-to-video pages describe creating video from a still image and a motion prompt, while MiniMax's product announcement describes image-to-video, text-to-video and a multimodal Media Agent. These are vendor-described capabilities. This directory has not tested generation quality, product or logo fidelity, consistency, regional availability, or usable-output rate.\n\nPrice and credits: Hailuo's public subscription terms describe free and paid service, subscription credits, priority generation and different download benefits. The posted plan table is dated July 14, 2025 and names Hailuo 02, so its prices and quotas are stale for a current plan comparison. Check the signed-in account, selected model and checkout; this listing makes no exact-price or fixed-credit promise.\n\nWatermark and rights: the subscription terms say free downloads include a watermark and paid plans offer watermark-free downloads. The same terms say users retain rights to content generated and downloaded on a paid subscription plan, while granting the service a broad license to use that content to operate, improve and promote its services. Do not infer the same rights for free output or every product surface. Users remain responsible for permissions covering uploaded images, people, logos, music and other third-party material; the service terms also require AI-generated or manipulated disclosure where law or context requires it.\n\nPrivacy: the published privacy policy covers hailuoai.video and names Nanonoble Pte. Ltd. It describes collection of account/contact, device, IP, cookie and usage information. Its face-data statement is limited to certain mobile-app features and says derived facial landmarks are used for generation and deleted after processing. This does not establish a universal retention rule for every upload, website, app, workspace or region. Check the applicable policy and account settings before sending sensitive material.\n\nBest for: creators comparing image-reference-to-video workflows and teams willing to review outputs and verify their account's current credits, export and rights terms.\n\nNot ideal for: buyers who require guaranteed packaging/logo fidelity, fixed per-clip cost, watermark-free free exports, or blanket rights and retention guarantees without account-specific review.\n\nCompare with Kling AI, Pika and Runway on reference-image control, motion direction, editing workflow, model-specific credits, watermark and output-rights boundaries. Downstream destination: Tool Intelligence for the product-image-to-short-video Task cluster as an Alternative. This selection creates no Task Fit or Task Page.",
+      "bestFor": ["Creators comparing image-reference-to-video workflows", "Teams that can review outputs and verify current account credits and rights before production"],
+      "notIdealFor": ["Users requiring guaranteed product, packaging or logo fidelity", "Buyers requiring fixed per-clip pricing, watermark-free free exports or blanket rights without checking current terms"],
+      "limitations": ["The public subscription plan table is dated July 14, 2025 and should not be treated as current pricing or quota evidence", "Free downloads are described as watermarked; paid-plan watermark-free downloads are subject to current plan terms", "Published paid-plan content rights include a broad service license for operating, improving and promoting the service", "No account, checkout, model, regional availability, product-image fidelity or generated output was tested", "Privacy statements differ by site/app surface; uploaded third-party images, likenesses, music and marks require user permission"],
+      "compareAxes": ["Image-reference and motion control versus Kling AI, Pika and Runway", "Editing workflow and model-dependent generation options", "Current account-specific credit and export costs", "Watermark, commercial-use and privacy-policy scope"],
+      "pricingSummary": "Freemium service is described, but the public plan table is dated 2025 and tied to Hailuo 02. Verify current account, model, region and checkout; no exact price or credit allowance is asserted."
+    },
+    "cn": {
+      "title": "Hailuo AI：图像转视频创作与 AI 视频工作区",
+      "summary": "Hailuo AI 是可将图像或文字转为短视频的视频与图像创作工作区。套餐、credits、无水印下载和输出权利取决于当前账户及适用条款；本文不声称商品图保真或账户权益已实测。",
+      "detail": "Hailuo AI 是 hailuoai.video 上面向创作者的视频与图像应用。当前服务条款将 Nanonoble Pte. Ltd. 列为签约公司；MiniMax 官方产品公告则将 Hailuo AI 网站作为其消费者产品入口，并介绍 Hailuo 视频模型系列。本条目仅指 Hailuo AI 应用；MiniMax Open Platform API、中国市场服务、单个模型版本和第三方托管属于不同产品或访问路径。\n\n官方产品页和图生视频页面介绍了从静态图像与运动提示生成视频；MiniMax 官方产品公告也介绍图生视频、文生视频和多模态 Media Agent。这些是厂商描述。本目录未测试生成质量、商品或 Logo 保真度、一致性、地区可用性或可用成片率。\n\n价格与 credits：Hailuo 公开订阅条款介绍了免费与付费服务、订阅 credits、优先生成和不同下载权益。公开套餐表最后更新于 2025 年 7 月 14 日，且以 Hailuo 02 为对象，不足以证明当前套餐价格和额度。请核对登录账户、所选模型与结账页；本文不承诺精确价格或固定 credits。\n\n水印与权利：订阅条款称免费用户下载的视频带水印，付费套餐提供无水印下载。条款称用户保留付费订阅期间生成并下载内容的权利，同时授予服务方为运营、改进和推广服务而使用内容的广泛许可。不可据此推定免费输出或所有产品入口享有相同权利。用户需自行取得上传图像、人物、Logo、音乐和其他第三方素材的许可；服务条款还要求在法律要求或为避免误导时披露 AI 生成或篡改内容。\n\n隐私：公开隐私政策适用于 hailuoai.video，并列出 Nanonoble Pte. Ltd.。政策说明会收集账户/联系方式、设备、IP、Cookie 和使用信息。关于面部数据的说明仅针对某些移动应用功能，称衍生面部特征用于生成并在处理后删除；这不能证明所有上传、网站、应用、工作区和地区适用同一留存规则。发送敏感材料前请核对实际适用政策与账户设置。\n\n适合：比较图像参考转视频流程的创作者，以及能够检查输出并核实当前账户 credits、导出和权利条款的团队。\n\n不适合：要求商品包装或 Logo 必须准确还原、固定单条成本、免费无水印导出，或不核对账户条款即可取得普遍权利与留存保证的采购者。\n\n可与 Kling AI、Pika 和 Runway 比较参考图控制、运动指令、编辑流程、模型对应的 credits、水印及输出权利边界。下游位置：`product-image-to-short-video` Task Cluster 的 Alternative。本选择不创建 Task Fit 或 Task Page。",
+      "bestFor": ["比较图像参考转视频流程的创作者", "能在生产前检查输出并核实账户 credits 与权利条款的团队"],
+      "notIdealFor": ["要求商品、包装或 Logo 必须准确还原的用户", "要求固定单条成本、免费无水印下载或无需核对当前条款即可取得普遍权利的采购者"],
+      "limitations": ["公开套餐表日期为 2025-07-14，不作为当前价格或额度证据", "条款称免费视频下载带水印；付费无水印权益以当前套餐为准", "付费计划生成并下载内容的权利伴随服务方运营、改进和推广用途的广泛许可", "本站未测试账户、结账、模型、地区可用性、商品图保真度或生成结果", "隐私政策按网站与应用功能区分；用户须确认第三方图像、肖像、音乐和商标的使用许可"],
+      "compareAxes": ["与 Kling AI、Pika 和 Runway 比较图像参考与运动控制", "编辑工作流和模型对应的生成选项", "账户实际 credits 与导出成本", "水印、商用权利与隐私政策适用范围"],
+      "pricingSummary": "公开资料介绍免费与付费服务，但套餐表日期为 2025 年且对应 Hailuo 02。请核对当前账户、模型、地区和结账页；本文不声称精确价格或额度。"
+    },
+    "tw": {
+      "title": "Hailuo AI：圖片轉影片創作與 AI 影片工作區",
+      "summary": "Hailuo AI 是可將圖片或文字轉為短影片的影片與圖片創作工作區。方案、credits、無浮水印下載與輸出權利取決於目前帳戶及適用條款；本文不宣稱商品圖片保真或帳戶權益已實測。",
+      "detail": "Hailuo AI 是 hailuoai.video 上面向創作者的影片與圖片應用。目前服務條款將 Nanonoble Pte. Ltd. 列為簽約公司；MiniMax 官方產品公告則將 Hailuo AI 網站作為其消費者產品入口，並介紹 Hailuo 影片模型系列。本項目僅指 Hailuo AI 應用；MiniMax Open Platform API、中國市場服務、個別模型版本與第三方託管屬於不同產品或存取途徑。\n\n官方產品頁和圖片轉影片頁面介紹了從靜態圖片與動態提示生成影片；MiniMax 官方產品公告亦介紹圖片轉影片、文字轉影片和多模態 Media Agent。這些是廠商描述。本目錄未測試生成品質、商品或 Logo 保真度、一致性、地區可用性或可用成片率。\n\n價格與 credits：Hailuo 公開訂閱條款介紹免費與付費服務、訂閱 credits、優先生成和不同下載權益。公開方案表最後更新於 2025 年 7 月 14 日，且以 Hailuo 02 為對象，不足以證明目前方案價格與額度。請核對登入帳戶、所選模型與結帳頁；本文不承諾精確價格或固定 credits。\n\n浮水印與權利：訂閱條款表示免費使用者下載的影片帶有浮水印，付費方案提供無浮水印下載。條款表示使用者保留付費訂閱期間生成並下載內容的權利，同時授予服務方為營運、改善和推廣服務而使用內容的廣泛授權。不可據此推定免費輸出或所有產品入口享有相同權利。使用者須自行取得上傳圖片、人物、Logo、音樂和其他第三方素材的許可；服務條款亦要求在法律要求或為避免誤導時揭露 AI 生成或篡改內容。\n\n隱私：公開隱私政策適用於 hailuoai.video，並列出 Nanonoble Pte. Ltd.。政策說明會收集帳戶/聯絡方式、裝置、IP、Cookie 和使用資訊。關於臉部資料的說明僅針對部分行動應用功能，稱衍生臉部特徵用於生成並在處理後刪除；這不能證明所有上傳、網站、應用、工作區和地區適用相同保存規則。傳送敏感資料前請核對實際適用政策與帳戶設定。\n\n適合：比較圖片參考轉影片流程的創作者，以及能檢查輸出並核實目前帳戶 credits、匯出和權利條款的團隊。\n\n不適合：要求商品包裝或 Logo 必須精確還原、固定單支成本、免費無浮水印匯出，或不核對帳戶條款即可取得普遍權利與保存保證的採購者。\n\n可與 Kling AI、Pika 和 Runway 比較參考圖片控制、動態指令、編輯流程、模型對應的 credits、浮水印及輸出權利界線。下游位置：`product-image-to-short-video` Task Cluster 的 Alternative。本選擇不建立 Task Fit 或 Task Page。",
+      "bestFor": ["比較圖片參考轉影片流程的創作者", "能在正式製作前檢查輸出並核實帳戶 credits 與權利條款的團隊"],
+      "notIdealFor": ["要求商品、包裝或 Logo 必須精確還原的使用者", "要求固定單支成本、免費無浮水印下載或不核對目前條款即可取得普遍權利的採購者"],
+      "limitations": ["公開方案表日期為 2025-07-14，不作為目前價格或額度證據", "條款表示免費影片下載帶浮水印；付費無浮水印權益依目前方案而定", "付費方案生成並下載內容的權利伴隨服務方營運、改善和推廣用途的廣泛授權", "本平台未測試帳戶、結帳、模型、地區可用性、商品圖片保真度或生成結果", "隱私政策依網站與應用功能區分；使用者須確認第三方圖片、肖像、音樂與商標的使用許可"],
+      "compareAxes": ["與 Kling AI、Pika 和 Runway 比較圖片參考與動態控制", "編輯流程和模型對應的生成選項", "帳戶實際 credits 與匯出成本", "浮水印、商用權利與隱私政策適用範圍"],
+      "pricingSummary": "公開資料介紹免費與付費服務，但方案表日期為 2025 年且對應 Hailuo 02。請核對目前帳戶、模型、地區與結帳頁；本文不聲稱精確價格或額度。"
+    }
+  },
+  "claimGate": {
+    "status": "PASS",
+    "items": [
+      {"key":"identity","status":"verified_public","boundary":"The selected entity is the hailuoai.video creator app; model IDs, MiniMax API and third-party hosts are excluded. Current terms identify Nanonoble Pte. Ltd. as contracting company.","sourceIds":["app-home","minimax-product-announcement"],"nextReviewDate":"2026-11-06"},
+      {"key":"operator","status":"verified_public","boundary":"The current hailuoai.video Terms of Service name Nanonoble Pte. Ltd.; this does not establish the operator of separate MiniMax API or China-market services.","sourceIds":["service-terms"],"nextReviewDate":"2026-11-06"},
+      {"key":"brand_relationship","status":"verified_public","boundary":"MiniMax's official announcement links the Hailuo AI website and describes Hailuo video models. This supports product/brand relationship, not a claim that every app/API route shares one operator or contract.","sourceIds":["minimax-product-announcement"],"nextReviewDate":"2026-11-06"},
+      {"key":"image_to_video","status":"verified_public","boundary":"Official product material describes image-to-video creation. Product-image fidelity, text/logo preservation and repeatability are untested.","sourceIds":["app-home","image-to-video-guide","minimax-product-announcement"],"nextReviewDate":"2026-11-06"},
+      {"key":"text_to_video","status":"verified_public","boundary":"MiniMax's official product announcement describes text-to-video for Hailuo AI; output quality and current model availability were not tested.","sourceIds":["app-home","minimax-product-announcement"],"nextReviewDate":"2026-11-06"},
+      {"key":"pricing","status":"conditional","boundary":"The public plan table was last updated 2025-07-14 and lists Hailuo 02-era packages; current prices, credits, model and regional eligibility must be checked in the target account. No exact price is asserted.","sourceIds":["payment-policy"],"nextReviewDate":"2026-11-06"},
+      {"key":"credits","status":"conditional","boundary":"Subscription and purchased-credit types are described, but current allowance and per-generation cost depend on current model and account. The public plan table is stale for current entitlements.","sourceIds":["payment-policy"],"nextReviewDate":"2026-11-06"},
+      {"key":"watermark","status":"conditional","boundary":"The subscription terms say free downloads include a watermark and paid plans offer watermark-free downloads; verify the current plan, model and export path.","sourceIds":["payment-policy"],"nextReviewDate":"2026-11-06"},
+      {"key":"commercial_use","status":"conditional","boundary":"Terms state users retain rights to content generated and downloaded on paid subscriptions, with a broad service license. Do not extrapolate to free content, other services or every regional contract.","sourceIds":["payment-policy","service-terms"],"nextReviewDate":"2026-11-06"},
+      {"key":"input_rights","status":"verified_public","boundary":"Users remain responsible for required permissions and legal compliance for uploaded content, likenesses and other protected material.","sourceIds":["service-terms"],"nextReviewDate":"2026-11-06"},
+      {"key":"privacy_boundary","status":"conditional","boundary":"Published privacy policy names Nanonoble and covers hailuoai.video. Face-data deletion language is limited to certain mobile features and does not establish universal retention for every product surface or region.","sourceIds":["privacy-policy","service-terms"],"nextReviewDate":"2026-11-06"},
+      {"key":"ai_labeling","status":"verified_public","boundary":"Terms require disclosure of AI-generated or manipulated content where applicable law requires it or where disclosure is reasonably needed to avoid deception.","sourceIds":["service-terms"],"nextReviewDate":"2026-11-06"}
+    ]
+  },
+  "selectionAudit": {
+    "reviewedAt": "2026-10-23",
+    "productionReadOnlyDuplicateCheck": {
+      "checkedAt": "2026-10-23T01:36:04.135Z",
+      "matchingToolIds": [],
+      "matchingCandidateIds": [],
+      "queries": ["Hailuo name/title", "hailuoai.video official host"],
+      "genericEnqueuePreflightRepeatsIdentityAndCanonicalChecks": true
+    },
+    "decisionOpportunity": {
+      "queue": "Expand",
+      "searchDemand": "unavailable; GSC refresh remains blocked and no volume is claimed",
+      "clusterLeverage": "Adds an Alternative to the published Kling AI Anchor in product-image-to-short-video.",
+      "comparisonObjects": [
+        {"slug":"kling-ai","path":"/ai/kling-ai","role":"anchor","reason":"Published product-image/video creator; compare reference control, current credits, watermark and rights scope."},
+        {"slug":"pika","path":"/ai/pika","role":"alternative","reason":"Compare image-reference workflows, editing controls and account-specific export/rights terms."},
+        {"slug":"runway","path":"/ai/runway","role":"alternative","reason":"Compare video editing workflow, image guidance, model usage and current plan boundaries."}
+      ],
+      "downstreamDestination": {"surface":"Tool Intelligence","taskSlug":"product-image-to-short-video","role":"alternative","taskPageOrFitCreated":false}
+    },
+    "publicationBoundary": {"recommendedLifecycle":"published","recommendedPageQualityStatus":"monitor","robots":"noindex, follow","sitemapEligible":false,"productionWrites":0,"indexApproved":false,"relationPublished":false},
+    "evidenceNotes": [
+      "Hailuo payment policy was last updated 2025-07-14 and its plan table refers to Hailuo 02; exact prices/credits are deliberately omitted as current entitlements.",
+      "Current site Terms of Service last modified 2026-08-19; Privacy Policy updated 2025-12-09.",
+      "The Hailuo image-to-video help page was returned as HTTP 500 by the live browser reader on 2026-10-23; its official search-indexed content was used only as corroboration, alongside the accessible homepage and MiniMax announcement.",
+      "No hands-on account, generation, media reuse rights or commercial checkout was tested. The included cover is original platform-owned SVG editorial art, not vendor media."
+    ]
+  }
+}

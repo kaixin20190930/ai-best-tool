@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Hailuo AI editorial illustration</title>
+  <desc id="desc">An original abstract scene showing a still image becoming a moving video frame.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101a3a"/>
+      <stop offset="1" stop-color="#243e6b"/>
+    </linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f1a96b"/>
+      <stop offset="1" stop-color="#ec6c82"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <circle cx="930" cy="145" r="76" fill="#f5cf8c" opacity=".95"/>
+  <path d="M610 470 802 250l118 133 92-97 188 184H610Z" fill="#597eac"/>
+  <path d="m610 470 192-220 70 80-145 140H610Z" fill="#89a9c9"/>
+  <rect x="118" y="132" width="400" height="300" rx="26" fill="#fff" opacity=".1" stroke="#d9e8ff" stroke-opacity=".65" stroke-width="3"/>
+  <rect x="146" y="160" width="344" height="244" rx="18" fill="url(#frame)"/>
+  <circle cx="403" cy="221" r="32" fill="#ffe0a1"/>
+  <path d="m146 371 116-113 69 67 45-42 114 121H146Z" fill="#344e78"/>
+  <path d="m262 258 69 67 45-42 114 121H224Z" fill="#688bb4"/>
+  <path d="M557 283h78" stroke="#d7e7ff" stroke-width="8" stroke-linecap="round" opacity=".7"/>
+  <path d="m615 260 26 23-26 23" fill="none" stroke="#d7e7ff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+  <text x="118" y="520" fill="#fff" font-family="Arial, sans-serif" font-size="52" font-weight="700">Hailuo AI</text>
+  <text x="120" y="566" fill="#c5d6f1" font-family="Arial, sans-serif" font-size="22" letter-spacing="3">IMAGE TO VIDEO · EDITORIAL ART</text>
+</svg>

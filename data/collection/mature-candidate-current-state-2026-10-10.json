@@ -11,6 +11,8 @@
     "canva": { "status": "released_monitor_noindex", "evidence": "data/collection/canva-release.json" },
     "anyword": { "status": "released_monitor_noindex", "evidence": "data/collection/anyword-release.json" },
     "bolt": { "status": "released_monitor_noindex", "evidence": "data/collection/bolt-release.json" },
+    "kling-ai": { "status": "released_monitor_noindex", "evidence": "docs/DAILY_OPERATIONS_2026-10-22_CN.md" },
+    "hailuo-ai": { "status": "released_monitor_noindex", "evidence": "docs/DAILY_OPERATIONS_2026-10-23_CN.md" },
     "v0": { "status": "released_monitor_noindex", "evidence": "docs/DAILY_OPERATIONS_2026-10-13_CN.md" },
     "scispace": { "status": "released_monitor_noindex", "evidence": "docs/DAILY_OPERATIONS_2026-10-13_CN.md" }
   },
