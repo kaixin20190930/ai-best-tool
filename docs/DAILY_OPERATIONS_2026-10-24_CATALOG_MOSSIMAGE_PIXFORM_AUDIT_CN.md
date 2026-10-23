@@ -13,7 +13,17 @@
 | MossImage (`mossimage.run`) | 独立托管图像创作工作室；Moxion Labs LLC 运营；明确声明不隶属 OpenMOSS 或 fal.ai。现有 OpenMOSS MOSS-Image 是独立模型/仓库实体 | 未发现该产品域的工具或候选。发现既有 OpenMOSS 模型工具 `96ea73cc-904d-46bc-8206-78d905b4d521`，及其已导入候选 `0402f14b-539f-4477-9f2c-253a5723441f`；两者必须保留且不得合并、覆盖、改 canonical 或重定向 | 可进入通用 preflight；独立最终 QA 通过后建议 `published + monitor/noindex`。页面名称与介绍应持续写明“独立托管工作室”，以区别模型实体。未授权入队或发布 |
 | Pixform (`pixform.ai`) | 面向静态照片的风格转换，另有独立双照片静态换脸工具。公开页面未说明法律运营主体 | 未发现名称、域名、canonical 或候选碰撞 | 可进入通用 preflight；独立最终 QA 通过后建议 `published + monitor/noindex`。GIF、多脸选择和视频换脸均明确是计划/考虑功能，不得写成上线能力。未授权入队或发布 |
 
-本目录近期 OPS2 基线要求普通 Catalog 使用通用流程、默认 `published + monitor/noindex` 且索引资格独立审核。主优化 tracker 最近更新为 2026-10-19，当前可读文件中未找到 2026-10-24 专属 task lock；本交付遵守用户固定对象和范围指令，不推断额外的队列/发布授权。搜索需求数据不可用，不声称流量或搜索量。
+本目录近期 OPS2 基线要求普通 Catalog 使用通用流程、默认 `published + monitor/noindex` 且索引资格独立审核。总控已在持久任务锁中登记本双工具单元，并严格复用一个开发槽和一个独立 QA 槽。本交付遵守用户固定对象和范围指令，不推断额外的队列或索引授权。搜索需求数据不可用，不声称流量或搜索量。
+
+## 最终发布结果
+
+- 独立 QA：`codex-thread:01a1699c-e00d-7691-9b68-bb5499a964c8`，结果 `QA_PASS`；固定报告为 `docs/DAILY_OPERATIONS_2026-10-24_MOSSIMAGE_PIXFORM_QA.json`。
+- MossImage：候选 `58b332a6-f2c8-4268-af26-e14fdc26937b` 经通用 enqueue 和 candidate bridge 创建 Tool `2b2eb52a-faf1-410a-9385-05db5799b055`，最终为 `published + monitor/noindex`。候选 enqueue、draft 导入和工具公开均完成 rollback、commit、幂等 postcheck；公开工具 preimage 为 `85fc74d2787428fd247c0bfc5a3e79a413bf31849665dd658ab5e3c6a4f32dce`。
+- Pixform：候选 `bfe41a8c-d6e1-4753-adfe-965347809758` 经同一通用链路创建 Tool `3e698bdd-35dd-4c9d-a56d-4324dcdc842b`，最终为 `published + monitor/noindex`。三段均完成 rollback、commit、幂等 postcheck；公开工具 preimage 为 `ba6b9ad1b85f8e67e9cfe35544bf737737562ebf7a710f9911fc8f25652f8d51`。
+- EN/CN/TW 六个工具页均返回 200、自指 canonical 和 `noindex, follow`；两个素材返回 200。sitemap 仍为 148 URLs，对 `mossimage` 与 `pixform` 均为 0 条。
+- 两个官网 CTA 均未设置 `nofollow`、`sponsored` 或 `ugc`，仅有 `noreferrer`，因此 HTML 链接属性属于普通 follow 链接。由于来源工具页当前仍是 noindex，不能把它宣传为已获得 Google 可计权反向链接；后续 index/sitemap 仍按统一 A 级门禁独立处理。
+- 发布后生产矩阵：`draft/monitor=9`、`pending/monitor=13`、`published/archive=2`、`published/continue_index=28`、`published/monitor=53`、`rejected/monitor=11`。Tool ID 总数 116，published 83；page quality 为 monitor 86、continue_index 28、archive 2。
+- 本单未创建 Task/Capability/Fit、Comparison、索引记录、sitemap 项、迁移、专属发布代码或额外测试系统。
 
 ## 来源与事实边界
 
