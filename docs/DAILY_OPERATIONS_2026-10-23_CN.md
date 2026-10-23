@@ -79,3 +79,12 @@ Kling AI Tool `8396b409-05e0-4c2c-97e4-bcf4a18db40f` 已于 2026-10-22 发布，
 - 合并审计：本文件。
 
 受保护的两份 SQL 修改和 `docs/FRESHNESS_CLAIM_DUE_BATCH_2026-10-15.json` 未纳入本单。
+
+## 交付收口
+
+- 主提交：`fa0062b1`，已推送至 `origin/main`；本地与远端 SHA 一致。
+- 自动部署后，平台自有 Hailuo SVG 返回 200；EN/CN/TW 页面均返回 200、自 canonical、`noindex, follow`。
+- sitemap 仍为 **148 URLs**，Hailuo 匹配 0；本次没有自动批准索引。
+- `PLAN_DEVIATION`：Freshness 的 OpenRouter 真实差分因 `continue_index` 安全写入路径缺失而未提交；没有绕过或工具专属 SQL。索引 selector 无 A 级对象，因此本日索引批准 0。
+- 需要 Owner：替换有效的 `GSC_REFRESH_TOKEN`。其余无需 Owner 操作。
+- 下一步：下一次运行选择一个新的成熟组合候选，并把 `continue_index` 的低风险 Freshness 支持作为共享执行器缺口处理；不得重复今日 Hailuo 或五项复核。
