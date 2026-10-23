@@ -1,0 +1,82 @@
+{
+  "overallStatus": "QA_PASS",
+  "checkedAt": "2026-10-23T16:35:47.000Z",
+  "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+  "qaActor": "codex-thread:01a1699c-e00d-7691-9b68-bb5499a964c8",
+  "qaThread": "codex-thread:01a1699c-e00d-7691-9b68-bb5499a964c8",
+  "selectionHashes": {
+    "mossimage": "c9437f3cacbf9a910999dff628e7ce6637cd041b4ba977e52762e936ee4f1674",
+    "pixform": "ea818284d64a40f1d5c3d4010e66cbd14c48bdabfea81df6197364fc301f4e3b"
+  },
+  "reviewScope": {
+    "artifacts": [
+      "docs/DAILY_OPERATIONS_2026-10-24_MOSSIMAGE_RUN_SELECTION.json",
+      "docs/DAILY_OPERATIONS_2026-10-24_PIXFORM_SELECTION.json",
+      "docs/DAILY_OPERATIONS_2026-10-24_CATALOG_MOSSIMAGE_PIXFORM_AUDIT_CN.md",
+      "public/images/tool-media/mossimage-run-editorial-cover.svg",
+      "public/images/tool-media/pixform-editorial-cover.svg"
+    ],
+    "mode": "single independent QA review"
+  },
+  "enqueueScopes": [
+    {
+      "selection": "mossimage",
+      "selectionHash": "c9437f3cacbf9a910999dff628e7ce6637cd041b4ba977e52762e936ee4f1674",
+      "preimageHash": "c2c64e5ec6ab561ed56890cd0a367a5bd8f247cad6acdc50fb6dc69b63a772d8",
+      "scope": {
+        "operation": "enqueue",
+        "candidateId": "58b332a6-f2c8-4268-af26-e14fdc26937b",
+        "canonicalUrl": "https://mossimage.run/"
+      },
+      "preflight": {
+        "status": "PASS",
+        "ready": true,
+        "productionWrites": 0
+      }
+    },
+    {
+      "selection": "pixform",
+      "selectionHash": "ea818284d64a40f1d5c3d4010e66cbd14c48bdabfea81df6197364fc301f4e3b",
+      "preimageHash": "0874bf1c106d1ba200538e36247082c59199bd8844e9cf6e3101e17edd47946b",
+      "scope": {
+        "operation": "enqueue",
+        "candidateId": "bfe41a8c-d6e1-4753-adfe-965347809758",
+        "canonicalUrl": "https://pixform.ai/"
+      },
+      "preflight": {
+        "status": "PASS",
+        "ready": true,
+        "productionWrites": 0
+      }
+    }
+  ],
+  "checks": {
+    "selectionSchemaAndHashes": "PASS; both selections parse through the generic OPS2 selection parser, include en/cn/tw content and source-backed claim gates, and their computed hashes match the fixed selection hashes. Both specified preimage hashes match the one permitted generic enqueue preflight per selection.",
+    "mossimageEntityBoundary": "PASS; mossimage.run describes an independent hosted studio, and its terms identify Moxion Labs LLC and state no affiliation with OpenMOSS or fal.ai. All three locales distinguish this studio from the existing OpenMOSS MOSS-Image model/repository and fal.ai as processor; they do not attribute photo editing to the MOSS-Image model. Existing OpenMOSS tool 96ea73cc-904d-46bc-8206-78d905b4d521 and candidate 0402f14b-539f-4477-9f2c-253a5723441f are explicitly preserved. Generic preflight passed exact global identity/canonical collision checks.",
+    "pixformCapabilityBoundary": "PASS; all locales describe static image-to-image style transformation and a separate two-photo static face-swap workflow. GIF face swap, selectable multi-face editing and video face swap are explicitly marked planned/under consideration and unavailable. Single-person-per-photo guidance, capacity limits and untested quality are retained.",
+    "officialFactsAndLocalization": "PASS; current official pages were reachable and support the selected identity, pricing/usage limits, privacy processing and retention boundaries, and terms. MossImage pricing is qualified for taxes, account eligibility and changing terms; Pixform free access is qualified by its per-IP hourly cap and capacity. English, Simplified Chinese and Traditional Chinese preserve the same material scope, constraints and uncertainty; no legal operator is inferred for Pixform.",
+    "sourceMapping": "PASS; every claimGate item references declared official source IDs whose claimKeys cover the relevant identity, capabilities, pricing, privacy, terms, retention or roadmap facts. OPS2 parser/preflight accepted the complementary official URL mappings and claim boundaries.",
+    "outboundLinkRelSemantics": "PASS; neither selection requests nor encodes rel=nofollow, rel=sponsored or rel=ugc as a way to claim dofollow. The existing official-visit link uses rel=noreferrer; noreferrer controls referrer information and is not equivalent to nofollow. This QA makes no claim that noreferrer itself grants a dofollow relationship.",
+    "mediaAndSha256": "PASS; both platform-owned editorial SVG files match their declared SHA-256 values (MossImage 454ce93d37c50279482696428caa692e8ceb007ff2f03c02991b543fbb1f7eca; Pixform 3e7a25e8b9cda10458f011a1c21697a24a8bafc0116cad3153de4eabf793830a). They are self-contained neutral illustrations with local paint references only, no vendor marks, scripts, embedded images, external references, hrefs, DOCTYPE or entities; generic media preflight accepted both.",
+    "enqueueAndReleaseBoundary": "PASS; both preflights returned ready=true with productionWrites=0. This QA performed no enqueue commit, production write, TypeScript/build/smoke run, index/sitemap/relationship/migration operation, commit or push.",
+    "materialIssues": []
+  },
+  "allowedReleaseBoundary": {
+    "lifecycle": "published",
+    "pageQualityStatus": "monitor",
+    "robots": "noindex, follow",
+    "sitemapEligible": false,
+    "indexApproved": false,
+    "relationPublished": false,
+    "taskFitOrTaskPageCreated": false
+  },
+  "execution": {
+    "genericEnqueuePreflights": 2,
+    "productionWrites": 0,
+    "enqueueCommitPerformed": false,
+    "publishOrIndexOperationPerformed": false,
+    "typescriptBuildSmokeOrTestRun": false,
+    "relationshipOrMigrationOperationPerformed": false,
+    "commitOrPushPerformed": false
+  }
+}

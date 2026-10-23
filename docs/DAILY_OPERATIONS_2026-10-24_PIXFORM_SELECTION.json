@@ -1,0 +1,67 @@
+{
+  "id": "bfe41a8c-d6e1-4753-adfe-965347809758",
+  "name": "Pixform",
+  "officialUrl": "https://pixform.ai/",
+  "officialDomainGroup": { "canonicalProductDomain": "pixform.ai", "parentBrandDomains": [], "identitySourceIds": ["home", "about"] },
+  "categorySlug": "design-art",
+  "cluster": { "role": "gap_filler" },
+  "officialSources": [
+    { "id": "home", "url": "https://pixform.ai/", "claimKeys": ["identity", "image_to_image", "styles", "limits", "capabilities", "pricing_and_limits"] },
+    { "id": "about", "url": "https://pixform.ai/about", "claimKeys": ["identity", "product_scope", "quality_boundary"] },
+    { "id": "privacy", "url": "https://pixform.ai/privacy", "claimKeys": ["privacy", "retention", "providers", "measurement", "privacy_and_retention"] },
+    { "id": "terms", "url": "https://pixform.ai/terms", "claimKeys": ["pricing", "usage_limits", "output_rights", "input_rights", "commercial_use", "pricing_and_limits"] },
+    { "id": "face-swap", "url": "https://pixform.ai/face-swap", "claimKeys": ["face_swap_scope", "roadmap_boundary", "image_limits", "face_swap_boundary", "roadmap_features"] }
+  ],
+  "entityGate": {
+    "status": "PASS",
+    "aiCoreCapability": { "status": "PASS", "sourceIds": ["home", "face-swap"], "evidenceExcerpt": "The official site describes still-image-to-image style transformation with six listed styles and a separate still-image face-swap workflow using two photos. Inputs and outputs are temporary; results and feature quality were not independently tested." },
+    "identityCanonical": { "status": "PASS", "sourceIds": ["home", "about"], "evidenceExcerpt": "Pixform is the photo transformation service at pixform.ai; its About page describes the initial release as a small creative tool for experimenting with versions of a user's images. The selected canonical is the root URL. Public pages give a contact address but do not identify a legal operating entity." },
+    "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Catalog-only production read-only check on 2026-10-24 found no tool or collection candidate matching Pixform, pixform.ai, its canonical or the selected image-transformation identity. No existing tool ID is being overwritten or merged. Generic enqueue preflight must repeat exact name/title/canonical and candidate checks." }
+  },
+  "reviewedAt": "2026-10-23",
+  "nextReviewDate": "2026-11-07",
+  "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/pixform-editorial-cover.svg", "sha256": "3e7a25e8b9cda10458f011a1c21697a24a8bafc0116cad3153de4eabf793830a", "creator": "AI Best Tool editorial", "createdAt": "2026-10-23", "noVendorMarks": true },
+  "pricing": "free",
+  "tags": ["image to image", "AI image transformation", "style transfer", "face swap", "no signup", "temporary image processing"],
+  "localized": {
+    "en": {
+      "title": "Pixform: free photo transformation and still-image face swap",
+      "summary": "Pixform offers image-to-image style transformation and a separate two-photo still-image face-swap workflow. Public terms describe limited free use without signup; GIF, selectable multi-face and video swaps are not available in this release.",
+      "detail": "Pixform at pixform.ai is a lightweight photo transformation service. Its home page describes uploading a JPG, PNG or WEBP image up to 10 MB, choosing one of six styles and generating a still image. A separate face-swap page describes a still-image workflow with a source photo and one reference portrait. These are vendor-described features; we did not submit photos or test results, likeness, safety controls or service reliability. The product is positioned for creative reinterpretation, not precise retouching or guaranteed identity preservation.\n\nThe Terms say the initial service is free, requires no account and is limited to 10 generation attempts per IP address per hour, subject to capacity. There is no paid subscription in the described initial release. The privacy policy says selected photos are sent to Replicate for processing and that uploads/results become inaccessible one hour after processing finishes, with deletion from temporary storage on the next cleanup run; unfinished jobs expire after two hours. Replicate and Cloudflare process data under their own policies. Temporary result links should be treated as private, and the policy cautions against sensitive uploads.\n\nPixform's roadmap page explicitly labels Face Swap GIF, selectable Multiple Face Swap and Video Face Swap as planned or under consideration, and says the current tools work with still images. This listing treats those as unavailable, not launched capabilities. In the current face-swap workflow, the page recommends one person per photo. Commercial use depends on source-image permissions, model licenses and third-party rights; output uniqueness and likeness are not guaranteed. Public pages do not identify a legal operating entity, so this listing does not infer one.\n\nBest for casual experiments that restyle a still photo or compare a two-photo face swap. Not ideal for production retouching, guaranteed likeness, animation/video workflows, multi-person batch editing, sensitive imagery or predictable capacity. Compare image transformation tools on style control, preservation of source details, upload retention, hourly limits and consent safeguards. No Task Fit or Task Page is created by this selection.",
+      "bestFor": ["Casual users exploring several artistic treatments of a still photo", "Users wanting to try a separate two-photo still-image face swap with permission from the people shown"],
+      "notIdealFor": ["Production work requiring precise retouching or guaranteed identity preservation", "Users needing GIF/video face swap, selectable multiple-face editing or predictable service capacity"],
+      "limitations": ["Still-image tools only; GIF face swap, selectable multiple-face swap and video face swap are explicitly planned/under consideration, not available", "Face swap guidance is for one person in each photo; outputs and likeness can vary", "Free use is limited to 10 attempts per IP address per hour and subject to capacity", "Photos are sent to Replicate; stated temporary storage expiry is not a universal deletion guarantee across provider systems", "No legal operating entity is identified on the reviewed public pages; no account or hands-on generation was tested"],
+      "compareAxes": ["Style options and control versus preservation of original details", "Single-photo transformation versus separate two-photo still-image face swap", "Hourly free-use limits and service availability", "Temporary upload handling, provider processing and consent requirements"],
+      "pricingSummary": "The initial release is described as free with no signup and up to 10 generation attempts per IP address per hour, subject to capacity. No paid subscription is described."
+    },
+    "cn": {
+      "title": "Pixform：免费照片转换与静态图片换脸",
+      "summary": "Pixform 提供图生图风格转换，以及独立的双照片静态换脸流程。公开条款称初期版本可限量免费使用且无需注册；GIF、可选多脸和视频换脸尚未上线。容量及数据处理仍有边界。",
+      "detail": "Pixform 位于 pixform.ai，是轻量照片转换服务。官网介绍上传不超过 10 MB 的 JPG、PNG 或 WEBP 图片，从六种风格中选择并生成静态图片。另一个独立换脸页面介绍使用一张场景照片和一张参考人像的静态换脸流程。这些是厂商描述；本站未上传照片或测试结果、肖像相似度、安全控制或服务可靠性。产品定位是创意改写，不是精确修图或保证身份不变。\n\n服务条款称初期版本免费、无需账户，每个 IP 地址每小时最多 10 次生成尝试，且受服务容量影响；所述初期版本没有付费订阅。隐私政策称用户选中的照片会发送至 Replicate 处理；处理结束后一小时，上传图片和结果将不可访问，并在下一次临时存储清理任务中删除；未完成任务两小时后过期。Replicate 与 Cloudflare 依各自政策处理数据。临时结果链接应视为私密，政策建议不要上传敏感内容。\n\nPixform 的路线图页明确将 Face Swap GIF、可选择的 Multiple Face Swap 和 Video Face Swap 标记为计划中或考虑中，并说明现有工具处理静态图片。本条目将它们视为不可用功能，不写成已上线。当前换脸流程建议每张照片各有一人。商用取决于原图许可、模型许可和第三方权利；不保证输出唯一或肖像相似。已核阅的公开页面没有说明法律运营实体，因此本条目不推断运营公司。\n\n适合尝试静态照片风格转换或双照片换脸。不适合生产修图、保证肖像相似、动画/视频流程、多人物批量编辑、敏感图像或要求稳定容量的工作。可比较风格控制、原图细节保留、上传留存、每小时限额和同意保护。本选择不创建 Task Fit 或 Task Page。",
+      "bestFor": ["想尝试静态照片多种艺术风格的普通用户", "在取得照片人物许可后，想体验独立双照片静态换脸流程的用户"],
+      "notIdealFor": ["需要精确修图或保证身份特征不变的生产工作", "需要 GIF/视频换脸、可选择多脸编辑或稳定服务容量的用户"],
+      "limitations": ["目前仅有静态图片工具；GIF 换脸、可选择多脸换脸和视频换脸明确属于计划/考虑功能，尚未上线", "换脸页面针对每张照片各一人；生成结果和肖像相似度可能变化", "免费使用受每 IP 每小时 10 次尝试限制且受容量影响", "照片会发送至 Replicate；公开的一小时临时存储期限不等于所有供应商系统均保证删除", "已核阅的公开页面未说明法律运营实体；本站未实测账户或生成"],
+      "compareAxes": ["风格选项与原图细节保留", "单照片风格转换与独立双照片静态换脸", "每小时免费限额和服务可用性", "上传临时处理、供应商数据处理与肖像同意要求"],
+      "pricingSummary": "公开条款称初期版本免费且无需注册，每个 IP 地址每小时最多 10 次生成尝试，并受容量影响；未描述付费订阅。"
+    },
+    "tw": {
+      "title": "Pixform：免費照片轉換與靜態圖片換臉",
+      "summary": "Pixform 提供圖生圖風格轉換，以及獨立的雙照片靜態換臉流程。公開條款稱初期版本可限量免費使用且免註冊；GIF、可選多臉及影片換臉尚未上線。容量與資料處理仍有限制。",
+      "detail": "Pixform 位於 pixform.ai，是輕量照片轉換服務。官網介紹上傳不超過 10 MB 的 JPG、PNG 或 WEBP 圖片，從六種風格中選擇並產生靜態圖片。另一個獨立換臉頁面介紹使用一張場景照片和一張參考人像的靜態換臉流程。這些是廠商描述；本站未上傳照片或測試結果、肖像相似度、安全控制或服務可靠性。產品定位為創意改寫，不是精確修圖或保證身分不變。\n\n服務條款稱初期版本免費、免帳戶，每個 IP 位址每小時最多 10 次生成嘗試，且受服務容量影響；所述初期版本沒有付費訂閱。隱私政策稱使用者選取的照片會傳送至 Replicate 處理；處理結束一小時後，上傳圖片和結果將無法存取，並於下一次臨時儲存清理工作中刪除；未完成工作兩小時後到期。Replicate 與 Cloudflare 依各自政策處理資料。臨時結果連結應視為私密，政策建議不要上傳敏感內容。\n\nPixform 的路線圖頁明確將 Face Swap GIF、可選擇的 Multiple Face Swap 和 Video Face Swap 標記為計畫中或考慮中，並說明現有工具處理靜態圖片。本項目將它們視為不可用功能，不寫成已上線。現有換臉流程建議每張照片各一人。商用取決於原圖授權、模型授權和第三方權利；不保證輸出唯一或肖像相似。已檢視的公開頁面未說明法律營運實體，因此本項目不推斷營運公司。\n\n適合嘗試靜態照片風格轉換或雙照片換臉。不適合生產修圖、保證肖像相似、動畫/影片流程、多人物批次編輯、敏感影像或要求穩定容量的工作。可比較風格控制、原圖細節保留、上傳保存、每小時限額和同意保護。本選擇不建立 Task Fit 或 Task Page。",
+      "bestFor": ["想嘗試靜態照片多種藝術風格的一般使用者", "取得照片人物許可後，想體驗獨立雙照片靜態換臉流程的使用者"],
+      "notIdealFor": ["需要精確修圖或保證身分特徵不變的生產工作", "需要 GIF/影片換臉、可選多臉編輯或穩定服務容量的使用者"],
+      "limitations": ["目前只有靜態圖片工具；GIF 換臉、可選多臉換臉和影片換臉明確屬計畫/考慮功能，尚未上線", "換臉頁面針對每張照片各一人；生成結果和肖像相似度可能變動", "免費使用受每 IP 每小時 10 次嘗試限制且受容量影響", "照片會傳送至 Replicate；公開的一小時臨時儲存期限不代表所有供應商系統均保證刪除", "已檢視的公開頁面未說明法律營運實體；本站未實測帳戶或生成"],
+      "compareAxes": ["風格選項與原圖細節保留", "單照片風格轉換與獨立雙照片靜態換臉", "每小時免費限額與服務可用性", "上傳臨時處理、供應商資料處理與肖像同意要求"],
+      "pricingSummary": "公開條款稱初期版本免費且免註冊，每個 IP 位址每小時最多 10 次生成嘗試，並受容量影響；未描述付費訂閱。"
+    }
+  },
+  "claimGate": { "status": "PASS", "items": [
+    { "key": "identity", "status": "verified_public", "boundary": "Pixform service identity and root canonical are established by the official home/About pages; public material reviewed does not identify a legal operating entity.", "sourceIds": ["home", "about"], "nextReviewDate": "2026-11-07" },
+    { "key": "image_to_image", "status": "verified_public", "boundary": "Official pages describe six-style still-image transformation. Output quality, likeness and detail preservation were not tested.", "sourceIds": ["home"], "nextReviewDate": "2026-11-07" },
+    { "key": "face_swap_boundary", "status": "verified_public", "boundary": "A separate official tool describes still-image face swap using two photos and one person in each. Do not conflate this with the image-to-image feature.", "sourceIds": ["face-swap"], "nextReviewDate": "2026-11-07" },
+    { "key": "roadmap_features", "status": "verified_public", "boundary": "Face Swap GIF, selectable multiple-face editing and Video Face Swap are marked planned/under consideration on the official page; current tools support still images only.", "sourceIds": ["face-swap"], "nextReviewDate": "2026-11-07" },
+    { "key": "pricing_and_limits", "status": "conditional", "boundary": "Terms describe free initial access, no account, and up to 10 attempts per IP per hour subject to capacity. No paid subscription is described; present availability and capacity were not tested.", "sourceIds": ["home", "terms"], "nextReviewDate": "2026-11-07" },
+    { "key": "privacy_and_retention", "status": "conditional", "boundary": "Policy says files become inaccessible one hour after processing and are removed on the next cleanup, unfinished jobs expire after two hours, and Replicate/Cloudflare process data under their own policies. This is not a universal provider deletion guarantee.", "sourceIds": ["privacy"], "nextReviewDate": "2026-11-07" },
+    { "key": "commercial_use", "status": "conditional", "boundary": "Terms condition commercial use on rights to the source image, applicable model licenses and third-party rights; no universal commercial-use guarantee is asserted.", "sourceIds": ["terms"], "nextReviewDate": "2026-11-07" }
+  ] }
+}

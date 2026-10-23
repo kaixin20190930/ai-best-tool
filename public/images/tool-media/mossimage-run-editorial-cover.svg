@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Independent image studio</title>
+  <desc id="desc">Abstract editorial composition of a prompt card, geometric image canvas and independent output cards.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101b2c"/><stop offset="1" stop-color="#293b4a"/></linearGradient>
+    <linearGradient id="art" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#f6a96b"/><stop offset="1" stop-color="#a7d6c4"/></linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="36" fill="url(#bg)"/>
+  <circle cx="1040" cy="120" r="115" fill="#e7d7a6" opacity=".12"/>
+  <rect x="84" y="88" width="330" height="499" rx="24" fill="#f6f4ed"/>
+  <rect x="119" y="126" width="258" height="18" rx="9" fill="#253447" opacity=".82"/>
+  <rect x="119" y="164" width="204" height="12" rx="6" fill="#829096"/>
+  <rect x="119" y="213" width="258" height="262" rx="16" fill="#e8ebe1"/>
+  <path d="M138 430c50-70 83-76 119-32 30-91 80-111 101-31v118H138z" fill="url(#art)"/>
+  <circle cx="290" cy="287" r="31" fill="#f8cc8a"/>
+  <rect x="119" y="505" width="150" height="12" rx="6" fill="#253447" opacity=".72"/>
+  <rect x="119" y="535" width="98" height="12" rx="6" fill="#829096"/>
+  <rect x="475" y="104" width="629" height="458" rx="30" fill="#f4f0e6"/>
+  <rect x="512" y="141" width="555" height="384" rx="20" fill="#d7e4dc"/>
+  <path d="M512 431c119-115 193-125 273-45 93-148 204-174 282-79v218H512z" fill="url(#art)"/>
+  <circle cx="905" cy="249" r="62" fill="#f7d59d"/>
+  <path d="M603 465c76-56 136-48 189 2m84-2c45-33 87-34 132 0" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity=".78"/>
+  <circle cx="1018" cy="178" r="12" fill="#fff" opacity=".9"/>
+  <rect x="765" y="583" width="160" height="8" rx="4" fill="#e9e3d3" opacity=".76"/>
+</svg>

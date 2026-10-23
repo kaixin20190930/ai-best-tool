@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Photo transformation workspace</title>
+  <desc id="desc">A neutral editorial diptych showing an original landscape and a painterly interpretation.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d2e5ee"/><stop offset="1" stop-color="#f7d8b5"/></linearGradient>
+    <linearGradient id="paint" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#d57f68"/><stop offset="1" stop-color="#697e9d"/></linearGradient>
+  </defs>
+  <rect width="1200" height="675" rx="36" fill="#f2efe8"/>
+  <rect x="74" y="78" width="500" height="519" rx="26" fill="#fff"/>
+  <rect x="626" y="78" width="500" height="519" rx="26" fill="#fff"/>
+  <rect x="102" y="112" width="444" height="430" rx="16" fill="url(#sky)"/>
+  <circle cx="443" cy="202" r="46" fill="#ffe6a9"/>
+  <path d="M102 397 232 276l113 99 102-145 99 115v197H102z" fill="#82999a"/>
+  <path d="m102 450 160-105 104 77 111-105 69 69v156H102z" fill="#526d70"/>
+  <path d="M208 542c12-89 57-132 103-132s91 43 103 132" fill="#d3a57b"/>
+  <circle cx="311" cy="392" r="38" fill="#d7a77d"/>
+  <path d="M273 391c8-50 67-65 83-11-27-8-54-5-83 11" fill="#38414b"/>
+  <rect x="654" y="112" width="444" height="430" rx="16" fill="url(#sky)"/>
+  <circle cx="988" cy="204" r="50" fill="#f6c983"/>
+  <path d="m654 404 143-126 102 101 106-153 93 119v197H654z" fill="url(#paint)"/>
+  <path d="m654 455 150-99 111 79 109-115 74 62v160H654z" fill="#4e6d78"/>
+  <path d="M753 542c16-94 59-133 105-133s90 39 105 133" fill="#d18c6e"/>
+  <circle cx="858" cy="394" r="39" fill="#e4ac7e"/>
+  <path d="M818 393c8-50 69-67 87-9-28-12-57-7-87 9" fill="#3b4652"/>
+  <path d="M588 337h24m-9-10 10 10-10 10" fill="none" stroke="#506577" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="241" y="567" width="165" height="9" rx="4.5" fill="#6e7d80" opacity=".6"/>
+  <rect x="793" y="567" width="165" height="9" rx="4.5" fill="#6e7d80" opacity=".6"/>
+</svg>

@@ -1,0 +1,65 @@
+{
+  "id": "58b332a6-f2c8-4268-af26-e14fdc26937b",
+  "name": "MossImage",
+  "officialUrl": "https://mossimage.run/",
+  "officialDomainGroup": { "canonicalProductDomain": "mossimage.run", "parentBrandDomains": [], "identitySourceIds": ["home", "terms"] },
+  "categorySlug": "design-art",
+  "cluster": { "role": "gap_filler" },
+  "officialSources": [
+    { "id": "home", "url": "https://mossimage.run/", "claimKeys": ["identity", "capabilities", "model_scope", "provider_boundary", "limitations", "model_editing_boundary"] },
+    { "id": "pricing", "url": "https://mossimage.run/pricing/", "claimKeys": ["pricing", "credits", "plan_limits"] },
+    { "id": "privacy", "url": "https://mossimage.run/privacy/", "claimKeys": ["privacy", "data_processing", "retention", "payments", "output_rights", "privacy_boundary"] },
+    { "id": "terms", "url": "https://mossimage.run/terms/", "claimKeys": ["identity", "operator", "terms", "output_boundary", "availability", "output_rights", "pricing"] }
+  ],
+  "entityGate": {
+    "status": "PASS",
+    "aiCoreCapability": { "status": "PASS", "sourceIds": ["home", "pricing"], "evidenceExcerpt": "The official studio describes browser-based image generation using MOSS-Image SFT, English and Chinese text, JSON layout controls, and a credit-based prompt-to-image workflow. Its guides also describe model exploration; the site does not establish that the MOSS-Image model itself edits uploaded photos." },
+    "identityCanonical": { "status": "PASS", "sourceIds": ["home", "terms"], "evidenceExcerpt": "The selected entity is the independent MOSS Image studio at mossimage.run, operated by Moxion Labs LLC per its Terms. The site says it is not affiliated with OpenMOSS or fal.ai. OpenMOSS MOSS-Image is a separate open-weight model family; fal.ai is a processing provider. Neither existing model tool nor provider is the canonical product being selected." },
+    "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Catalog-only production read-only check on 2026-10-24 found no tool or candidate at mossimage.run and no candidate for this studio identity. It did find the existing OpenMOSS MOSS-Image model tool 96ea73cc-904d-46bc-8206-78d905b4d521 and its imported candidate 0402f14b-539f-4477-9f2c-253a5723441f at github.com/OpenMOSS/MOSS-Image. Those IDs are deliberately preserved: model weights/repository and the independent hosted multi-model studio are distinct entities, and no overwrite, merge, alias or redirect is proposed. Exact name/title/canonical enqueue preflight remains authoritative." }
+  },
+  "reviewedAt": "2026-10-23",
+  "nextReviewDate": "2026-11-07",
+  "media": { "mode": "platform_owned_editorial", "assetPath": "/images/tool-media/mossimage-run-editorial-cover.svg", "sha256": "454ce93d37c50279482696428caa692e8ceb007ff2f03c02991b543fbb1f7eca", "creator": "AI Best Tool editorial", "createdAt": "2026-10-23", "noVendorMarks": true },
+  "pricing": "freemium",
+  "tags": ["AI image generator", "text to image", "JSON layout", "Chinese text rendering", "hosted image generation", "image editing workflow"],
+  "localized": {
+    "en": {
+      "title": "MossImage: independent hosted image studio",
+      "summary": "MossImage is an independent browser-based image studio with MOSS-Image generation, JSON layout controls and other image models. Its published plans use credits; exact account access and current availability were not tested.",
+      "detail": "MossImage at mossimage.run is a hosted creative studio operated by Moxion Labs LLC according to its Terms of Use. It is not affiliated with OpenMOSS or fal.ai. The separate OpenMOSS MOSS-Image project is an open-weight model family; this listing describes the studio product, not that repository or model as a duplicate tool. The studio says it runs MOSS-Image-SFT through fal.ai and offers other providers' image models and editing workflows. Its home page describes text-to-image generation, English and Chinese lettering, JSON layout control and prompt-led creation. These are vendor-described capabilities; we did not test model quality, editing fidelity, provider routing, service availability or outputs. Do not infer that the MOSS-Image model edits photos: the site distinguishes its hosted editing models from MOSS-Image generation.\n\nThe public pricing page lists three starter images, a one-time pack of 30 images for USD 9.99, a monthly plan at USD 14.99 for 80 images, and an annual plan at USD 119 for 800 images. It says taxes may apply and monthly credits may roll over once, subject to a stated cap. Prices and plan terms can change; checkout, region, account eligibility and actual credit use were not tested.\n\nThe privacy page says prompts and settings are sent to fal.ai and generated files are hosted by that provider; the studio keeps short-lived result links rather than a permanent image library. Stripe processes checkout and billing, while the studio retains account, quota, purchase and operational records. Provider retention practices and deletion timing are not established by the studio policy. Avoid sensitive uploads unless the applicable provider terms meet your requirements.\n\nBest for creators who want a browser workflow combining text-to-image, layout guidance and access to several hosted models. Not ideal for teams requiring self-hosted inference, guaranteed output fidelity, provider-independent retention or account-specific cost guarantees. Compare with OpenMOSS MOSS-Image for self-hosted/open-weight control, and with hosted image studios on editing workflow, model choice, credit costs and data routing. The existing OpenMOSS model listing remains a separate entity; no Task Fit or Task Page is created by this selection.",
+      "bestFor": ["Creators who want a hosted browser workflow for image generation and layout-guided prompts", "Users comparing several image models and editing workflows from one studio"],
+      "notIdealFor": ["Teams requiring self-hosted inference or provider-independent data retention", "Users who need guaranteed text, packaging or image-edit fidelity"],
+      "limitations": ["MOSS-Image is described as a generation model; the studio's editing uses other hosted models", "Generation quality, image fidelity, routing, regional availability and account access were not independently tested", "Prompts/settings go to fal.ai and generated files are hosted by that provider under its own policies", "Published USD prices and credit counts may change; checkout, taxes and account-specific entitlements were not checked"],
+      "compareAxes": ["Hosted multi-model workflow versus OpenMOSS MOSS-Image local/open-weight setup", "Prompt-to-image layout controls versus uploaded-image editing", "Published credit prices versus actual model-specific consumption", "Provider routing, retention disclosures and control over sensitive uploads"],
+      "pricingSummary": "The public page lists free starter images, a USD 9.99 one-time pack, USD 14.99 monthly and USD 119 annual plans. Taxes may apply; account, checkout and regional terms were not verified."
+    },
+    "cn": {
+      "title": "MossImage：独立托管式图像创作工作室",
+      "summary": "MossImage 是独立的浏览器图像工作室，提供 MOSS-Image 生成、JSON 布局控制和其他图像模型。公开方案按 credits 计费；本站未测试账户权益或当前可用性。",
+      "detail": "MossImage 位于 mossimage.run。其服务条款称运营方为 Moxion Labs LLC，并说明它与 OpenMOSS、fal.ai 均无关联。OpenMOSS 的 MOSS-Image 是独立开放权重模型系列；本条目描述的是工作室产品，不是该模型或仓库的重复工具。该工作室称通过 fal.ai 运行 MOSS-Image-SFT，并提供其他供应商的图像模型和编辑流程。官网介绍文生图、中英文文字、JSON 布局控制及提示词创作。这些是厂商描述；本站未测试模型质量、编辑保真度、供应商路由、服务可用性或生成结果。不要推断 MOSS-Image 模型能编辑照片：官网区分了托管编辑模型与 MOSS-Image 生成。\n\n公开价格页列出 3 张入门图片、一次性 30 张图片包（USD 9.99）、每月 80 张（USD 14.99）和每年 800 张（USD 119）。页面称可能另加税，月度 credits 可按说明结转一次并受上限约束。价格和方案可能变化；本站未测试结账、地区、账户资格或实际 credits 消耗。\n\n隐私页称提示词和设置会发送至 fal.ai 处理，生成文件由该供应商托管；工作室保留短期结果链接，而非永久图库。Stripe 处理结账和账单，工作室另保存账户、额度、购买和必要运营记录。工作室政策未确定供应商留存规则及删除时点。若供应商条款不符合要求，请勿上传敏感内容。\n\n适合希望在一个托管工作流中使用文生图、布局引导和多种模型的创作者。不适合要求自托管推理、保证输出保真度、供应商独立留存或账户级成本保证的团队。可与 OpenMOSS MOSS-Image 比较本地开放权重控制，也可与其他托管图像工作室比较编辑流程、模型选择、credits 成本和数据路由。现有 OpenMOSS 模型条目保持独立；本选择不创建 Task Fit 或 Task Page。",
+      "bestFor": ["需要托管式图像生成和布局提示工作流的创作者", "希望在一个工作室中比较多种图像模型及编辑流程的用户"],
+      "notIdealFor": ["要求自托管推理或不经模型供应商处理数据的团队", "要求文字、商品包装或图像编辑结果必须准确保真的用户"],
+      "limitations": ["MOSS-Image 被描述为生成模型；工作室的编辑功能使用其他托管模型", "本站未独立测试生成质量、图像保真度、路由、地区可用性或账户访问", "提示词/设置会发送至 fal.ai，生成文件由该供应商按其政策托管", "公开美元价格与 credits 数可能变化；未核实结账、税费和账户权益"],
+      "compareAxes": ["托管多模型工作流与 OpenMOSS MOSS-Image 本地/开放权重部署", "提示词文生图布局控制与上传图片编辑", "公开 credits 价格与模型实际消耗", "供应商路由、留存说明及敏感图像控制"],
+      "pricingSummary": "公开页面列有免费入门图片、USD 9.99 一次性包、USD 14.99 月付和 USD 119 年付。可能另加税；未核实账户、结账或地区条件。"
+    },
+    "tw": {
+      "title": "MossImage：獨立託管式影像創作工作室",
+      "summary": "MossImage 是獨立的瀏覽器影像工作室，提供 MOSS-Image 生成、JSON 版面控制及其他影像模型。公開方案採 credits 計費；本站未測試帳戶權益或目前可用性。",
+      "detail": "MossImage 位於 mossimage.run。其服務條款稱營運方為 Moxion Labs LLC，並說明它與 OpenMOSS、fal.ai 均無關聯。OpenMOSS 的 MOSS-Image 是獨立開放權重模型系列；本項目描述的是工作室產品，不是該模型或儲存庫的重複工具。工作室稱透過 fal.ai 執行 MOSS-Image-SFT，並提供其他供應商的影像模型與編輯流程。官網介紹文字生圖、中英文文字、JSON 版面控制及提示詞創作。這些是廠商描述；本站未測試模型品質、編輯保真度、供應商路由、服務可用性或生成結果。不要推定 MOSS-Image 模型能編輯照片：官網區分託管編輯模型與 MOSS-Image 生成。\n\n公開價格頁列出 3 張入門圖片、一次性 30 張圖片包（USD 9.99）、每月 80 張（USD 14.99）及每年 800 張（USD 119）。頁面表示可能另加稅，月度 credits 可依說明結轉一次並受上限限制。價格與方案可能變動；本站未測試結帳、地區、帳戶資格或實際 credits 消耗。\n\n隱私頁稱提示詞與設定會傳送至 fal.ai 處理，生成檔案由該供應商託管；工作室保留短期結果連結，而非永久圖庫。Stripe 處理結帳與帳單，工作室另保存帳戶、額度、購買及必要營運紀錄。工作室政策未確定供應商保存規則與刪除時點。若供應商條款不符合需求，請勿上傳敏感內容。\n\n適合希望在單一託管流程中使用文字生圖、版面引導與多種模型的創作者。不適合要求自行託管推論、保證輸出保真度、供應商獨立保存或帳戶級成本保證的團隊。可與 OpenMOSS MOSS-Image 比較本機開放權重控制，也可與其他託管影像工作室比較編輯流程、模型選擇、credits 成本與資料路由。既有 OpenMOSS 模型項目維持獨立；本選擇不建立 Task Fit 或 Task Page。",
+      "bestFor": ["需要託管式影像生成與版面提示流程的創作者", "希望在同一工作室比較多種影像模型與編輯流程的使用者"],
+      "notIdealFor": ["要求自行託管推論或資料不經模型供應商處理的團隊", "要求文字、商品包裝或影像編輯結果必須準確保真的使用者"],
+      "limitations": ["MOSS-Image 被描述為生成模型；工作室編輯功能使用其他託管模型", "本站未獨立測試生成品質、影像保真度、路由、地區可用性或帳戶存取", "提示詞/設定會傳送至 fal.ai，生成檔案由該供應商依其政策託管", "公開美元價格與 credits 數可能變動；未核實結帳、稅費與帳戶權益"],
+      "compareAxes": ["託管多模型流程與 OpenMOSS MOSS-Image 本機/開放權重部署", "提示詞文字生圖版面控制與上傳影像編輯", "公開 credits 價格與模型實際消耗", "供應商路由、保存說明及敏感影像控制"],
+      "pricingSummary": "公開頁面列有免費入門圖片、USD 9.99 一次性包、USD 14.99 月付及 USD 119 年付。可能另加稅；未核實帳戶、結帳或地區條件。"
+    }
+  },
+  "claimGate": { "status": "PASS", "items": [
+    { "key": "identity", "status": "verified_public", "boundary": "Selected entity is the independent mossimage.run studio, operated by Moxion Labs LLC per its terms. It is distinct from the OpenMOSS MOSS-Image model/tool and from fal.ai, which the site identifies as a processing provider.", "sourceIds": ["home", "terms"], "nextReviewDate": "2026-11-07" },
+    { "key": "capabilities", "status": "verified_public", "boundary": "Text-to-image, MOSS-Image-SFT access, JSON layout and other hosted models are site-described; no independent quality or reliability claim is made.", "sourceIds": ["home"], "nextReviewDate": "2026-11-07" },
+    { "key": "model_editing_boundary", "status": "verified_public", "boundary": "The site distinguishes MOSS-Image generation from editing performed with other hosted models. Do not attribute image editing to the OpenMOSS model.", "sourceIds": ["home"], "nextReviewDate": "2026-11-07" },
+    { "key": "pricing", "status": "conditional", "boundary": "Public pricing page lists USD prices and image-credit quantities; checkout, taxes, account eligibility, regional terms and current availability were not tested.", "sourceIds": ["pricing", "terms"], "nextReviewDate": "2026-11-07" },
+    { "key": "privacy_boundary", "status": "conditional", "boundary": "Policy says prompts/settings go to fal.ai, outputs are provider-hosted, and Stripe processes billing. Provider retention/deletion timing is not established by this site policy; avoid sensitive inputs pending review of provider terms.", "sourceIds": ["privacy"], "nextReviewDate": "2026-11-07" },
+    { "key": "output_rights", "status": "unknown", "boundary": "No blanket commercial-use, ownership or output exclusivity claim is made in this selection; verify applicable terms and provider/model licenses before commercial use.", "sourceIds": ["terms", "privacy"], "nextReviewDate": "2026-11-07" }
+  ] }
+}
