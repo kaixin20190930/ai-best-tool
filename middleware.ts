@@ -194,6 +194,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(redirectUrl, 308);
   }
 
+  if (
+    (request.method === 'GET' || request.method === 'HEAD') &&
+    [
+      '/guides/ai-automation-tools-comparison',
+      '/guides/n8n-alternatives-comparison',
+      '/guides/make-alternatives-comparison',
+    ].includes(pathWithoutLocale)
+  ) {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = getLocalizedPath(pathname, '/guides/ai-tools-for-automation-comparison');
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+
   // next-intl rewrites the bare /tasks path to its default English locale.
   // Close unapproved Task paths before the locale loading boundary can stream.
   if (request.method === 'GET' || request.method === 'HEAD') {

@@ -15,15 +15,15 @@ type LocalizedToolDecisionMetadata = {
 const TOOL_DECISION_METADATA_PILOTS: Record<string, LocalizedToolDecisionMetadata> = {
   n8n: {
     en: {
-      title: 'n8n for AI Workflow Automation: Costs & Limits',
+      title: 'n8n Workflow Automation: Pricing, Self-Hosting & vs Make',
       description:
-        'Assess n8n for visual AI and API workflows. Compare cloud versus self-hosting, execution costs, governance, license limits, and maintenance trade-offs.',
+        'Evaluate n8n Cloud vs self-hosting, execution pricing, AI workflows, and license limits. See when Make or Lindy fits better.',
       primaryTask: 'Build maintainable AI and API automations',
       decisionAngle: 'Cloud convenience versus self-hosting control and maintenance',
     },
     cn: {
-      title: 'n8n AI 工作流自动化：成本、自托管与限制',
-      description: '判断 n8n 是否适合可视化 AI 与 API 工作流，比较云端和自托管、执行成本、治理、许可证边界与维护责任。',
+      title: 'n8n 工作流自动化：价格、自托管与 Make 对比',
+      description: '比较 n8n Cloud、自托管、execution 计费和许可证限制，并看 Make 与 Lindy 何时更适合。',
       primaryTask: '构建可维护的 AI 与 API 自动化流程',
       decisionAngle: '比较云端便利性与自托管控制、维护成本',
     },

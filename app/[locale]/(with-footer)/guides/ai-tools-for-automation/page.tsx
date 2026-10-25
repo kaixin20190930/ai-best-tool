@@ -86,8 +86,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
     },
     {
       href: '/guides/ai-tools-for-automation-comparison',
-      title: isChinese ? '自动化对比页' : 'Automation comparison',
-      desc: isChinese ? '触发器、编排和长期维护。' : 'Triggers, orchestration, and long-term maintenance.',
+      title: isChinese ? 'n8n vs Make vs Lindy' : 'n8n vs Make vs Lindy',
+      desc: isChinese ? '对照部署、AI 任务、成本和人工确认。' : 'Compare deployment, AI work, cost, and human review.',
     },
     {
       href: '/ai/n8n',
@@ -199,26 +199,26 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                 : 'Operational ownership, run limits, and complex-flow debugging cost.',
             },
             {
-              task: isChinese ? 'API 驱动的开发者工作流' : 'API-driven developer workflows',
-              toolName: 'pipedream',
-              toolLabel: 'Pipedream',
+              task: isChinese ? '跨 SaaS 的可视化 Scenario' : 'Visual cross-SaaS scenarios',
+              toolName: 'make',
+              toolLabel: 'Make',
               bestFor: isChinese
-                ? '需要快速连接 API、事件和代码步骤。'
-                : 'Fast API, event, and code-step integrations.',
+                ? '运营团队串联确定的触发、分支与应用操作。'
+                : 'Operations teams linking defined triggers, branches, and app actions.',
               verifyFirst: isChinese
-                ? '计费单位、日志保留和生产错误恢复。'
-                : 'Billing units, log retention, and production recovery.',
+                ? '运行级 credits、AI 模型费用与数据区域。'
+                : 'Run-level credits, AI provider charges, and data region.',
             },
             {
-              task: isChinese ? '业务团队低代码自动化' : 'Low-code automation for business teams',
-              toolName: 'zapier',
-              toolLabel: 'Zapier',
+              task: isChinese ? '向 AI 队友委派开放式任务' : 'Delegate open-ended work to an AI teammate',
+              toolName: 'lindy',
+              toolLabel: 'Lindy',
               bestFor: isChinese
-                ? '常见 SaaS 连接和非技术成员快速上手。'
-                : 'Common SaaS integrations and fast non-technical adoption.',
+                ? '跨工具研究、跟进和协作任务，团队愿意审核结果。'
+                : 'Cross-tool research and follow-up with team review.',
               verifyFirst: isChinese
-                ? '高频任务成本、复杂分支和权限治理。'
-                : 'High-volume cost, complex branching, and permission governance.',
+                ? '共享 credits 消耗、暂停条件和实际动作权限。'
+                : 'Shared credit use, pause conditions, and action permissions.',
             },
           ]}
         />

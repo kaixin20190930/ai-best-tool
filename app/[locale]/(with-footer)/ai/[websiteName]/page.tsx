@@ -3365,6 +3365,15 @@ export default async function Page({
                     decisionCardV2?.reviewedAt || decisionCard.reviewSchedule.lastCheckedAt ? aboveFoldReviewedAt : null
                   }
                 >
+                  {['n8n', 'make', 'lindy'].includes(canonicalSlug) && (
+                    <a
+                      data-automation-comparison-link
+                      href={`/${locale}/guides/ai-tools-for-automation-comparison`}
+                      className='inline-flex rounded-lg bg-cyan-800 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-900'
+                    >
+                      {isChinese ? '对比 n8n、Make 与 Lindy' : 'Compare n8n, Make, and Lindy'}
+                    </a>
+                  )}
                   {priorityOfficialEvidence && (
                     <section
                       data-official-evidence='true'

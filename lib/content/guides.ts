@@ -724,38 +724,12 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     priority: 0.76,
     changeFrequency: 'weekly',
     title: {
-      cn: 'AI 自动化工具对比',
-      en: 'AI tools for automation comparison',
+      cn: 'n8n vs Make vs Lindy',
+      en: 'n8n vs Make vs Lindy',
     },
     desc: {
-      cn: '把常见自动化工具放在一起快速对照。',
-      en: 'Compare common automation tools side by side.',
-    },
-  },
-  {
-    href: '/guides/ai-automation-tools-comparison',
-    priority: 0.76,
-    changeFrequency: 'weekly',
-    title: {
-      cn: 'AI 自动化工具对比',
-      en: 'AI automation tools comparison',
-    },
-    desc: {
-      cn: '把常见自动化工具放在一起快速对照。',
-      en: 'Compare common automation tools side by side.',
-    },
-  },
-  {
-    href: '/guides/n8n-alternatives-comparison',
-    priority: 0.77,
-    changeFrequency: 'weekly',
-    title: {
-      cn: 'n8n 替代方案对比',
-      en: 'n8n alternatives comparison',
-    },
-    desc: {
-      cn: '把常见 n8n 替代项放在一起快速对照。',
-      en: 'Compare common n8n alternatives side by side.',
+      cn: '按部署、AI 任务、用量成本与人审要求选择。',
+      en: 'Choose by deployment, AI work, usage cost, and human review.',
     },
   },
   {
@@ -1679,19 +1653,6 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     desc: {
       cn: '把常见 Mailchimp 替代工具放在一起快速对照。',
       en: 'Compare common Mailchimp alternatives side by side.',
-    },
-  },
-  {
-    href: '/guides/make-alternatives-comparison',
-    priority: 0.76,
-    changeFrequency: 'weekly',
-    title: {
-      cn: 'Make 替代方案对比',
-      en: 'Make alternatives comparison',
-    },
-    desc: {
-      cn: '把常见 Make 替代工具放在一起快速对照。',
-      en: 'Compare common Make alternatives side by side.',
     },
   },
   {
