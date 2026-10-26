@@ -1,6 +1,8 @@
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 
+import { loadEnvConfig } from '@next/env';
+
 import {
   createGoogleSearchConsoleClient,
   createRefreshTokenAccessTokenProvider,
@@ -10,6 +12,8 @@ import {
   collectGscSearchAnalytics,
   renderGscSearchAnalyticsReport,
 } from '../lib/integrations/gsc-search-analytics-report';
+
+loadEnvConfig(process.cwd());
 
 function summaryOutputPath(argv: string[]): string | null {
   if (argv.length === 0) return null;
