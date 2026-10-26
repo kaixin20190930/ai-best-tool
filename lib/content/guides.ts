@@ -707,6 +707,19 @@ export const GUIDE_PAGES: GuidePageConfig[] = [
     },
   },
   {
+    href: '/guides/n8n-self-hosted-requirements',
+    priority: 0.8,
+    changeFrequency: 'monthly',
+    title: {
+      cn: 'n8n 自托管要求',
+      en: 'n8n self-hosted requirements',
+    },
+    desc: {
+      cn: '核对部署、数据库、凭证密钥、Webhook、安全和运维责任。',
+      en: 'Check deployment, database, credential-key, webhook, security, and operations ownership.',
+    },
+  },
+  {
     href: '/guides/ai-automation-tools',
     priority: 0.75,
     changeFrequency: 'monthly',
@@ -1906,6 +1919,7 @@ export const FEATURED_GUIDE_HREFS = [
   '/guides/ai-tools-for-agents',
   '/guides/ai-agent-tools',
   '/guides/ai-tools-for-automation',
+  '/guides/n8n-self-hosted-requirements',
   '/guides/ai-automation-tools',
   '/guides/ai-tools-for-agents-comparison',
   '/guides/ai-agent-tools-comparison',

@@ -63,6 +63,10 @@ export const STATIC_PAGE_EDITS: Record<string, ContentEditRecord> = {
     modifiedAt: '2026-09-09',
     evidence: '3e40bb5f: app/[locale]/(with-footer)/guides/ai-tools-for-automation/page.tsx',
   },
+  '/guides/n8n-self-hosted-requirements': {
+    modifiedAt: '2026-10-26',
+    evidence: 'SEO Product Architecture V3 Automation Cluster review using current official n8n hosting documentation.',
+  },
   '/guides/ai-tools-for-marketing': {
     modifiedAt: '2026-09-09',
     evidence: '3e40bb5f: app/[locale]/(with-footer)/guides/ai-tools-for-marketing/page.tsx',

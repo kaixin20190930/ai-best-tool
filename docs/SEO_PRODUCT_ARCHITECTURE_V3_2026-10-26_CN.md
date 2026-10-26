@@ -234,3 +234,11 @@ Catalog 日常收录继续运行，但候选必须服务 Cluster 或明确独立
 - `/best-ai-tools/free-ai-coding-tools`：完成跨品类 free 页面查重后，复用同一主题模板；首批只纳入具有官方持续免费入口的 GitHub Copilot 与 Cursor，不用其他未核验工具补数量。
 - Coding Guide：停止把不可用 comparison placeholder 当作主要下一步，改链到免费 Coding 决策页。
 - Claim 证据显示：本单只实现 E0 官方公开来源标签和“非账户实测/非性能基准”边界，不扩建通用证据系统。
+
+### 2026-10-26 Automation Cluster 实施状态
+
+- `/guides/n8n-self-hosted-requirements`：使用现有 Guide 路由与 SEO 能力交付，不新建页面引擎或数据表。
+- 内容范围：Docker/持久化、数据库、加密密钥、反向代理 Webhook、安全责任和 queue mode 扩展条件。
+- 证据边界：只使用 n8n 官方公开文档（E0），不把示例配置泛化为统一硬件最低规格，不声称账户实测、性能基准或真实总成本。
+- 内链：Automation Guide 与 `/ai/n8n` 进入该要求页；要求页回链 n8n Decision Card 和现有三工具比较页。
+- 验证预算：复用既有 n8n 页面测试，只做一次专项、TypeScript、最终 build、独立 QA 和部署后 smoke。

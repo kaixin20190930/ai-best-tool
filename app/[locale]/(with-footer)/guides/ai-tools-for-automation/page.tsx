@@ -85,9 +85,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       desc: isChinese ? '先看 shortlist，再进更细对比。' : 'Start with the shortlist before deeper comparison.',
     },
     {
-      href: '/guides/ai-tools-for-automation-comparison',
-      title: isChinese ? 'n8n vs Make vs Lindy' : 'n8n vs Make vs Lindy',
-      desc: isChinese ? '对照部署、AI 任务、成本和人工确认。' : 'Compare deployment, AI work, cost, and human review.',
+      href: '/guides/n8n-self-hosted-requirements',
+      title: isChinese ? 'n8n 自托管要求' : 'n8n self-hosted requirements',
+      desc: isChinese ? '核对部署、数据库、安全和运维责任。' : 'Check deployment, database, security, and operations ownership.',
     },
     {
       href: '/ai/n8n',
@@ -128,6 +128,18 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               ? '自动化工具的重点，不只是“能不能连起来”，而是能不能稳定跑、方便维护，并且在流程出错时可观察、可修复。'
               : 'Automation tools are not only about whether they connect steps. The real question is whether they run reliably, stay maintainable, and remain observable when something breaks.'}
           </p>
+          <div className='mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4'>
+            {quickStarts.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className='rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-cyan-50'
+              >
+                <p className='text-sm font-semibold text-slate-950'>{item.title}</p>
+                <p className='mt-2 text-sm leading-6 text-slate-600'>{item.desc}</p>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <section className='mt-8 grid gap-4 lg:grid-cols-[1fr_0.9fr]'>

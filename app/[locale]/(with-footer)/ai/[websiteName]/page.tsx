@@ -38,6 +38,7 @@ import { SEO_CONFIG, ToolMetadata } from '@/lib/seo/constants';
 import {
   buildLocalizedPageMetadata,
   generateLocalizedCanonicalUrl,
+  generateLocalizedPath,
   generateToolDescription,
   generateToolTitle,
 } from '@/lib/seo/metadata';
@@ -3229,9 +3230,13 @@ export default async function Page({
       prioritySearchIntent?.summary ||
       bestFitList[0] ||
       (isChinese ? `判断 ${data.title} 是否适合你的任务` : `Decide whether ${data.title} fits your task`);
+    let priorityEvidenceLimit: string | null = null;
+    if (priorityEvidence) {
+      priorityEvidenceLimit = isChinese ? priorityEvidence.limitation.zh : priorityEvidence.limitation.en;
+    }
     const aboveFoldLimit =
       decisionMetadataPilot?.decisionAngle ||
-      (priorityEvidence ? (isChinese ? priorityEvidence.limitation.zh : priorityEvidence.limitation.en) : null) ||
+      priorityEvidenceLimit ||
       decisionCard.audience.notIdealFor[0] ||
       decisionCard.risks[0] ||
       (isChinese
@@ -3366,13 +3371,24 @@ export default async function Page({
                   }
                 >
                   {['n8n', 'make', 'lindy'].includes(canonicalSlug) && (
-                    <a
-                      data-automation-comparison-link
-                      href={`/${locale}/guides/ai-tools-for-automation-comparison`}
-                      className='inline-flex rounded-lg bg-cyan-800 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-900'
-                    >
-                      {isChinese ? '对比 n8n、Make 与 Lindy' : 'Compare n8n, Make, and Lindy'}
-                    </a>
+                    <div className='flex flex-wrap gap-3'>
+                      {canonicalSlug === 'n8n' && (
+                        <NextLink
+                          data-n8n-self-hosted-guide-link
+                          href={generateLocalizedPath('/guides/n8n-self-hosted-requirements', locale)}
+                          className='inline-flex rounded-lg bg-cyan-800 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-900'
+                        >
+                          {isChinese ? '核对 n8n 自托管要求' : 'Check n8n self-hosted requirements'}
+                        </NextLink>
+                      )}
+                      <NextLink
+                        data-automation-comparison-link
+                        href={generateLocalizedPath('/guides/ai-tools-for-automation-comparison', locale)}
+                        className='inline-flex rounded-lg border border-cyan-200 bg-white px-5 py-3 text-sm font-semibold text-cyan-900 hover:bg-cyan-50'
+                      >
+                        {isChinese ? '对比 n8n、Make 与 Lindy' : 'Compare n8n, Make, and Lindy'}
+                      </NextLink>
+                    </div>
                   )}
                   {priorityOfficialEvidence && (
                     <section

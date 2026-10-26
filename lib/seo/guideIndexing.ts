@@ -16,6 +16,7 @@ export const INDEXABLE_GUIDE_PATHS = new Set([
   '/guides/ai-tools-for-research',
   '/guides/ai-tools-for-developers',
   '/guides/ai-tools-for-automation',
+  '/guides/n8n-self-hosted-requirements',
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-marketing',
   '/guides/ai-tools-for-sales',
