@@ -6,6 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 
 import sitemap from '../app/sitemap';
 import GuideEvidencePanel from '../components/guides/GuideEvidencePanel';
+import { getTopicDecisionProfile } from '../lib/content/topicDecisionProfiles';
 import { MIN_TOPIC_CANDIDATES, TOPIC_TOOL_NAMES } from '../lib/data/topicToolSources';
 import { getTopListTopic, topListTopics } from '../lib/data/topLists';
 import EDITORIALLY_APPROVED_CATEGORY_SITEMAP_SLUGS from '../lib/seo/categorySitemapApproval';
@@ -78,6 +79,12 @@ async function main() {
   assert.equal(selected.toolCount, 2, 'Count must come from eligible matches, not broad category counts.');
   assert.equal(selected.indexable, true);
   assert.equal(selected.category, null, 'Virtual topic must not pretend to be a database category.');
+  const reversedAutomationTools = selectTopicTools(automation, [tool('make'), tool('n8n')]);
+  assert.deepEqual(
+    reversedAutomationTools.tools.map((item) => item.name),
+    ['n8n', 'make'],
+    'Decision pages must preserve the reviewed roster instead of directory popularity order.',
+  );
 
   for (const changes of [
     { title: {} },
@@ -150,6 +157,10 @@ async function main() {
   assert.deepEqual(TOPIC_TOOL_NAMES['ai-meeting-notes-tools'], ['otter-ai', 'fathom']);
   assert.deepEqual(TOPIC_TOOL_NAMES['ai-student-tools'], ['notebooklm', 'consensus', 'gemini']);
   assert.deepEqual(TOPIC_TOOL_NAMES['ai-lead-generation-tools'], []);
+  assert.deepEqual(TOPIC_TOOL_NAMES['free-ai-coding-tools'], ['github-copilot', 'cursor']);
+  const freeCodingProfile = getTopicDecisionProfile('free-ai-coding-tools');
+  assert.equal(freeCodingProfile?.evidence.length, 2);
+  assert(freeCodingProfile?.evidence.every((item) => item.level === 'E0'));
   const unregistered = { ...automation, key: 'unregistered-topic' } as typeof automation;
   assert.equal(selectTopicTools(unregistered, fixtureTools).toolCount, 0);
 
@@ -276,7 +287,13 @@ async function main() {
     }
   }
   const sitemapTopicEntries = entries.filter((entry) => /\/best-ai-tools\/[^/]+$/.test(new URL(entry.url).pathname));
-  assert.equal(sitemapTopicEntries.length, 19 * 2, 'All 19 existing approved topic routes must remain in the sitemap.');
+  const expectedTopicEntries =
+    topListTopics.filter((topic) => TOPIC_TOOL_NAMES[topic.key].length >= MIN_TOPIC_CANDIDATES).length * 2;
+  assert.equal(
+    sitemapTopicEntries.length,
+    expectedTopicEntries,
+    'Every eligible topic route must remain in the sitemap.',
+  );
   const statics = entries.filter((entry) => !/\/(ai|categories)\//.test(new URL(entry.url).pathname));
   for (const entry of statics) {
     const path = new URL(entry.url).pathname.replace(/^\/cn(?=\/|$)/, '') || '/';

@@ -31,11 +31,11 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
   const isChinese = locale === 'cn' || locale === 'tw';
   const title = isChinese
-    ? 'AI 工具目录：按场景比较精选 AI 工具 | AI Best Tool'
-    : 'AI Tools Directory: Compare Curated AI Tools | AI Best Tool';
+    ? '按任务、价格与限制比较 AI 工具（2026）| AI Best Tool'
+    : 'Compare AI Tools by Task, Price & Limits (2026) | AI Best Tool';
   const description = isChinese
-    ? '按写作、研究、开发、自动化和 Web3 等真实场景浏览 AI 工具，通过来源、价格、限制、核查日期与变化记录判断哪款更适合。'
-    : 'Browse an AI tools directory by real use case, then compare sources, pricing, limits, review dates, and material changes before choosing.';
+    ? '按真实任务比较 AI 工具的价格、限制、适用场景和可追溯证据，缩小候选并找到下一步该核对什么。'
+    : 'Compare AI tools by real task, pricing, limits, fit, and traceable evidence so you can narrow the shortlist and know what to verify next.';
   return buildLocalizedPageMetadata({
     locale,
     path: '/',
@@ -73,8 +73,8 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const latestRows = latestTools?.data.map((tool) => toolToListRow(tool, locale)) || [];
   const totalVisibleTools = latestTools?.total;
   const heroTitle = isChinese
-    ? '用证据、限制和真实变化比较 AI 工具'
-    : 'Compare AI tools with evidence, limits, and real changes';
+    ? '用证据、限制和横向比较选对 AI 工具'
+    : 'Choose the right AI tool with evidence, limits, and side-by-side comparisons';
   const heroSubtitle = isChinese
     ? '先确认要解决的任务，再查看官方来源、适用边界、最后核查和下一步比较。这里不替所有人选唯一第一名，而是帮助你排除不合适的选择。'
     : 'Start with the task, then inspect official sources, fit boundaries, last-checked dates, and what to compare next. We help you rule out poor fits rather than name one winner for everyone.';
@@ -148,6 +148,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   const priorityTopListKeys = [
     'ai-coding-tools',
+    'free-ai-coding-tools',
     'ai-agent-tools',
     'ai-chatbot-tools',
     'ai-image-tools',
@@ -186,7 +187,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               <div className='mb-4 flex flex-wrap gap-2'>
                 <span className='inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700'>
                   <Sparkles className='size-4' />
-                  {isChinese ? 'AI 工具目录' : 'AI tools directory'}
+                  {isChinese ? 'AI 工具决策平台' : 'AI tool decision platform'}
                 </span>
                 <span className='inline-flex items-center gap-2 rounded-full bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-700'>
                   <BadgeCheck className='size-4' />

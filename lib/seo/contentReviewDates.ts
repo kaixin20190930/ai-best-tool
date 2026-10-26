@@ -19,9 +19,11 @@ export const EDITORIAL_REVIEW_RECORDS: Record<EditorialReviewKey, EditorialRevie
     evidence: 'CTR-DIFF-05 core-entry review recorded in docs/CTR_DIFFERENTIATION_REVIEW_2026-09-09_CN.md.',
   },
   'best-topic-template': {
-    reviewedAt: '2026-09-09',
-    scope: 'Shared Best topic template, ranking explanation, tool eligibility, decision path, and user-facing copy.',
-    evidence: 'CTR-DIFF-05 template review; this date does not claim that every listed tool fact was reverified.',
+    reviewedAt: '2026-10-26',
+    scope:
+      'Shared Best topic template, task eligibility, decision criteria, claim-level evidence boundary, and user-facing copy.',
+    evidence:
+      'SEO Product Architecture V3 first implementation unit; this date does not claim that every listed tool fact was reverified.',
   },
 };
 

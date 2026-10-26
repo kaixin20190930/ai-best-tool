@@ -5,7 +5,10 @@ type ContentEditRecord = { modifiedAt: string; evidence: string };
 // Checked-in edit dates, not build timestamps. Update the record when the page
 // changes; the baseline entries cite the last source edit at f29b7dc3.
 export const STATIC_PAGE_EDITS: Record<string, ContentEditRecord> = {
-  '/': { modifiedAt: '2026-09-09', evidence: '3e40bb5f: app/[locale]/(with-footer)/(home)/page.tsx' },
+  '/': {
+    modifiedAt: '2026-10-26',
+    evidence: 'SEO Product Architecture V3 homepage positioning and decision-first metadata review.',
+  },
   '/guides': { modifiedAt: '2026-09-02', evidence: 'e05d25ea: app/[locale]/(with-footer)/guides/page.tsx' },
   '/guides/how-to-choose-ai-tools': {
     modifiedAt: '2026-08-31',

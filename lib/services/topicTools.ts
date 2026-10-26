@@ -25,11 +25,13 @@ export function isEligibleTopicTool(tool: Tool): boolean {
 export function selectTopicTools(topic: TopListTopicConfig, tools: Tool[]) {
   const names = TOPIC_TOOL_NAMES[topic.key] || []; // Fail closed for unregistered runtime keys.
   const seen = new Set<string>();
-  const candidates = tools.filter((tool) => {
-    const matches = names.includes(tool.name);
-    if (!matches || !isEligibleTopicTool(tool) || seen.has(tool.id)) return false;
+  // Topic pages are editorial decision surfaces. Preserve the reviewed roster
+  // order instead of inheriting directory popularity or sponsored priority.
+  const candidates = names.flatMap((name) => {
+    const tool = tools.find((item) => item.name === name && isEligibleTopicTool(item) && !seen.has(item.id));
+    if (!tool) return [];
     seen.add(tool.id);
-    return true;
+    return [tool];
   });
   return {
     category: null,

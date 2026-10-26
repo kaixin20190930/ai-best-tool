@@ -9,10 +9,11 @@ const footerPath = path.join(process.cwd(), 'components', 'home', 'Footer.tsx');
 const footerSource = fs.readFileSync(footerPath, 'utf8');
 
 const requiredSignals = [
-  'AI 工具目录：按场景比较精选 AI 工具 | AI Best Tool',
-  'AI Tools Directory: Compare Curated AI Tools | AI Best Tool',
-  '用证据、限制和真实变化比较 AI 工具',
-  'Compare AI tools with evidence, limits, and real changes',
+  '按任务、价格与限制比较 AI 工具（2026）| AI Best Tool',
+  'Compare AI Tools by Task, Price & Limits (2026) | AI Best Tool',
+  '用证据、限制和横向比较选对 AI 工具',
+  'Choose the right AI tool with evidence, limits, and side-by-side comparisons',
+  'AI tool decision platform',
   'Sources + limits',
   'Sources + dates',
   'generateWebSiteSchema',
@@ -61,4 +62,6 @@ if (latestInventoryIndex === -1 || source.includes("href='/submit'") || source.i
 }
 if (!footerSource.includes("'/developer/listing'")) throw new Error('Owner entry must remain available in the footer.');
 
-console.log('✅ Homepage positioning passed: directory topic, evidence method, and commercial boundary are intact.');
+console.log(
+  '✅ Homepage positioning passed: decision-platform topic, evidence method, and commercial boundary are intact.',
+);

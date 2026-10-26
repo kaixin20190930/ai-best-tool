@@ -89,9 +89,9 @@ export default async function Page({ params: { locale } }: { params: { locale: s
       desc: isChinese ? '先看 editor-native shortlist。' : 'Start with the editor-native shortlist.',
     },
     {
-      href: '/guides/ai-coding-tools-comparison',
-      title: isChinese ? '编程对比页' : 'Coding comparison',
-      desc: isChinese ? '编辑器、补全和重构工作流。' : 'Compare editor, completion, and refactoring workflows.',
+      href: '/best-ai-tools/free-ai-coding-tools',
+      title: isChinese ? '免费编程工具' : 'Free coding tools',
+      desc: isChinese ? '核对免费层、额度和升级边界。' : 'Compare free tiers, limits, and upgrade boundaries.',
     },
     {
       href: '/ai/cursor',

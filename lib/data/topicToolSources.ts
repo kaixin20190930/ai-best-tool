@@ -14,6 +14,8 @@ export const TOPIC_TOOL_NAMES: Record<TopListTopicKey, readonly string[]> = {
   // General conversational assistants; meeting transcription is a different task.
   'ai-chatbot-tools': ['claude', 'gemini', 'poe'],
   'ai-coding-tools': ['cursor', 'codex', 'github-copilot', 'replit', 'emdash'],
+  // Both products have an official recurring free entry point. Exact quotas remain source-dated claims.
+  'free-ai-coding-tools': ['github-copilot', 'cursor'],
   'ai-code-review-tools': ['github-copilot', 'codex', 'cursor'],
   // Written scripts, visual documents, and presenter-led business content.
   'ai-content-creation-tools': ['claude', 'gamma', 'synthesia'],

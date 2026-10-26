@@ -5,6 +5,7 @@ import { CheckCircle2, Star } from 'lucide-react';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
 import { getPublicToolSummary } from '@/lib/content/publicToolScope';
+import { getTopicDecisionProfile } from '@/lib/content/topicDecisionProfiles';
 import { getTopListTopic } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { getEditorialReviewRecord } from '@/lib/seo/contentReviewDates';
@@ -43,7 +44,9 @@ export async function generateMetadata({
     const topic = getTopListTopic(params.topic);
     const isChinese = params.locale === 'cn' || params.locale === 'tw';
     const topicData = topic ? (await getTopicCatalog()).topics.get(topic.key) : null;
-    const title = topic?.title || (isChinese ? 'AI 工具榜单' : 'Best AI tools');
+    const decisionProfile = topic ? getTopicDecisionProfile(topic.key) : null;
+    const title =
+      decisionProfile?.title[isChinese ? 'cn' : 'en'] || topic?.title || (isChinese ? 'AI 工具榜单' : 'Best AI tools');
     let description = topic?.description;
     if (topic?.key === 'ai-automation-tools') {
       description = isChinese
@@ -61,10 +64,8 @@ export async function generateMetadata({
       description = isChinese
         ? 'AI Web3 工具榜单，覆盖链上数据、钱包监控、协议研究、告警和 Crypto 工作流。'
         : 'AI Web3 tools ranking for on-chain data, wallet monitoring, protocol research, alerts, and crypto workflows.';
-    } else if (topic?.key === 'ai-coding-tools') {
-      description = isChinese
-        ? 'AI 编程工具榜单，覆盖编码辅助、调试、重构、编辑器体验和开发工作流。'
-        : 'AI coding tools ranking for coding assistance, debugging, refactoring, editor experience, and development workflows.';
+    } else if (decisionProfile) {
+      description = decisionProfile.description[isChinese ? 'cn' : 'en'];
     } else if (!description) {
       description = isChinese
         ? '按用途整理的 AI 工具榜单，帮助你更快缩小候选。'
@@ -113,6 +114,10 @@ export default async function BestAiToolsTopicPage({
 
     const topicData = (await getTopicCatalog()).topics.get(topic.key)!;
     const { tools, toolCount } = topicData;
+    const language = isChinese ? 'cn' : 'en';
+    const decisionProfile = getTopicDecisionProfile(topic.key);
+    const displayTitle = decisionProfile?.title[language] || topic.title;
+    const displayDescription = decisionProfile?.description[language] || topic.description;
 
     const checkedAt = getEditorialReviewRecord('best-topic-template').reviewedAt;
     const checkedAtLabel = new Intl.DateTimeFormat(isChinese ? 'zh-CN' : 'en-US', {
@@ -123,18 +128,18 @@ export default async function BestAiToolsTopicPage({
 
     const faqs = [
       {
-        question: isChinese ? '这个榜单是怎么选出来的？' : 'How is this ranking selected?',
+        question: isChinese ? '这些候选是怎么选出来的？' : 'How is this shortlist selected?',
         answer: isChinese
-          ? '候选来自站内已发布工具，按主题用途筛选。顺序沿用目录的热门排序，可能包含推广优先项，并不代表独立测评得分。'
-          : 'Candidates are published directory tools selected for the topic. Order follows directory popularity, which can prioritize sponsored placements; it is not an independent review score.',
+          ? '候选来自站内已发布工具，按主题用途和已审核清单筛选。推广或付费状态不会改变这里的候选顺序，顺序也不代表性能评分。'
+          : 'Candidates are published tools selected by task fit and a reviewed roster. Sponsorship or payment does not change this order, and the order is not a performance score.',
       },
       {
         question: isChinese
-          ? '为什么要先看榜单，再看详情页？'
-          : 'Why start with a ranking before opening detail pages?',
+          ? '为什么要先看候选，再看详情页？'
+          : 'Why start with a shortlist before opening detail pages?',
         answer: isChinese
-          ? '榜单能先帮你缩小范围，详情页再帮你确认适合谁、哪里不适合、以及有哪些替代方案。'
-          : 'The ranking narrows the field first, then detail pages help confirm fit, trade-offs, and alternatives.',
+          ? '候选页先帮你缩小范围，详情页再帮你确认适合谁、哪里不适合、以及有哪些替代方案。'
+          : 'The shortlist narrows the field first, then detail pages help confirm fit, trade-offs, and alternatives.',
       },
       {
         question: isChinese ? '下一步通常该做什么？' : 'What is the usual next step?',
@@ -153,13 +158,13 @@ export default async function BestAiToolsTopicPage({
           items={[
             { name: isChinese ? '首页' : 'Home', path: '/' },
             { name: isChinese ? 'AI 工具榜单' : 'Best AI Tools', path: '/best-ai-tools' },
-            { name: topic.title, path: `/best-ai-tools/${topic.key}` },
+            { name: displayTitle, path: `/best-ai-tools/${topic.key}` },
           ]}
           className='mb-5'
         />
         <section className='rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8'>
-          <h1 className='text-3xl font-bold text-slate-950 lg:text-5xl'>{topic.title}</h1>
-          <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600'>{topic.description}</p>
+          <h1 className='text-3xl font-bold text-slate-950 lg:text-5xl'>{displayTitle}</h1>
+          <p className='mt-4 max-w-3xl text-base leading-7 text-slate-600'>{displayDescription}</p>
           <p className='mt-2 max-w-3xl text-sm leading-6 text-slate-600'>{topic.summary}</p>
           <p className='mt-3 text-sm text-slate-500'>
             {isChinese ? '匹配工具数' : 'Matching tools'}: {toolCount} ·{' '}
@@ -172,13 +177,68 @@ export default async function BestAiToolsTopicPage({
                 <p className='text-sm font-semibold text-slate-950'>{isChinese ? '筛选规则' : 'Selection rules'}</p>
                 <p className='mt-1 text-sm leading-6 text-slate-600'>
                   {isChinese
-                    ? '按主题用途筛选已发布工具，沿用目录热门排序（含推广优先项）；次序不是独立测评评分。'
-                    : 'Published tools are selected by use case, then use directory popularity order, including sponsored priority. Order is not an independent review score.'}
+                    ? '候选必须匹配此任务且通过公开实体门禁。卡片顺序不是性能评分；价格、额度和账户权益请以标注日期的来源为准。'
+                    : 'Candidates must fit this task and pass the public entity gate. Card order is not a performance score; use the dated sources for pricing, limits, and account entitlements.'}
                 </p>
               </div>
             </div>
           </div>
         </section>
+        {decisionProfile ? (
+          <section
+            className='mt-6 grid gap-4 lg:grid-cols-[1fr_1.1fr]'
+            aria-label={isChinese ? '决策维度与证据' : 'Decision criteria and evidence'}
+          >
+            <div className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6'>
+              <p className='text-sm font-semibold uppercase tracking-wide text-cyan-700'>
+                {isChinese ? '先按这些维度筛选' : 'Start with these decision criteria'}
+              </p>
+              <div className='mt-4 grid gap-3 sm:grid-cols-2'>
+                {decisionProfile.criteria.map((criterion) => (
+                  <div key={criterion.title[language]} className='rounded-xl bg-slate-50 p-4'>
+                    <h2 className='text-sm font-semibold text-slate-950'>{criterion.title[language]}</h2>
+                    <p className='mt-2 text-sm leading-6 text-slate-600'>{criterion.description[language]}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className='rounded-2xl border border-slate-200 bg-slate-950 p-5 text-white shadow-sm sm:p-6'>
+              <p className='text-sm font-semibold uppercase tracking-wide text-emerald-300'>
+                {isChinese ? '当前证据边界' : 'Current evidence boundary'}
+              </p>
+              <div className='mt-4 space-y-4'>
+                {decisionProfile.evidence.map((evidence) => (
+                  <article key={evidence.source.url} className='rounded-xl bg-white/10 p-4'>
+                    <div className='flex flex-wrap items-center gap-2 text-xs'>
+                      <span className='rounded-full bg-emerald-300 px-2 py-1 font-bold text-slate-950'>
+                        {evidence.level}
+                      </span>
+                      <span className='text-slate-300'>{isChinese ? '官方公开来源' : 'Official public source'}</span>
+                      <time className='text-slate-400' dateTime={evidence.checkedAt}>
+                        {evidence.checkedAt}
+                      </time>
+                    </div>
+                    <p className='mt-3 text-sm leading-6 text-white'>{evidence.claim[language]}</p>
+                    <p className='mt-2 text-sm leading-6 text-slate-300'>{evidence.boundary[language]}</p>
+                    <a
+                      href={evidence.source.url}
+                      target='_blank'
+                      rel='noreferrer'
+                      className='mt-3 inline-block text-sm font-semibold text-emerald-300 underline'
+                    >
+                      {evidence.source.label}
+                    </a>
+                  </article>
+                ))}
+              </div>
+              <p className='mt-4 text-xs leading-5 text-slate-400'>
+                {isChinese
+                  ? 'E0 表示官方公开资料核验，不代表 AI Best Tool 已完成账户实测或性能基准。'
+                  : 'E0 means verified from official public material; it does not claim account-level testing or a performance benchmark by AI Best Tool.'}
+              </p>
+            </div>
+          </section>
+        ) : null}
         <section className='mt-6' aria-label={isChinese ? '候选工具' : 'Candidate tools'}>
           <div className='mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
             {tools.map((tool, index) => {

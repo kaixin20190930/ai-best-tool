@@ -226,3 +226,11 @@ Catalog 日常收录继续运行，但候选必须服务 Cluster 或明确独立
 5. 自动运营输入字段和周账本更新。
 
 该单元不得顺便新建评分系统、Dashboard、专属数据库表或批量 Tool 页面。删除、重定向、index/sitemap 变更和数据库迁移仍单独遵循现有授权边界。
+
+### 2026-10-26 实施状态
+
+- 首页 decision-first metadata、H1 和产品标签：已进入代码差分。
+- `/best-ai-tools/ai-coding-tools`：复用现有动态主题页，增加专用决策维度和 E0 证据边界，不创建同义 URL。
+- `/best-ai-tools/free-ai-coding-tools`：完成跨品类 free 页面查重后，复用同一主题模板；首批只纳入具有官方持续免费入口的 GitHub Copilot 与 Cursor，不用其他未核验工具补数量。
+- Coding Guide：停止把不可用 comparison placeholder 当作主要下一步，改链到免费 Coding 决策页。
+- Claim 证据显示：本单只实现 E0 官方公开来源标签和“非账户实测/非性能基准”边界，不扩建通用证据系统。
