@@ -36,6 +36,10 @@ export default function Footer() {
 
   const SupportLinks = [
     {
+      title: 'RapCraft',
+      href: 'https://rapcraft.ai',
+    },
+    {
       title: 'TripTrace',
       href: 'https://triptrace.ai',
     },
