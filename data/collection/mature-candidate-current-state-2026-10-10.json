@@ -4,6 +4,7 @@
   "asOf": "2026-10-14",
   "historicalSnapshot": "data/collection/mature-candidate-buffer-2026-10-06.json",
   "released": {
+    "wellsaid": { "status": "released_monitor_noindex", "evidence": "docs/DAILY_OPERATIONS_2026-10-16_CN.md" },
     "elicit": { "status": "released_monitor_noindex", "evidence": "data/collection/elicit-release.json" },
     "murf": { "status": "released_monitor_noindex", "evidence": "data/collection/murf-release.json" },
     "pika": { "status": "released_monitor_noindex", "evidence": "data/collection/pika-release.json" },
