@@ -2,12 +2,14 @@
 
 核查日期：2026-10-26（上海时间）。本单仅做官方一手来源研究、只读生产查重和通用代码修复；未入队、未改生产 Tool、未发布或修改 index/sitemap。机器快照：[JSON](../data/collection/collection-entity-gate-candidate-review-2026-10-26.json)。
 
+共核对 **32 项**：`NEW_TOOL_READY` 8、`NEW_TOOL_RESEARCH` 5、`EXISTING_TOOL_UPDATE` 7、`HOLD/EXCLUDE` 12。Kling 与 Hailuo 模型版本按两个父产品分别计数。
+
 ## 口径与生产查重
 
 - `NEW_TOOL_READY` 仅表示当前来源支持独立实体，仍须准备完整 OPS2 selection（两条互补官方来源、媒体权利、Claim 边界、真实重复意图比较和后续 QA）；不是发布资格。`NEW_TOOL_RESEARCH` 表示具体证据缺口。`EXISTING_TOOL_UPDATE` 进入已有 Tool 的 freshness/实体维护。`HOLD/EXCLUDE` 不入队。
 - 四个独立信号依次为官方身份、专用用户入口/工作流、独立生命周期、独立搜索/决策意图；快照中的布尔值只反映本次来源支持程度，不能替代入队时带 source ID 的证据。
 - 生产查重于 2026-10-26 只读查询 `tools(id,name,url,status)` 与 `collection_candidates(id,title,url,status,tool_id)`，覆盖所有行的精确名称/URL 与列出的相邻品牌。新候选均无精确名称/URL 命中；这不证明语义绝无重复，Graphify/Codebase Memory、HyperFrames/HeyGen、HA-MCP/Home Assistant 等仍需做任务意图比较。站点公开 sitemap 仅作辅助核对，不能覆盖 noindex Tool。
-- 发现生产已有 `grok-voice-3-0`、`anthropic-oss-scanner`、`cadcraft` 与 `artcraft`、`moss-image` 与 `mossimage`、`omniroute`、`kling-ai`、`hailuo-ai`。这些是现有库存维护或重复处置问题；本单未写入生产。
+- 发现生产已有 `grok-voice-3-0`、`anthropic-oss-scanner`、`cadcraft` 与 `artcraft`、`moss-image`、`omniroute`、`kling-ai`、`hailuo-ai`。另有 `mossimage`（`mossimage.run`），它是独立托管产品，与 OpenMOSS 模型 `MOSS-Image` 不是重复实体；本单未写入生产。
 
 ## 合并后逐项结论
 
@@ -30,7 +32,7 @@
 | Grok Voice 3.0 | EXISTING_TOOL_UPDATE / `model` / `grok-voice-3-0`（`grok`） | [官方1](https://docs.x.ai/developers/models/grok-voice-3.0)<br>信号 ✓××× | grok-voice-3-0; existing published row is itself a model and needs disposition | Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately. Route through existing Tool freshness/entity maintenance. |
 | OSS Scanner | EXISTING_TOOL_UPDATE / `service` / `anthropic-oss-scanner`（`anthropic`） | [官方1](https://red.anthropic.com/oss-scanner/)<br>信号 ✓××× | anthropic-oss-scanner; existing published Tool | Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately. Route through existing Tool freshness/entity maintenance. |
 | CADCraft | EXISTING_TOOL_UPDATE / `brand_variant` / `cadcraft`（`artcraft`） | [官方1](https://getartcraft.com/apps/cadcraft)<br>信号 ✓××× | cadcraft and artcraft; existing published Tool/parent pair | Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately. Route through existing Tool freshness/entity maintenance. |
-| MOSS Image | EXISTING_TOOL_UPDATE / `model` / `moss-image`（`moss`） | [官方1](https://github.com/OpenMOSS/MOSS-Image)<br>信号 ✓××× | moss-image and mossimage; two published similar-name rows | Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately. Route through existing Tool freshness/entity maintenance. |
+| MOSS Image | EXISTING_TOOL_UPDATE / `model` / `moss-image`（`moss`） | [官方1](https://github.com/OpenMOSS/MOSS-Image)<br>信号 ✓××× | 已有 `moss-image` Tool；`mossimage.run` 是不同的独立托管产品 | 仅将 OpenMOSS 模型版本变化路由到现有 `moss-image` Tool 更新；不把 `mossimage.run` 作为重复项或合并对象。 |
 | OmniRoute | EXISTING_TOOL_UPDATE / `product` / `omniroute` | [官方1](https://www.omniroute.online/)<br>信号 ✓××× | omniroute; existing published Tool | Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately. Route through existing Tool freshness/entity maintenance. |
 | Kling model versions | EXISTING_TOOL_UPDATE / `version` / `kling-model-versions`（`kling-ai`） | [官方1](https://kling.ai/dev/model-release/kling-4)<br>信号 ✓××× | kling-ai; existing published Tool | Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately. Route through existing Tool freshness/entity maintenance. |
 | Hailuo model versions | EXISTING_TOOL_UPDATE / `version` / `hailuo-model-versions`（`hailuo-ai`） | [官方1](https://hailuoai.video/)<br>信号 ✓××× | hailuo-ai; existing published Tool | Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately. Route through existing Tool freshness/entity maintenance. |
@@ -50,4 +52,4 @@
 
 - OPS2 selection 新增 `entityProfile` 分类、产品 key/父产品 key 和四项带官方 source ID 的独立信号；`run-ops2-candidate-enqueue` 对未来新入队缺画像或非 `new_tool` 的对象 fail closed。历史已应用 selection 的读取与回验保留。画像进入 `raw_payload`。
 - `model/version/feature/api_surface/brand_variant` 必须绑定父产品，不能通过 new Tool 入队；已有模型 Tool（例如 Grok Voice 3.0、MOSS Image）不会被本次代码自动删除或合并，需要单独精确前像的生产维护。
-- 首选推进 Codebase Memory MCP、DeepSeek Harness、OpenClaw 等 READY 的完整 selection 证据；Graphify 先纠正官方域名；Capafy、FarmBot Tech、OpenDots、Creen 补生命周期。对 `MOSS Image` 两条生产行安排专项重复处置，并检查已落地模型 Tool 的索引与实体策略。
+- 首选推进 Codebase Memory MCP、DeepSeek Harness、OpenClaw 等 READY 的完整 selection 证据；Graphify 先纠正官方域名；Capafy、FarmBot Tech、OpenDots、Creen 补生命周期。`MOSS-Image` 后续只维护现有 `moss-image` Tool；`mossimage.run` 作为独立托管产品保留，并检查已落地模型 Tool 的索引与实体策略。

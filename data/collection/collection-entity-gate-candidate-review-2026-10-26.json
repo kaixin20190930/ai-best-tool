@@ -1,6 +1,13 @@
 {
   "schemaVersion": 1,
   "reviewedAt": "2026-10-26",
+  "total": 32,
+  "groupCounts": {
+    "NEW_TOOL_READY": 8,
+    "NEW_TOOL_RESEARCH": 5,
+    "EXISTING_TOOL_UPDATE": 7,
+    "HOLD/EXCLUDE": 12
+  },
   "productionCheck": "read-only Neon tools and collection_candidates name/url snapshot on 2026-10-26; no writes",
   "items": [
     {
@@ -439,12 +446,12 @@
         "decisionIntent": false
       },
       "productionDuplicateCheck": {
-        "exactToolOrCandidateMatch": "moss-image and mossimage; two published similar-name rows",
+        "exactToolOrCandidateMatch": "moss-image is the existing OpenMOSS model Tool; mossimage.run is a distinct hosted product, not a duplicate",
         "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
         "checkedAt": "2026-10-26"
       },
-      "limitations": "Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately.",
-      "recommendedAction": "Route through existing Tool freshness/entity maintenance."
+      "limitations": "MOSS-Image is an OpenMOSS model; mossimage.run is an independent hosted product and must not be merged with it.",
+      "recommendedAction": "Route only OpenMOSS model version changes to the existing moss-image Tool update; retain mossimage.run as a separate product."
     },
     {
       "name": "OmniRoute",
