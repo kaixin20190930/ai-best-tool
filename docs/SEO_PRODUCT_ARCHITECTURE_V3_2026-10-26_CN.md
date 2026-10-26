@@ -242,3 +242,4 @@ Catalog 日常收录继续运行，但候选必须服务 Cluster 或明确独立
 - 证据边界：只使用 n8n 官方公开文档（E0），不把示例配置泛化为统一硬件最低规格，不声称账户实测、性能基准或真实总成本。
 - 内链：Automation Guide 与 `/ai/n8n` 进入该要求页；要求页回链 n8n Decision Card 和现有三工具比较页。
 - 验证预算：复用既有 n8n 页面测试，只做一次专项、TypeScript、最终 build、独立 QA 和部署后 smoke。
+- `/ai/n8n` Harvest：基于截至 2026-10-14 的真实 7 天基线（679 impressions、1 click、CTR 0.15%、平均排名 9.27），只升级搜索摘要、首屏 Cloud/自托管决策和既有 Guide 消费入口；不重验已通过的工具事实，不改变 `continue_index` 或 sitemap。

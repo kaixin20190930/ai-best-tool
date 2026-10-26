@@ -10,6 +10,19 @@ async function main() {
     const response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(60000) });
     assert.equal(response.status, 200, path);
     const document = new JSDOM(await response.text()).window.document;
+    const chinese = path.startsWith('/cn/');
+    assert.equal(
+      document.title,
+      chinese
+        ? 'n8n 价格与自托管：成本、限制和替代方案'
+        : 'n8n Pricing & Self-Hosting: Costs, Limits and Alternatives',
+    );
+    assert.equal(
+      document.querySelector('meta[name="description"]')?.getAttribute('content'),
+      chinese
+        ? '比较 n8n Cloud 与自托管的 execution 计费、维护责任、Community Edition 限制和许可边界，并判断何时改用 Make 或 Lindy。'
+        : 'Compare n8n Cloud and self-hosting by execution pricing, maintenance, Community Edition limits, licensing, and when Make or Lindy is a better fit.',
+    );
     assert.equal(
       document.querySelector('link[rel="canonical"]')?.getAttribute('href'),
       `https://aibesttool.com${path}`,
@@ -33,6 +46,14 @@ async function main() {
       ? '/cn/guides/n8n-self-hosted-requirements'
       : '/guides/n8n-self-hosted-requirements';
     assert(document.querySelector(`a[href="${expectedGuideHref}"]`));
+    assert(
+      body.includes(chinese ? '自托管换来更多控制' : 'Self-hosting adds control'),
+      `${path}: concrete above-fold trade-off must be visible`,
+    );
+    assert(
+      body.includes(chinese ? '为生产自动化选择 n8n Cloud 或自托管' : 'Choose n8n Cloud or self-hosting for production automations'),
+      `${path}: concrete above-fold task must be visible`,
+    );
     console.log(`${path}: evidence, official sources, canonical and ${released ? 'index' : 'noindex'} passed`);
   }
   for (const path of ['/guides/n8n-self-hosted-requirements', '/cn/guides/n8n-self-hosted-requirements']) {

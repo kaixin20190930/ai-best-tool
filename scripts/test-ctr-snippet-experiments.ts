@@ -10,7 +10,17 @@ type Experiment = {
   routes: { en: string; cn: string };
   before: Record<string, string>;
   after: { enTitle: string; enDescription: string; cnTitle: string; cnDescription: string };
-  baselineMetrics: unknown;
+  baselineMetrics:
+    | null
+    | {
+        source: string;
+        periodDays: number;
+        through: string;
+        clicks: number;
+        impressions: number;
+        ctr: number;
+        position: number;
+      };
   result: unknown;
 };
 
@@ -48,7 +58,18 @@ for (const experiment of registry.experiments) {
     assert.equal(experiment.after[`${locale}Title` as 'enTitle'], current.title);
     assert.equal(experiment.after[`${locale}Description` as 'enDescription'], current.description);
   }
-  assert.equal(experiment.baselineMetrics, null, `${experiment.slug}: do not fabricate missing GSC route metrics`);
+  if (experiment.slug === 'n8n') {
+    assert(experiment.baselineMetrics, 'n8n: the recorded Harvest baseline is required');
+    assert.equal(experiment.baselineMetrics.source, 'docs/WEEKLY_MARKET_GROWTH_REVIEW_2026-10-16_CN.md');
+    assert.equal(experiment.baselineMetrics.periodDays, 7);
+    assert.equal(experiment.baselineMetrics.through, '2026-10-14');
+    assert.equal(experiment.baselineMetrics.impressions, 679);
+    assert.equal(experiment.baselineMetrics.clicks, 1);
+    assert.equal(experiment.baselineMetrics.ctr, 0.15);
+    assert.equal(experiment.baselineMetrics.position, 9.27);
+  } else {
+    assert.equal(experiment.baselineMetrics, null, `${experiment.slug}: do not fabricate missing GSC route metrics`);
+  }
   assert.equal(experiment.result, null, `${experiment.slug}: result must remain empty during observation`);
 }
 

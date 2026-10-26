@@ -3378,7 +3378,7 @@ export default async function Page({
                           href={generateLocalizedPath('/guides/n8n-self-hosted-requirements', locale)}
                           className='inline-flex rounded-lg bg-cyan-800 px-5 py-3 text-sm font-semibold text-white hover:bg-cyan-900'
                         >
-                          {isChinese ? '核对 n8n 自托管要求' : 'Check n8n self-hosted requirements'}
+                          {isChinese ? '查看 n8n 自托管上线清单' : 'Review the n8n self-hosting checklist'}
                         </NextLink>
                       )}
                       <NextLink

@@ -15,17 +15,17 @@ type LocalizedToolDecisionMetadata = {
 const TOOL_DECISION_METADATA_PILOTS: Record<string, LocalizedToolDecisionMetadata> = {
   n8n: {
     en: {
-      title: 'n8n Workflow Automation: Pricing, Self-Hosting & vs Make',
+      title: 'n8n Pricing & Self-Hosting: Costs, Limits and Alternatives',
       description:
-        'Evaluate n8n Cloud vs self-hosting, execution pricing, AI workflows, and license limits. See when Make or Lindy fits better.',
-      primaryTask: 'Build maintainable AI and API automations',
-      decisionAngle: 'Cloud convenience versus self-hosting control and maintenance',
+        'Compare n8n Cloud and self-hosting by execution pricing, maintenance, Community Edition limits, licensing, and when Make or Lindy is a better fit.',
+      primaryTask: 'Choose n8n Cloud or self-hosting for production automations',
+      decisionAngle: 'Self-hosting adds control, but your team owns security, backups, upgrades, and recovery',
     },
     cn: {
-      title: 'n8n 工作流自动化：价格、自托管与 Make 对比',
-      description: '比较 n8n Cloud、自托管、execution 计费和许可证限制，并看 Make 与 Lindy 何时更适合。',
-      primaryTask: '构建可维护的 AI 与 API 自动化流程',
-      decisionAngle: '比较云端便利性与自托管控制、维护成本',
+      title: 'n8n 价格与自托管：成本、限制和替代方案',
+      description: '比较 n8n Cloud 与自托管的 execution 计费、维护责任、Community Edition 限制和许可边界，并判断何时改用 Make 或 Lindy。',
+      primaryTask: '为生产自动化选择 n8n Cloud 或自托管',
+      decisionAngle: '自托管换来更多控制，但安全、备份、升级和故障恢复都由团队负责',
     },
   },
   openrouter: {
