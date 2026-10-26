@@ -2,6 +2,7 @@ const TOOL_ROUTE_ALIASES: Record<string, string> = {
   anthropic: 'claude',
   'canva-magic-studio': 'canva',
   'fireflies-ai': 'fireflies',
+  'grok-voice-3-0': 'grok-voice',
   'murf-ai': 'murf',
   otter: 'otter-ai',
 };

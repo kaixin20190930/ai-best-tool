@@ -26,6 +26,17 @@ const assertions: Array<[boolean, string]> = [
   [getLocalizedToolPath('fireflies-ai', 'cn') === '/cn/ai/fireflies', 'Chinese Fireflies alias path is invalid.'],
   [isLegacyToolSlug('fireflies-ai'), 'Fireflies.ai must be recognized as a legacy slug.'],
   [!isLegacyToolSlug('fireflies'), 'Fireflies must remain the canonical slug.'],
+  [getCanonicalToolSlug('grok-voice-3-0') === 'grok-voice', 'Grok Voice model version must resolve to the durable API product.'],
+  [
+    getLocalizedToolPath('grok-voice-3-0', 'en') === '/ai/grok-voice',
+    'English Grok Voice model path must resolve to the durable API product.',
+  ],
+  [
+    getLocalizedToolPath('grok-voice-3-0', 'cn') === '/cn/ai/grok-voice',
+    'Chinese Grok Voice model path must resolve to the durable API product.',
+  ],
+  [isLegacyToolSlug('grok-voice-3-0'), 'Grok Voice 3.0 must be recognized as a versioned legacy slug.'],
+  [!isLegacyToolSlug('grok-voice'), 'Grok Voice API must remain the canonical slug.'],
   [getCanonicalToolSlug('murf-ai') === 'murf', 'Murf Studio must have one canonical slug.'],
   [
     getLocalizedToolPath('murf-ai', 'en') === '/ai/murf',
@@ -68,4 +79,4 @@ for (const [condition, message] of assertions) {
   if (!condition) throw new Error(message);
 }
 
-console.log('✅ Tool aliases keep Claude, Otter.ai, Fireflies, and Murf canonical with permanent legacy redirects.');
+console.log('✅ Tool aliases keep durable product identities canonical with permanent legacy redirects.');
