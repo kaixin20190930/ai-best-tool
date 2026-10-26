@@ -8,7 +8,7 @@ import type { PoolClient } from 'pg';
 import { getPool } from '../db/neon/client';
 import { isAdminUser } from '../lib/auth/admin';
 import { resolveCollectionCategorySlug } from '../lib/services/admin/collection';
-import { parseOps2Selection, selectionHash, selectionRawPayload, type Ops2Selection } from '../lib/services/admin/ops2Selection';
+import { assertNewToolEntityProfile, parseOps2Selection, selectionHash, selectionRawPayload, type Ops2Selection } from '../lib/services/admin/ops2Selection';
 import { createAdminClient } from '../lib/supabase/admin';
 import { assertInternalAudit, assertInternalPreparationScope,
   assertUnusedInternalPreparationNonce, type InternalPreparationAudit } from './ops2-internal-preparation';
@@ -250,6 +250,7 @@ export async function run(selection: Ops2Selection, options: Options, deps = pro
     const existing = await readCandidate(client, selection, transaction);
     const applied = existing?.raw_payload &&
       (existing.raw_payload as Record<string, any>).ops2EnqueueAudit?.preimageHash;
+    if (!applied) assertNewToolEntityProfile(selection);
     const internalMode = Boolean(process.env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION);
     if (options.mode === 'postcheck') {
       const audit = (existing?.raw_payload as Record<string, any> | undefined)?.ops2EnqueueAudit;

@@ -32,6 +32,13 @@ const fixture = {
     { id: 'features', url: 'https://fixture.example/features', claimKeys: ['core', 'identity'] },
     { id: 'rights', url: 'https://fixture.example/rights', claimKeys: ['rights'] },
   ],
+  entityProfile: { route: 'new_tool', entityKind: 'product', canonicalProductKey: 'fixture-ai-research',
+    independentSignals: {
+      officialIdentity: { sourceIds: ['features'], evidenceExcerpt: 'The official page identifies Fixture AI Research as its own product.' },
+      userEntryWorkflow: { sourceIds: ['features'], evidenceExcerpt: 'Users enter the dedicated research workflow from its product page.' },
+      lifecycle: { sourceIds: ['features'], evidenceExcerpt: 'The product has its own documented setup and ongoing release path.' },
+      searchDecisionIntent: { sourceIds: ['features'], evidenceExcerpt: 'Researchers choose this product for source-grounded research tasks.' },
+    } },
   entityGate: { status: 'PASS', aiCoreCapability: { status: 'PASS', sourceIds: ['features'],
     evidenceExcerpt: 'The fixture demonstrates source-grounded AI research over user-selected documents.' },
     identityCanonical: { status: 'PASS', sourceIds: ['features'],
@@ -66,6 +73,25 @@ assert.throws(() => parseOps2Selection({ ...fixture, localized: { en: content.en
 assert.throws(() => parseOps2Selection({ ...fixture, localized: { ...newLocalized, zh: content.zh } }),
   /cannot mix/);
 assert.equal(selectionRawPayload(selection).sourceType, 'ops2_selection');
+assert.equal(selectionRawPayload(selection).entityProfile?.canonicalProductKey, 'fixture-ai-research');
+const legacySelection = parseOps2Selection({ ...fixture, entityProfile: undefined });
+assert.equal(legacySelection.entityProfile, undefined);
+for (const entityKind of ['model', 'version', 'feature', 'api_surface', 'brand_variant']) {
+  assert.throws(() => parseOps2Selection({ ...fixture, entityProfile: {
+    ...fixture.entityProfile, entityKind, parentProductKey: 'fixture-ai',
+  } }), /Dependent entity/);
+}
+assert.throws(() => parseOps2Selection({ ...fixture, entityProfile: {
+  ...fixture.entityProfile, independentSignals: { ...fixture.entityProfile.independentSignals,
+    lifecycle: { sourceIds: [], evidenceExcerpt: 'There is no independent release lifecycle.' } },
+} }), /lifecycle.sourceIds/);
+assert.throws(() => parseOps2Selection({ ...fixture, entityProfile: {
+  route: 'existing_tool_update', entityKind: 'feature', canonicalProductKey: 'fixture-voice',
+} }), /parent product/);
+assert.equal(parseOps2Selection({ ...fixture, entityProfile: {
+  route: 'existing_tool_update', entityKind: 'feature', canonicalProductKey: 'fixture-voice',
+  parentProductKey: 'fixture-ai',
+} }).entityProfile?.route, 'existing_tool_update');
 assert.doesNotMatch(evidenceReadyDraftSql, /marketValidation/);
 assert.doesNotMatch(evidenceReadyDraftSql, /ops2_selection|ops2Selection/);
 assert.throws(() => parseOps2Selection({ ...fixture, officialSources: fixture.officialSources.slice(0, 1) }));
@@ -241,6 +267,14 @@ async function main() {
       scope: { operation: 'enqueue', candidateId: selection.id, canonicalUrl: selection.officialUrl } };
     process.env.OPS2_QA_REPORT = JSON.stringify(report);
     process.env.OPS2_QA_REFERENCE = report.qaActor;
+    await assert.rejects(run(legacySelection, parseOptions(['--mode=preflight']), deps),
+      /explicit independent new_tool entity profile/);
+    const updateSelection = parseOps2Selection({ ...fixture, entityProfile: {
+      route: 'existing_tool_update', entityKind: 'feature', canonicalProductKey: 'fixture-voice',
+      parentProductKey: 'fixture-ai',
+    } });
+    await assert.rejects(run(updateSelection, parseOptions(['--mode=preflight']), deps),
+      /explicit independent new_tool entity profile/);
     for (const invalid of [
       { ...report, status: 'HOLD' },
       { ...report, selectionHash: '0'.repeat(64) },

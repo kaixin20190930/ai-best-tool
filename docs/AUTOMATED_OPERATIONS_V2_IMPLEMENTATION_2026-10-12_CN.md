@@ -34,6 +34,7 @@
 
 - 产品身份、官方域名和唯一 canonical 清楚。
 - 不是重复实体、模型名、单一功能表面或传统产品的轻量 AI 标签。
+- OPS2 新候选 selection 必须显式填写 `entityProfile`：`entityKind`、`canonicalProductKey`、可选的 `parentProductKey`、路由，以及四项可回溯的独立实体信号（官方独立身份、用户入口/工作流、产品生命周期、独立搜索/决策意图）。只有独立 `product/platform/service/framework/template/skill` 且四项均有官方证据，才可路由 `new_tool` 并入队。`model/version/feature/api_surface/brand_variant` 必须绑定父产品键，走 `existing_tool_update` 或 `hold`；不因单独名称、网址或热度生成 Tool。缺画像或证据的未来 enqueue fail closed，历史已落地 selection 仍可读取和回验。画像保存在 candidate `raw_payload`，不新增表或专属发布器。
 - 核心 AI 能力由官方来源直接支持。
 - 至少两个互补官方来源覆盖产品范围和关键限制。
 - 三语言基础页面完整，包含 Best for、Not ideal、限制、比较路径和核验日期。
@@ -380,6 +381,8 @@ Claim、Update、Sponsored 和自然 Listing 使用同一个 Tool ID，但商业
 2. **已收录工具定期更新**：统一 selector 按变化或到期的 Claim、实体/canonical 事件、GSC/Coverage、站内消费和 Decision Cluster 需要生成批次；只核变化字段，执行 freshness、内容升级、索引状态、合并或归档建议。
 
 自动抓取、普通用户提交、Vendor 认领、付费提交和历史编辑只保留为 provenance，不产生不同的自然审核、更新、索引或推荐流程。工具一旦拥有正式 Tool ID，就统一进入“已收录工具定期更新”；不得继续走候选收录流程或因来源不同复制实体。
+
+2026-10-26 实体分类与生产查重样本见 [合并候选复核](./COLLECTION_ENTITY_GATE_AND_CANDIDATE_REVIEW_2026-10-26_CN.md)。样本中的 READY 只表示实体研究可进入后续 selection 准备，不是自动入队、公开或索引批准。
 
 ### 两条流程中的状态动作
 

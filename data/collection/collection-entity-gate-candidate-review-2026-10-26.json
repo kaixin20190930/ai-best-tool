@@ -1,0 +1,776 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-26",
+  "productionCheck": "read-only Neon tools and collection_candidates name/url snapshot on 2026-10-26; no writes",
+  "items": [
+    {
+      "name": "Graphify (submitted graphiffy.com)",
+      "priority": "P1",
+      "finalGroup": "NEW_TOOL_RESEARCH",
+      "entityKind": "skill",
+      "canonicalProductKey": "graphify",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://graphify.com/security",
+        "https://graphify.com/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": true,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Submitted graphiffy.com did not resolve; official security page explicitly names graphify.com and Graphify-Labs. Correct canonical before selection; code knowledge graph intent overlaps Codebase Memory MCP.",
+      "recommendedAction": "Correct domain and compare code graph decision intent."
+    },
+    {
+      "name": "Codebase Memory MCP",
+      "priority": "P1",
+      "finalGroup": "NEW_TOOL_READY",
+      "entityKind": "product",
+      "canonicalProductKey": "codebase-memory-mcp",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://github.com/DeusData/codebase-memory-mcp",
+        "https://github.com/DeusData/codebase-memory-mcp/releases"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": true,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Distinct local MCP code graph; compare with Graphify and existing coding tools before publication. README performance figures are vendor claims.",
+      "recommendedAction": "Prepare selection with actual source, media rights and claim boundaries."
+    },
+    {
+      "name": "DeepSeek Harness",
+      "priority": "P1",
+      "finalGroup": "NEW_TOOL_READY",
+      "entityKind": "platform",
+      "canonicalProductKey": "deepseek-harness",
+      "parentProductKey": "deepseek",
+      "officialSources": [
+        "https://www.deepseek.com/en/harness/",
+        "https://www.deepseek.com/en/harness/terms-of-use/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": true,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Public preview and rapidly changing plugin surface; no account-level claims verified.",
+      "recommendedAction": "Prepare independent platform selection; monitor preview status."
+    },
+    {
+      "name": "OpenClaw",
+      "priority": "P1",
+      "finalGroup": "NEW_TOOL_READY",
+      "entityKind": "platform",
+      "canonicalProductKey": "openclaw",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://docs.openclaw.ai/",
+        "https://docs.openclaw.ai/start/getting-started"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": true,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Self-hosted agent requires user setup and provider access; public docs may change.",
+      "recommendedAction": "Prepare selection with security and installation limitations."
+    },
+    {
+      "name": "Home Assistant MCP (ha-mcp)",
+      "priority": "P1",
+      "finalGroup": "NEW_TOOL_READY",
+      "entityKind": "product",
+      "canonicalProductKey": "ha-mcp",
+      "parentProductKey": "home-assistant",
+      "officialSources": [
+        "https://github.com/homeassistant-ai/ha-mcp",
+        "https://github.com/homeassistant-ai/ha-mcp/releases"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": true,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Repository calls itself unofficial; must not imply Home Assistant endorsement. Requires Home Assistant and admin-scoped access.",
+      "recommendedAction": "Prepare independent integration selection with unofficial status."
+    },
+    {
+      "name": "Capafy AI",
+      "priority": "P1",
+      "finalGroup": "NEW_TOOL_RESEARCH",
+      "entityKind": "platform",
+      "canonicalProductKey": "capafy-ai",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://capafy.ai/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": false,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Marketplace and run workflow visible; independent lifecycle and third-party listing quality require second official source.",
+      "recommendedAction": "Find dated official policy/release evidence and audit sample listings."
+    },
+    {
+      "name": "FarmBot Tech",
+      "priority": "P1",
+      "finalGroup": "NEW_TOOL_RESEARCH",
+      "entityKind": "service",
+      "canonicalProductKey": "farmbot-tech",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://www.farmbottech.com/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": false,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Official site describes voice-first farm records but maturity and AI implementation are insufficiently documented. Distinguish unrelated FarmBot brands.",
+      "recommendedAction": "Verify product access, AI core and terms from official sources."
+    },
+    {
+      "name": "HyperFrames",
+      "priority": "P2",
+      "finalGroup": "NEW_TOOL_READY",
+      "entityKind": "framework",
+      "canonicalProductKey": "hyperframes",
+      "parentProductKey": "heygen",
+      "officialSources": [
+        "https://github.com/heygen-com/hyperframes",
+        "https://github.com/heygen-com/hyperframes/releases",
+        "https://github.com/heygen-com/hyperframes/blob/main/docs/quickstart.mdx"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": true,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "HeyGen-owned framework with separate CLI and release stream; brand relation must be explicit.",
+      "recommendedAction": "Prepare framework selection and compare HeyGen Tool intent."
+    },
+    {
+      "name": "ZSky AI",
+      "priority": "P2",
+      "finalGroup": "NEW_TOOL_READY",
+      "entityKind": "platform",
+      "canonicalProductKey": "zsky-ai",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://zsky.ai/",
+        "https://zsky.ai/official-apps",
+        "https://zsky.ai/pricing"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": true,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Vendor pricing and quality claims untested; similar creative platforms exist in catalog.",
+      "recommendedAction": "Prepare selection with differentiated image/video workflow."
+    },
+    {
+      "name": "OpenDots",
+      "priority": "P2",
+      "finalGroup": "NEW_TOOL_RESEARCH",
+      "entityKind": "template",
+      "canonicalProductKey": "opendots",
+      "parentProductKey": "copilotkit",
+      "officialSources": [
+        "https://github.com/CopilotKit/OpenDots"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": false,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Official repository calls it an open-source template; release stability and separation from CopilotKit need verification.",
+      "recommendedAction": "Check tagged releases and standalone installation lifecycle."
+    },
+    {
+      "name": "Replica Skill",
+      "priority": "P2",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "skill",
+      "canonicalProductKey": "replica-skill",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://github.com/Jakeschincariol/replica-skill"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": false,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "README and one visible initial commit do not establish stable independent releases or maintained lifecycle.",
+      "recommendedAction": "Hold until tagged stable release and maintenance evidence."
+    },
+    {
+      "name": "Claude-Mem",
+      "priority": "P2",
+      "finalGroup": "NEW_TOOL_READY",
+      "entityKind": "product",
+      "canonicalProductKey": "claude-mem",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://github.com/thedotmack/claude-mem",
+        "https://github.com/thedotmack/claude-mem/blob/main/docs/public/installation.mdx"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": true,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Despite name, supports multiple agents; privacy/provider processing boundaries need review.",
+      "recommendedAction": "Prepare selection as cross-agent memory product."
+    },
+    {
+      "name": "Superpowers",
+      "priority": "P2",
+      "finalGroup": "NEW_TOOL_READY",
+      "entityKind": "skill",
+      "canonicalProductKey": "superpowers",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://github.com/obra/superpowers",
+        "https://github.com/obra/superpowers/releases"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": true,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Standalone skill suite, but may overlap native agent features; avoid broad outcome claims.",
+      "recommendedAction": "Prepare selection focused on development workflow decision intent."
+    },
+    {
+      "name": "Creen AI",
+      "priority": "P2",
+      "finalGroup": "NEW_TOOL_RESEARCH",
+      "entityKind": "platform",
+      "canonicalProductKey": "creen-ai",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://www.creen.ai/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": true,
+        "lifecycle": false,
+        "decisionIntent": true
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Official homepage resolves and describes image/video generation; lifecycle, pricing and identity need independent official pages.",
+      "recommendedAction": "Verify terms, release history and product differentiation."
+    },
+    {
+      "name": "Grok Voice 3.0",
+      "priority": "UPDATE",
+      "finalGroup": "EXISTING_TOOL_UPDATE",
+      "entityKind": "model",
+      "canonicalProductKey": "grok-voice-3-0",
+      "parentProductKey": "grok",
+      "officialSources": [
+        "https://docs.x.ai/developers/models/grok-voice-3.0"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": "grok-voice-3-0; existing published row is itself a model and needs disposition",
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately.",
+      "recommendedAction": "Route through existing Tool freshness/entity maintenance."
+    },
+    {
+      "name": "OSS Scanner",
+      "priority": "UPDATE",
+      "finalGroup": "EXISTING_TOOL_UPDATE",
+      "entityKind": "service",
+      "canonicalProductKey": "anthropic-oss-scanner",
+      "parentProductKey": "anthropic",
+      "officialSources": [
+        "https://red.anthropic.com/oss-scanner/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": "anthropic-oss-scanner; existing published Tool",
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately.",
+      "recommendedAction": "Route through existing Tool freshness/entity maintenance."
+    },
+    {
+      "name": "CADCraft",
+      "priority": "UPDATE",
+      "finalGroup": "EXISTING_TOOL_UPDATE",
+      "entityKind": "brand_variant",
+      "canonicalProductKey": "cadcraft",
+      "parentProductKey": "artcraft",
+      "officialSources": [
+        "https://getartcraft.com/apps/cadcraft"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": "cadcraft and artcraft; existing published Tool/parent pair",
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately.",
+      "recommendedAction": "Route through existing Tool freshness/entity maintenance."
+    },
+    {
+      "name": "MOSS Image",
+      "priority": "UPDATE",
+      "finalGroup": "EXISTING_TOOL_UPDATE",
+      "entityKind": "model",
+      "canonicalProductKey": "moss-image",
+      "parentProductKey": "moss",
+      "officialSources": [
+        "https://github.com/OpenMOSS/MOSS-Image"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": "moss-image and mossimage; two published similar-name rows",
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately.",
+      "recommendedAction": "Route through existing Tool freshness/entity maintenance."
+    },
+    {
+      "name": "OmniRoute",
+      "priority": "UPDATE",
+      "finalGroup": "EXISTING_TOOL_UPDATE",
+      "entityKind": "product",
+      "canonicalProductKey": "omniroute",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://www.omniroute.online/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": "omniroute; existing published Tool",
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately.",
+      "recommendedAction": "Route through existing Tool freshness/entity maintenance."
+    },
+    {
+      "name": "Kling model versions",
+      "priority": "UPDATE",
+      "finalGroup": "EXISTING_TOOL_UPDATE",
+      "entityKind": "version",
+      "canonicalProductKey": "kling-model-versions",
+      "parentProductKey": "kling-ai",
+      "officialSources": [
+        "https://kling.ai/dev/model-release/kling-4"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": "kling-ai; existing published Tool",
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately.",
+      "recommendedAction": "Route through existing Tool freshness/entity maintenance."
+    },
+    {
+      "name": "Hailuo model versions",
+      "priority": "UPDATE",
+      "finalGroup": "EXISTING_TOOL_UPDATE",
+      "entityKind": "version",
+      "canonicalProductKey": "hailuo-model-versions",
+      "parentProductKey": "hailuo-ai",
+      "officialSources": [
+        "https://hailuoai.video/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": "hailuo-ai; existing published Tool",
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Existing Tool match or parent product; do not enqueue another Tool. Verify changed claims against current official source and resolve existing duplicate rows separately.",
+      "recommendedAction": "Route through existing Tool freshness/entity maintenance."
+    },
+    {
+      "name": "Dessa",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "service",
+      "canonicalProductKey": "dessa",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://dessaai.net/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Ambiguous brand: independent dessaai.net states it is unaffiliated with Block Dessa; requested identity unspecified.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "Timestral",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "model",
+      "canonicalProductKey": "timestral",
+      "parentProductKey": "mistral",
+      "officialSources": [
+        "https://mistral.ai/news/timestral/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Mistral explicitly calls Timestral a model family.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "Vane Deploy",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "service",
+      "canonicalProductKey": "vane-deploy",
+      "parentProductKey": null,
+      "officialSources": [],
+      "independentEntitySignals": {
+        "identity": false,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "No reliable first-party identity/source located.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "Filee",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "product",
+      "canonicalProductKey": "filee",
+      "parentProductKey": null,
+      "officialSources": [
+        "https://filee.sh/"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Official offline converter page does not establish core AI capability.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "Kimi 3.1",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "version",
+      "canonicalProductKey": "kimi-3-1",
+      "parentProductKey": "kimi",
+      "officialSources": [],
+      "independentEntitySignals": {
+        "identity": false,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "No verified first-party release for this exact label.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "Seedance 2.5",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "model",
+      "canonicalProductKey": "seedance-2-5",
+      "parentProductKey": "seedance",
+      "officialSources": [
+        "https://seed.bytedance.com/en/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "ByteDance identifies a model used inside Jimeng/Doubao.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "MiniMax H3",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "model",
+      "canonicalProductKey": "minimax-h3",
+      "parentProductKey": "hailuo-ai",
+      "officialSources": [
+        "https://www.minimax.io/blog/minimax-h3"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "MiniMax identifies a model; Hailuo is the user entry.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "Gemini Omni Flash",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "model",
+      "canonicalProductKey": "gemini-omni-flash",
+      "parentProductKey": "gemini",
+      "officialSources": [],
+      "independentEntitySignals": {
+        "identity": false,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "No verified Google first-party source for exact label; production has a Product Hunt Gemini Omni candidate.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "Kling 4.0",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "version",
+      "canonicalProductKey": "kling-4-0",
+      "parentProductKey": "kling-ai",
+      "officialSources": [
+        "https://kling.ai/dev/model-release/kling-4"
+      ],
+      "independentEntitySignals": {
+        "identity": true,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Official Kling page identifies a model version within existing Kling AI.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "FreeLLM",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "service",
+      "canonicalProductKey": "freellm",
+      "parentProductKey": null,
+      "officialSources": [],
+      "independentEntitySignals": {
+        "identity": false,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "No verified unique first-party identity or lifecycle.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    },
+    {
+      "name": "README-only project without stable release",
+      "priority": "HOLD",
+      "finalGroup": "HOLD/EXCLUDE",
+      "entityKind": "skill",
+      "canonicalProductKey": "readme-only-project",
+      "parentProductKey": null,
+      "officialSources": [],
+      "independentEntitySignals": {
+        "identity": false,
+        "entryWorkflow": false,
+        "lifecycle": false,
+        "decisionIntent": false
+      },
+      "productionDuplicateCheck": {
+        "exactToolOrCandidateMatch": null,
+        "scope": "read-only production tools name/url plus collection_candidates title/url; semantic neighbors noted in limitations",
+        "checkedAt": "2026-10-26"
+      },
+      "limitations": "Category-level exclusion: README alone cannot prove maintained lifecycle.",
+      "recommendedAction": "Do not enqueue; resolve official identity or route model/version to parent update."
+    }
+  ]
+}

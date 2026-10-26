@@ -3,6 +3,14 @@ import { createHash } from 'node:crypto';
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const locales = ['en', 'cn', 'tw'] as const;
 type Locale = typeof locales[number];
+const independentKinds = ['product', 'platform', 'service', 'framework', 'template', 'skill'] as const;
+const dependentKinds = ['model', 'version', 'feature', 'api_surface', 'brand_variant'] as const;
+type EntityKind = typeof independentKinds[number] | typeof dependentKinds[number];
+type EntitySignal = { sourceIds: string[]; evidenceExcerpt: string };
+export type Ops2EntityProfile = { route: 'new_tool' | 'existing_tool_update' | 'hold';
+  entityKind: EntityKind; canonicalProductKey: string; parentProductKey?: string;
+  independentSignals?: { officialIdentity: EntitySignal; userEntryWorkflow: EntitySignal;
+    lifecycle: EntitySignal; searchDecisionIntent: EntitySignal } };
 
 export type Ops2Selection = {
   id: string;
@@ -13,6 +21,8 @@ export type Ops2Selection = {
   categorySlug: string;
   cluster: { taskSlug?: string; role: 'anchor' | 'alternative' | 'gap_filler' };
   officialSources: { id: string; url: string; claimKeys: string[] }[];
+  /** Optional only when reading a selection created before the entity profile contract. */
+  entityProfile?: Ops2EntityProfile;
   entityGate: { status: 'PASS'; aiCoreCapability: { status: 'PASS'; sourceIds: string[]; evidenceExcerpt: string };
     identityCanonical: { status: 'PASS'; sourceIds: string[]; evidenceExcerpt: string };
     duplicateIntent: { status: 'PASS'; checkedToolIds: string[]; rationale: string } };
@@ -85,6 +95,58 @@ function sourceIds(value: unknown, label: string, available: Set<string>, min = 
   return ids;
 }
 
+function productKey(value: unknown, label: string): string {
+  const key = text(value, label).toLowerCase();
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(key)) throw new Error(`Invalid ${label}`);
+  return key;
+}
+
+function parseEntityProfile(value: unknown, available: Set<string>): Ops2EntityProfile | undefined {
+  if (value === undefined) return undefined; // Historical selections remain readable.
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid entityProfile');
+  const raw = value as Record<string, any>;
+  const entityKind = raw.entityKind as EntityKind;
+  const route = raw.route as Ops2EntityProfile['route'];
+  if (![...independentKinds, ...dependentKinds].includes(entityKind) ||
+      !['new_tool', 'existing_tool_update', 'hold'].includes(route)) throw new Error('Invalid entity classification');
+  const canonicalProductKey = productKey(raw.canonicalProductKey, 'entityProfile.canonicalProductKey');
+  const parentProductKey = raw.parentProductKey === undefined ? undefined
+    : productKey(raw.parentProductKey, 'entityProfile.parentProductKey');
+  if (parentProductKey === canonicalProductKey) throw new Error('Entity cannot be its own parent product');
+  if (dependentKinds.includes(entityKind as typeof dependentKinds[number]) &&
+      (!parentProductKey || route === 'new_tool'))
+    throw new Error('Dependent entity requires a parent product and cannot enqueue a new Tool');
+  if (route === 'existing_tool_update' && !parentProductKey)
+    throw new Error('Existing-tool update requires a parent product key');
+  let independentSignals: Ops2EntityProfile['independentSignals'];
+  if (route === 'new_tool') {
+    if (!independentKinds.includes(entityKind as typeof independentKinds[number]))
+      throw new Error('Only an independent entity can enqueue a new Tool');
+    const signal = (key: keyof NonNullable<Ops2EntityProfile['independentSignals']>): EntitySignal => ({
+      sourceIds: sourceIds(raw.independentSignals?.[key]?.sourceIds,
+        `entityProfile.independentSignals.${key}.sourceIds`, available),
+      evidenceExcerpt: text(raw.independentSignals?.[key]?.evidenceExcerpt,
+        `entityProfile.independentSignals.${key}.evidenceExcerpt`, 20),
+    });
+    independentSignals = { officialIdentity: signal('officialIdentity'),
+      userEntryWorkflow: signal('userEntryWorkflow'), lifecycle: signal('lifecycle'),
+      searchDecisionIntent: signal('searchDecisionIntent') };
+  } else if (raw.independentSignals !== undefined) {
+    throw new Error('Independent signals are only valid for new Tool routing');
+  }
+  return { route, entityKind, canonicalProductKey, ...(parentProductKey ? { parentProductKey } : {}),
+    ...(independentSignals ? { independentSignals } : {}) };
+}
+
+export function assertNewToolEntityProfile(selection: Ops2Selection): void {
+  if (selection.entityProfile?.route !== 'new_tool')
+    throw new Error('New candidate enqueue requires an explicit independent new_tool entity profile');
+  const profile = parseEntityProfile(selection.entityProfile,
+    new Set(selection.officialSources.map((source) => source.id)));
+  if (profile?.route !== 'new_tool' || !profile.independentSignals)
+    throw new Error('New candidate enqueue requires an explicit independent new_tool entity profile');
+}
+
 export function parseOps2Selection(input: unknown): Ops2Selection {
   if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('Selection must be an object');
   const raw = input as Record<string, any>;
@@ -134,6 +196,7 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
   if (new Set(sources.flatMap((source) => source.claimKeys)).size < 2)
     throw new Error('Official sources must cover complementary facts');
   const availableSourceIds = new Set(sources.map((source) => source.id));
+  const entityProfile = parseEntityProfile(raw.entityProfile, availableSourceIds);
   const entityGate = raw.entityGate;
   if (entityGate?.status !== 'PASS' || entityGate.aiCoreCapability?.status !== 'PASS' ||
       entityGate.identityCanonical?.status !== 'PASS' || entityGate.duplicateIntent?.status !== 'PASS')
@@ -259,7 +322,7 @@ export function parseOps2Selection(input: unknown): Ops2Selection {
   return { id, name: text(raw.name, 'name', 4), officialUrl,
     ...(officialDomainGroup ? { officialDomainGroup } : {}), categorySlug,
     cluster: { ...(taskSlug === undefined ? {} : { taskSlug }), role },
-    officialSources: sources, entityGate: parsedEntityGate,
+    officialSources: sources, ...(entityProfile ? { entityProfile } : {}), entityGate: parsedEntityGate,
     reviewedAt, nextReviewDate, media,
     pricing, tags: list(raw.tags, 'tags'), localized, claimGate: { status: 'PASS', items: parsedClaims } };
 }
@@ -277,6 +340,7 @@ export function selectionRawPayload(selection: Ops2Selection) {
     detailMetadata: { title: selection.name, description: summary,
       canonicalUrl: selection.officialUrl, externalUrl: selection.officialUrl, imageUrl },
     categorySlug: selection.categorySlug, tags: selection.tags, pricing: selection.pricing,
+    ...(selection.entityProfile ? { entityProfile: selection.entityProfile } : {}),
     useCases: selection.localized.en.bestFor,
     intakePlan: { evidenceUrls: selection.officialSources.map((source) => source.url), reviewedAt: selection.reviewedAt },
     decision: { reviewedAt: selection.reviewedAt, limitations: selection.localized.en.limitations,
