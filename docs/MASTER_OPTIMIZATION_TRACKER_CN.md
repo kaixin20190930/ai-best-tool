@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-19
+更新时间：2026-10-26
+
+2026-10-26 **SEO 产品架构 V3 已批准并落入产品宪法**：产品公开定位从泛 AI 工具目录收敛为 Evidence-backed AI Tool Decision Platform；Decision Cluster 成为唯一内容生产单位，页面职责、一个意图一个 canonical、工具三态、Claim 级 E0-E3 证据和 Coding/Automation/DeepL 第一阶段资产已冻结。12 周目标从“批量页面”改为两个 P0 Coding 决策页、一个 n8n 自托管 Guide、最多 8-12 个有独立价值的深度 Tool 页和至少一个可复核 E2 实测；数量均为质量上限而非 KPI。普通单元被限制为一份快照、一个端到端开发槽、一次最终 QA 和一份审计，R 级文档不运行 TypeScript/build/smoke，防止过度设计、开发和测试。当前硬阻塞仍是 GSC refresh token 失效；在数据恢复前不凭计划数量扩张。详见[SEO 产品架构 V3](./SEO_PRODUCT_ARCHITECTURE_V3_2026-10-26_CN.md)。
 
 2026-10-19 **成熟工具快速索引共享门禁修复并完成三项生产放行**：修复了把同一 published Task Fit 下的竞品误计为重复意图的问题；Task Fit 现在保留为比较上下文审计，真实 tool/candidate 身份碰撞仍硬阻断。Descript、HeyGen、Lovable 使用同一成熟品牌证据批次，通过独立 `QA_PASS_RELEASE`、证据 commit/零写 postcheck、最终 selector、rollback 与唯一索引 commit，均成为 `published + continue_index`。生产 sitemap 从 128 增至 134，英文和简中各新增三条 URL，一次生产 SEO smoke 通过；繁中继续不进 sitemap。生产当前 101 Tool ID / 77 published / 21 continue_index / 78 monitor / 2 archive，今日与本周索引使用量为 3/3。GSC 最新完整日仍为 10-14，OAuth refresh 400，未伪造更新数据。详见[当日日报](./DAILY_OPERATIONS_2026-10-19_CN.md)。
 

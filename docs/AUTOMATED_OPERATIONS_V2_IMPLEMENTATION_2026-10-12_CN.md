@@ -6,6 +6,8 @@
 
 上位战略：[Evidence-backed AI Tool Decision Platform 执行基线](./EVIDENCE_BACKED_DECISION_PLATFORM_EXECUTION_2026-10-12_CN.md)
 
+当前产品与 SEO 架构：[AI Best Tool SEO 产品架构 V3](./SEO_PRODUCT_ARCHITECTURE_V3_2026-10-26_CN.md)。页面职责、Cluster 排期、关键词优先级、证据等级和流程预算以 V3 为准。
+
 ## 1. 本次修正解决什么
 
 当前系统已经具备 `collection_candidates → draft tool → Admin 编辑 → published + monitor/noindex` 的通用数据路径，但实际自动运营仍大量采用“每个工具单独建立 release JSON、guard、专项测试和 Git 提交”的项目制路径。仓库已有约 42 个候选/发布数据文件和 32 个专项发布脚本。这种方式适合历史脏数据、复杂别名、重定向、受保护旧行或高风险边界，不适合成熟工具日常收录。
@@ -285,6 +287,15 @@ Google 普通页面的发现和编入索引通常需要数天；自动化只能�
 - 已有 PASS 没有来源变化、到期、受影响代码变化或生产异常时不得重跑。
 - 自动化不得为了实现本节而拆出 scoring service、dashboard、专属数据库表或连续 gate 任务；需要这些能力时，必须先用两周数据证明现有字段无法满足。
 - 单项超过 60 分钟、同类流程连续失败两次或验证成本高于用户变化时立即缩小范围，并在日报中记录 `PROCESS_BUDGET_EXCEEDED`。
+
+### V3 Cluster 执行补充（2026-10-26 生效）
+
+- 一个真实决策问题和一个 canonical 主页面构成当周生产中心；工具是 Cluster 供给，不是孤立页面 KPI。
+- 每个候选必须记录 `clusterRole`、至少两个 `comparisonTargets`、`downstreamConsumer`、`indexIntent` 和 Claim 级证据状态。没有下游消费位置的对象只进候选池。
+- 页面、工具、测试和 QA 数量都不是完成标准；正常单元只有一份快照、一个端到端开发槽、一次最终独立 QA 和一份最终审计。
+- E0 官方、E1 账户、E2 受控实测、E3 可复现基准属于单条 Claim；没有 E2/E3 时禁止把资料核验写成“真实测试”。
+- 新主页面只从新鲜 GSC、站内行为或明确独立需求中产生。GSC unavailable 时允许维护和已批准差分，不允许凭计划数量扩张。
+- 当前 Coding、Automation、DeepL 的页面职责、关键词和 12 周顺序以 [SEO 产品架构 V3](./SEO_PRODUCT_ARCHITECTURE_V3_2026-10-26_CN.md) 为唯一解释，不另建阶段任务、评分服务或 Dashboard。
 
 ## 9B. 免费与付费收录的商业化预留（暂不实施）
 
