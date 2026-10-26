@@ -93,26 +93,26 @@ export default function AdminToolEditForm({
   );
   const [commercialLoading, setCommercialLoading] = useState(false);
   const [claimLoading, setClaimLoading] = useState(false);
+  const [marketValidationDirty, setMarketValidationDirty] = useState(false);
   const claimTool = tool as ClaimInfoTool;
   const [claimOwnerEmail, setClaimOwnerEmail] = useState(claimTool.owner_email || '');
   const [claimStatus, setClaimStatus] = useState(claimTool.claim_status || 'unclaimed');
   const [claimedAt, setClaimedAt] = useState(claimTool.claimed_at || '');
 
-  const getTitle = (data: any) => {
+  const getLocalizedValue = (data: any, locale: 'en' | 'cn') => {
     if (typeof data === 'string') return data;
     if (typeof data === 'object' && data !== null) {
-      return data.en || data.zh || Object.values(data)[0] || '';
+      if (locale === 'cn') return data.cn || data.zh || data.en || Object.values(data)[0] || '';
+      return data.en || data.zh || data.cn || Object.values(data)[0] || '';
     }
     return '';
   };
 
-  const getContent = (data: any) => {
-    if (typeof data === 'string') return data;
-    if (typeof data === 'object' && data !== null) {
-      return data.en || data.zh || Object.values(data)[0] || '';
-    }
-    return '';
-  };
+  const preserveLocalizedValues = (data: any, en: string, cn: string) => ({
+    ...(data && typeof data === 'object' ? data : {}),
+    en,
+    cn,
+  });
 
   const quality = getToolQuality(tool);
   const featureRecord = getFeatureRecord(tool.features);
@@ -359,8 +359,11 @@ export default function AdminToolEditForm({
     const formData = new FormData(e.currentTarget);
     const name = String(formData.get('name') || '').trim();
     const titleEn = String(formData.get('title_en') || '').trim();
+    const titleCn = String(formData.get('title_cn') || '').trim();
     const contentEn = String(formData.get('content_en') || '').trim();
+    const contentCn = String(formData.get('content_cn') || '').trim();
     const detailEn = String(formData.get('detail_en') || '').trim();
+    const detailCn = String(formData.get('detail_cn') || '').trim();
     const url = String(formData.get('url') || '').trim();
     const imageUrl = String(formData.get('image_url') || '').trim();
     const thumbnailUrl = String(formData.get('thumbnail_url') || '').trim();
@@ -409,9 +412,9 @@ export default function AdminToolEditForm({
 
     const result = await updateTool(tool.id, {
       name,
-      title: { en: titleEn, zh: titleEn },
-      content: { en: contentEn, zh: contentEn },
-      detail: { en: detailEn, zh: detailEn },
+      title: preserveLocalizedValues(tool.title, titleEn, titleCn),
+      content: preserveLocalizedValues(tool.content, contentEn, contentCn),
+      detail: preserveLocalizedValues(tool.detail, detailEn, detailCn),
       url,
       image_url: imageUrl,
       thumbnail_url: thumbnailUrl,
@@ -440,7 +443,7 @@ export default function AdminToolEditForm({
         summary: { en: editorialSummaryEn, zh: editorialSummaryZh },
         trustNote: { en: editorialTrustNoteEn, zh: editorialTrustNoteZh },
       },
-      marketValidation: {
+      marketValidation: marketValidationDirty ? {
         verdict: marketVerdict,
         reviewedAt: String(formData.get('market_reviewed_at') || '').trim() || null,
         evidenceUrls: parseEvidenceLines('market_evidence_urls'),
@@ -457,7 +460,7 @@ export default function AdminToolEditForm({
           evidenceQuality: Number(formData.get('market_score_evidence_quality') || 0),
           strategicValue: Number(formData.get('market_score_strategic_value') || 0),
         },
-      },
+      } : undefined,
       decisionEvidence: {
         bestFit: {
           en: parseEvidenceLines('best_fit_en'),
@@ -840,7 +843,21 @@ export default function AdminToolEditForm({
               type="text"
               id="title_en"
               name="title_en"
-              defaultValue={getTitle(tool.title)}
+              defaultValue={getLocalizedValue(tool.title, 'en')}
+              required
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="title_cn" className="block text-sm font-medium text-slate-700">
+              Title (CN)
+            </label>
+            <input
+              type="text"
+              id="title_cn"
+              name="title_cn"
+              defaultValue={getLocalizedValue(tool.title, 'cn')}
               required
               className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
             />
@@ -854,7 +871,21 @@ export default function AdminToolEditForm({
               id="content_en"
               name="content_en"
               rows={3}
-              defaultValue={getContent(tool.content)}
+              defaultValue={getLocalizedValue(tool.content, 'en')}
+              required
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="content_cn" className="block text-sm font-medium text-slate-700">
+              Description (CN)
+            </label>
+            <textarea
+              id="content_cn"
+              name="content_cn"
+              rows={3}
+              defaultValue={getLocalizedValue(tool.content, 'cn')}
               required
               className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
             />
@@ -868,7 +899,20 @@ export default function AdminToolEditForm({
               id="detail_en"
               name="detail_en"
               rows={5}
-              defaultValue={getContent(tool.detail)}
+              defaultValue={getLocalizedValue(tool.detail, 'en')}
+              className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="detail_cn" className="block text-sm font-medium text-slate-700">
+              Detailed Description (CN)
+            </label>
+            <textarea
+              id="detail_cn"
+              name="detail_cn"
+              rows={5}
+              defaultValue={getLocalizedValue(tool.detail, 'cn')}
               className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
             />
           </div>
@@ -1164,7 +1208,10 @@ export default function AdminToolEditForm({
             </div>
           </div>
 
-          <div className="md:col-span-2 rounded-lg border border-emerald-100 bg-emerald-50/40 p-4">
+          <div
+            className="md:col-span-2 rounded-lg border border-emerald-100 bg-emerald-50/40 p-4"
+            onChange={() => setMarketValidationDirty(true)}
+          >
             <p className="text-sm font-semibold text-slate-900">Market validation</p>
             <p className="mt-1 text-xs text-slate-600">
               Evidence completeness is not product quality. Record independent adoption and durability before marking a collected tool as validated.
