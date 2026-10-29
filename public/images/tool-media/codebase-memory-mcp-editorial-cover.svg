@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Codebase Memory MCP editorial illustration</title>
+  <desc id="desc">A local code graph connecting files, symbols, and an AI agent.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#102a43"/><stop offset="1" stop-color="#1f6f78"/></linearGradient>
+    <linearGradient id="node" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d7f4ec"/><stop offset="1" stop-color="#79c7b5"/></linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="40" fill="url(#bg)"/>
+  <g fill="none" stroke="#a6ded1" stroke-opacity=".72" stroke-width="8">
+    <path d="M270 315 440 190 630 275 790 155 960 260M270 315 450 455 630 275 790 430 960 260"/>
+    <path d="M440 190 450 455M790 155 790 430" stroke-opacity=".32"/>
+  </g>
+  <g fill="url(#node)" stroke="#e9fff8" stroke-width="7">
+    <circle cx="270" cy="315" r="42"/><circle cx="440" cy="190" r="34"/><circle cx="450" cy="455" r="34"/>
+    <circle cx="630" cy="275" r="52"/><circle cx="790" cy="155" r="34"/><circle cx="790" cy="430" r="34"/><circle cx="960" cy="260" r="42"/>
+  </g>
+  <g fill="#102a43" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle">
+    <text x="270" y="325">{} </text><text x="440" y="200">ƒ</text><text x="450" y="465">md</text>
+    <text x="630" y="285">MCP</text><text x="790" y="165">cfg</text><text x="790" y="440">db</text><text x="960" y="270">AI</text>
+  </g>
+</svg>

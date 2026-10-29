@@ -1,0 +1,81 @@
+{
+  "overallStatus": "QA_PASS",
+  "checkedAt": "2026-10-29T01:00:50.000Z",
+  "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+  "qaActor": "codex-thread:01a18529-f035-7001-aac3-e9a52b3b506c",
+  "qaThread": "codex-thread:01a18529-f035-7001-aac3-e9a52b3b506c",
+  "selectionHashes": {
+    "codebase-memory-mcp": "bb7634dbdb08f9c6e8f8576cb50db9e0ae3beaf15a0a6196f35a70422432ff7a",
+    "deepseek-harness": "d2d3203fe96770299892b3412134bad04607a81c6dd68e8ba4c62444e59bf452"
+  },
+  "enqueueScopes": [
+    {
+      "selection": "codebase-memory-mcp",
+      "status": "PASS",
+      "selectionHash": "bb7634dbdb08f9c6e8f8576cb50db9e0ae3beaf15a0a6196f35a70422432ff7a",
+      "preimageHash": "8af496cbb1c33920981096ae47f10b5fc74b46f45dbdc205e54a31d69ba11380",
+      "scope": {
+        "operation": "enqueue",
+        "candidateId": "fbb19a69-8ee0-48e0-8b3c-17b4c6e51a22",
+        "canonicalUrl": "https://github.com/DeusData/codebase-memory-mcp"
+      }
+    },
+    {
+      "selection": "deepseek-harness",
+      "status": "PASS",
+      "selectionHash": "d2d3203fe96770299892b3412134bad04607a81c6dd68e8ba4c62444e59bf452",
+      "preimageHash": "c5ce4cab149aa5c4a77b845ba68e27d5fdfb88f97f233843202c6fa072479109",
+      "scope": {
+        "operation": "enqueue",
+        "candidateId": "6b31eac4-2dca-466b-a587-26471de2a778",
+        "canonicalUrl": "https://www.deepseek.com/en/harness/"
+      }
+    }
+  ],
+  "checks": {
+    "entityAndVersionBoundary": "PASS; both are durable products, while releases, model versions, plugins, integrations and companion UI remain claims or updates under the owning product.",
+    "officialSourcesAndClaims": "PASS; current first-party sources support identity, capability, lifecycle, license and the explicit limitations retained by each locale.",
+    "deepseekSafetyBoundary": "PASS; public/developer preview, no security audit, code/command/plugin access and least-privilege disposable-environment guidance are prominent and are not softened into production-readiness claims.",
+    "localization": "PASS; en/cn/tw preserve equivalent Best for, Not ideal, limitations, comparison axes and pricing/privacy/security uncertainty.",
+    "media": "PASS; both platform-owned neutral SVGs match their declared SHA-256 values and contain no vendor marks or remote content.",
+    "genericOps2Preflight": "PASS; both exact selections passed existing generic enqueue preflight with productionWrites=0.",
+    "processBudget": "PASS; R-level source/schema/media/differential QA only. No TypeScript, build, smoke, runtime branch, tool-specific executor, production write, commit or push.",
+    "materialIssues": []
+  },
+  "allowedReleaseBoundary": {
+    "lifecycle": "published",
+    "pageQualityStatus": "monitor",
+    "robots": "noindex, follow",
+    "sitemapEligible": false,
+    "indexApproved": false,
+    "relationPublished": false
+  },
+  "ops2QaReports": [
+    {
+      "status": "PASS",
+      "selectionHash": "bb7634dbdb08f9c6e8f8576cb50db9e0ae3beaf15a0a6196f35a70422432ff7a",
+      "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "qaActor": "codex-thread:01a18529-f035-7001-aac3-e9a52b3b506c",
+      "qaThread": "codex-thread:01a18529-f035-7001-aac3-e9a52b3b506c",
+      "checkedAt": "2026-10-29T01:00:50.000Z",
+      "scope": {
+        "operation": "enqueue",
+        "candidateId": "fbb19a69-8ee0-48e0-8b3c-17b4c6e51a22",
+        "canonicalUrl": "https://github.com/DeusData/codebase-memory-mcp"
+      }
+    },
+    {
+      "status": "PASS",
+      "selectionHash": "d2d3203fe96770299892b3412134bad04607a81c6dd68e8ba4c62444e59bf452",
+      "reviewer": "2b8177ac-70b3-4475-a1ee-509ff8b4b622",
+      "qaActor": "codex-thread:01a18529-f035-7001-aac3-e9a52b3b506c",
+      "qaThread": "codex-thread:01a18529-f035-7001-aac3-e9a52b3b506c",
+      "checkedAt": "2026-10-29T01:00:50.000Z",
+      "scope": {
+        "operation": "enqueue",
+        "candidateId": "6b31eac4-2dca-466b-a587-26471de2a778",
+        "canonicalUrl": "https://www.deepseek.com/en/harness/"
+      }
+    }
+  ]
+}

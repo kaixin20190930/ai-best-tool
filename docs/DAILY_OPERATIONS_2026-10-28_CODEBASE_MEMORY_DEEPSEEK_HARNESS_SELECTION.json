@@ -1,0 +1,200 @@
+{
+  "packetId": "CATALOG-CODEBASE-MEMORY-DEEPSEEK-HARNESS-2026-10-28",
+  "reviewedAt": "2026-10-28",
+  "sourceCheckedAt": "2026-10-28",
+  "level": "R",
+  "productionWrites": 0,
+  "opportunityContext": {
+    "searchDemand": "unavailable; no current page/query GSC evidence was used to invent volume or demand",
+    "cluster": "AI coding assistants and codebase context",
+    "comparisonTargets": {
+      "codebase-memory-mcp": ["Graphify", "Sourcegraph Cody"],
+      "deepseek-harness": ["OpenHands", "Claude Code"]
+    },
+    "downstreamConsumer": {
+      "codebase-memory-mcp": "AI coding-assistant decision cluster; codebase graph/MCP capability comparison and the tool-intelligence page if it is later published",
+      "deepseek-harness": "AI agent development environment decision cluster; open-source harness comparison and the tool-intelligence page if it is later published"
+    },
+    "observableSignals": ["official-source outbound clicks", "comparison-entry clicks", "GSC query/page impressions after any separately approved publication"],
+    "identityAndVersionPolicy": "Keep each durable product as one entity. Treat releases, model versions, plugins, integrations and optional companion UI as claims/updates under the owning product, not new Tool IDs. Reopen identity only if the vendor establishes a separately named product, separate entry workflow and independent lifecycle.",
+    "mediaPolicy": "Two neutral AI Best Tool editorial SVGs; no vendor marks, screenshots, remote assets or implied endorsement."
+  },
+  "selections": [
+    {
+      "id": "fbb19a69-8ee0-48e0-8b3c-17b4c6e51a22",
+      "name": "Codebase Memory MCP",
+      "officialUrl": "https://github.com/DeusData/codebase-memory-mcp",
+      "categorySlug": "developer-tools",
+      "cluster": { "role": "gap_filler" },
+      "officialSources": [
+        { "id": "cbm-repository-2026-10-28", "url": "https://github.com/DeusData/codebase-memory-mcp", "claimKeys": ["identity", "ai_core_capability", "local_architecture", "workflow", "limitations", "hosting_and_security", "pricing_license"] },
+        { "id": "cbm-releases-2026-10-28", "url": "https://github.com/DeusData/codebase-memory-mcp/releases", "claimKeys": ["lifecycle", "current_release", "maintenance"] },
+        { "id": "cbm-license-2026-10-28", "url": "https://github.com/DeusData/codebase-memory-mcp/blob/main/LICENSE", "claimKeys": ["license", "pricing_license"] }
+      ],
+      "entityProfile": {
+        "route": "new_tool",
+        "entityKind": "product",
+        "canonicalProductKey": "codebase-memory-mcp",
+        "independentSignals": {
+          "officialIdentity": { "sourceIds": ["cbm-repository-2026-10-28"], "evidenceExcerpt": "The DeusData repository names codebase-memory-mcp as an MCP server for local code intelligence and persistent repository knowledge graphs." },
+          "userEntryWorkflow": { "sourceIds": ["cbm-repository-2026-10-28"], "evidenceExcerpt": "Users install the server and connect coding agents through MCP, or query its graph through the CLI; this is distinct from browsing a hosted Graphify service." },
+          "lifecycle": { "sourceIds": ["cbm-releases-2026-10-28"], "evidenceExcerpt": "The repository has a release stream; the official releases page showed v0.12.1 as latest when checked on 2026-10-28." },
+          "searchDecisionIntent": { "sourceIds": ["cbm-repository-2026-10-28"], "evidenceExcerpt": "The official description frames a concrete decision need: give coding agents structural codebase context and trace code, documentation, configuration and infrastructure relationships." }
+        }
+      },
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["cbm-repository-2026-10-28"], "evidenceExcerpt": "A locally run MCP server builds a persistent code knowledge graph and exposes graph context to AI coding agents; this is AI-agent infrastructure rather than a model release." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["cbm-repository-2026-10-28", "cbm-releases-2026-10-28"], "evidenceExcerpt": "The DeusData repository is the product identity and canonical project home. Its release history is attached to that repository; no separate hosted product identity was found." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Full production tools and candidate records were scanned read-only for Codebase Memory, codebase-memory-mcp, DeusData and the official repository URL; no matching entity or candidate was found. Graphify and Sourcegraph Cody are comparison objects, not asserted duplicates: compare distinct code-graph and coding-assistant workflows before publication." }
+      },
+      "reviewedAt": "2026-10-28",
+      "nextReviewDate": "2026-11-27",
+      "media": {
+        "mode": "platform_owned_editorial",
+        "assetPath": "/images/tool-media/codebase-memory-mcp-editorial-cover.svg",
+        "sha256": "33198d6d61ea449ba3d67e47ee04b73022291cab997b90a44ac13777528e8316",
+        "creator": "AI Best Tool editorial",
+        "createdAt": "2026-10-28",
+        "noVendorMarks": true
+      },
+      "pricing": "free",
+      "tags": ["developer-tools", "mcp", "code-intelligence", "knowledge-graph", "local-first"],
+      "localized": {
+        "en": {
+          "title": "Codebase Memory MCP: Local Code Knowledge Graph for AI Agents",
+          "summary": "Codebase Memory MCP is a locally run MCP server that indexes code, documentation, configuration, and infrastructure into a persistent graph for coding agents and CLI queries.",
+          "detail": "Codebase Memory MCP is the DeusData repository and product: a locally run MCP server that builds a persistent knowledge graph from a project’s source code and surrounding technical context. It can help an agent trace symbols and dependencies or explore an unfamiliar repository, and it also offers a CLI. The project is separate from Graphify: shared graph terminology does not make them one product. Its optional CBM Lens is a companion interface within this project, not a separate Tool. The repository currently identifies MIT licensing and a release stream; its latest listed release at review was v0.12.1. Local indexing and graph queries do not require a hosted service or API key, according to the project. Installation, native build prerequisites, supported clients, performance and the optional Lens/model behavior are implementation- and version-dependent; review the current repository before use.",
+          "bestFor": ["Developers who want a local code graph exposed to MCP-compatible coding agents", "Teams exploring relationships across source, docs, configuration, and infrastructure", "Users who prefer local indexing and CLI or agent workflows"],
+          "notIdealFor": ["People seeking a hosted no-setup SaaS", "Users who need independently verified enterprise support or service-level commitments", "Projects whose environment cannot meet the current native build or client-integration requirements"],
+          "limitations": ["The core product is software that users install and operate; this is not a hosted code-analysis service.", "The repository's performance and compatibility statements are vendor-maintained and were not independently benchmarked here.", "Native build prerequisites and supported integrations can vary by platform and release.", "CBM Lens is described by the project as an open-beta companion; its optional browser AI is opt-in and local according to the repository.", "No account-level, team-hosting, security-audit, or commercial support claim is made by this review."],
+          "compareAxes": ["local vs hosted processing", "MCP/CLI workflow", "graph scope and code navigation", "setup and platform prerequisites", "license and operating cost"],
+          "pricingSummary": "The repository is MIT-licensed and the software is presented as locally runnable without a hosted API key. Compute and maintenance are the user's responsibility; any third-party model or infrastructure costs are separate and not established as a standard plan."
+        },
+        "cn": {
+          "title": "Codebase Memory MCP：面向 AI 编程代理的本地代码知识图谱",
+          "summary": "Codebase Memory MCP 是 DeusData 的本地运行 MCP 服务，可将代码、文档、配置和基础设施信息构建为持久图谱，供编程代理或 CLI 查询。",
+          "detail": "Codebase Memory MCP 是 DeusData 仓库对应的独立产品：在本地运行的 MCP 服务，将项目源码及相关技术上下文构建为持久知识图谱，帮助代理追踪符号、依赖并理解陌生代码库，也可通过 CLI 查询。它与 Graphify 是不同产品，名称或图谱概念相近不代表实体相同。可选的 CBM Lens 是本项目的配套界面，不另建工具实体。项目当前标注 MIT 许可并维护独立发行版本；本次核验时 releases 页面最新列出 v0.12.1。仓库称本地索引和图谱查询不需要托管服务或 API Key。安装方式、原生构建依赖、客户端兼容性、性能以及可选 Lens/模型行为会随环境和版本变化，使用前应查看当前仓库。",
+          "bestFor": ["希望把本地代码图谱通过 MCP 提供给编程代理的开发者", "需要梳理源码、文档、配置和基础设施关系的团队", "偏好本地索引以及 CLI 或代理工作流的用户"],
+          "notIdealFor": ["需要免安装托管 SaaS 的用户", "要求已独立验证的企业支持或服务等级承诺的团队", "运行环境无法满足当前原生构建或客户端集成要求的项目"],
+          "limitations": ["核心产品需要用户自行安装和运行，并非托管代码分析服务。", "仓库中的性能和兼容性说明为项目方维护，本次没有独立基准测试。", "原生构建依赖和客户端集成支持可能因平台与版本而异。", "项目将 CBM Lens 标为开放测试配套界面；仓库称可选浏览器 AI 需主动启用且在本机运行。", "本次不作账户级权益、团队托管、安全审计或商业支持承诺。"],
+          "compareAxes": ["本地处理与托管服务", "MCP/CLI 工作流", "图谱范围与代码导航", "安装及平台前置条件", "许可与运行成本"],
+          "pricingSummary": "仓库采用 MIT 许可，项目说明软件可本地运行且无需托管 API Key。计算资源和维护由用户承担；第三方模型或基础设施可能产生独立费用，未发现统一套餐价格。"
+        },
+        "tw": {
+          "title": "Codebase Memory MCP：為 AI 程式代理提供的本機程式碼知識圖譜",
+          "summary": "Codebase Memory MCP 是 DeusData 的本機 MCP 服務，可將程式碼、文件、設定與基礎架構資訊建成持久圖譜，供程式代理或 CLI 查詢。",
+          "detail": "Codebase Memory MCP 是 DeusData 儲存庫所對應的獨立產品：在本機執行的 MCP 服務，會將專案原始碼及相關技術脈絡建成持久知識圖譜，協助代理追蹤符號、相依關係並理解陌生程式庫，也可透過 CLI 查詢。它與 Graphify 是不同產品，名稱或圖譜概念相近不代表實體相同。選用的 CBM Lens 是本專案的配套介面，不另建工具實體。專案目前標示 MIT 授權並維護獨立發行版本；本次核對時 releases 頁面最新列出 v0.12.1。儲存庫表示本機索引和圖譜查詢不需要託管服務或 API Key。安裝方式、原生建置相依項目、用戶端相容性、效能及選用 Lens/模型行為會隨環境與版本改變，使用前應查看目前儲存庫。",
+          "bestFor": ["希望透過 MCP 將本機程式碼圖譜提供給程式代理的開發者", "需要梳理原始碼、文件、設定與基礎架構關係的團隊", "偏好本機索引以及 CLI 或代理工作流程的使用者"],
+          "notIdealFor": ["需要免安裝託管 SaaS 的使用者", "要求已獨立驗證企業支援或服務等級承諾的團隊", "執行環境無法符合目前原生建置或用戶端整合要求的專案"],
+          "limitations": ["核心產品需要使用者自行安裝和執行，並非託管程式碼分析服務。", "儲存庫中的效能與相容性說明由專案方維護，本次未進行獨立基準測試。", "原生建置相依項目和用戶端整合支援可能因平台與版本而異。", "專案將 CBM Lens 標示為公開測試中的配套介面；儲存庫表示選用的瀏覽器 AI 須主動啟用並在本機推論。", "本次不承諾帳戶權益、團隊託管、安全稽核或商業支援。"],
+          "compareAxes": ["本機處理與託管服務", "MCP/CLI 工作流程", "圖譜範圍與程式碼導覽", "安裝及平台先決條件", "授權與執行成本"],
+          "pricingSummary": "儲存庫採 MIT 授權，專案表示軟體可在本機執行且不需託管 API Key。運算資源與維護由使用者負責；第三方模型或基礎設施可能另有費用，目前未確認統一方案價格。"
+        }
+      },
+      "claimGate": {
+        "status": "PASS",
+        "items": [
+          { "key": "ai_core_capability", "status": "verified_public", "boundary": "Repository describes a local MCP server and persistent code knowledge graph; product performance and independently tested accuracy are not claimed.", "sourceIds": ["cbm-repository-2026-10-28"], "nextReviewDate": "2026-11-27" },
+          { "key": "local_architecture", "status": "verified_public", "boundary": "Only the repository statement that indexing and graph queries need no hosted service/API key is included; it does not prove every optional integration or external model is cost-free.", "sourceIds": ["cbm-repository-2026-10-28"], "nextReviewDate": "2026-11-27" },
+          { "key": "license", "status": "verified_public", "boundary": "The repository license file is MIT; this is not legal advice and does not independently clear third-party components or user content.", "sourceIds": ["cbm-license-2026-10-28"], "nextReviewDate": "2026-11-27" },
+          { "key": "current_release", "status": "verified_public", "boundary": "v0.12.1 was the latest item shown on the official releases page on 2026-10-28; version is a freshness claim, not a separate product entity.", "sourceIds": ["cbm-releases-2026-10-28"], "nextReviewDate": "2026-11-27" },
+          { "key": "hosting_and_security", "status": "conditional", "boundary": "The core runs locally per the repository, but no independent security audit, enterprise hosting, or complete data-flow test was performed; assess optional integrations separately.", "sourceIds": ["cbm-repository-2026-10-28"], "nextReviewDate": "2026-11-27" }
+        ]
+      }
+    },
+    {
+      "id": "6b31eac4-2dca-466b-a587-26471de2a778",
+      "name": "DeepSeek Harness",
+      "officialUrl": "https://www.deepseek.com/en/harness/",
+      "categorySlug": "developer-tools",
+      "cluster": { "role": "gap_filler" },
+      "officialSources": [
+        { "id": "dsh-product-page-2026-10-28", "url": "https://www.deepseek.com/en/harness/", "claimKeys": ["identity", "ai_core_capability", "preview_status", "preview_and_compatibility", "plugin_architecture", "workflow", "pricing_and_model_cost"] },
+        { "id": "dsh-terms-2026-10-28", "url": "https://www.deepseek.com/en/harness/terms-of-use/", "claimKeys": ["operator", "terms", "service_modes", "pricing_boundary", "pricing_and_model_cost"] },
+        { "id": "dsh-privacy-2026-10-28", "url": "https://www.deepseek.com/en/harness/privacy/", "claimKeys": ["privacy", "data_processing", "service_modes", "privacy_and_data_processing"] },
+        { "id": "dsh-repository-2026-10-28", "url": "https://github.com/deepseek-ai/deepseek-harness", "claimKeys": ["identity", "brand_relationship", "license", "preview_compatibility", "preview_and_compatibility", "security_posture"] },
+        { "id": "dsh-safety-notice-2026-10-28", "url": "https://github.com/deepseek-ai/deepseek-harness/blob/master/SAFETY.md", "claimKeys": ["security_posture", "safety_limitations"] },
+        { "id": "dsh-license-2026-10-28", "url": "https://github.com/deepseek-ai/deepseek-harness/blob/master/LICENSE", "claimKeys": ["license"] }
+      ],
+      "officialDomainGroup": {
+        "canonicalProductDomain": "deepseek.com",
+        "parentBrandDomains": ["github.com"],
+        "identitySourceIds": ["dsh-product-page-2026-10-28", "dsh-repository-2026-10-28"]
+      },
+      "entityProfile": {
+        "route": "new_tool",
+        "entityKind": "platform",
+        "canonicalProductKey": "deepseek-harness",
+        "parentProductKey": "deepseek",
+        "independentSignals": {
+          "officialIdentity": { "sourceIds": ["dsh-product-page-2026-10-28", "dsh-repository-2026-10-28", "dsh-terms-2026-10-28"], "evidenceExcerpt": "DeepSeek presents Harness as its own public-preview open-source agent harness, links its GitHub project, and the Harness terms identify the operating company and service." },
+          "userEntryWorkflow": { "sourceIds": ["dsh-product-page-2026-10-28"], "evidenceExcerpt": "The official page offers a desktop app or a web UI launched from code, with plugins extending tools, skills, and interface capabilities." },
+          "lifecycle": { "sourceIds": ["dsh-product-page-2026-10-28", "dsh-repository-2026-10-28"], "evidenceExcerpt": "The official page explicitly says public preview worldwide; the official repository calls it developer preview and warns of compatibility-breaking changes." },
+          "searchDecisionIntent": { "sourceIds": ["dsh-product-page-2026-10-28", "dsh-privacy-2026-10-28"], "evidenceExcerpt": "The product is a user-facing agent workspace and extensible harness; choosing it requires assessing local execution, model-provider setup, plugin permissions, and preview safety." }
+        }
+      },
+      "entityGate": {
+        "status": "PASS",
+        "aiCoreCapability": { "status": "PASS", "sourceIds": ["dsh-product-page-2026-10-28"], "evidenceExcerpt": "DeepSeek describes an open-source agent harness with desktop and code-launched web UI, supporting everyday work, coding, research, background tasks and plugins." },
+        "identityCanonical": { "status": "PASS", "sourceIds": ["dsh-product-page-2026-10-28", "dsh-repository-2026-10-28", "dsh-terms-2026-10-28"], "evidenceExcerpt": "The DeepSeek Harness product page, linked DeepSeek AI repository and product-specific terms establish one distinct product and operator; releases, plugins and bundled/default models remain claims of this platform." },
+        "duplicateIntent": { "status": "PASS", "checkedToolIds": [], "rationale": "Full production tools and candidate records were scanned read-only for DeepSeek Harness, deepseek-harness and deepseek.com; no matching entity or candidate was found. OpenHands and Claude Code are comparison objects for separate product workflows, not assumed duplicates." }
+      },
+      "reviewedAt": "2026-10-28",
+      "nextReviewDate": "2026-11-04",
+      "media": {
+        "mode": "platform_owned_editorial",
+        "assetPath": "/images/tool-media/deepseek-harness-editorial-cover.svg",
+        "sha256": "4590a45cef9008ab318621e5af572c786cbd6b4fc7bbaae44c3c3df8267fd8e8",
+        "creator": "AI Best Tool editorial",
+        "createdAt": "2026-10-28",
+        "noVendorMarks": true
+      },
+      "pricing": "freemium",
+      "tags": ["developer-tools", "ai-agent", "agent-harness", "plugins", "open-source", "preview"],
+      "localized": {
+        "en": {
+          "title": "DeepSeek Harness: Open-Source Agent Workspace in Public Preview",
+          "summary": "DeepSeek Harness is an open-source agent harness with a desktop app or code-launched web UI and a plugin-based architecture; it remains in public preview with rapidly changing compatibility.",
+          "detail": "DeepSeek Harness is DeepSeek's user-facing open-source agent workspace and extensible harness, presented for everyday work, coding, research, background tasks, and plugin development. The official product page says it is in public preview worldwide. DeepSeek's GitHub repository labels it developer-preview software and warns that compatibility-breaking changes will occur. It can run as a desktop app or a web UI launched from code; using the web UI requires choosing a workspace and configuring a model/provider. The official privacy policy distinguishes official-model services from custom-model services: custom-model inputs are routed to the selected provider under that provider's policies, while the policy also lists session logs and user-provided content among data processed in connection with the services. The exact mode-specific capture and retention behavior was not independently tested, so do not generalize a privacy guarantee. The official safety notice says the software has not undergone a security audit and can execute generated code, commands, plugins, and access available files, processes, network, or credentials. Use least privilege and an isolated disposable environment; do not treat it as production-ready. No fixed all-in price or account-level usage allowance is asserted.",
+          "bestFor": ["Developers evaluating an extensible, plugin-oriented open-source agent workspace", "Users comfortable configuring model providers and reviewing tool permissions", "Experimentation in a disposable or isolated development environment"],
+          "notIdealFor": ["Production or sensitive-data workloads without an independent security review", "Users seeking a stable compatibility contract or fully managed no-setup service", "Users expecting model inference, API access, or plugins to be free of separate provider charges"],
+          "limitations": ["Public preview / developer preview; interfaces and compatibility may change rapidly and break.", "The official repository says it has not undergone a security audit; generated code/commands and plugins may access files, processes, network, and credentials available to the process.", "Sandboxing and approval prompts reduce but do not eliminate risk; the official guidance recommends least privilege and a disposable VM/container.", "Model setup and costs depend on the chosen official or custom provider; no single all-in price or quota was verified.", "The privacy policy lists session logs and user-provided content while also describing custom-provider routing; exact mode-specific capture/retention was not independently tested, so avoid blanket privacy claims.", "This product is distinct from DeepSeek model versions; bundled model names and versions must be maintained as version claims, not separate Tool IDs."],
+          "compareAxes": ["preview stability and breaking changes", "plugin architecture and extensibility", "local workspace and command permissions", "model-provider configuration and data handling", "security posture and operating cost"],
+          "pricingSummary": "Open-source software is offered in public preview, but this does not establish zero total cost. Model/API charges depend on the selected provider and configuration; no universal subscription price or quota was verified."
+        },
+        "cn": {
+          "title": "DeepSeek Harness：处于公开预览阶段的开源代理工作台",
+          "summary": "DeepSeek Harness 是开源 AI 代理工作台，可使用桌面应用或通过代码启动网页界面，并采用可扩展插件架构；目前仍处于公开预览，官方提示兼容性会快速变化并可能出现破坏性更新。",
+          "detail": "DeepSeek Harness 是 DeepSeek 面向用户提供的开源代理工作台与可扩展运行框架，官方介绍其用途包括日常工作、编程、研究、后台任务和插件开发。产品页称目前在全球公开预览；DeepSeek 官方 GitHub 仓库进一步标记为开发者预览，并明确提示会出现兼容性破坏变更。产品可作为桌面应用运行，也可通过代码启动网页界面；使用网页界面需要选择工作区并配置模型/提供方。官方隐私政策区分官方模型服务和自定义模型服务：自定义模型输入会发送给所选提供方并受其政策约束；同时政策也将会话日志和用户提供内容列为服务处理的数据。各模式下实际收集和保留行为未经过独立测试，因此不应泛化隐私保证。官方安全说明称软件尚未经过安全审计，能够执行模型生成的代码和命令、加载插件，并访问进程可用的文件、网络或凭据。应遵循最小权限并在一次性隔离环境中试用，不应视为可直接用于生产的安全工具。本次没有核实统一全包价格或账户级额度。",
+          "bestFor": ["评估可扩展插件式开源代理工作台的开发者", "能够配置模型提供方并审查工具权限的用户", "在一次性或隔离开发环境中进行实验的用户"],
+          "notIdealFor": ["尚未独立完成安全审查却要处理生产或敏感数据的工作负载", "需要稳定兼容承诺或免配置托管服务的用户", "认为模型推理、API 或插件不会产生独立提供方费用的用户"],
+          "limitations": ["公开预览/开发者预览阶段；界面和兼容性可能快速变化并发生破坏性更新。", "官方仓库称尚未经过安全审计；生成代码、命令和插件可能访问进程可用的文件、进程、网络及凭据。", "沙箱和操作审批只能降低风险，不能消除风险；官方建议采用最小权限及一次性虚拟机/容器。", "模型设置与成本取决于所选官方或自定义提供方；未核实统一全包价格或额度。", "隐私政策列出会话日志和用户提供内容，同时说明自定义模型会转发至所选提供方；各模式的实际收集/保留未独立测试，不应作笼统隐私承诺。", "该产品不是 DeepSeek 模型版本；内置模型名称和版本应作为版本声明维护，不应另建 Tool ID。"],
+          "compareAxes": ["预览稳定性与破坏性更新", "插件架构与扩展方式", "本地工作区和命令权限", "模型提供方配置与数据处理", "安全态势与运行成本"],
+          "pricingSummary": "软件以开源形式处于公开预览，但这不代表总成本为零。模型/API 费用取决于所选提供方和配置；本次未核实统一订阅价格或额度。"
+        },
+        "tw": {
+          "title": "DeepSeek Harness：處於公開預覽階段的開源代理工作台",
+          "summary": "DeepSeek Harness 是開源 AI 代理工作台，可使用桌面應用程式或透過程式碼啟動網頁介面，並採用可擴充外掛架構；目前仍在公開預覽，官方提醒相容性會快速變動並可能出現破壞性更新。",
+          "detail": "DeepSeek Harness 是 DeepSeek 面向使用者提供的開源代理工作台與可擴充執行框架，官方介紹用途包括日常工作、程式開發、研究、背景工作及外掛開發。產品頁表示目前在全球公開預覽；DeepSeek 官方 GitHub 儲存庫進一步標示為開發者預覽，並明確提醒將出現相容性破壞變更。產品可作為桌面應用程式執行，也可透過程式碼啟動網頁介面；使用網頁介面需要選擇工作區並設定模型/提供者。官方隱私政策區分官方模型服務與自訂模型服務：自訂模型輸入會傳送給所選提供者並受其政策約束；同一政策也將工作階段記錄和使用者提供內容列為服務處理資料。各模式的實際收集與保留行為未經獨立測試，因此不應泛化隱私保證。官方安全說明表示軟體尚未經過安全稽核，可執行模型產生的程式碼和命令、載入外掛，並存取執行程序可用的檔案、網路或憑證。應採用最小權限並在一次性隔離環境試用，不應視為可直接用於正式環境的安全工具。本次未核實統一全包價格或帳戶級額度。",
+          "bestFor": ["評估可擴充外掛式開源代理工作台的開發者", "能設定模型提供者並檢查工具權限的使用者", "在一次性或隔離開發環境中進行實驗的使用者"],
+          "notIdealFor": ["尚未獨立完成安全審查卻要處理正式環境或敏感資料的工作負載", "需要穩定相容承諾或免設定託管服務的使用者", "認為模型推論、API 或外掛不會產生提供者額外費用的使用者"],
+          "limitations": ["公開預覽/開發者預覽階段；介面和相容性可能快速變動並發生破壞性更新。", "官方儲存庫表示尚未經過安全稽核；生成程式碼、命令和外掛可能存取執行程序可用的檔案、程序、網路及憑證。", "沙箱和操作核准只能降低風險，不能消除風險；官方建議採用最小權限及一次性虛擬機器/容器。", "模型設定與成本取決於所選官方或自訂提供者；未核實統一全包價格或額度。", "隱私政策列出工作階段記錄和使用者提供內容，同時說明自訂模型會轉送至所選提供者；各模式實際收集/保留未獨立測試，不應作籠統隱私承諾。", "此產品不同於 DeepSeek 模型版本；內建模型名稱和版本應作為版本聲明維護，不應另建 Tool ID。"],
+          "compareAxes": ["預覽穩定性與破壞性更新", "外掛架構與擴充方式", "本機工作區和命令權限", "模型提供者設定與資料處理", "安全態勢與執行成本"],
+          "pricingSummary": "軟體以開源形式處於公開預覽，但這不代表總成本為零。模型/API 費用取決於所選提供者和設定；本次未核實統一訂閱價格或額度。"
+        }
+      },
+      "claimGate": {
+        "status": "PASS",
+        "items": [
+          { "key": "ai_core_capability", "status": "verified_public", "boundary": "Official page describes an agent harness and plugin architecture; capabilities are not independently tested in this packet.", "sourceIds": ["dsh-product-page-2026-10-28"], "nextReviewDate": "2026-11-04" },
+          { "key": "preview_and_compatibility", "status": "verified_public", "boundary": "Public preview is stated by the product page; developer-preview and breaking compatibility changes are stated by the official repository. Recheck frequently; do not imply stable production readiness.", "sourceIds": ["dsh-product-page-2026-10-28", "dsh-repository-2026-10-28"], "nextReviewDate": "2026-11-04" },
+          { "key": "security_posture", "status": "verified_public", "boundary": "The official repository safety notice says no security audit has been performed and describes access risks; this is a vendor-published warning, not an independent audit.", "sourceIds": ["dsh-repository-2026-10-28", "dsh-safety-notice-2026-10-28"], "nextReviewDate": "2026-11-04" },
+          { "key": "privacy_and_data_processing", "status": "conditional", "boundary": "The policy lists session logs and user-provided content, and separately describes custom-provider routing; exact mode-specific capture/retention was not independently tested, so no blanket privacy guarantee is made.", "sourceIds": ["dsh-privacy-2026-10-28"], "nextReviewDate": "2026-11-04" },
+          { "key": "pricing_and_model_cost", "status": "unknown", "boundary": "No unified subscription price or account-specific allowance was verified. The selected model/provider may impose separate charges; do not state a numeric price or quota.", "sourceIds": [], "nextReviewDate": "2026-11-04" },
+          { "key": "license", "status": "verified_public", "boundary": "The official repository LICENSE file says MIT; bundled components and third-party plugins may have separate terms.", "sourceIds": ["dsh-license-2026-10-28"], "nextReviewDate": "2026-11-04" }
+        ]
+      }
+    }
+  ]
+}
