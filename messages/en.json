@@ -76,7 +76,7 @@
   },
   "FooterNavigation": {
     "privacyPolicy": {
-      "1-h1": "Privacy Policy for AI Best Tool Tools Directory",
+      "1-h1": "Privacy Policy for AI Best Tool",
       "1-p": "This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service. If you choose to use my Service, then you agree to the collection and use of information in relation to this policy. The Personal Information that I collect is used for providing and improving the Service. I will not use or share your information with anyone except as described in this Privacy Policy. The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions.",
       "2-h2": "1. Information Collection and Use",
       "2-p": "For a better experience, while using our Service, I may require you to provide us with certain personally identifiable information. The information that I request will be retained on your device and is not collected by me in any way. The app does use third-party services that may collect information used to identify you.",
@@ -99,8 +99,8 @@
       "8-p": "I may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. I will notify you of any changes by posting the new Privacy Policy on this page. These changes are effective immediately after they are posted on this page."
     },
     "termsConditions": {
-      "1-h1": "Terms of Service for AI Best Tool Directory",
-      "1-p": "Welcome to AI Best Tool Directory! Our website, located at https://AIBestTool.com (\"Website\"), is dedicated to providing you with the ability to create custom images. By accessing or using our Website, you agree to be bound by these Terms of Service (\"Terms\"). If you do not agree with any part of the terms, then you are prohibited from using the Website.",
+      "1-h1": "Terms of Service for AI Best Tool",
+      "1-p": "Welcome to AI Best Tool! Our website is located at https://AIBestTool.com (\"Website\"). By accessing or using our Website, you agree to be bound by these Terms of Service (\"Terms\"). If you do not agree with any part of the terms, then you are prohibited from using the Website.",
       "2-h2": "1. Use License",
       "2-p": "You are granted a limited, non-exclusive, non-transferable license to use the Website and its services for personal, non-commercial purposes. This license does not include any rights to copy, modify, or distribute the Website's content or use it for commercial purposes without our prior written consent.",
       "3-h2": "2. Ownership",
@@ -111,10 +111,10 @@
       "5-h2": "4. Governing Law",
       "5-p": "These Terms shall be governed and construed in accordance with the laws of the United States of America, without regard to its conflict of law provisions.",
       "6-h2": "5. Changes to Terms",
-      "6-p": "AI Best Tool Directory reserves the right, at our sole discretion, to modify or replace these Terms at any time. We will notify users of any changes by email. Your continued use of the Website after any change in these Terms will constitute your acceptance of such changes.",
+      "6-p": "AI Best Tool reserves the right, at our sole discretion, to modify or replace these Terms at any time. We will notify users of any changes by email. Your continued use of the Website after any change in these Terms will constitute your acceptance of such changes.",
       "7-h2": "6. Contact Information",
       "7-p": "If you have any questions about these Terms, please contact us at contact@6677.ai.",
-      "last-p": "By using AI Best Tool Directory, you signify your acceptance of these Terms of Service."
+      "last-p": "By using AI Best Tool, you signify your acceptance of these Terms of Service."
     }
   },
   "NotFound": {
@@ -133,7 +133,7 @@
   },
   "Submit": {
     "title": "Submit your AI Tool",
-    "subTitle": "Submit your AI Tool and Get traffic from AI Best Tool Directory",
+    "subTitle": "Submit your AI tool for evidence-based editorial review",
     "website": "Website Name",
     "url": "Website URL",
     "submit": "Submit",
