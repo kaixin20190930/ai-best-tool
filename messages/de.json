@@ -3,7 +3,7 @@
     "loading": "Wird geladen..."
   },
   "Navigation": {
-    "title": "AI Best Tool Tools Verzeichnis",
+    "title": "AI Best Tool Entscheidungsplattform",
     "discover": "Entdecken",
     "submit": "Einreichen",
     "newtools": "Neue Tools",
@@ -14,8 +14,8 @@
     "pricing": "Preise"
   },
   "Footer": {
-    "title": "AI Best Tool Tools Verzeichnis",
-    "subTitle": "Entdecken Sie die besten KI-Tools im AI Best Tool Verzeichnis.",
+    "title": "AI Best Tool Entscheidungsplattform",
+    "subTitle": "Vergleichen Sie KI-Tools nach Aufgabe, Preis, Grenzen, Eignung und nachvollziehbaren Quellen.",
     "support": "Unterstützung",
     "aibesttool": "AI Best Tool",
     "tattoo": "AI Tattoo-Generator",
@@ -122,10 +122,10 @@
   },
   "Home": {
     "title": "AI Best Tool - KI-Tools entdecken",
-    "subTitle": "Finden Sie Ihre Lieblings-KI-Tools im AI Best Tool Verzeichnis. Durchsuchen Sie Kategorien, vergleichen Sie Optionen und reichen Sie neue Tools ein.",
+    "subTitle": "Treffen Sie bessere KI-Tool-Entscheidungen mit Aufgabenvergleichen, Quellen, Grenzen und Prüfdaten.",
     "ai-navigate": "KI-Tools Liste",
     "latestTools": "Neueste KI-Tools",
-    "latestToolsDescription": "Kürzlich geprüfte Tools aus dem AI Best Tool Verzeichnis.",
+    "latestToolsDescription": "Kürzlich geprüfte Tools mit Quellen, Grenzen und klaren Entscheidungsbedingungen.",
     "popularTools": "Beliebte KI-Tools",
     "popularToolsDescription": "Tools mit stärkeren Traffic-, Bewertungs- und Nutzungssignalen.",
     "exploreMore": "Weitere KI-Tools entdecken"
@@ -163,12 +163,12 @@
   },
   "Metadata": {
     "home": {
-      "title": "AI Best Tool | KI-Tool-Verzeichnis",
-      "description": "AI Best Tool ist ein kuratiertes Verzeichnis von KI-Tools. Entdecken, vergleichen und finden Sie nützliche Optionen für verschiedene Anwendungsfälle.",
-      "keywords": "AI Best Tool, KI-Tool-Verzeichnis, KI-Tools"
+      "title": "AI Best Tool | KI-Tool-Entscheidungsplattform",
+      "description": "Vergleichen Sie KI-Tools nach Aufgabe, Preis, Grenzen, Eignung und nachvollziehbaren Quellen.",
+      "keywords": "KI-Tools vergleichen, KI-Tool-Bewertungen, KI-Software auswählen"
     },
     "ai": {
-      "titleSubfix": "AI Best Tool Verzeichnis"
+      "titleSubfix": "AI Best Tool"
     },
     "explore": {
       "title": "KI-Tools erkunden | AI Best Tool",
@@ -181,7 +181,7 @@
       "keywords": "Startup-Start, Produktstart-Seiten, Startup-Werbung, kostenlose Einreichungsseiten, Startup-Marketing"
     },
     "submit": {
-      "title": "Reichen Sie Ihr KI-Tool ein und erhalten Sie Traffic | AI Best Tool Verzeichnis"
+      "title": "Reichen Sie Ihr KI-Tool ein | AI Best Tool"
     }
   },
   "admin": {

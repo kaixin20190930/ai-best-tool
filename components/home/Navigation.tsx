@@ -69,7 +69,7 @@ export default function Navigation({ user, isAdmin = false }: NavigationProps) {
               />
               <BaseImage
                 src='/images/Aileron.svg'
-                alt='AI Best Tool wordmark - your AI tools directory'
+                alt='AI Best Tool wordmark - evidence-backed AI tool decisions'
                 title={t('title')}
                 width={64}
                 height={16}

@@ -1,5 +1,7 @@
 # AI Best Tool SEO 产品架构 V3
 
+> 2026-10-29 执行补充：每日选择、GSC 防噪、Entity Resolution 抽查、页面资产五态和调度切换以 `docs/SEO_AUTOMATION_FOUNDATION_CLOSEOUT_2026-10-29_CN.md` 为准。该补充不推翻 Cluster、证据等级、三态工具页和 anti-overengineering 原则。
+
 生效日期：2026-10-26
 
 状态：**已批准，作为产品、SEO 与自动运营的当前执行基线**

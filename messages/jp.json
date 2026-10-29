@@ -3,7 +3,7 @@
     "loading": "読み込み中..."
   },
   "Navigation": {
-    "title": "AI Best Tool ツールディレクトリ",
+    "title": "AI Best Tool 意思決定プラットフォーム",
     "discover": "AI を発見する",
     "submit": "提出する",
     "newtools": "新しいツール",
@@ -14,8 +14,8 @@
     "pricing": "料金"
   },
   "Footer": {
-    "title": "AI Best Tool ツールディレクトリ",
-    "subTitle": "AI Best Tool ディレクトリで、最適なAIツールを探しましょう。",
+    "title": "AI Best Tool 意思決定プラットフォーム",
+    "subTitle": "タスク、価格、制限、適合性、追跡可能な根拠でAIツールを比較します。",
     "support": "サポート",
     "aibesttool": "AI Best Tool",
     "tattoo": "AIタトゥージェネレーター",
@@ -122,10 +122,10 @@
   },
   "Home": {
     "title": "AI Best Tool - AIツールを発見する",
-    "subTitle": "AI Best Tool ディレクトリでお気に入りのAIツールを見つけましょう。カテゴリごとに閲覧し、比較して、新しいツールを投稿できます。",
+    "subTitle": "タスク比較、根拠、制限、確認日を使ってAIツールを判断できます。",
     "ai-navigate": "AIツールリスト",
     "latestTools": "最新のAIツール",
-    "latestToolsDescription": "AI Best Tool ディレクトリで最近確認されたツールです。",
+    "latestToolsDescription": "根拠、制限、判断条件が最近確認されたツールです。",
     "popularTools": "人気のAIツール",
     "popularToolsDescription": "トラフィック、評価、利用状況のシグナルが強いツールです。",
     "exploreMore": "もっと多くのAIツールを入手する"
@@ -163,12 +163,12 @@
   },
   "Metadata": {
     "home": {
-      "title": "AI Best Tool | AIツールディレクトリ",
-      "description": "AI Best Toolは、厳選されたAIツールのディレクトリです。さまざまな用途に合うツールを探して、比較して、発見できます。",
-      "keywords": "AI Best Tool, AIツールディレクトリ, AIツール"
+      "title": "AI Best Tool | AIツール意思決定プラットフォーム",
+      "description": "タスク、価格、制限、適合性、追跡可能な根拠でAIツールを比較します。",
+      "keywords": "AIツール比較, AIツールレビュー, AIソフトウェア選び"
     },
     "ai": {
-      "titleSubfix": "AI Best Toolツールディレクトリ"
+      "titleSubfix": "AI Best Tool"
     },
     "explore": {
       "title": "AIツールを探索 | AI Best Tool",
@@ -181,7 +181,7 @@
       "keywords": "スタートアップ立ち上げ, 製品発売サイト, スタートアッププロモーション, 無料投稿サイト, スタートアップマーケティング"
     },
     "submit": {
-      "title": "AIツールを提出してトラフィックを取得する | AI Best Toolツールディレクトリ"
+      "title": "AIツールを提出する | AI Best Tool"
     }
   },
   "admin": {

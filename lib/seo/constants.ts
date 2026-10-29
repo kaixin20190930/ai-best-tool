@@ -74,9 +74,9 @@ function getSiteUrl(): string {
 export const SEO_CONFIG: SEOConfig = {
   siteName: 'AI Best Tool',
   siteUrl: getSiteUrl(),
-  defaultTitle: 'AI Best Tool - Discover the Best AI Tools',
+  defaultTitle: 'AI Best Tool - Compare AI Tools with Evidence',
   defaultDescription:
-    'Discover and explore the best AI tools for your needs. Browse our curated directory of AI-powered software, applications, and services.',
+    'Compare AI tools by task, pricing, limits, fit, and traceable evidence to build a defensible shortlist.',
   defaultImage: '/images/aibesttool.png',
   twitterHandle: '@aibesttool',
   locales: ['en', 'zh-CN', 'zh-TW', 'es', 'fr', 'de', 'jp', 'pt', 'ru'],

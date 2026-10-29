@@ -1,5 +1,7 @@
 # AI Best Tool 自动运营 V2 全面执行方案
 
+> 2026-10-29 调度契约更新：日常运营不再要求 Catalog、Freshness、Decision、Market 四线每天都产生交付。统一改为“最多 5 个可解释候选 + 一个 high-confidence 默认结果单元 + 可选低风险维护”；Owner 可覆盖但不回复也会继续执行。GSC 防噪、14 天冷却、Entity Resolution 抽查和影子切换详见 `docs/SEO_AUTOMATION_FOUNDATION_CLOSEOUT_2026-10-29_CN.md`。本更新优先于下文旧的每日数量目标，但不改变数据库、发布和索引安全边界。
+
 生效日期：2026-10-12
 
 状态：执行中

@@ -3,7 +3,7 @@
     "loading": "carregando..."
   },
   "Navigation": {
-    "title": "AIBestTool Diretório de Ferramentas de IA",
+    "title": "Plataforma de decisão AI Best Tool",
     "discover": "Descobrir IA",
     "submit": "Enviar",
     "newtools": "Novas Ferramentas",
@@ -14,8 +14,8 @@
     "pricing": "Preços"
   },
   "Footer": {
-    "title": "AIBestTool Diretório de Ferramentas de IA",
-    "subTitle": "Explore as melhores ferramentas de IA no diretório AI Best Tool.",
+    "title": "Plataforma de decisão AI Best Tool",
+    "subTitle": "Compare ferramentas de IA por tarefa, preço, limites, adequação e evidências verificáveis.",
     "support": "Apoio",
     "aibesttool": "AI Best Tool",
     "tattoo": "Gerador de Tatuagens AI",
@@ -122,10 +122,10 @@
   },
   "Home": {
     "title": "AI Best Tool - Descubra ferramentas de IA",
-    "subTitle": "Encontre suas ferramentas de IA favoritas no diretório AI Best Tool. Navegue por categorias, compare opções e envie novas ferramentas.",
+    "subTitle": "Decida melhor com comparações por tarefa, fontes, limites e datas de revisão.",
     "ai-navigate": "Lista de Ferramentas de IA",
     "latestTools": "Ferramentas de IA mais recentes",
-    "latestToolsDescription": "Ferramentas revisadas recentemente no diretório AI Best Tool.",
+    "latestToolsDescription": "Ferramentas revisadas recentemente com fontes, limites e condições claras de decisão.",
     "popularTools": "Ferramentas de IA populares",
     "popularToolsDescription": "Ferramentas com sinais mais fortes de tráfego, avaliações e uso.",
     "exploreMore": "Obter Mais Ferramentas de IA"
@@ -163,12 +163,12 @@
   },
   "Metadata": {
     "home": {
-      "title": "AI Best Tool | Diretório de ferramentas de IA",
-      "description": "AI Best Tool é um diretório curado de ferramentas de IA. Explore, compare e descubra opções úteis para diferentes casos de uso.",
-      "keywords": "AI Best Tool, diretório de ferramentas de IA, ferramentas de IA"
+      "title": "AI Best Tool | Plataforma de decisão de IA",
+      "description": "Compare ferramentas de IA por tarefa, preço, limites, adequação e evidências verificáveis.",
+      "keywords": "comparar ferramentas de IA, avaliações de IA, escolher software de IA"
     },
     "ai": {
-      "titleSubfix": "Diretório de IA do AIBestTool"
+      "titleSubfix": "AI Best Tool"
     },
     "explore": {
       "title": "Explore ferramentas de IA | AI Best Tool",
@@ -181,7 +181,7 @@
       "keywords": "lançamento de startup, sites de lançamento de produtos, promoção de startup, sites de envio gratuitos, marketing de startup"
     },
     "submit": {
-      "title": "Envie sua ferramenta de IA e obtenha Tráfego | Diretório de IA do AIBestTool"
+      "title": "Envie sua ferramenta de IA | AI Best Tool"
     }
   },
   "admin": {

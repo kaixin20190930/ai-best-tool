@@ -3,7 +3,7 @@
     "loading": "loading..."
   },
   "Navigation": {
-    "title": "AI Best Tool Tools Directory",
+    "title": "AI Best Tool Decision Platform",
     "discover": "Discover AI",
     "submit": "Submit",
     "developer": "Developer Listing",
@@ -15,8 +15,8 @@
     "distribution": "Distribution"
   },
   "Footer": {
-    "title": "AI Best Tool Tools Directory",
-    "subTitle": "Browse, filter, and compare AI tools in a directory that stays current.",
+    "title": "AI Best Tool Decision Platform",
+    "subTitle": "Compare AI tools by task, pricing, limits, fit, and traceable evidence.",
     "support": "Support",
     "aibesttool": "AI Best Tool",
     "tattoo": "AI Tattoo Generator",
@@ -26,31 +26,31 @@
   },
   "Faq": {
     "1": {
-      "question": "What is AI Best Tool Tools Directory?",
-      "answer": "AI Best Tool Tools Directory - AIBestTool.com is building an ai tools directory that helps you get your favorite ai tools. It can get ai writing tools, ai markting tools, ai paraphrasing tools, ai seo tools, ai study tools, ai generator tools, ai research tools, ai art tools, ai music tools, ai video tools, ai coding tools, ai photo tools and more here."
+      "question": "What is AI Best Tool?",
+      "answer": "AI Best Tool is an evidence-backed decision platform that compares AI tools by real tasks, pricing, limits, fit, and review dates."
     },
     "2": {
-      "question": "How to found your ai tools in AI Best Tool tools directory?",
-      "answer-1": "1. Open AIBestTool.com.",
-      "answer-2": "2. Explore the ai tools in the AI Best Tool tools directory.",
-      "answer-3": "3. Click the ai tools that you need to get the detail and visit it."
+      "question": "How do I choose an AI tool?",
+      "answer-1": "1. Start with the task you need to complete.",
+      "answer-2": "2. Compare evidence, limits, pricing, and fit conditions.",
+      "answer-3": "3. Open the official sources before making the final choice."
     },
     "3": {
-      "question": "What are the main features of AI Best Tool Tools Directory?",
-      "answer-1": "1. Free AI Tools Directory: It's free to found your favorite AI Tools here.",
-      "answer-2": "2. Startup List: The free startup list for ai tools developers."
+      "question": "What makes AI Best Tool different?",
+      "answer-1": "1. Decision pages organize tools around real tasks instead of list size.",
+      "answer-2": "2. Claims retain sources, limitations, review dates, and comparison boundaries."
     },
     "4": {
-      "question": "Is it free to submit ai tools to AI Best Tool Tools Directory?",
-      "answer": "Yes, it's free currently. But you should share the backlink for AI Best Tool Tools Directory!"
+      "question": "Is it free to submit an AI tool?",
+      "answer": "Standard submission is currently free. Submission never guarantees approval, ranking, indexing, traffic, or editorial endorsement."
     },
     "5": {
-      "question": "What's the categories list of AI Tools that AI Best Tool Tools Directory support?",
-      "answer": "We will support all kinds of AI Tools later. Please wait for a few days."
+      "question": "Which AI tool categories are covered?",
+      "answer": "Coverage follows real decision tasks and evidence readiness, including coding, research, writing, design, automation, marketing, audio, and video."
     },
     "6": {
-      "question": "What's the frequency for the up of AI tools in AI Best Tool Directory?",
-      "answer": "The list of AI tools will be updated daily."
+      "question": "How often is tool information reviewed?",
+      "answer": "Facts are reviewed according to their volatility and source changes. A no-change check does not receive a cosmetic fresh date."
     },
     "7": {
       "question": "How are AI tools described here?",
@@ -61,16 +61,16 @@
       "answer": "If the content aren't appearing, try a different browser, clear your cache. If issues persist, contact us at contact@6677.ai."
     },
     "9": {
-      "question": "How is the directory content maintained?",
-      "answer": "The directory is maintained through editorial review, structured data, and automated updates where helpful."
+      "question": "How is decision content maintained?",
+      "answer": "Automation finds changes and editors verify decision-changing facts, limitations, and publication eligibility."
     },
     "10": {
       "question": "What are the usage rights of the AI tools?",
-      "answer": "AI Best Tool Tools Directory is just the AI Directory for AI tools. The usage rights of the AI tools are based on the AI tools' website."
+      "answer": "Rights vary by product, plan, model, and output path. Check the linked official terms before commercial or sensitive use."
     },
     "11": {
-      "question": "Does the webui of AI Best Tool Directory is open source?",
-      "answer": "Yes, we will open source the webui of AI Best Tool Directory in the github(https://github.com/6677-ai/tap4-ai-webui). Please star us."
+      "question": "Can I inspect the source behind a decision?",
+      "answer": "Decision-changing claims link to their source and review date when the evidence is public."
     },
     "title": "Frequently Asked Questions"
   },
@@ -123,10 +123,10 @@
   },
   "Home": {
     "title": "AI Best Tool - Explore Curated AI Tools",
-    "subTitle": "Find the right AI tools faster with a directory that keeps tools, categories, and filters current.",
+    "subTitle": "Find the right AI tools faster with task-based comparisons, evidence, limits, and review dates.",
     "ai-navigate": "AI Tools List",
     "latestTools": "Latest AI Tools",
-    "latestToolsDescription": "Recently reviewed tools from the AI Best Tool directory.",
+    "latestToolsDescription": "Recently reviewed tools with evidence, limits, and decision boundaries.",
     "popularTools": "Popular AI Tools",
     "popularToolsDescription": "Tools with stronger traffic, ratings, and usage signals.",
     "exploreMore": "Get More AI Tools"
@@ -165,11 +165,11 @@
   "Metadata": {
     "home": {
       "title": "AI Best Tool - Explore Curated AI Tools and Apps",
-      "description": "Browse a curated directory of AI tools. Find options for writing, design, coding, marketing, and productivity, kept current for easy comparison.",
-      "keywords": "AI Best Tool Directory, AI tools, AI software, AI applications, AI tool directory"
+      "description": "Compare AI tools by real task, pricing, limits, fit, and traceable evidence so you can build a defensible shortlist.",
+      "keywords": "compare AI tools, AI tool comparison, AI software reviews, AI tool evidence, AI tool limitations"
     },
     "ai": {
-      "titleSubfix": "AI Best Tool Directory"
+      "titleSubfix": "AI Best Tool"
     },
     "explore": {
       "title": "Explore AI Tools | AI Best Tool",
@@ -182,7 +182,7 @@
       "keywords": "startup launch, product launch sites, startup promotion, free submission sites, startup marketing"
     },
     "submit": {
-      "title": "Submit your AI tool and get Get Traffic | AI Best Tool Directory"
+      "title": "Submit your AI tool | AI Best Tool"
     }
   },
   "admin": {

@@ -3,7 +3,7 @@
     "loading": "加载中..."
   },
   "Navigation": {
-    "title": "AI Best Tool工具目录",
+    "title": "AI Best Tool 决策平台",
     "discover": "发现AI",
     "submit": "提交",
     "developer": "开发者入驻",
@@ -15,8 +15,8 @@
     "distribution": "产品分发"
   },
   "Footer": {
-    "title": "AI Best Tool工具目录",
-    "subTitle": "浏览、筛选并比较适合你的 AI 工具，持续更新的 AI 工具目录。",
+    "title": "AI Best Tool 决策平台",
+    "subTitle": "按任务、价格、限制、适用性和可追溯证据比较 AI 工具。",
     "support": "支持",
     "aibesttool": "AI Best Tool",
     "tattoo": "AI纹身生成器",
@@ -123,10 +123,10 @@
   },
   "Home": {
     "title": "AI Best Tool - 探索精选 AI 工具",
-    "subTitle": "在 AI Best Tool 工具目录中找到适合你的 AI 工具。我们持续更新工具、分类和筛选，帮助你更快做决定。",
+    "subTitle": "通过任务型比较、证据、限制和复查日期，更快找到适合你的 AI 工具。",
     "ai-navigate": "AI工具列表",
     "latestTools": "最新收录的AI工具",
-    "latestToolsDescription": "最近通过审核并加入 AI Best Tool 目录的工具。",
+    "latestToolsDescription": "最近完成证据、限制和适用边界复核的工具。",
     "popularTools": "热门AI工具",
     "popularToolsDescription": "根据访问、评分和使用信号优先展示的工具。",
     "exploreMore": "获取更多AI工具"
@@ -165,11 +165,11 @@
   "Metadata": {
     "home": {
       "title": "AI Best Tool - 探索精选 AI 工具和应用",
-      "description": "浏览我们精心策划的 AI 工具目录。找到适合写作、设计、编程、营销和生产力场景的工具，持续更新，方便比较。",
-      "keywords": "AI Best Tool目录, AI工具, AI软件, AI应用程序, AI工具目录"
+      "description": "按真实任务、价格、限制、适用性和可追溯证据比较 AI 工具，形成更可信的候选清单。",
+      "keywords": "AI工具比较, AI工具评测, AI软件选择, AI工具证据, AI工具限制"
     },
     "ai": {
-      "titleSubfix": "AI Best Tool目录"
+      "titleSubfix": "AI Best Tool"
     },
     "explore": {
       "title": "探索 AI 工具 | AI Best Tool",
@@ -182,7 +182,7 @@
       "keywords": "创业公司启动, 产品发布网站, 创业公司推广, 免费提交网站, 创业公司营销"
     },
     "submit": {
-      "title": "提交您的AI工具并获取流量 | AI Best Tool目录"
+      "title": "提交您的 AI 工具 | AI Best Tool"
     }
   },
   "admin": {

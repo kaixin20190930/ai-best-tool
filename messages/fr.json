@@ -3,7 +3,7 @@
     "loading": "Chargement..."
   },
   "Navigation": {
-    "title": "Répertoire des outils AI de AIBestTool",
+    "title": "Plateforme de décision AI Best Tool",
     "discover": "Découvrir l'IA",
     "submit": "Soumettre",
     "newtools": "Nouveaux outils",
@@ -14,8 +14,8 @@
     "pricing": "Tarifs"
   },
   "Footer": {
-    "title": "Répertoire des outils AI de AIBestTool",
-    "subTitle": "Explorez les meilleurs outils IA dans le répertoire AI Best Tool.",
+    "title": "Plateforme de décision AI Best Tool",
+    "subTitle": "Comparez les outils IA par tâche, prix, limites, adéquation et preuves vérifiables.",
     "support": "Soutien",
     "aibesttool": "AI Best Tool",
     "tattoo": "Générateur de Tatouages AI",
@@ -122,10 +122,10 @@
   },
   "Home": {
     "title": "AI Best Tool - Découvrez les outils IA",
-    "subTitle": "Trouvez vos outils IA préférés dans le répertoire AI Best Tool. Parcourez les catégories, comparez les options et soumettez de nouveaux outils.",
+    "subTitle": "Décidez avec des comparaisons par tâche, des sources, des limites et des dates de vérification.",
     "ai-navigate": "Liste des outils AI",
     "latestTools": "Derniers outils IA",
-    "latestToolsDescription": "Outils récemment vérifiés dans le répertoire AI Best Tool.",
+    "latestToolsDescription": "Outils récemment vérifiés avec sources, limites et conditions de décision claires.",
     "popularTools": "Outils IA populaires",
     "popularToolsDescription": "Outils présentant de meilleurs signaux de trafic, d'avis et d'utilisation.",
     "exploreMore": "Obtenez plus d'outils AI"
@@ -163,12 +163,12 @@
   },
   "Metadata": {
     "home": {
-      "title": "AI Best Tool | Répertoire d’outils IA",
-      "description": "AI Best Tool est un répertoire sélectionné d’outils IA. Explorez, comparez et découvrez des options utiles pour différents usages.",
-      "keywords": "AI Best Tool, répertoire d’outils IA, outils IA"
+      "title": "AI Best Tool | Plateforme de décision IA",
+      "description": "Comparez les outils IA par tâche, prix, limites, adéquation et preuves vérifiables.",
+      "keywords": "comparer les outils IA, avis outils IA, choisir un logiciel IA"
     },
     "ai": {
-      "titleSubfix": "Répertoire des outils AI de AIBestTool"
+      "titleSubfix": "AI Best Tool"
     },
     "explore": {
       "title": "Explorez les outils IA | AI Best Tool",
@@ -181,7 +181,7 @@
       "keywords": "lancement startup, sites lancement produit, promotion startup, sites soumission gratuits, marketing startup"
     },
     "submit": {
-      "title": "Soumettez votre outil AI et obtenez du trafic | Répertoire des outils AI de AIBestTool"
+      "title": "Soumettez votre outil IA | AI Best Tool"
     }
   },
   "admin": {

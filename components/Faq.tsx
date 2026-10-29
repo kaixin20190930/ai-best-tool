@@ -17,7 +17,7 @@ export default function Faq() {
       {
         question: 'AI Best Tool 是什么？',
         answer:
-          'AI Best Tool 是一个按真实任务组织的 AI 工具目录。我们通过来源、适用条件、限制和复查日期帮助用户形成更可信的候选清单。',
+          'AI Best Tool 是一个按真实任务组织的 AI 工具决策平台。我们通过来源、适用条件、限制和复查日期帮助用户形成更可信的候选清单。',
       },
       {
         question: '浏览和提交工具需要付费吗？',
@@ -50,7 +50,7 @@ export default function Faq() {
       {
         question: 'What is AI Best Tool?',
         answer:
-          'AI Best Tool is an AI tools directory organized around real tasks. Sources, fit conditions, limitations, and review dates help visitors build a more defensible shortlist.',
+          'AI Best Tool is an evidence-backed decision platform organized around real tasks. Sources, fit conditions, limitations, and review dates help visitors build a more defensible shortlist.',
       },
       {
         question: 'Is browsing or submitting a tool free?',
