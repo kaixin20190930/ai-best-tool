@@ -39,6 +39,7 @@
 - Tool ID 总数：**129**；published：**89**。
 - page quality：`monitor=99`、`continue_index=28`、`archive=2`；不同维度不可相加。
 - 本日 Catalog 发布：**2**；A级索引批准：**0**。
+- 发布提交：`bd640fe2` 已推送至 `origin/main`。生产 EN/CN/TW 六个页面与两项自有素材均返回 200；页面使用各自 self-canonical 和 `noindex, follow`。生产 sitemap 为 **152 URLs**，两个新 slug 匹配均为 0。
 
 ## 流程预算与下一步
 
