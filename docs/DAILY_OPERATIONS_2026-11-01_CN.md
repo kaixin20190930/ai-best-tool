@@ -52,6 +52,12 @@
 
 周计划原定 n8n Harvest/Decision 改写，但实际页面仍在冷却期。今日按规则缩小为真实来源异常修复，没有追逐单日波动，也没有重复改写冷却页面。
 
+## 发布状态
+
+- 代码与审计 SHA：`fd0d573895ed1b3883dd858eb8051ca3856ccdc4`，已推送 `origin/main`。
+- 生产部署：EN/CN n8n 页面均返回 200，显示 2026-11-01 官方快照和新 FAQ 来源；self-canonical 保持正常，未出现 `noindex`，索引状态未改变。
+- 受保护的 Perplexity/Gemini SQL 与旧 Freshness 草稿未纳入提交。
+
 ## 唯一下一项
 
 下一次日运行重新读取完整账本，在排除 n8n 冷却后，从稳定 Harvest/Cluster 缺口中选择唯一 high-confidence 默认项；若没有 high-confidence 项则零写入。当前优先观察 `free ai coding tools` Cluster，其次才是证据成熟的 OpenClaw 通用收录包。
