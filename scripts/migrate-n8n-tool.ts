@@ -36,7 +36,7 @@ Pilot one real workflow in n8n and a simpler managed alternative such as Make. M
 
 - [Current plans and execution billing](https://n8n.io/pricing/)
 - [Community and paid editions](https://docs.n8n.io/deploy/host-n8n/community-edition-features/)
-- [Sustainable Use License](https://docs.n8n.io/privacy-and-security/sustainable-use-license)
+- [Sustainable Use License](https://support.n8n.io/article/can-i-use-your-license-for-my-use-case)
 - [Queue-mode operations](https://docs.n8n.io/deploy/host-n8n/configure-n8n/scaling/enable-queue-mode/)
 
 This is an official-source editorial review, not a hands-on performance benchmark. Market adoption evidence was collected separately on ${audit.reviewedAt}; repository popularity is not proof of reliability for your workload.`;
@@ -67,7 +67,7 @@ n8n 将可视化工作流、代码、API 集成和 AI 步骤结合起来。核�
 
 - [当前套餐与计费](https://n8n.io/pricing/)
 - [Community 与付费版本](https://docs.n8n.io/deploy/host-n8n/community-edition-features/)
-- [Sustainable Use License](https://docs.n8n.io/privacy-and-security/sustainable-use-license)
+- [Sustainable Use License](https://support.n8n.io/article/can-i-use-your-license-for-my-use-case)
 - [Queue mode 运维](https://docs.n8n.io/deploy/host-n8n/configure-n8n/scaling/enable-queue-mode/)
 
 本页为官方来源核验式分析，不声称已完成性能实测。市场采用证据另采集于 ${audit.reviewedAt}，仓库热度不能证明具体业务负载的可靠性。`;

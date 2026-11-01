@@ -87,11 +87,11 @@ const baselines: Record<string, DecisionBaseline> = {
     title: 'Decision baseline established',
     summary:
       'n8n is a fit for technical teams that need code-level workflow control, broad integrations, or a choice between managed and self-hosted deployment, and can own credentials, failures, and maintenance. Keep Make, Zapier, or managed n8n Cloud in the comparison when lower operational overhead, simpler collaboration, or managed delivery matters more than self-hosting flexibility.',
-    primarySourceUrl: 'https://docs.n8n.io/sustainable-use-license/',
+    primarySourceUrl: 'https://support.n8n.io/article/can-i-use-your-license-for-my-use-case',
     sourceUrls: [
       'https://n8n.io/pricing/',
       'https://docs.n8n.io/hosting/community-edition-features/',
-      'https://docs.n8n.io/sustainable-use-license/',
+      'https://support.n8n.io/article/can-i-use-your-license-for-my-use-case',
       'https://docs.n8n.io/hosting/scaling/queue-mode/',
     ],
     bestFit: ['Technical operations', 'Code-assisted workflows'],

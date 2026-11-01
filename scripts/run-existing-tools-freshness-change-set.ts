@@ -7,6 +7,7 @@ import { Client } from 'pg';
 
 import { getDatabaseConnectionString } from '../lib/database/connection';
 import {
+  assertPublishedFreshnessPageState,
   buildAllowedUpdateSql,
   replaceApprovedAtPath,
   replaceApprovedText,
@@ -68,8 +69,7 @@ async function main() {
       ]);
       assert.equal(found.rowCount, 1, `${item.slug}: missing or duplicated entity`);
       const before = found.rows[0].record;
-      assert.equal(before.status, 'published');
-      assert.equal(before.page_quality_status, 'monitor');
+      assertPublishedFreshnessPageState(before);
       assert.equal(before.name, item.slug);
       assert(before.url?.startsWith('https://'));
       const protectedRow = { ...before };

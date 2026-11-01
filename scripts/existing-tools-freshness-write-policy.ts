@@ -7,6 +7,14 @@ export type WritableItem = {
   featureReplacements?: { path: string[]; from: string; to: string }[];
 };
 
+export function assertPublishedFreshnessPageState(row: { status: string; page_quality_status: string }) {
+  assert.equal(row.status, 'published');
+  assert(
+    row.page_quality_status === 'monitor' || row.page_quality_status === 'continue_index',
+    'Freshness requires a published monitor or continue_index row',
+  );
+}
+
 const allowedPath = /^(?:detail\.(?:en|zh|cn)|features\.decision\.freshnessSummary\.(?:en|zh|cn))$/;
 
 export function validateApprovedWritablePaths(items: WritableItem[], approved: ApprovedWritablePath[]) {

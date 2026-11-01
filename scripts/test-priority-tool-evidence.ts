@@ -89,7 +89,7 @@ for (const [officialSnapshotSlug, expectedDate] of Object.entries({
   'luma-ai': '2026-09-25',
   make: '2026-09-06',
   openrouter: '2026-09-04',
-  n8n: '2026-09-04',
+  n8n: '2026-11-01',
   perplexity: '2026-09-06',
   pipedream: '2026-09-01',
   runway: '2026-09-01',

@@ -1894,7 +1894,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: '官方事实快照',
           title: 'Execution 成本、部署责任和许可证边界',
           summary: '以下为官方来源核验，并非实测；价格按年付展示，套餐、AI credits 和功能分配应在购买前复核。',
-          checkedAt: '2026-10-17',
+          checkedAt: '2026-11-01',
           facts: [
             {
               label: 'Cloud 套餐',
@@ -1936,7 +1936,7 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           title: 'Execution cost, deployment ownership, and license boundaries',
           summary:
             'This is an official-source review, not a hands-on test. Prices use annual billing; recheck plans, AI credits, and feature allocation before purchasing.',
-          checkedAt: '2026-10-17',
+          checkedAt: '2026-11-01',
           facts: [
             {
               label: 'Cloud plans',

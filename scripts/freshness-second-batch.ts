@@ -121,7 +121,7 @@ const SECOND_BATCH: ReviewCandidate[] = [
     sources: [
       'https://n8n.io/pricing/',
       'https://docs.n8n.io/deploy/host-n8n/community-edition-features/',
-      'https://docs.n8n.io/privacy-and-security/sustainable-use-license',
+      'https://support.n8n.io/article/can-i-use-your-license-for-my-use-case',
     ],
     unresolved: [
       'Selected account billing, AI model consumption and external provider charges require workflow/account inspection.',

@@ -1,0 +1,19 @@
+{
+  "unit": "N8N-SOURCE-INTEGRITY-2026-11-01",
+  "status": "QA_PASS",
+  "reviewedAt": "2026-11-01",
+  "manifestSha256": "06e9d1250e241edc4756dffd48d33fdfe9981a15a97920d3af0ecaa6e66d1a1a",
+  "findings": [],
+  "checks": {
+    "officialLicenseFaqUrlReplaced": true,
+    "noPublicClaimLifecycleIndexCanonicalOrSitemapChange": true,
+    "genericFreshnessRunnerAllowsOnlyPublishedMonitorOrContinueIndex": true,
+    "manifestScopeAndHashesStructurallyValid": true,
+    "controllerResults": {
+      "tsc": "PASS",
+      "writePolicyTest": "PASS",
+      "fullBuild": "PASS",
+      "priorityEvidenceTest": "FAIL: pre-existing unrelated NotebookLM assertion"
+    }
+  }
+}

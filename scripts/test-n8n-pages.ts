@@ -1,8 +1,13 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { JSDOM } from 'jsdom';
+import { assertPublishedFreshnessPageState } from './existing-tools-freshness-write-policy';
 
 async function main() {
+  assertPublishedFreshnessPageState({ status: 'published', page_quality_status: 'monitor' });
+  assertPublishedFreshnessPageState({ status: 'published', page_quality_status: 'continue_index' });
+  assert.throws(() => assertPublishedFreshnessPageState({ status: 'draft', page_quality_status: 'monitor' }));
+  assert.throws(() => assertPublishedFreshnessPageState({ status: 'published', page_quality_status: 'archive' }));
   const base = process.env.SEO_BASE_URL || 'http://localhost:3107';
   const audit = JSON.parse(fs.readFileSync('data/collection/n8n-preaudit-2026-09-01.json', 'utf8'));
   const released = audit.status === 'released';
@@ -41,7 +46,7 @@ async function main() {
         `${path}: migrated decision content must be visible`,
       );
     }
-    assert(document.querySelector('a[href="https://docs.n8n.io/privacy-and-security/sustainable-use-license"]'));
+    assert(document.querySelector('a[href="https://support.n8n.io/article/can-i-use-your-license-for-my-use-case"]'));
     const expectedGuideHref = path.startsWith('/cn/')
       ? '/cn/guides/n8n-self-hosted-requirements'
       : '/guides/n8n-self-hosted-requirements';

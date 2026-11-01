@@ -1,0 +1,50 @@
+{
+  "unit": "N8N-SOURCE-INTEGRITY-2026-11-01",
+  "asOf": "2026-11-01",
+  "scope": "One published n8n Tool maintenanceReview source/date correction. No detail, other features, lifecycle, page_quality_status, canonical, or sitemap change. Production write is limited to the generic freshness executor after independent QA.",
+  "approvedWritablePaths": [],
+  "declaredMetadataWrites": [
+    {
+      "slug": "n8n",
+      "paths": ["features.maintenanceReview", "next_review_date"],
+      "nextReviewDate": "2026-11-15",
+      "executorBoundary": "Fixed side effect in scripts/run-existing-tools-freshness-change-set.ts; outside approvedWritablePaths."
+    }
+  ],
+  "items": [
+    {
+      "id": "23bb3601-a5ac-42c3-bff3-64b06a063959",
+      "slug": "n8n",
+      "preimageSha256": "90cb795e89846d709985a579c505222de302f7dfc0c105c060136a9d7c4a8c2c",
+      "protectedSha256": "4392acea0acddeda273071ca569d2e88111a79a8aa1a4003cc1c99998e120381",
+      "protectedFeaturesSha256": "6b49cb4b527b3ca6558a60eca13fdcd33a7becc8e7c4ee380e2b08ab49a3a496",
+      "expectedDetailSha256": "3529734b7374bb520c5c4f2890453e708b6171a8311d048b716167d017f298cb",
+      "nextReviewDate": "2026-11-15",
+      "review": {
+        "checkedAt": "2026-11-01",
+        "nextReviewDate": "2026-11-15",
+        "outcome": "source_integrity_corrected",
+        "scope": "Public annual plan pricing, workflow execution billing, Community edition boundaries, and self-hosted license use cases; no account checkout or BYOK usage test.",
+        "changeSummary": "Public claims remain supported. Replace the not-found license documentation URL with the current official n8n license FAQ; no public claim or page copy changes.",
+        "sources": [
+          "https://n8n.io/pricing/",
+          "https://docs.n8n.io/deploy/host-n8n/community-edition-features/",
+          "https://support.n8n.io/article/can-i-use-your-license-for-my-use-case"
+        ],
+        "claims": [
+          {
+            "id": "ai-workflow-cost",
+            "status": "conditional",
+            "category": "price",
+            "limitation": "Assistant credits and keyless models vary by plan; BYOK provider costs and actual workflow usage require account verification.",
+            "nextReviewDate": "2026-11-15"
+          }
+        ],
+        "unresolved": [
+          "Selected account billing, AI model consumption and external provider charges require workflow/account inspection."
+        ]
+      },
+      "rollback": "Restore the exact 2026-10-08 maintenanceReview and next_review_date=2026-10-22 only if the full postimage still matches; preserve published + continue_index and all other fields."
+    }
+  ]
+}
