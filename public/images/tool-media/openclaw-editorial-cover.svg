@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Self-hosted AI assistant editorial illustration</title>
+  <desc id="desc">A local gateway connects an AI assistant to chat channels, models, and user-controlled tools.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#102c36"/>
+      <stop offset="1" stop-color="#1f5962"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f7c56f"/>
+      <stop offset="1" stop-color="#e77c55"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" rx="40" fill="url(#bg)"/>
+  <g fill="none" stroke="#8fd6d0" stroke-width="12" stroke-linecap="round">
+    <path d="M360 205H235v-70"/>
+    <path d="M360 425H235v70"/>
+    <path d="M840 205h125v-70"/>
+    <path d="M840 425h125v70"/>
+  </g>
+  <g fill="#e8f4ef" stroke="#c7ebe3" stroke-width="7">
+    <rect x="120" y="80" width="230" height="120" rx="26"/>
+    <rect x="120" y="430" width="230" height="120" rx="26"/>
+    <rect x="850" y="80" width="230" height="120" rx="26"/>
+    <rect x="850" y="430" width="230" height="120" rx="26"/>
+  </g>
+  <rect x="360" y="145" width="480" height="340" rx="52" fill="url(#core)" stroke="#ffe3ad" stroke-width="9"/>
+  <circle cx="600" cy="285" r="72" fill="#173c46"/>
+  <path d="M566 285h68M600 251v68" stroke="#f7efe1" stroke-width="15" stroke-linecap="round"/>
+  <rect x="470" y="390" width="260" height="24" rx="12" fill="#173c46" opacity=".8"/>
+  <g fill="#183b44" font-family="monospace" font-size="28" font-weight="700" text-anchor="middle">
+    <text x="235" y="151">CHAT</text>
+    <text x="235" y="501">TOOLS</text>
+    <text x="965" y="151">MODELS</text>
+    <text x="965" y="501">MEMORY</text>
+  </g>
+</svg>

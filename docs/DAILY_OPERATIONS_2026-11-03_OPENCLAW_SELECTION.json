@@ -1,0 +1,288 @@
+{
+  "id": "c8c7ae00-5d82-412d-b080-79ca831c674c",
+  "name": "OpenClaw",
+  "officialUrl": "https://openclaw.ai/",
+  "categorySlug": "life-assistant",
+  "cluster": {
+    "role": "anchor"
+  },
+  "officialSources": [
+    {
+      "id": "openclaw-product-2026-11-03",
+      "url": "https://openclaw.ai/",
+      "claimKeys": [
+        "identity",
+        "ai_core_capability",
+        "self_hosted_architecture",
+        "software_pricing",
+        "channel_integrations"
+      ]
+    },
+    {
+      "id": "openclaw-install-2026-11-03",
+      "url": "https://openclaw.ai/install",
+      "claimKeys": [
+        "installation_and_platforms",
+        "provider_requirements",
+        "channel_integrations",
+        "software_pricing"
+      ]
+    },
+    {
+      "id": "openclaw-security-2026-11-03",
+      "url": "https://docs.openclaw.ai/gateway/security",
+      "claimKeys": [
+        "security_boundary",
+        "self_hosted_architecture",
+        "operator_responsibility"
+      ]
+    }
+  ],
+  "entityProfile": {
+    "route": "new_tool",
+    "entityKind": "platform",
+    "canonicalProductKey": "openclaw",
+    "independentSignals": {
+      "officialIdentity": {
+        "sourceIds": [
+          "openclaw-product-2026-11-03"
+        ],
+        "evidenceExcerpt": "The official product site identifies OpenClaw as an open-source AI assistant that runs on the user's machine and connects to chat applications."
+      },
+      "userEntryWorkflow": {
+        "sourceIds": [
+          "openclaw-install-2026-11-03"
+        ],
+        "evidenceExcerpt": "Users install a desktop app or CLI, select a model provider during onboarding, run the local Gateway, and optionally connect supported chat channels."
+      },
+      "lifecycle": {
+        "sourceIds": [
+          "openclaw-product-2026-11-03",
+          "openclaw-install-2026-11-03"
+        ],
+        "evidenceExcerpt": "The official site publishes current desktop releases, stable and beta update channels, installation paths, maintenance commands, and active platform documentation."
+      },
+      "searchDecisionIntent": {
+        "sourceIds": [
+          "openclaw-product-2026-11-03",
+          "openclaw-security-2026-11-03"
+        ],
+        "evidenceExcerpt": "Choosing OpenClaw requires a distinct decision about self-hosting, model-provider access, messaging integrations, tool permissions, and operator-managed security."
+      }
+    }
+  },
+  "entityGate": {
+    "status": "PASS",
+    "aiCoreCapability": {
+      "status": "PASS",
+      "sourceIds": [
+        "openclaw-product-2026-11-03",
+        "openclaw-install-2026-11-03"
+      ],
+      "evidenceExcerpt": "OpenClaw runs an AI assistant through a local Gateway, connects a selected model provider, and can use tools and messaging channels to carry out user-directed tasks."
+    },
+    "identityCanonical": {
+      "status": "PASS",
+      "sourceIds": [
+        "openclaw-product-2026-11-03",
+        "openclaw-install-2026-11-03"
+      ],
+      "evidenceExcerpt": "OpenClaw has a durable product name, canonical product site, dedicated installation workflow, documentation, release channels, and its own operational lifecycle."
+    },
+    "duplicateIntent": {
+      "status": "PASS",
+      "checkedToolIds": [],
+      "rationale": "A read-only production scan on 2026-11-03 found no Tool or collection candidate matching OpenClaw, openclaw.ai, or docs.openclaw.ai. Related assistants and automation tools are comparison objects, not the same entity."
+    }
+  },
+  "reviewedAt": "2026-11-03",
+  "nextReviewDate": "2026-11-17",
+  "media": {
+    "mode": "platform_owned_editorial",
+    "assetPath": "/images/tool-media/openclaw-editorial-cover.svg",
+    "sha256": "65db597e491c228ae2c2a115ab57fea938f42a9dbaf132ee51a7236476c9ebc7",
+    "creator": "AI Best Tool editorial",
+    "createdAt": "2026-11-03",
+    "noVendorMarks": true
+  },
+  "pricing": "free",
+  "tags": [
+    "ai-assistant",
+    "self-hosted",
+    "automation",
+    "multi-channel",
+    "open-source"
+  ],
+  "localized": {
+    "en": {
+      "title": "OpenClaw: Self-Hosted AI Assistant and Messaging Gateway",
+      "summary": "OpenClaw is an open-source AI assistant that runs through a user-controlled Gateway and connects selected model providers, tools, memory, and messaging channels.",
+      "detail": "OpenClaw is a self-hosted AI assistant platform built around a local or user-operated Gateway. Its official onboarding asks the operator to choose a model provider, configure access, and optionally connect chat channels such as Telegram, Discord, Slack, WhatsApp, or iMessage. The platform can combine conversations, tools, memory, skills, plugins, and automations, but that breadth also makes setup and security an operator responsibility. OpenClaw itself is presented without a subscription or hosted tier; model APIs, servers, communication services, and optional integrations can still create separate costs. This page treats release numbers, plugins, providers, and new channel integrations as updates to the same OpenClaw product rather than new Tool entities.",
+      "bestFor": [
+        "Technical users who want a self-hosted assistant with control over models, memory, and tools",
+        "People who want to reach one assistant from several supported messaging channels",
+        "Teams willing to operate a Gateway and define access, secrets, and tool permissions"
+      ],
+      "notIdealFor": [
+        "People seeking a fully managed assistant with no setup or infrastructure responsibility",
+        "Users who cannot safely manage provider keys, channel credentials, and tool permissions",
+        "Buyers who need a single bundled price covering models, hosting, support, and messaging"
+      ],
+      "limitations": [
+        "OpenClaw is self-hosted or user-operated; installation, updates, backups, monitoring, and incident response remain operator responsibilities.",
+        "The software has no hosted subscription tier, but model-provider usage, servers, storage, and communication services may cost extra.",
+        "Channel, platform, provider, and plugin support can change by release and may require separate credentials or third-party terms.",
+        "Broad tool access can create material security risk; the official security guidance should be reviewed before exposing the Gateway or enabling sensitive actions.",
+        "AI Best Tool did not run an account-level security audit, reliability benchmark, or end-to-end test of every integration."
+      ],
+      "compareAxes": [
+        "self-hosted control vs managed convenience",
+        "supported model providers and external costs",
+        "messaging-channel coverage",
+        "tool, memory, skill, and automation depth",
+        "security model and operator workload"
+      ],
+      "pricingSummary": "The official site says OpenClaw has no subscription or hosted tier. The software can be installed locally, while model APIs, infrastructure, messaging services, and other third-party integrations may have separate costs."
+    },
+    "cn": {
+      "title": "OpenClaw：自托管 AI 助手与多渠道消息网关",
+      "summary": "OpenClaw 是开源 AI 助手平台，通过用户控制的 Gateway 连接所选模型、工具、记忆、Skills、自动化和多个消息渠道，适合愿意自行部署并管理安全边界的技术用户与团队。",
+      "detail": "OpenClaw 是以本地或用户自运营 Gateway 为核心的自托管 AI 助手平台。官方引导流程要求运营者选择模型提供商、配置访问方式，并可连接 Telegram、Discord、Slack、WhatsApp 或 iMessage 等消息渠道。平台可以组合对话、工具、记忆、Skills、插件与自动化，但这种广泛能力也意味着安装和安全责任由运营者承担。OpenClaw 官方称软件本身没有订阅或托管套餐；模型 API、服务器、通信服务和可选集成仍可能产生独立费用。本页将发行版本、插件、模型提供商和新增渠道视为同一 OpenClaw 产品的更新，不为它们重复创建 Tool 实体。",
+      "bestFor": [
+        "希望自托管并控制模型、记忆与工具的技术用户",
+        "希望从多个受支持消息渠道访问同一助手的用户",
+        "愿意运营 Gateway 并管理访问、密钥和工具权限的团队"
+      ],
+      "notIdealFor": [
+        "需要完全托管且不承担安装和基础设施责任的用户",
+        "无法安全管理模型密钥、渠道凭据和工具权限的用户",
+        "需要模型、托管、支持和消息费用全部打包为单一价格的采购方"
+      ],
+      "limitations": [
+        "OpenClaw 需要自托管或由用户运营，安装、更新、备份、监控和事件响应由运营者负责。",
+        "软件没有托管订阅套餐，但模型调用、服务器、存储和通信服务可能另行收费。",
+        "渠道、平台、模型提供商和插件支持会随版本变化，也可能需要独立凭据或第三方条款。",
+        "广泛的工具权限会带来显著安全风险，暴露 Gateway 或启用敏感动作前应阅读官方安全指南。",
+        "AI Best Tool 未进行账户级安全审计、可靠性基准或全部集成的端到端测试。"
+      ],
+      "compareAxes": [
+        "自托管控制与托管便利性",
+        "模型提供商支持与外部成本",
+        "消息渠道覆盖范围",
+        "工具、记忆、Skills 和自动化深度",
+        "安全模型与运营工作量"
+      ],
+      "pricingSummary": "官网称 OpenClaw 没有订阅或托管套餐，软件可在本地安装；模型 API、基础设施、消息服务和其他第三方集成可能产生独立费用。"
+    },
+    "tw": {
+      "title": "OpenClaw：自架 AI 助手與多管道訊息閘道",
+      "summary": "OpenClaw 是開源 AI 助手平台，透過使用者控制的 Gateway 連接所選模型、工具、記憶、Skills、自動化與多個訊息管道，適合願意自行部署並管理安全邊界的技術使用者與團隊。",
+      "detail": "OpenClaw 是以本機或使用者自營 Gateway 為核心的自架 AI 助手平台。官方引導流程要求營運者選擇模型供應商、設定存取方式，並可連接 Telegram、Discord、Slack、WhatsApp 或 iMessage 等訊息管道。平台可以整合對話、工具、記憶、Skills、外掛與自動化，但這種廣泛能力也代表安裝與安全責任由營運者承擔。OpenClaw 官方表示軟體本身沒有訂閱或託管方案；模型 API、伺服器、通訊服務與選用整合仍可能產生個別費用。本頁把發行版本、外掛、模型供應商及新增管道視為同一 OpenClaw 產品的更新，不為它們重複建立 Tool 實體。",
+      "bestFor": [
+        "希望自架並控制模型、記憶與工具的技術使用者",
+        "希望從多個支援訊息管道使用同一助手的人",
+        "願意營運 Gateway 並管理存取、密鑰與工具權限的團隊"
+      ],
+      "notIdealFor": [
+        "需要完全託管且不承擔安裝與基礎設施責任的使用者",
+        "無法安全管理模型密鑰、管道憑證與工具權限的使用者",
+        "需要模型、託管、支援與訊息費用全部整合為單一價格的採購方"
+      ],
+      "limitations": [
+        "OpenClaw 需要自架或由使用者營運，安裝、更新、備份、監控與事件回應由營運者負責。",
+        "軟體沒有託管訂閱方案，但模型呼叫、伺服器、儲存與通訊服務可能另外收費。",
+        "管道、平台、模型供應商與外掛支援會隨版本變化，也可能需要獨立憑證或第三方條款。",
+        "廣泛的工具權限會帶來顯著安全風險，公開 Gateway 或啟用敏感動作前應閱讀官方安全指南。",
+        "AI Best Tool 未進行帳戶層級安全稽核、可靠性基準或所有整合的端到端測試。"
+      ],
+      "compareAxes": [
+        "自架控制與託管便利性",
+        "模型供應商支援與外部成本",
+        "訊息管道覆蓋範圍",
+        "工具、記憶、Skills 與自動化深度",
+        "安全模型與營運工作量"
+      ],
+      "pricingSummary": "官網表示 OpenClaw 沒有訂閱或託管方案，軟體可在本機安裝；模型 API、基礎設施、訊息服務與其他第三方整合可能產生個別費用。"
+    }
+  },
+  "claimGate": {
+    "status": "PASS",
+    "items": [
+      {
+        "key": "ai_core_capability",
+        "status": "verified_public",
+        "boundary": "Official pages describe an AI assistant, local Gateway, model-provider onboarding, tools, memory, skills, plugins, and automations; no universal task success claim is made.",
+        "sourceIds": [
+          "openclaw-product-2026-11-03"
+        ],
+        "nextReviewDate": "2026-12-03"
+      },
+      {
+        "key": "self_hosted_architecture",
+        "status": "verified_public",
+        "boundary": "The official product and security documentation describe user-operated software and a Gateway trust boundary; this does not prove that every optional service keeps all data local.",
+        "sourceIds": [
+          "openclaw-product-2026-11-03",
+          "openclaw-security-2026-11-03"
+        ],
+        "nextReviewDate": "2026-12-03"
+      },
+      {
+        "key": "software_pricing",
+        "status": "verified_public",
+        "boundary": "The official site states no OpenClaw subscription or hosted tier; model providers, hosting, storage, communication channels, and third-party integrations can still cost money.",
+        "sourceIds": [
+          "openclaw-product-2026-11-03",
+          "openclaw-install-2026-11-03"
+        ],
+        "nextReviewDate": "2026-11-17"
+      },
+      {
+        "key": "channel_integrations",
+        "status": "verified_public",
+        "boundary": "Official pages list multiple messaging integrations, but availability, setup requirements, credentials, and behavior vary by channel and release.",
+        "sourceIds": [
+          "openclaw-product-2026-11-03",
+          "openclaw-install-2026-11-03"
+        ],
+        "nextReviewDate": "2026-12-03"
+      },
+      {
+        "key": "installation_and_platforms",
+        "status": "verified_public",
+        "boundary": "The install page lists desktop and CLI paths for macOS, Windows, and Linux; exact version, runtime, package, and platform requirements are release-dependent.",
+        "sourceIds": [
+          "openclaw-install-2026-11-03"
+        ],
+        "nextReviewDate": "2026-11-17"
+      },
+      {
+        "key": "provider_requirements",
+        "status": "conditional",
+        "boundary": "Onboarding requires selecting and authenticating a model provider. Provider availability, account eligibility, quotas, data handling, and charges are governed separately.",
+        "sourceIds": [
+          "openclaw-install-2026-11-03"
+        ],
+        "nextReviewDate": "2026-11-17"
+      },
+      {
+        "key": "security_boundary",
+        "status": "conditional",
+        "boundary": "Official security guidance documents a trust boundary and hardening controls, but AI Best Tool has not independently audited a deployment or every plugin, channel, and tool path.",
+        "sourceIds": [
+          "openclaw-security-2026-11-03"
+        ],
+        "nextReviewDate": "2026-11-17"
+      },
+      {
+        "key": "operator_responsibility",
+        "status": "verified_public",
+        "boundary": "Operators control deployment, credentials, exposure, tools, and permissions; this page does not promise managed monitoring, backups, support, or incident response.",
+        "sourceIds": [
+          "openclaw-security-2026-11-03"
+        ],
+        "nextReviewDate": "2026-11-17"
+      }
+    ]
+  }
+}
