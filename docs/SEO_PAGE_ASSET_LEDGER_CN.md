@@ -1,17 +1,17 @@
 # SEO 页面资产账本
 
-更新时间：2026-11-02
+更新时间：2026-11-03
 
-本账本由现有路由注册、生产 Tool 数据、生产 sitemap 和最近私有 GSC 快照派生，不是新的数据库或 Dashboard。合并、重定向、归档和删除仅形成候选，不自动执行。完整逐页数据见 `reports/seo/page-asset-ledger-2026-11-02.json`。
+本账本由现有路由注册、生产 Tool 数据、生产 sitemap 和最近私有 GSC 快照派生，不是新的数据库或 Dashboard。合并、重定向、归档和删除仅形成候选，不自动执行。完整逐页数据见 `reports/seo/page-asset-ledger-2026-11-03.json`。
 
 ## 汇总
 
-- 页面资产：328
+- 页面资产：330
 - 生产 sitemap URL：152
 - GSC 最新完整日：2026-10-30
 - KEEP_INDEX：68
 - IMPROVE：3
-- INTERNAL_NOINDEX：176
+- INTERNAL_NOINDEX：178
 - MERGE_CANDIDATE：53
 - ARCHIVE_CANDIDATE：28
 
