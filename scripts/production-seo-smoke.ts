@@ -5,6 +5,8 @@ const canonicalBaseUrl = (process.env.SEO_CANONICAL_BASE_URL || 'https://aibestt
 const isCanonicalHostCheck = new URL(requestBaseUrl).hostname === new URL(canonicalBaseUrl).hostname;
 const corePaths = [
   '/ai/claude',
+  '/guides/ai-tools-for-automation-comparison',
+  '/cn/guides/ai-tools-for-automation-comparison',
   '/cn',
   '/cn/explore',
   '/cn/guides',
@@ -63,7 +65,7 @@ function getDecisionCardLinks(body: string) {
 }
 
 function hasSingleBreadcrumbPair(body: string) {
-  const visibleCount = (body.match(/<nav aria-label="Breadcrumb"/g) || []).length;
+  const visibleCount = (body.match(/<nav aria-label="(?:Breadcrumb|面包屑)"/g) || []).length;
   const breadcrumbSchemaCount = Array.from(
     body.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g),
   ).filter((match) => match[1].includes('BreadcrumbList')).length;

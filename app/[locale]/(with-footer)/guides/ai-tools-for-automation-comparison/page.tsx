@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { automationDecisionComparison } from '@/lib/content/automationDecisionComparison';
-import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
+import { generateHreflangLinks, generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 
 import { buildComparisonMetadata, buildComparisonPageData, ComparisonPage } from '../comparison-template';
 
@@ -19,6 +19,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     ...metadata,
     alternates: {
       canonical: generateLocalizedCanonicalUrl('/guides/ai-tools-for-automation-comparison', locale),
+      languages: generateHreflangLinks('/guides/ai-tools-for-automation-comparison', locale),
     },
   };
 }
