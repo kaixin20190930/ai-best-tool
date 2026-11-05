@@ -2,6 +2,8 @@
 
 日期：2026-10-29
 
+> 2026-11-04 产品指标补充：候选 `confidence`、`defaultSelected`、资产分类和流程 PASS 只用于判断自动化能否安全执行，不代表产品增长。自动化选择与周/月复盘必须服从[产品增长路线与执行 Roadmap](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)：优先报告 qualified non-brand clicks/CTR、获得相关曝光的页面与查询簇、Top 20 决策查询和站内决策行为。Automation comparison 已具备单项分发候选资格，不再由本文件的历史 noindex 结论永久冻结。
+
 交付单元：`SEO-AUTOMATION-FOUNDATION-CLOSEOUT`
 
 ## 1. 结果
@@ -82,7 +84,7 @@ pnpm run seo:quality-inventory
 - 分析 `n8n pricing`、`n8n ai pricing`、`n8n requirements`、`n8n self hosted requirements` 等稳定查询簇。
 - `/ai/n8n` 保持产品实体和决策页职责。
 - `/guides/n8n-self-hosted-requirements` 保持部署要求、责任和成本结构职责。
-- 已有 comparison 继续 noindex，除非后续获得独立需求和唯一意图。
+- comparison 默认 noindex；已有 Automation comparison 经复核具备独立 BOFU 意图和 verified 内容，在英语路径修复与最终事实 QA 后进入单项分发审批。
 - 不重验已有 PASS 的产品事实，不改变当前 index/sitemap 状态。
 - 完成后冷却 14 天，按第 3、7、14、28 天观察。
 

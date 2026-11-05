@@ -1,5 +1,7 @@
 # AI Best Tool SEO 产品架构 V3
 
+> 2026-11-04 路线修订：当前产品增长顺序、BOFU comparison 的单项发布机制、指标树和 11 月串行排期以[产品增长路线与执行 Roadmap](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)为准。本文的 Decision Cluster、一个意图一个 canonical、Claim 证据、工具三态和工程预算继续有效；“comparison 默认 noindex”解释为 fail-closed 起点，不是永久禁止索引。
+
 > 2026-10-29 执行补充：每日选择、GSC 防噪、Entity Resolution 抽查、页面资产五态和调度切换以 `docs/SEO_AUTOMATION_FOUNDATION_CLOSEOUT_2026-10-29_CN.md` 为准。该补充不推翻 Cluster、证据等级、三态工具页和 anti-overengineering 原则。
 
 生效日期：2026-10-26
@@ -16,11 +18,11 @@
 
 ## 1. 结论
 
-AI Best Tool 不再把“AI 工具目录”作为主要产品身份，而是：
+AI Best Tool 不再把“AI 工具目录库存”作为主要产品价值，而是：
 
 > **用可追溯证据、真实限制和场景化比较，帮助用户选择合适 AI 工具的决策平台。**
 
-工具收录是决策内容的供给，不是独立增长目标。一个新工具只有在能够服务真实决策任务、比较关系或已有搜索机会时，才进入优先生产队列。工具数量、页面数量、测试次数和审核轮数都不是 KPI。
+工具目录和 BOFU 页面形式是市场同等能力；竞争优势来自数据准确度、限制边界、适用/不适用判断和透明复核。工具收录是决策内容的供给，不是独立增长目标。一个新工具只有在能够服务真实决策任务、比较关系或已有搜索机会时，才进入优先生产队列。工具数量、页面数量、测试次数、审核轮数、资产账本数量和 `high-confidence` 候选数量都不是产品 KPI。
 
 ## 2. 当前事实与问题
 
@@ -57,7 +59,7 @@ Cluster 不是要求一次批量创建全部页面。它只要求每个页面有
 | `/ai/{tool}` | 单一产品实体、证据、限制和适用边界 | 满足独立需求才 index，否则 monitor/noindex |
 | `/best-ai-tools/{topic}` | 品类 shortlist、best-for 和购买决策 | 一个主题一个 canonical 主页面 |
 | `/tasks/{slug}` | 围绕真实任务给出选择路径 | 证据和关系完整前 noindex |
-| `/compare/{slug}` | 明确的 X vs Y 或小组结构化比较 | 默认 noindex，独立需求通过后再申请 index |
+| `/compare/{slug}` 或现有 comparison Guide | 明确的 X vs Y 或小组结构化比较，承接 BOFU 评估需求 | 默认 fail-closed；内容完整、意图独立且单项审批通过后可 index |
 | `/guides/{slug}` | 设置、部署、要求和操作路径 | 与 best/compare 意图分离后可 index |
 | Explore / Category | 浏览和发现 | 不承担主决策关键词 |
 
@@ -105,7 +107,7 @@ Cluster 不是要求一次批量创建全部页面。它只要求每个页面有
 | `/ai/n8n` | 已有 n8n 实际曝光与实体意图 | P0 Harvest，优先改善 CTR、首屏结论和内部消费 |
 | `/guides/n8n-self-hosted-requirements` | `n8n self hosted requirements`，KD 30.4 | P0 新 Guide；先回答部署要求、责任和成本结构 |
 | `/ai/make`、`/ai/lindy` | 互补候选实体 | P1 深度升级，不强制同时完成 |
-| `/compare/n8n-vs-make-vs-lindy` | 小组比较 | 保持 noindex，先补证据和真实差异；不作为开局主战词 |
+| `/guides/ai-tools-for-automation-comparison` | n8n vs Make vs Lindy 小组比较 | 已具备 verified 内容；完成路径修复和最终事实 QA 后作为首个 comparison 分发候选 |
 
 Automation 的正确顺序是自托管、部署要求和成本责任，再考虑 pricing/vs 竞争词。`n8n pricing plans`（KD 45.5）和 `n8n vs zapier pricing`（KD 51.5）暂不作为开局主页面。
 

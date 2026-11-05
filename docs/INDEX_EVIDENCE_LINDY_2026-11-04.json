@@ -1,0 +1,86 @@
+{
+  "unit": "INDEX_EVIDENCE_LINDY_2026-11-04",
+  "items": [
+    {
+      "id": "df16d4cc-a1f6-454e-971f-fcfe7dca31c7",
+      "slug": "lindy",
+      "updatedAt": "2026-10-17 02:43:55.987283+00",
+      "featuresMd5": "7894ac8e5caf02405ba10e87519db2b0",
+      "patch": {
+        "evidence": {
+          "official": [
+            {
+              "url": "https://www.lindy.ai/",
+              "label": "Lindy official product page",
+              "checkedAt": "2026-11-04",
+              "scope": "Current official identity and cross-tool AI employee positioning. This is first-party product scope, not independent performance evidence."
+            },
+            {
+              "url": "https://www.lindy.ai/pricing",
+              "label": "Lindy official pricing",
+              "checkedAt": "2026-11-04",
+              "scope": "Current free-credit trial, team credit tiers and account billing boundary. Checkout, tax and workspace-specific entitlements still require account verification."
+            },
+            {
+              "url": "https://docs.lindy.ai/account-billing/usage",
+              "label": "Lindy official usage documentation",
+              "checkedAt": "2026-11-04",
+              "scope": "Current shared credit-pool and heavy-task pause behavior. Actual task cost and reliability depend on configuration and were not tested by this directory."
+            }
+          ],
+          "independent": [
+            {
+              "url": "https://cybernews.com/ai-tools/lindy-ai-review/",
+              "label": "Cybernews hands-on Lindy review",
+              "checkedAt": "2026-11-04",
+              "type": "editorial_buyer_coverage",
+              "scope": "Independent real-workflow testing found routine automations approachable while complex multi-step workflows and custom integrations remained limiting. Its historical pricing table is excluded because the live official pricing changed.",
+              "nonDuplication": "A hands-on workflow and usability assessment from an editorial publisher; it is not Lindy first-party material and does not supply the company-continuity signal."
+            },
+            {
+              "url": "https://www.crunchbase.com/organization/lindy",
+              "label": "Crunchbase Lindy company profile",
+              "checkedAt": "2026-11-04",
+              "type": "public_adoption_market_signal",
+              "scope": "Independent company-profile data identifies Lindy as active and records Seed, Series A and Series B rounds. This supports organizational continuity only, not product capability or reliability.",
+              "nonDuplication": "A structured company-continuity and financing signal from a different domain and evidence method; it is not a product test and does not repeat Cybernews workflow testing."
+            }
+          ]
+        },
+        "marketValidation": {
+          "verdict": "validated",
+          "reviewedAt": "2026-11-04",
+          "score": 80,
+          "scores": {
+            "userValue": 22,
+            "independentValidation": 18,
+            "durability": 18,
+            "evidenceQuality": 14,
+            "strategicValue": 8
+          },
+          "evidenceUrls": [
+            "https://www.lindy.ai/",
+            "https://www.lindy.ai/pricing",
+            "https://docs.lindy.ai/account-billing/usage",
+            "https://cybernews.com/ai-tools/lindy-ai-review/",
+            "https://www.crunchbase.com/organization/lindy"
+          ],
+          "strongSignals": [
+            "Cybernews documents hands-on real-workflow testing: routine automations were approachable, while complex multi-step workflows and custom integrations showed limitations.",
+            "Crunchbase records an active company and three financing rounds through Series B; this is a continuity signal only, not product-performance proof."
+          ],
+          "supportingSignals": [
+            "Three current first-party sources establish product identity, live pricing boundaries and shared-credit usage behavior."
+          ],
+          "rationale": {
+            "en": "Current official product, pricing and usage documentation plus two non-duplicative independent signals support a narrowly validated market-readiness decision. Hands-on editorial testing supports practical buyer relevance; company-profile data supports continuity. Neither source proves search demand, account-specific cost or production reliability.",
+            "cn": "当前官网产品、定价与用量文档，加上两条不重复的独立信号，足以支持范围受限的市场就绪判断。编辑实测支持实际采购相关性，公司资料支持持续运营；两者都不证明搜索需求、账户实际成本或生产可靠性。",
+            "zh": "當前官網產品、定價與用量文件，加上兩條不重複的獨立訊號，足以支援範圍受限的市場就緒判斷。編輯實測支援實際採購相關性，公司資料支援持續營運；兩者都不證明搜尋需求、帳戶實際成本或正式環境可靠性。",
+            "tw": "當前官網產品、定價與用量文件，加上兩條不重複的獨立訊號，足以支援範圍受限的市場就緒判斷。編輯實測支援實際採購相關性，公司資料支援持續營運；兩者都不證明搜尋需求、帳戶實際成本或正式環境可靠性。"
+          },
+          "limitation": "Editorial readiness threshold only. Cybernews pricing claims were excluded as stale; Crunchbase is used only for company continuity. No verified search-volume estimate, account checkout, permissions audit or directory-run reliability test."
+        }
+      }
+    }
+  ]
+}

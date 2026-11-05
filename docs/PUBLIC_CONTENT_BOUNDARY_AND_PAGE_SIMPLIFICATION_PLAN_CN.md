@@ -4,6 +4,8 @@
 
 状态：PUB-01 至 PUB-04 均已完成独立 QA、部署与生产验证并关闭；真实 Pilot 作为后续独立实验，尚未启动
 
+> 2026-11-04 补充：本文件的 comparison 六段结构、公开内容边界和 fail-closed 校验继续有效；“当前全部 comparison 保持 noindex”是 2026-09 的批次冻结，不是永久产品规则。今后完整、独立意图且通过单项内容/SEO 审批的 comparison 可进入 index 与 sitemap，执行顺序以[产品增长路线与执行 Roadmap](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)为准。空壳、少于两个有效候选、重复意图或跨页 canonical 页面继续 noindex。
+
 上位计划：[收录与搜索质量主计划](./MASTER_OPTIMIZATION_TRACKER_CN.md)
 
 站点级约束：[SEO 信息架构与不可回退规则](./SEO_INFORMATION_ARCHITECTURE_GUARDRAILS_CN.md)
@@ -133,7 +135,7 @@ Web3 comparison 还存在四个语义问题：
 - 每个比较维度必须产生候选差异和选择结论；纯方法教育移到主 Guide。
 - 最多一个 Evidence 区块、一个下一步区块、一个主 CTA。
 - 不显示 GuideSubmissionPath；工具方 CTA 只出现在工具详情或商业页面。
-- 当前全部 comparison 保持 noindex、排除 sitemap；未来索引必须单独走内容质量和搜索意图审批。
+- comparison 默认 fail-closed、排除 sitemap；完整、独立意图且通过单项内容和搜索意图审批的页面可以 index，其余继续 noindex。
 
 ### E. Tool 详情
 

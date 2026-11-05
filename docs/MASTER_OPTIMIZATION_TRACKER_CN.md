@@ -1,6 +1,12 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-10-26
+更新时间：2026-11-04
+
+2026-11-05 **生产验收校正**：Stage 1 导航修复 `65e7830c` 的本地扫描为 174 页/3,294 链接且英语 `/en/` 链接为 0；首次生产扫描看到约 70 页旧共享导航，第二次复测已消失。唯一 `/submit` 抓取失败单独确认为预期 `307` 登录跳转后落点 `200`。Stage 2 n8n 初版 `3ac20856` 的定价组件误嵌在条件证据链接内；修复 `7d050803` 推送后，生产英中页面、相关 Guide、canonical/index 和 sitemap 专项检查均通过。Stage 3 Automation 发布 `8eeec217`、hreflang 补丁 `7a769177` 已推送；生产英中页面 `200 + index + self-canonical + en/zh-CN/x-default`，SEO smoke 通过，sitemap 154 条且只新增 Automation 英中两条 comparison。Stage 4 Lindy 独立 QA 调用未能创建代理，仍无 `QA_PASS`，生产证据与索引状态未写入；Make 未开始。
+
+2026-11-04 **产品增长路线本地实现记录（由 2026-11-05 生产验收校正覆盖）**：基线已冻结；导航、n8n pricing/cost 决策页和 Automation comparison 单项索引代码均已在本地实现并通过相应检查，但不能据此判定生产阶段完成。Lindy 单对象证据清单的只读拟议后像评审为 `approve_continue_index`，质量分 100、17 项门禁全通过；preflight 与事务 rollback 均为生产写入 0。当前仍为 `published + monitor/noindex`，通用证据提交器要求绑定当前清单哈希的独立 `QA_PASS`，不得由证据作者自签。Make 仍未开始。详见[产品增长路线](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)与[Lindy 证据清单](./INDEX_EVIDENCE_LINDY_2026-11-04.json)。
+
+2026-11-04 **产品增长路线重新对齐**：当前上位路线统一为“市场同等页面能力 → 事实准确度 → BOFU comparison 分发 → 面向用户的决策体验 → 小批索引反馈循环”。comparison 是评估期承接形式，不把页面形式本身称为差异化；Evidence/Decision/Timeline 继续作为底层可信能力，但前台改用用户语言和渐进披露。增长主指标切换为 qualified non-brand clicks/CTR、获得相关曝光的页面和查询簇、Top 20 决策查询以及站内决策行为；资产数、处理数、候选数、每日发布数和 `high-confidence` 候选只做运营健康。11 月严格串行执行英语 `/en/` 内链修复、n8n pricing/cost Harvest、Automation comparison 单项发布、Lindy 受控索引实验，再按信号决定 Make；Productivity 和 Meeting Notes 空壳 comparison 不进 sitemap。旧规模化路线的每日/每周产量和一年工具数目标停止执行。详见[产品增长路线与执行 Roadmap](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)。
 
 2026-10-26 **SEO 产品架构 V3 已批准并落入产品宪法**：产品公开定位从泛 AI 工具目录收敛为 Evidence-backed AI Tool Decision Platform；Decision Cluster 成为唯一内容生产单位，页面职责、一个意图一个 canonical、工具三态、Claim 级 E0-E3 证据和 Coding/Automation/DeepL 第一阶段资产已冻结。12 周目标从“批量页面”改为两个 P0 Coding 决策页、一个 n8n 自托管 Guide、最多 8-12 个有独立价值的深度 Tool 页和至少一个可复核 E2 实测；数量均为质量上限而非 KPI。普通单元被限制为一份快照、一个端到端开发槽、一次最终 QA 和一份审计，R 级文档不运行 TypeScript/build/smoke，防止过度设计、开发和测试。当前硬阻塞仍是 GSC refresh token 失效；在数据恢复前不凭计划数量扩张。详见[SEO 产品架构 V3](./SEO_PRODUCT_ARCHITECTURE_V3_2026-10-26_CN.md)。
 
@@ -153,9 +159,7 @@ Otter.ai、Fireflies 的 3 条既有 published meeting fit 保持原 status、�
 
 差异化开发执行规则：先定义用户价值和风险，默认最小实现；dormant/noindex 功能不新增网络服务。默认验证为专项测试、`tsc`、完整 build 与一次生产模式 smoke；单项超过 60 分钟或连续两次 QA FAIL，交总控重新选方案。仅安全、支付、数据一致性 P0 可扩大测试范围。
 
-2026-09-20 规模化口径更新：生产基线为 63 条工具记录、50 条已公开、13 条获准索引；技术和 SEO 护栏稳定，当前增长瓶颈转为高
-质量工具库存和差异化覆盖。成熟工具正常运营日每天至少公开 1 个、最多 2 个；通过提前维护 Task Cluster 候选缓冲保证大多数日期达标。仅证据冲突、重复实体、生产/构建故障、权限阻塞或缓冲确实没有合格对象时可为 0，记录 blocker 并优先补充候选包。索引仍逐页审批，每天最多 1 个、
-目标每周 4 个且硬上限 5 个。完整阶段目标、维护频率和暂停门禁见
+2026-09-20 历史规模化口径：当时生产基线为 63 条工具记录、50 条已公开、13 条获准索引，并曾采用每日公开与每周索引数量目标。该数量口径已于 2026-11-04 停止执行；当前只保留逐页审批、质量门禁和暂停机制，增长节奏见 2026-11 Roadmap。历史阶段目标、维护频率和暂停门禁见
 [高质量工具规模化与分层维护路线图](./CONTENT_SCALE_AND_MAINTENANCE_ROADMAP_2026-09-20_CN.md)。
 
 四周实施排期见 [证据驱动目录优化计划](./FOUR_WEEK_EVIDENCE_LED_DIRECTORY_PLAN_CN.md)。
@@ -351,9 +355,7 @@ Gamma 验收补充：`33e65beb` 部署成功后发现新简版提示被官方快
 
 以下行为在本轮冻结：
 
-- 不批量新增同义 guide、comparison 或 alternatives URL。成熟候选保持 14-21 条 Task Cluster 缓冲；2026-10-08 起正常运营日最多公开 1 个通过实体门禁的成熟工具，并可同日推进 1 个最多 5 条的既有 freshness 批次。新工具默认 `monitor / noindex`，账号级未决 Claim 保留限定和复核日，不整体阻止发布。成熟工具在 48-72 小时技术观察后可进入独立索引评审；当前每天最多
-  批准 1 个、目标每周 4 个且硬上限 5 个。只有同时通过资料完整度、独立市场验证和索引复核的条目才进入 sitemap；没有合格项
-  时记录 SLA 异常并补池，不发布弱页凑数。详见 [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)。
+- 不批量新增同义 guide、comparison 或 alternatives URL。新工具默认 `monitor / noindex`，账号级未决 Claim 保留限定和复核日，不整体阻止公开。只有同时通过资料完整度、独立需求、市场验证和索引复核的条目才进入 sitemap；没有合格项时允许为 0，增强已有页面，不发布弱页凑数。数据库额度仅是安全上限。详见 [工具页索引发布与节奏控制](./TOOL_INDEX_RELEASE_POLICY_CN.md)与[2026-11 Roadmap](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)。
 - 不为了“更新日期”批量改写内容；每次更新必须对应真实来源、编辑核查或用户反馈。
 - 不把外链数量作为 SEO 成功指标；分发模块只保留维护，不继续扩功能或执行站外投放。
 
