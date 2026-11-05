@@ -3495,8 +3495,6 @@ export default async function Page({
                             rel='noreferrer'
                             className='inline-flex items-center rounded-lg border border-cyan-200 bg-white px-3 py-2 text-xs font-semibold text-cyan-800 hover:border-cyan-300 hover:bg-cyan-100'
                           >
-                {canonicalSlug === 'n8n' ? <N8nPricingDecision locale={locale} /> : null}
-
                             {source.label}
                           </a>
                         ))}
@@ -3518,6 +3516,8 @@ export default async function Page({
                     </details>
                   )}
                 </PublicToolDecision>
+
+                {canonicalSlug === 'n8n' ? <N8nPricingDecision locale={locale} /> : null}
 
                 {toolId && (
                   <div className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>
