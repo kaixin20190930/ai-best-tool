@@ -1966,5 +1966,5 @@ export const FEATURED_GUIDE_HREFS = [
 ] as const;
 
 export const INDEXABLE_GUIDE_PAGES = GUIDE_PAGES.filter(
-  (page) => !isComparisonGuideHref(page.href) && INDEXABLE_GUIDE_PATHS.has(page.href),
+  (page) => INDEXABLE_GUIDE_PATHS.has(page.href),
 );

@@ -9,6 +9,7 @@ import {
 } from '@/lib/content/verifiedComparison';
 import { BASE_URL } from '@/lib/env';
 import { getNoindexMetadata } from '@/lib/seo/indexing';
+import { INDEXABLE_COMPARISON_GUIDE_PATHS } from '@/lib/seo/guideIndexing';
 import { generateLocalizedCanonicalUrl } from '@/lib/seo/metadata';
 import { generateBreadcrumbSchema, generateFAQSchema, generateItemListSchema } from '@/lib/seo/schema';
 import { loadPublicComparisonCapabilityRows } from '@/lib/services/decision/capabilityReadModel';
@@ -29,16 +30,22 @@ export type ComparisonConfig = {
     | { kind: 'unavailable'; guideLabel: BilingualCopy };
 };
 
-export async function buildComparisonMetadata(locale: string, title: string, description: string): Promise<Metadata> {
+export async function buildComparisonMetadata(
+  locale: string,
+  title: string,
+  description: string,
+  comparisonPath?: string,
+): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: 'Metadata.home',
   });
 
+  const indexable = comparisonPath ? INDEXABLE_COMPARISON_GUIDE_PATHS.has(comparisonPath) : false;
   return {
     title: locale === 'cn' || locale === 'tw' ? `${title} | AI Best Tool` : `${title} | ${t('title')}`,
     description,
-    ...getNoindexMetadata(),
+    ...(indexable ? { robots: { index: true, follow: true } } : getNoindexMetadata()),
   };
 }
 

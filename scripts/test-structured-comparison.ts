@@ -247,11 +247,12 @@ async function main() {
     path.join(process.cwd(), 'app/[locale]/(with-footer)/guides/comparison-template.tsx'),
     'utf8',
   );
-  assert.match(templateSource, /\.\.\.getNoindexMetadata\(\)/);
+  assert.match(templateSource, /getNoindexMetadata\(\)/);
+  assert.match(templateSource, /INDEXABLE_COMPARISON_GUIDE_PATHS\.has/);
   assert.equal((getNoindexMetadata().robots as { index: boolean }).index, false);
-  assert.equal(
-    INDEXABLE_GUIDE_PAGES.some((page) => page.href.endsWith('-comparison')),
-    false,
+  assert.deepEqual(
+    INDEXABLE_GUIDE_PAGES.filter((page) => page.href.endsWith('-comparison')).map((page) => page.href),
+    ['/guides/ai-tools-for-automation-comparison'],
   );
   assert.equal(
     INDEXABLE_GUIDE_PAGES.some((page) => page.href === '/guides/ai-tools-for-web3-comparison'),

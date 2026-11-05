@@ -12,6 +12,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
     locale === 'cn' || locale === 'tw'
       ? '按部署方式、AI 工作模型、credits 与 execution 成本、人审和限制，对比 n8n、Make 与 Lindy。'
       : 'Compare n8n, Make, and Lindy by deployment, AI work model, credits and executions, human review, and limits.',
+    '/guides/ai-tools-for-automation-comparison',
   );
 
   return {

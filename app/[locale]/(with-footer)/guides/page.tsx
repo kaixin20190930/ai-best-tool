@@ -302,20 +302,20 @@ export default function GuidesPage({ params: { locale } }: { params: { locale: s
           <GitCompareArrows className='mt-1 size-5 shrink-0 text-slate-500' />
           <div>
             <h2 className='font-semibold text-slate-950'>
-              {isChinese ? '已经明确要并排比较编程工具？' : 'Already need a side-by-side coding comparison?'}
+              {isChinese ? '正在比较自动化工具？' : 'Comparing automation tools?'}
             </h2>
             <p className='mt-1 text-sm leading-6 text-slate-600'>
               {isChinese
-                ? '这是辅助决策入口，不是搜索主干；看完后请回到工具详情核对事实。'
-                : 'This is a secondary decision aid, not a search backbone. Return to tool profiles to verify facts.'}
+                ? '按部署方式、计费单位和人工审核要求并排比较 n8n、Make 与 Lindy。'
+                : 'Compare n8n, Make, and Lindy by deployment, billing unit, and human-review needs.'}
             </p>
           </div>
         </div>
         <Link
-          href={generateLocalizedPath('/guides/ai-coding-tools-comparison', locale)}
+          href={generateLocalizedPath('/guides/ai-tools-for-automation-comparison', locale)}
           className='inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-cyan-300'
         >
-          {isChinese ? '打开次级对比' : 'Open secondary comparison'}
+          {isChinese ? '打开自动化对比' : 'Open automation comparison'}
           <ArrowRight className='size-4' />
         </Link>
       </section>

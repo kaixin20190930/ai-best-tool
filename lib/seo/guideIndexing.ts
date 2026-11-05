@@ -2,6 +2,13 @@ export function isComparisonGuideHref(href: string): boolean {
   return href.includes('-comparison');
 }
 
+// Comparison pages fail closed. Each release requires an explicit editorial
+// allowlist entry after its candidates, sources, canonical, and sitemap gate
+// have passed. A comparison-shaped URL alone is never indexable.
+export const INDEXABLE_COMPARISON_GUIDE_PATHS = new Set<string>([
+  '/guides/ai-tools-for-automation-comparison',
+]);
+
 export const INDEXABLE_GUIDE_PATHS = new Set([
   '/guides/how-to-choose-ai-tools',
   '/guides/free-ai-tools',
@@ -17,6 +24,7 @@ export const INDEXABLE_GUIDE_PATHS = new Set([
   '/guides/ai-tools-for-developers',
   '/guides/ai-tools-for-automation',
   '/guides/n8n-self-hosted-requirements',
+  '/guides/ai-tools-for-automation-comparison',
   '/guides/ai-tools-for-web3',
   '/guides/ai-tools-for-marketing',
   '/guides/ai-tools-for-sales',

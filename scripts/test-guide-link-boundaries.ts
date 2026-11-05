@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { INDEXABLE_GUIDE_PAGES, INDEXABLE_GUIDE_PATHS, isComparisonGuideHref } from '../lib/content/guides';
+import { INDEXABLE_GUIDE_PAGES, INDEXABLE_GUIDE_PATHS } from '../lib/content/guides';
 
 const root = process.cwd();
 const guideHubPath = 'app/[locale]/(with-footer)/guides/page.tsx';
@@ -20,8 +20,13 @@ function collectGuideFiles(directory: string): string[] {
 
 assert.ok(INDEXABLE_GUIDE_PAGES.length >= 12, 'Indexable guide allowlist is unexpectedly small');
 assert.ok(
-  INDEXABLE_GUIDE_PAGES.every((guide) => INDEXABLE_GUIDE_PATHS.has(guide.href) && !isComparisonGuideHref(guide.href)),
-  'Indexable guide pages must be allowlisted and must not be comparison routes',
+  INDEXABLE_GUIDE_PAGES.every((guide) => INDEXABLE_GUIDE_PATHS.has(guide.href)),
+  'Indexable guide pages must be explicitly allowlisted',
+);
+assert.deepEqual(
+  INDEXABLE_GUIDE_PAGES.filter((guide) => guide.href.includes('-comparison')).map((guide) => guide.href),
+  ['/guides/ai-tools-for-automation-comparison'],
+  'Only the verified Automation comparison may pass the fail-closed comparison gate',
 );
 
 const comparisonLinks = guideHubSource.match(/\/guides\/[a-z0-9-]+-comparison/g) || [];

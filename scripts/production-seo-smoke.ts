@@ -227,14 +227,25 @@ async function runSmokeCheck() {
         new URL(url).pathname,
       ),
     );
+    const approvedComparisonPaths = new Set([
+      '/guides/ai-tools-for-automation-comparison',
+      '/cn/guides/ai-tools-for-automation-comparison',
+    ]);
     const comparisonUrls = urls.filter((url) => url.includes('comparison'));
+    const unapprovedComparisonUrls = comparisonUrls.filter((url) => !approvedComparisonPaths.has(new URL(url).pathname));
 
-    if (sitemapResponse.ok && urls.length > 0 && internalUrls.length === 0 && comparisonUrls.length === 0) {
-      console.log(`✅ /sitemap.xml: ${urls.length} URLs, no internal or comparison paths`);
+    if (
+      sitemapResponse.ok &&
+      urls.length > 0 &&
+      internalUrls.length === 0 &&
+      unapprovedComparisonUrls.length === 0 &&
+      comparisonUrls.length === approvedComparisonPaths.size
+    ) {
+      console.log(`✅ /sitemap.xml: ${urls.length} URLs, only the approved Automation comparison paths`);
     } else {
       failures++;
       console.error(
-        `❌ /sitemap.xml: status ${sitemapResponse.status}, URLs ${urls.length}, internal ${internalUrls.length}, comparison ${comparisonUrls.length}`,
+        `❌ /sitemap.xml: status ${sitemapResponse.status}, URLs ${urls.length}, internal ${internalUrls.length}, comparison ${comparisonUrls.length}, unapproved comparison ${unapprovedComparisonUrls.length}`,
       );
     }
   } catch (error) {
