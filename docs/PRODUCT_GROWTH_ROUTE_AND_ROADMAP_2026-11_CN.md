@@ -178,6 +178,8 @@ Roadmap 的交付必须写明目标状态。例如“发布 Automation compariso
 
 **2026-11-05 执行校正：R1、R2、R3 生产技术验收通过；R4 等待独立 QA。**R1 提交 `65e7830c` 已推送；本地生产模式扫描为 174 页、3,294 个站内链接，英语 `/en/` 链接为 0。第一次线上扫描在部署切换期间仍看到约 70 页的共享 `/en/explore`；第二次扫描已不再出现这些链接，唯一抓取失败的 `/submit` 单独验证为预期的 `307` 登录跳转（落点 `200`）。R2 的初版 `3ac20856` 在线上出现新标题与旧正文混合，根因为定价组件误嵌在条件证据链接内；修复 `7d050803` 推送后，生产英中页面、相关 Guide、canonical/index 和 sitemap 专项检查均通过。R3 的发布 `8eeec217` 与 hreflang 补丁 `7a769177` 已推送；生产英中页面均为 `200 + index + self-canonical + en/zh-CN/x-default`，生产 SEO smoke 通过，sitemap 为 154 条且仅新增 Automation 英中两条 comparison。R4 独立 QA 工具调用未能创建代理，没有 `QA_PASS`；生产证据与索引状态未写入。
 
+**2026-11-05 R4 最新状态（覆盖上段历史状态）：证据 QA 已通过并提交；索引评审未通过。**独立报告 `INDEX_EVIDENCE_LINDY_2026-11-04_QA.json` 与清单内容哈希匹配。fresh preflight 写入 0；单对象 evidence commit 写入 1；postcheck 确认后像已应用且追加写入 0。随后对实际生产后像运行单对象索引 selector/preflight，结果均为 `repair_monitor`，正式评审已记录同一结论。阻塞是过期的 `next_review_date`（生产值为 2026-10-31，上海时间）、缺少可验证的 `indexIdentity` 独立意图快照，以及未记录真实完成的 `observationComplete`。此前基于拟议后像的 `approve_continue_index` 不能代替当前生产评审。未运行索引 rollback/commit；Lindy 保持 `published + monitor/noindex`，sitemap 无 Lindy。先真实复核日期、生产查重与观察证据，再生成新的索引批次及其独立 QA；不得把本次证据 QA 扩展为索引发布签署。
+
 ### R1：统一英语路径（P0，2026-11-04 至 11-06）
 
 目标：消除站内英语 `/en/...` 重定向链，再扩大索引。
@@ -222,6 +224,8 @@ Roadmap 的交付必须写明目标状态。例如“发布 Automation compariso
 验收：精确新增 en/cn 两条；query 与内容相关；28 天后决定保持、增强或退回。
 
 **2026-11-05 执行状态：A 级拟议后像已通过，但独立 QA 未创建成功；等待独立签署后才能生产提交。**
+
+以下为证据提交前的历史快照；当前状态以上述“R4 最新状态”为准。
 
 - 当前生产仍为 `published + monitor/noindex`，本轮没有改数据库、robots、sitemap 或索引状态。
 - 已重新核验 3 条官方来源：产品主页、实时定价页、用量与重任务暂停文档。

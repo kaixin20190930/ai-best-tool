@@ -92,7 +92,9 @@ async function main() {
       officialSourceCount: evidence.officialSourceCount,
       independentSignalCount: evidence.independentSignalCount,
       decisionContentComplete: evidence.decisionContentComplete,
-      editorialDatesComplete: evidence.editorialReviewed && Boolean(tool.next_review_date),
+      editorialDatesComplete: evidence.editorialReviewed &&
+        typeof tool.next_review_date === 'string' &&
+        tool.next_review_date.slice(0, 10) >= options.asOf,
       canonicalUnique: options.canonicalUnique,
       intentUnique: options.intentUnique,
       automatedSeoPassed: options.seoPassed,

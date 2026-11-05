@@ -1,0 +1,33 @@
+{
+  "status": "QA_PASS",
+  "unit": "INDEX_EVIDENCE_LINDY_2026-11-04",
+  "manifestSha256": "d1448244740a00c83894d88a2674c4b37e0ab2fabafd640d44f8dbcfa2213539",
+  "qaActor": "codex-thread:01a1aa90-ce2e-7ca2-b88e-b0a175428fb5",
+  "checkedAt": "2026-11-05",
+  "hashContract": {
+    "algorithm": "sha256(JSON.stringify(JSON.parse(manifestUtf8)))",
+    "rawFileSha256": "d603ce07aac331ab0e82f3eebbd5e283557da886f614be4d4523bac6b73578b9",
+    "note": "manifestSha256 follows scripts/run-existing-tool-index-evidence.ts; raw file bytes include formatting and are not the commit-gate hash."
+  },
+  "findings": [],
+  "checks": {
+    "manifestShapeAndAllowedPatchKeys": "PASS",
+    "singleLindyItemAndProductionPreimage": "PASS",
+    "officialSourcesCurrentAndScoped": "PASS; product identity, pricing/billing boundary, shared credit pool, and heavy-task pause behavior only",
+    "independentSignalsNonDuplicativeAndScoped": "PASS; Cybernews is limited to hands-on workflow and usability observations, while Crunchbase is limited to organizational continuity and funding rounds",
+    "staleCybernewsPricingExcluded": "PASS",
+    "unsupportedSearchDemandAccountCostAndReliabilityClaimsExcluded": "PASS",
+    "marketValidationScoreArithmetic": "PASS; 22 + 18 + 18 + 14 + 8 = 80",
+    "manifestHashMatchesCommitContract": "PASS",
+    "genericEvidenceTests": "PASS",
+    "typescript": "PASS",
+    "productionReadOnlyPreflight": "PASS; productionWrites=0, alreadyApplied=false",
+    "productionTransactionRollback": "PASS; productionWrites=0"
+  },
+  "scopeLimitations": [
+    "This QA_PASS authorizes only the Lindy evidence manifest bound to manifestSha256.",
+    "No evidence commit, index review commit, continue_index transition, sitemap change, deployment, or production write was performed.",
+    "A fresh preflight must still pass before evidence commit; all later index-release gates remain independently required.",
+    "This review does not assert search demand, account-specific checkout or entitlements, production reliability, or current numeric pricing."
+  ]
+}

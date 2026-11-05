@@ -2,6 +2,8 @@
 
 更新时间：2026-11-04
 
+2026-11-05 **Lindy 证据与索引门禁更新（覆盖下段 R4 旧状态）**：独立 QA 报告 `INDEX_EVIDENCE_LINDY_2026-11-04_QA.json` 与清单内容哈希匹配；fresh preflight 写入 0，Lindy 单对象 evidence commit 写入 1，postcheck 已应用且追加写入 0。实际生产后像的单对象 selector/preflight 和正式索引评审均为 `repair_monitor`，阻塞为过期 `next_review_date`、缺失独立意图快照 `indexIdentity`、未记录完成的观察期。没有运行索引 rollback/commit；Lindy 仍为 `published + monitor/noindex`，线上 robots 为 `noindex` 且不在 sitemap。修复脚本已要求正式评审拒绝过期复核日期。下一步须真实补齐日期、意图查重与观察证据，再重新评审并取得索引批次独立 QA；证据 QA 不等于索引放行。
+
 2026-11-05 **生产验收校正**：Stage 1 导航修复 `65e7830c` 的本地扫描为 174 页/3,294 链接且英语 `/en/` 链接为 0；首次生产扫描看到约 70 页旧共享导航，第二次复测已消失。唯一 `/submit` 抓取失败单独确认为预期 `307` 登录跳转后落点 `200`。Stage 2 n8n 初版 `3ac20856` 的定价组件误嵌在条件证据链接内；修复 `7d050803` 推送后，生产英中页面、相关 Guide、canonical/index 和 sitemap 专项检查均通过。Stage 3 Automation 发布 `8eeec217`、hreflang 补丁 `7a769177` 已推送；生产英中页面 `200 + index + self-canonical + en/zh-CN/x-default`，SEO smoke 通过，sitemap 154 条且只新增 Automation 英中两条 comparison。Stage 4 Lindy 独立 QA 调用未能创建代理，仍无 `QA_PASS`，生产证据与索引状态未写入；Make 未开始。
 
 2026-11-04 **产品增长路线本地实现记录（由 2026-11-05 生产验收校正覆盖）**：基线已冻结；导航、n8n pricing/cost 决策页和 Automation comparison 单项索引代码均已在本地实现并通过相应检查，但不能据此判定生产阶段完成。Lindy 单对象证据清单的只读拟议后像评审为 `approve_continue_index`，质量分 100、17 项门禁全通过；preflight 与事务 rollback 均为生产写入 0。当前仍为 `published + monitor/noindex`，通用证据提交器要求绑定当前清单哈希的独立 `QA_PASS`，不得由证据作者自签。Make 仍未开始。详见[产品增长路线](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)与[Lindy 证据清单](./INDEX_EVIDENCE_LINDY_2026-11-04.json)。
