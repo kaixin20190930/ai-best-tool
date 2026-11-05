@@ -68,6 +68,7 @@ export function createRefreshTokenAccessTokenProvider(input: {
         refresh_token: refreshToken,
         grant_type: 'refresh_token',
       }).toString(),
+      signal: AbortSignal.timeout(20_000),
     });
 
     if (!tokenResponse.ok) {
@@ -108,6 +109,7 @@ async function authorizedJsonRequest(
   const accessToken = await accessTokenProvider();
   return fetch(url, {
     ...init,
+    signal: init.signal || AbortSignal.timeout(20_000),
     headers: {
       Authorization: `Bearer ${accessToken}`,
       ...(init.headers || {}),

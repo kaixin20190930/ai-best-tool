@@ -34,6 +34,8 @@ pnpm run gsc:fetch-readonly -- --summary-out docs/GSC_SEARCH_ANALYTICS_SUMMARY_C
 
 ## 数据解释边界
 
+2026-11-05：采集新增 page×query 联合行（dataState=final），用于当前产品增长周报确认相关曝光页；旧快照缺该维度时 unavailable。联合行同样 top rows，不保证全量。运行 pnpm run growth:weekly-report --summary 只生成汇总，原始查询行和 JSON 保留 .local/gsc/。自动运营、日期口径和当前凭据限制见[执行手册](./PRODUCT_GROWTH_OPERATIONS_RUNBOOK_CN.md)。
+
 - 总量由不分维度的 property 查询取得；不要把 page/query 行加总当作总量。页面维度的聚合规则可能与 property 总量不同。
 - page/query 请求每页最多 25,000 行，本脚本最多取各维度 50,000 行并标记是否触及本地上限。但 Google 只保证返回部分头部行，**即使没有触及上限也不保证 query 完整**；匿名化查询可能缺失。
 - date 维度不含零数据日期。连续日期如有空缺，应标记为未返回，而不是自行填零。

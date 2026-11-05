@@ -18,6 +18,7 @@ export type GscPeriod = {
   startDate: string;
   endDate: string;
   totals: SearchAnalyticsRow | null;
+  pageQuery?: { rows: SearchAnalyticsRow[]; capped: boolean; topRowsOnly: boolean };
   breakdowns: Record<
     SearchAnalyticsDimension,
     {
@@ -79,7 +80,7 @@ async function breakdown(
   client: ReadonlySearchAnalyticsClient,
   startDate: string,
   endDate: string,
-  dimension: SearchAnalyticsDimension,
+  dimension: SearchAnalyticsDimension | ['page', 'query'],
 ): Promise<GscPeriod['breakdowns'][SearchAnalyticsDimension]> {
   async function fetchPage(
     startRow: number,
@@ -89,7 +90,7 @@ async function breakdown(
       startDate,
       endDate,
       type: 'web',
-      dimensions: [dimension],
+      dimensions: Array.isArray(dimension) ? dimension : [dimension],
       dataState: 'final',
       rowLimit: PAGE_SIZE,
       startRow,
@@ -123,6 +124,7 @@ async function collectPeriod(client: ReadonlySearchAnalyticsClient, endDate: str
     startDate,
     endDate,
     totals: totalsRows[0] || null,
+    pageQuery: await breakdown(client, startDate, endDate, ['page', 'query']),
     breakdowns: {
       date: await breakdown(client, startDate, endDate, 'date'),
       page: await breakdown(client, startDate, endDate, 'page'),

@@ -246,6 +246,8 @@ Productivity 和 Meeting Notes comparison 本月不进入索引排期；先决�
 
 ## 八、自动运营调整
 
+**2026-11-05 实施状态：**监控修复 1edbe12f 已推送，两项 GitHub 工作流真实运行均 Success。新周报、页面×查询只读采集与发布后观察脚本已实现并手动验证。增长周报 ai-best-tool、唯一 Cluster 复盘 ai-best-tool-cluster、发布后观察 ai-best-tool-2 已创建为 ACTIVE heartbeat，绑定当前实施聊天；首次自动运行待验收。GSC 最新最终日仍 10-30、实时 OAuth 400；获授权核查的 Moss 服务账号无 aibesttool 读取权限，发布后指标等待数据恢复。11-05 工具级 Freshness 队列 69 个到期公开工具，其中 Lindy/Make 到期，不能冒充 Claim 级计数。完整执行契约与运行记录见[自动运营手册](./PRODUCT_GROWTH_OPERATIONS_RUNBOOK_CN.md)、[新指标周报](./PRODUCT_GROWTH_WEEKLY_REPORT_CN.md)、[发布后观察](./PRODUCT_GROWTH_OBSERVATION_CN.md)。
+
 自动化继续做实体查重、Freshness、资产账本和候选筛选，但角色从“证明系统每天有产出”改为“为当前 Cluster 提供输入和护栏”。
 
 每周只允许一个主增长 Cluster，默认输出：

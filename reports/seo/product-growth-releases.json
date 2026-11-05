@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "timezone": "Asia/Shanghai",
+  "activeCluster": "automation",
+  "stage": "R4_REPAIR_MONITOR",
+  "releases": [
+    { "id": "n8n-pricing", "releasedOn": "2026-11-05", "commit": "7d050803", "contentCooldownUntil": "2026-11-19", "paths": ["/ai/n8n", "/cn/ai/n8n"] },
+    { "id": "automation-comparison", "releasedOn": "2026-11-05", "commit": "7a769177", "contentCooldownUntil": "2026-11-19", "paths": ["/guides/ai-tools-for-automation-comparison", "/cn/guides/ai-tools-for-automation-comparison"] }
+  ],
+  "milestoneDays": [3, 7, 14, 28],
+  "lindy": { "status": "repair_monitor", "releasedOn": null, "blockers": ["expired next_review_date", "missing verified indexIdentity", "observationComplete not recorded"] },
+  "make": { "status": "not_started", "releasedOn": null, "gate": "R4 distribution decision and at least 14 days of valid signals" }
+}

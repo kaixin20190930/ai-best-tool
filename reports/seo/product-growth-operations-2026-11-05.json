@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-11-05",
+  "monitoring": {
+    "commit": "1edbe12f4d90a63ed14e01c68f9f26d11a754686",
+    "productionHealthRun": "41995465820",
+    "seoMonitoringRun": "41995465716",
+    "conclusion": "success",
+    "verification": "GitHub run pages each displayed Success"
+  },
+  "automations": [
+    { "id": "ai-best-tool", "name": "AI Best Tool 增长周报", "status": "ACTIVE", "cadence": "Friday 16:00 Asia/Shanghai", "firstScheduledRun": "not_yet_verified" },
+    { "id": "ai-best-tool-cluster", "name": "AI Best Tool 唯一 Cluster 复盘", "status": "ACTIVE", "cadence": "Friday 17:00 Asia/Shanghai", "firstScheduledRun": "not_yet_verified" },
+    { "id": "ai-best-tool-2", "name": "AI Best Tool 发布后观察", "status": "ACTIVE", "cadence": "Daily 10:00 Asia/Shanghai", "firstScheduledRun": "not_yet_verified" }
+  ],
+  "targetThread": "01a1a537-2cf3-71c3-b2d7-0f9c2ead6132",
+  "manualChecks": {
+    "weeklyReport": "generated_from_explicitly_stale_pre_release_snapshot",
+    "latestGscFinalDate": "2026-10-30",
+    "observation": { "urls": 8, "anomalies": 0, "productionWrites": 0 },
+    "freshness": { "totalTools": 150, "duePublishedTools": 69, "claimDueTools": 56, "entityDueTools": 13, "claimLevelCount": null },
+    "typescript": "pass",
+    "growthScoreboardTests": "pass",
+    "gscReadonlyTests": "pass",
+    "privateOutputTests": "pass",
+    "routeConsistencyTests": "pass"
+  },
+  "remaining": [
+    "Verify first actual heartbeat executions, not only ACTIVE configuration",
+    "Restore aibesttool GSC permission; refresh-token OAuth returned 400; candidate service-account token issued but both aibesttool properties returned 404",
+    "Record final post-release GSC and discovery/crawl/index evidence at due milestones",
+    "Resolve Lindy repair_monitor with actual review, identity and observation evidence; retain independent index QA requirement",
+    "Keep Make noindex until prior stage and valid signal gate pass"
+  ],
+  "decisionBehaviorAttribution": "unavailable; GSC proxies used under approved roadmap",
+  "externalBusinessWrites": 0,
+  "note": "Git commits and automation configuration writes are explicitly separate from production business data writes."
+}

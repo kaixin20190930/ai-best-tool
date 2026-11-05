@@ -38,6 +38,13 @@ globalThis.fetch = async (input, init) => {
   }
   assert.equal(method, 'POST');
   assert.ok(url.endsWith('/searchAnalytics/query'));
+  if (body?.dimensions?.length === 2) {
+    assert.deepEqual(body.dimensions, ['page', 'query']);
+    assert.equal(body.dataState, 'final');
+    return Response.json({
+      rows: [{ ...row('https://aibesttool.com/ai/n8n'), keys: ['https://aibesttool.com/ai/n8n', 'n8n pricing'] }],
+    });
+  }
   if (body?.dataState === 'all') {
     return Response.json({
       rows: [row('2026-10-07'), row('2026-10-08')],
@@ -76,6 +83,8 @@ async function main() {
     assert.equal(snapshot.periods.days7.breakdowns.page.rows.length, 25_001);
     assert.equal(snapshot.periods.days7.breakdowns.page.capped, false);
     assert.equal(snapshot.periods.days7.breakdowns.query.topRowsOnly, true);
+    assert.deepEqual(snapshot.periods.days7.pageQuery?.rows[0].keys, ['https://aibesttool.com/ai/n8n', 'n8n pricing']);
+    assert.equal(snapshot.periods.days28.pageQuery?.topRowsOnly, true);
     assert.equal(snapshot.periods.days7.totals?.clicks, 10);
     const publicReport = renderGscSearchAnalyticsReport(snapshot, false);
     const localReport = renderGscSearchAnalyticsReport(snapshot, true);

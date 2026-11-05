@@ -2,6 +2,8 @@
 
 更新时间：2026-11-04
 
+2026-11-05 **自动运营补齐**：监控修复 1edbe12f 已推送；Production Health Monitor 41995465820、SEO Monitoring 41995465716 实际运行均 Success。修复 comparison blanket ban、React 渲染测试、旧每日发布配额断言和目录页证据口径。新增长周报与发布后观察已手动运行，新增 page×query 只读采集；三项 ACTIVE heartbeat 已创建回读（ai-best-tool、ai-best-tool-cluster、ai-best-tool-2），首个自动运行待验收。GSC 实时 OAuth 400，Moss 服务账号对 aibesttool 两种 property 返回 404，未复用无权限凭据。发布后搜索效果仍 unavailable；Lindy 索引评审 repair_monitor、Make 未开始。参照[执行手册](./PRODUCT_GROWTH_OPERATIONS_RUNBOOK_CN.md)、[周报](./PRODUCT_GROWTH_WEEKLY_REPORT_CN.md)、[观察](./PRODUCT_GROWTH_OBSERVATION_CN.md)，不按新一周自动推进阶段。
+
 2026-11-05 **Lindy 证据与索引门禁更新（覆盖下段 R4 旧状态）**：独立 QA 报告 `INDEX_EVIDENCE_LINDY_2026-11-04_QA.json` 与清单内容哈希匹配；fresh preflight 写入 0，Lindy 单对象 evidence commit 写入 1，postcheck 已应用且追加写入 0。实际生产后像的单对象 selector/preflight 和正式索引评审均为 `repair_monitor`，阻塞为过期 `next_review_date`、缺失独立意图快照 `indexIdentity`、未记录完成的观察期。没有运行索引 rollback/commit；Lindy 仍为 `published + monitor/noindex`，线上 robots 为 `noindex` 且不在 sitemap。修复脚本已要求正式评审拒绝过期复核日期。下一步须真实补齐日期、意图查重与观察证据，再重新评审并取得索引批次独立 QA；证据 QA 不等于索引放行。
 
 2026-11-05 **生产验收校正**：Stage 1 导航修复 `65e7830c` 的本地扫描为 174 页/3,294 链接且英语 `/en/` 链接为 0；首次生产扫描看到约 70 页旧共享导航，第二次复测已消失。唯一 `/submit` 抓取失败单独确认为预期 `307` 登录跳转后落点 `200`。Stage 2 n8n 初版 `3ac20856` 的定价组件误嵌在条件证据链接内；修复 `7d050803` 推送后，生产英中页面、相关 Guide、canonical/index 和 sitemap 专项检查均通过。Stage 3 Automation 发布 `8eeec217`、hreflang 补丁 `7a769177` 已推送；生产英中页面 `200 + index + self-canonical + en/zh-CN/x-default`，SEO smoke 通过，sitemap 154 条且只新增 Automation 英中两条 comparison。Stage 4 Lindy 独立 QA 调用未能创建代理，仍无 `QA_PASS`，生产证据与索引状态未写入；Make 未开始。
