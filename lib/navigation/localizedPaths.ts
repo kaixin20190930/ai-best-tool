@@ -16,18 +16,28 @@ export function splitLocalePath(pathname: string) {
   return { pathname: path, locale, count };
 }
 
-// next-intl owns the locale prefix. Do not alter query values, hashes or external URLs.
-export function normalizeLocalizedHref(href: string | UrlObject, explicitLocale?: string) {
+function prefixLocalizedPath(pathname: string, locale?: string) {
+  if (!locale || locale === 'en') return pathname;
+  return pathname === '/' ? `/${locale}` : `/${locale}${pathname}`;
+}
+
+// Return the final public href used in server-rendered HTML. next-intl's Link
+// intentionally prefixes SSR hrefs even with `as-needed`, then repairs them
+// after hydration. That safe fallback creates crawlable /en/* redirect links,
+// so links use the canonical public pathname directly instead.
+export function normalizeLocalizedHref(href: string | UrlObject, explicitLocale?: string, currentLocale?: string) {
   const pathname = typeof href === 'string' ? href.split(/[?#]/, 1)[0] : href.pathname;
   const external = typeof href !== 'string' && Boolean(href.protocol || href.host || href.hostname);
   if (external || !pathname?.startsWith('/') || pathname.startsWith('//')) {
-    return { href, locale: explicitLocale };
+    return { href, locale: explicitLocale || currentLocale };
   }
   const parts = splitLocalePath(pathname);
+  const targetLocale = explicitLocale || parts.locale || currentLocale;
+  const publicPathname = prefixLocalizedPath(parts.pathname, targetLocale);
   return {
     href:
-      typeof href === 'string' ? parts.pathname + href.slice(pathname.length) : { ...href, pathname: parts.pathname },
-    locale: explicitLocale || parts.locale,
+      typeof href === 'string' ? publicPathname + href.slice(pathname.length) : { ...href, pathname: publicPathname },
+    locale: targetLocale === 'en' ? undefined : targetLocale,
   };
 }
 

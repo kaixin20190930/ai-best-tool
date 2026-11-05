@@ -4,9 +4,10 @@ import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
+import type { ToolEntryContext } from '@/lib/claims/toolEntry';
+import { generateLocalizedPath } from '@/lib/seo/metadata';
 import { cn } from '@/lib/utils';
 import { submitClaimListing } from '@/app/actions/claimListing';
-import type { ToolEntryContext } from '@/lib/claims/toolEntry';
 
 type ClaimListingFormProps = {
   locale: string;
@@ -23,7 +24,12 @@ const claimReasonOptions = [
   { value: 'other', zh: '其他', en: 'Other' },
 ] as const;
 
-export default function ClaimListingForm({ locale, sourcePath, initialIntent = 'default', toolContext }: ClaimListingFormProps) {
+export default function ClaimListingForm({
+  locale,
+  sourcePath,
+  initialIntent = 'default',
+  toolContext,
+}: ClaimListingFormProps) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -33,7 +39,9 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
     email: '',
     company: '',
     website: toolContext?.website || '',
-    claimReason: toolContext?.intent || (initialIntent === 'paid' || initialIntent === 'claim' ? 'ownership_update' : 'profile_correction'),
+    claimReason:
+      toolContext?.intent ||
+      (initialIntent === 'paid' || initialIntent === 'claim' ? 'ownership_update' : 'profile_correction'),
     note: '',
   });
 
@@ -74,7 +82,9 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
         email: '',
         company: '',
         website: '',
-        claimReason: toolContext?.intent || (initialIntent === 'paid' || initialIntent === 'claim' ? 'ownership_update' : 'profile_correction'),
+        claimReason:
+          toolContext?.intent ||
+          (initialIntent === 'paid' || initialIntent === 'claim' ? 'ownership_update' : 'profile_correction'),
         note: '',
       });
     } catch (error) {
@@ -106,13 +116,13 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
         <p className='mt-2 text-sm leading-6 text-emerald-900/80'>{nextStepText}</p>
         <div className='mt-4 flex flex-wrap items-center gap-3'>
           <Link
-            href={`/${locale}/pricing`}
+            href={generateLocalizedPath('/pricing', locale)}
             className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
           >
             {isChinese ? '查看价格页' : 'View pricing'}
           </Link>
           <Link
-            href={`/${locale}/submit?intent=claim`}
+            href={generateLocalizedPath('/submit?intent=claim', locale)}
             className='inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-white px-4 py-2 text-sm font-semibold text-emerald-800 hover:bg-emerald-100'
           >
             {isChinese ? '转到提交页' : 'Go to submit'}
@@ -131,10 +141,13 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
 
   return (
     <form onSubmit={handleSubmit} className='space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
-      {toolContext && <p className='rounded-lg border border-cyan-200 bg-cyan-50 p-3 text-sm text-cyan-900'>
-        {isChinese ? `正在处理 ${toolContext.listingName} 的${toolContext.intent === 'ownership_update' ? '认领' : '资料纠错'}。请填写邮箱并核对以下资料。` :
-          `Submitting a ${toolContext.intent === 'ownership_update' ? 'claim' : 'correction'} for ${toolContext.listingName}. Add your email and review the details below.`}
-      </p>}
+      {toolContext && (
+        <p className='rounded-lg border border-cyan-200 bg-cyan-50 p-3 text-sm text-cyan-900'>
+          {isChinese
+            ? `正在处理 ${toolContext.listingName} 的${toolContext.intent === 'ownership_update' ? '认领' : '资料纠错'}。请填写邮箱并核对以下资料。`
+            : `Submitting a ${toolContext.intent === 'ownership_update' ? 'claim' : 'correction'} for ${toolContext.listingName}. Add your email and review the details below.`}
+        </p>
+      )}
       <label htmlFor='claim-reason' className='block space-y-2 text-sm font-medium text-slate-700'>
         <span>{isChinese ? '认领原因' : 'Claim reason'}</span>
         <select
@@ -235,7 +248,11 @@ export default function ClaimListingForm({ locale, sourcePath, initialIntent = '
             : 'We review claims manually before any public owner mapping.'}
         </p>
       </div>
-      {submitError && <p role='alert' className='text-sm text-rose-700'>{submitError}</p>}
+      {submitError && (
+        <p role='alert' className='text-sm text-rose-700'>
+          {submitError}
+        </p>
+      )}
     </form>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Clock3, Heart, MessageSquare, Share2, Sparkles, TrendingUp } from 'lucide-react';
 
+import { generateLocalizedPath } from '@/lib/seo/metadata';
 import { CommunityHighlight, RecentDiscussion } from '@/lib/services/community';
 
 import TrackableCompareLink from '../TrackableCompareLink';
@@ -75,7 +76,7 @@ function CardActions({
       </Link>
       {compareHref && compareLabel && (
         <TrackableCompareLink
-          href={`/${locale}${compareHref}`}
+          href={generateLocalizedPath(compareHref, locale)}
           toolId={toolId}
           className='inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-200 hover:text-slate-950'
         >
@@ -162,7 +163,7 @@ export default function CommunityPulse({
                 <CardActions
                   toolId={tool.id}
                   locale={locale}
-                  detailHref={`/${locale}/ai/${tool.name}`}
+                  detailHref={generateLocalizedPath(`/ai/${tool.name}`, locale)}
                   detailLabel={isChinese ? '看工具详情' : 'View tool'}
                   compareHref={tool.compareHref}
                   compareLabel={tool.compareLabel}
@@ -213,7 +214,7 @@ export default function CommunityPulse({
                 <CardActions
                   toolId={item.id}
                   locale={locale}
-                  detailHref={`/${locale}/ai/${toolName}#comments`}
+                  detailHref={generateLocalizedPath(`/ai/${toolName}#comments`, locale)}
                   detailLabel={isChinese ? '看讨论' : 'Read discussion'}
                   compareHref={compareHref}
                   compareLabel={compareLabel}
@@ -264,7 +265,7 @@ export default function CommunityPulse({
                 <CardActions
                   toolId={tool.id}
                   locale={locale}
-                  detailHref={`/${locale}/ai/${tool.name}`}
+                  detailHref={generateLocalizedPath(`/ai/${tool.name}`, locale)}
                   detailLabel={isChinese ? '看工具详情' : 'View tool'}
                   compareHref={tool.compareHref}
                   compareLabel={tool.compareLabel}

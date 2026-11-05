@@ -4,6 +4,7 @@ import { ArrowRight, Clock3, CreditCard, Megaphone, Rocket, Sparkles } from 'luc
 import { getTranslations } from 'next-intl/server';
 
 import { getListingPaymentMailto, listingConfig } from '@/lib/config/listing';
+import { generateLocalizedPath } from '@/lib/seo/metadata';
 import CommerceViewTracker from '@/components/analytics/CommerceViewTracker';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 
@@ -158,8 +159,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default function PricingPage({ params: { locale } }: { params: { locale: string } }) {
   const isChinese = locale === 'cn' || locale === 'tw';
-  const submitHref = `/${locale}/submit?intent=paid`;
-  const claimHref = `/${locale}/developer/listing?intent=claim`;
+  const submitHref = generateLocalizedPath('/submit?intent=paid', locale);
+  const claimHref = generateLocalizedPath('/developer/listing?intent=claim', locale);
   const paymentHref = getListingPaymentMailto('AI Best Tool pricing');
   const { free, priorityReview, featuredWindows, launchBundle } = listingConfig.pricingTiers;
 
@@ -302,7 +303,7 @@ export default function PricingPage({ params: { locale } }: { params: { locale: 
               </p>
               <div className='mt-4 flex flex-wrap gap-3'>
                 <TrackableCtaLink
-                  href={`/${locale}/profile/submissions`}
+                  href={generateLocalizedPath('/profile/submissions', locale)}
                   ctaId='pricing_view_submissions'
                   ctaLabel='View my submissions'
                   pageType='pricing'

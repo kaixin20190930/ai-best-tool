@@ -7,7 +7,7 @@ import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG } from '@/lib/seo/constants';
-import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata, generateLocalizedPath } from '@/lib/seo/metadata';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/lib/seo/schema';
 import { getLocalizedField as getCategoryLocalizedField, getPopularCategories } from '@/lib/services/categories';
 import { getCommunityHighlights, getRecentDiscussions, getRisingTools } from '@/lib/services/community';
@@ -301,7 +301,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
             {priorityTopListTopics.slice(0, 4).map((topic) => (
               <TrackableCtaLink
                 key={topic.key}
-                href={`/${locale}/best-ai-tools/${topic.key}`}
+                href={generateLocalizedPath(`/best-ai-tools/${topic.key}`, locale)}
                 ctaId={`home_top_list_${topic.key}`}
                 ctaLabel={topic.title}
                 pageType='home'

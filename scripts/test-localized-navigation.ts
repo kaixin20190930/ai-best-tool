@@ -24,22 +24,29 @@ function unitTests() {
   for (const locale of locales) {
     const target = locale === 'en' ? '/ai/adobe' : `/${locale}/ai/adobe`;
     assert.deepEqual(normalizeLocalizedHref(`/${locale}/login?redirect=%2Fcn%2Fai%2Fadobe#sign-in`), {
-      href: '/login?redirect=%2Fcn%2Fai%2Fadobe#sign-in',
-      locale,
+      href: `${locale === 'en' ? '' : `/${locale}`}/login?redirect=%2Fcn%2Fai%2Fadobe#sign-in`,
+      locale: locale === 'en' ? undefined : locale,
     });
-    assert.deepEqual(normalizeLocalizedHref(`/${locale}/${locale}/pricing`), { href: '/pricing', locale });
+    assert.deepEqual(normalizeLocalizedHref(`/${locale}/${locale}/pricing`), {
+      href: `${locale === 'en' ? '' : `/${locale}`}/pricing`,
+      locale: locale === 'en' ? undefined : locale,
+    });
+    assert.deepEqual(normalizeLocalizedHref('/pricing?plan=pro#compare', undefined, locale), {
+      href: `${locale === 'en' ? '' : `/${locale}`}/pricing?plan=pro#compare`,
+      locale: locale === 'en' ? undefined : locale,
+    });
     assert.equal(repairRepeatedLocalePath(`/${locale}/${locale}/ai/adobe`), target);
     assert.equal(safeLocalizedReturnPath('/ai/adobe?view=reviews#comments', locale), `${target}?view=reviews#comments`);
     const login = new URL(buildLoginHref('/ai/adobe?view=reviews&sort=new#comments', locale), 'https://example.test');
     assert.equal(login.pathname, '/login');
     assert.equal(login.searchParams.get('redirect'), `${target}?view=reviews&sort=new#comments`);
   }
-  assert.deepEqual(normalizeLocalizedHref('/cn/pricing', 'de'), { href: '/pricing', locale: 'de' });
-  assert.deepEqual(normalizeLocalizedHref('/en/cn/login'), { href: '/login', locale: 'cn' });
+  assert.deepEqual(normalizeLocalizedHref('/cn/pricing', 'de'), { href: '/de/pricing', locale: 'de' });
+  assert.deepEqual(normalizeLocalizedHref('/en/cn/login'), { href: '/cn/login', locale: 'cn' });
   assert.deepEqual(
     normalizeLocalizedHref({ pathname: '/cn/profile', query: { redirect: '/cn/a?x=1&y=2' }, hash: 'x' }),
     {
-      href: { pathname: '/profile', query: { redirect: '/cn/a?x=1&y=2' }, hash: 'x' },
+      href: { pathname: '/cn/profile', query: { redirect: '/cn/a?x=1&y=2' }, hash: 'x' },
       locale: 'cn',
     },
   );
@@ -74,10 +81,7 @@ function unitTests() {
   assert.equal(repairRepeatedLocalePath('/cn/login'), '/cn/login');
   assert.equal(repairRepeatedLocalePath('/en/ai/adobe'), '/en/ai/adobe');
   assert.equal(repairRepeatedLocalePath('/api/cn/cn'), '/api/cn/cn');
-  assert.match(
-    readFileSync('app/navigation.ts', 'utf8'),
-    /export \{ default as Link \} from '@\/components\/navigation\/LocalizedLink'/,
-  );
+  assert.match(readFileSync('components/navigation/LocalizedLink.tsx', 'utf8'), /import NextLink from 'next\/link'/);
 
   // Resolve the imported JSX binding: next/link and native anchors must not be flagged.
   let filesChecked = 0;
@@ -189,6 +193,9 @@ async function smoke() {
         }
         anchors += 1;
         assert(!duplicate.test(url.pathname), `${page}: ${href}`);
+        if (!page.startsWith('/cn/')) {
+          assert(!url.pathname.startsWith('/en/'), `${page}: default-locale redirect link ${href}`);
+        }
       }
       if (/\/ai\/(adobe|salesforce_einstein)$/.test(page)) {
         assert(html.includes(`href="https://aibesttool.com${page}"`), `${page}: canonical`);

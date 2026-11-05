@@ -9,7 +9,7 @@ import { getTopicDecisionProfile } from '@/lib/content/topicDecisionProfiles';
 import { getTopListTopic } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { getEditorialReviewRecord } from '@/lib/seo/contentReviewDates';
-import { buildLocalizedPageMetadata } from '@/lib/seo/metadata';
+import { buildLocalizedPageMetadata, generateLocalizedPath } from '@/lib/seo/metadata';
 import { generateFAQSchema } from '@/lib/seo/schema';
 import { getTopicCatalog } from '@/lib/services/topicTools';
 import SeoBreadcrumbs from '@/components/seo/SeoBreadcrumbs';
@@ -244,7 +244,7 @@ export default async function BestAiToolsTopicPage({
             {tools.map((tool, index) => {
               const title = getLocalizedText(tool.title, locale);
               const content = getPublicToolSummary(tool.name, locale, getLocalizedText(tool.content, locale));
-              const detailHref = `/${locale}/ai/${encodeURIComponent(tool.name)}`;
+              const detailHref = generateLocalizedPath(`/ai/${encodeURIComponent(tool.name)}`, locale);
 
               return (
                 <div key={tool.id} className='rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'>
@@ -298,10 +298,10 @@ export default async function BestAiToolsTopicPage({
           className='mt-8 flex flex-wrap gap-4 text-sm font-semibold text-cyan-800'
           aria-label={isChinese ? '继续选择' : 'Continue choosing'}
         >
-          <Link href={`/${locale}${topic.guideHref}`} className='underline'>
+          <Link href={generateLocalizedPath(topic.guideHref, locale)} className='underline'>
             {isChinese ? '查看选择指南' : topic.guideLabel}
           </Link>
-          <Link href={`/${locale}/best-ai-tools`} className='underline'>
+          <Link href={generateLocalizedPath('/best-ai-tools', locale)} className='underline'>
             {isChinese ? '查看其他任务榜单' : 'Lists for other tasks'}
           </Link>
         </nav>

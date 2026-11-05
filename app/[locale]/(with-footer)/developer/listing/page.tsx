@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { ArrowRight, CheckCircle2, Mail, ShieldCheck, Sparkles } from 'lucide-react';
 
+import { parseToolEntryContext } from '@/lib/claims/toolEntry';
 import { getListingPaymentMailto } from '@/lib/config/listing';
+import { generateLocalizedPath } from '@/lib/seo/metadata';
 import TrackableCtaLink from '@/components/analytics/TrackableCtaLink';
 import ClaimListingForm from '@/components/developer/ClaimListingForm';
-import { parseToolEntryContext } from '@/lib/claims/toolEntry';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
   const isChinese = locale === 'cn' || locale === 'tw';
@@ -30,10 +31,10 @@ export default function DeveloperListingPage({
 }) {
   const isChinese = locale === 'cn' || locale === 'tw';
   const mailtoHref = getListingPaymentMailto('Claim listing interest');
-  const sourcePath = `/${locale}/developer/listing`;
+  const sourcePath = generateLocalizedPath('/developer/listing', locale);
   const toolContext = parseToolEntryContext(searchParams || {}, locale);
-  const submitHref = `/${locale}/submit?intent=claim`;
-  const pricingHref = `/${locale}/pricing`;
+  const submitHref = generateLocalizedPath('/submit?intent=claim', locale);
+  const pricingHref = generateLocalizedPath('/pricing', locale);
   let initialIntent: 'default' | 'claim' | 'paid' = 'default';
   if (searchParams?.intent === 'claim') {
     initialIntent = 'claim';
@@ -307,7 +308,12 @@ export default function DeveloperListingPage({
 
         <div>
           <div id='claim-form'>
-            <ClaimListingForm locale={locale} sourcePath={toolContext?.sourcePath || sourcePath} initialIntent={initialIntent} toolContext={toolContext} />
+            <ClaimListingForm
+              locale={locale}
+              sourcePath={toolContext?.sourcePath || sourcePath}
+              initialIntent={initialIntent}
+              toolContext={toolContext}
+            />
           </div>
         </div>
       </section>

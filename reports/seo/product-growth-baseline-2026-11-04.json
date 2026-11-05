@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-11-04",
+  "timezone": "Asia/Shanghai",
+  "productionBaseUrl": "https://aibesttool.com",
+  "purpose": "Stage 0 baseline for the November product growth roadmap before localized-link, n8n content, comparison distribution, or tool-index changes",
+  "sitemap": {
+    "urlCount": 152,
+    "explicitEnglishPrefixCount": 0,
+    "targets": {
+      "automationComparison": [],
+      "productivityComparison": [],
+      "meetingNotesComparison": [],
+      "make": [],
+      "lindy": [],
+      "n8n": [
+        "https://aibesttool.com/ai/n8n",
+        "https://aibesttool.com/cn/ai/n8n"
+      ]
+    }
+  },
+  "productionHtml": {
+    "method": "Count server-rendered internal href values beginning with /en/",
+    "pages": [
+      { "path": "/", "explicitEnglishHrefCount": 31, "canonical": "https://aibesttool.com" },
+      { "path": "/explore", "explicitEnglishHrefCount": 15, "canonical": "https://aibesttool.com/explore" },
+      { "path": "/ai/n8n", "explicitEnglishHrefCount": 8, "canonical": "https://aibesttool.com/ai/n8n" },
+      { "path": "/ai/make", "explicitEnglishHrefCount": 8, "canonical": "https://aibesttool.com/ai/make" },
+      { "path": "/cn/ai/n8n", "explicitEnglishHrefCount": 0, "canonical": "https://aibesttool.com/cn/ai/n8n" }
+    ]
+  },
+  "searchBaseline": {
+    "source": "reports/seo/page-asset-ledger-2026-11-03.json and docs/GSC_MARKET_SNAPSHOT_2026-11-02_CN.md",
+    "latestCompleteDate": "2026-10-30",
+    "site28d": {
+      "clicks": 4,
+      "impressions": 3192,
+      "ctr": 0.0013,
+      "position": 15.21
+    },
+    "n8n28d": {
+      "clicks": 1,
+      "impressions": 2274,
+      "ctr": 0.00043975373790677223,
+      "position": 10.400175901495162
+    }
+  },
+  "constraints": [
+    "This snapshot is evidence for before/after comparison, not a fixed sitemap-count contract.",
+    "Google discovery, crawl, indexing, and impressions are separate states.",
+    "No index, sitemap, database, or production mutation was performed while capturing this baseline."
+  ]
+}

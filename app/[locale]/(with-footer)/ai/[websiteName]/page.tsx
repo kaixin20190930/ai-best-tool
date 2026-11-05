@@ -19,19 +19,19 @@ import {
 } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
+import { buildToolEntryHref } from '@/lib/claims/toolEntry';
 import { getLegacyToolScopeContent } from '@/lib/config/legacyToolScopeReviews';
 import { PRIORITY_TOOL_EVIDENCE } from '@/lib/config/priorityToolEvidence';
 import { PRIORITY_TOOL_FALLBACK_PROFILES } from '@/lib/config/priorityToolFallbacks';
 import { getSafetyToolReview } from '@/lib/config/safetyToolReviews';
 import TOOL_MAINTENANCE_REVIEWS from '@/lib/config/toolMaintenanceReviews';
 import { getCanonicalToolSlug, getLocalizedToolPath, isLegacyToolSlug } from '@/lib/config/toolRouteAliases';
-import { buildToolEntryHref } from '@/lib/claims/toolEntry';
-import { getPublicToolDetail, getPublicToolSummary } from '@/lib/content/publicToolScope';
 import {
   getPublicToolDetailDisposition,
   isNextNavigationError,
   isPublicToolMetadataAllowed,
 } from '@/lib/content/publicToolDetailAccess';
+import { getPublicToolDetail, getPublicToolSummary } from '@/lib/content/publicToolScope';
 import { BASE_URL } from '@/lib/env';
 import { buildLoginHref } from '@/lib/navigation/localizedPaths';
 import { SEO_CONFIG, ToolMetadata } from '@/lib/seo/constants';
@@ -60,13 +60,13 @@ import { toolToDetailData } from '@/lib/services/toolPresenter';
 import { getLocalizedField, getToolByName } from '@/lib/services/tools';
 import { createClient } from '@/lib/supabase/server';
 import { Separator } from '@/components/ui/separator';
+import DecisionToolInteractionTracker from '@/components/analytics/DecisionToolInteractionTracker';
 import PageViewTracker from '@/components/analytics/PageViewTracker';
 import CommentList from '@/components/comments/CommentList';
 import FavoriteButton from '@/components/FavoriteButton';
 import BaseImage from '@/components/image/BaseImage';
 import ChangeTimelinePanel from '@/components/intelligence/ChangeTimelinePanel';
 import EvidenceLedgerPanel from '@/components/intelligence/EvidenceLedgerPanel';
-import DecisionToolInteractionTracker from '@/components/analytics/DecisionToolInteractionTracker';
 import MarkdownProse from '@/components/MarkdownProse';
 import MediaGallery from '@/components/MediaGallery';
 import RatingStars from '@/components/RatingStars';
@@ -780,7 +780,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: '用量计算',
               value: '团队共用 credits 池；查询、更新、深度研究和电话等工作消耗不同，不能用固定单价推算所有任务。',
             },
-            { label: '运行边界', value: '官网描述了外部影响动作的审批与额度不足时暂停；本站未验证目标工作区的权限和每种动作。' },
+            {
+              label: '运行边界',
+              value: '官网描述了外部影响动作的审批与额度不足时暂停；本站未验证目标工作区的权限和每种动作。',
+            },
           ],
           sources: [
             { label: '官方定价', href: 'https://www.lindy.ai/pricing' },
@@ -791,10 +794,14 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           label: 'Official fact snapshot',
           title: 'AI teammate seats, usage, and approval boundaries',
           summary:
-            'This is Lindy\'s current public scope, not an account-level test. Confirm checkout, permissions, and task consumption before buying.',
+            "This is Lindy's current public scope, not an account-level test. Confirm checkout, permissions, and task consumption before buying.",
           checkedAt: '2026-10-17',
           facts: [
-            { label: 'Trial and plans', value: 'Free credits are a short trial; Team bills active seats and Enterprise requires a separate quote.' },
+            {
+              label: 'Trial and plans',
+              value:
+                'Free credits are a short trial; Team bills active seats and Enterprise requires a separate quote.',
+            },
             {
               label: 'Usage model',
               value:
@@ -1407,7 +1414,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           sources: [
             { label: '官方身份与产品范围', href: 'https://lumalabs.ai/llm-info' },
             { label: '当前套餐', href: 'https://lumalabs.ai/pricing' },
-            { label: '产品一致性指南', href: 'https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide' },
+            {
+              label: '产品一致性指南',
+              href: 'https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide',
+            },
           ],
         }
       : {
@@ -1436,7 +1446,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
           sources: [
             { label: 'Official identity and product scope', href: 'https://lumalabs.ai/llm-info' },
             { label: 'Current plans', href: 'https://lumalabs.ai/pricing' },
-            { label: 'Product consistency guidance', href: 'https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide' },
+            {
+              label: 'Product consistency guidance',
+              href: 'https://lumalabs.ai/learning-hub/keep-character-product-consistency-in-luma-reference-guide',
+            },
           ],
         };
   }
@@ -1529,7 +1542,10 @@ function getPriorityToolOfficialEvidence(websiteName: string, locale: string): P
               label: 'Data Controls',
               href: 'https://help.openai.com/en/articles/7730893-data-controls-in-chatgpt',
             },
-            { label: '训练数据设置', href: 'https://help.openai.com/en/articles/8983130-what-if-i-want-to-keep-my-history-on-but-disable-model-training' },
+            {
+              label: '训练数据设置',
+              href: 'https://help.openai.com/en/articles/8983130-what-if-i-want-to-keep-my-history-on-but-disable-model-training',
+            },
           ],
         }
       : {
@@ -2474,8 +2490,7 @@ function getPriorityToolSearchIntent(websiteName: string, locale: string): Prior
           metadataDescription:
             'Assess Lindy for connected team work, approvals, and per-seat plus credit costs; compare setup and maintenance with n8n and Make.',
           label: 'AI teammate decision',
-          summary:
-            'Evaluate actual target-workspace permissions, consumption, and results, not only the public demo.',
+          summary: 'Evaluate actual target-workspace permissions, consumption, and results, not only the public demo.',
           checkpoints: [
             'Connected tools, shared context, and scheduled-routine coverage',
             'Human approval, permissions, and failure recovery',
@@ -2675,9 +2690,10 @@ export async function generateMetadata({
         ? getLocalizedField(dbTool.title, locale) || data?.title || websiteName
         : data?.title || websiteName);
 
-    const originalDescription = metadataAllowed && dbTool
-      ? getLocalizedField(dbTool.content, locale) || data?.content || ''
-      : data?.content || '';
+    const originalDescription =
+      metadataAllowed && dbTool
+        ? getLocalizedField(dbTool.content, locale) || data?.content || ''
+        : data?.content || '';
     const toolDescription = safetyCorrection?.content || scopeCorrection?.content || originalDescription;
 
     // Get category name if available
@@ -3291,7 +3307,13 @@ export default async function Page({
     return (
       <>
         <PageViewTracker toolId={toolId} />
-        {toolId && <DecisionToolInteractionTracker toolId={toolId} locale={locale} enabled={process.env.DECISION_EVENT_COLLECTION_ENABLED === 'true'} />}
+        {toolId && (
+          <DecisionToolInteractionTracker
+            toolId={toolId}
+            locale={locale}
+            enabled={process.env.DECISION_EVENT_COLLECTION_ENABLED === 'true'}
+          />
+        )}
         {/* Structured Data for SEO */}
         {softwareSchema && <StructuredDataServer data={softwareSchema} />}
 
@@ -3351,7 +3373,7 @@ export default async function Page({
                     </a>
                   )}
                   <a
-                    href={`/${locale}/explore?search=${encodeURIComponent(data.title)}`}
+                    href={generateLocalizedPath(`/explore?search=${encodeURIComponent(data.title)}`, locale)}
                     className='inline-flex items-center justify-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-medium text-slate-700 ring-1 ring-slate-200 transition hover:bg-slate-100'
                   >
                     {isChinese ? '找相似工具' : 'Find similar tools'} <CircleArrowRight className='size-4' />
@@ -3703,7 +3725,14 @@ export default async function Page({
             <aside className='space-y-4 lg:sticky lg:top-24 lg:self-start'>
               {toolId && (
                 <div className='rounded-lg bg-white p-5 shadow-sm ring-1 ring-slate-200'>
-                  <ToolFeedbackBar toolId={toolId} userId={user?.id} locale={locale} slug={canonicalSlug} listingName={data.title} website={dbTool?.url || ''} />
+                  <ToolFeedbackBar
+                    toolId={toolId}
+                    userId={user?.id}
+                    locale={locale}
+                    slug={canonicalSlug}
+                    listingName={data.title}
+                    website={dbTool?.url || ''}
+                  />
                 </div>
               )}
             </aside>
@@ -3758,7 +3787,16 @@ export default async function Page({
                   </p>
                   <p className='mt-2 text-slate-600'>{claimSummary}</p>
                   <NextLink
-                    href={buildToolEntryHref({ intent: 'ownership_update', toolId, slug: canonicalSlug, listingName: data.title, website: dbTool?.url || '' }, locale)}
+                    href={buildToolEntryHref(
+                      {
+                        intent: 'ownership_update',
+                        toolId,
+                        slug: canonicalSlug,
+                        listingName: data.title,
+                        website: dbTool?.url || '',
+                      },
+                      locale,
+                    )}
                     className='mt-3 inline-block font-semibold text-cyan-800 underline'
                   >
                     {isChinese ? '认领或维护此条目' : 'Claim or maintain this listing'}
