@@ -1,6 +1,6 @@
 # 核心页面真实信号审计
 
-更新时间：2026-09-01
+更新时间：2026-11-05
 
 审计地址：`https://aibesttool.com`
 
@@ -12,7 +12,7 @@
 - HTTP 正常：33
 - canonical：33/33
 - meta description：33/33
-- evidence / freshness 信号：33/33
+- evidence / freshness 信号：16/33
 - 评论 / 认领 / 官网 / 比较动作信号：33/33
 - 指定机会页官方来源块：16/16
 
@@ -20,23 +20,23 @@
 
 | 页面 | HTTP | canonical | description | evidence / freshness | action signal | 官方来源块 | 错误 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| / | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /explore | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /best-ai-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /categories/productivity | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /categories/research | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /categories/voice | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /categories/automation | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /categories/web3 | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /categories/developer-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /categories/chatbot | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /guides/how-to-choose-ai-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /guides/free-ai-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /guides/ai-writing-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /guides/ai-seo-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /guides/ai-coding-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /guides/ai-tools-for-web3 | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
-| /guides/ai-note-taking-tools | 200 | 是 | 是 | 是 | 是 | 不要求 | - |
+| / | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /explore | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /best-ai-tools | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /categories/productivity | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /categories/research | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /categories/voice | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /categories/automation | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /categories/web3 | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /categories/developer-tools | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /categories/chatbot | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /guides/how-to-choose-ai-tools | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /guides/free-ai-tools | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /guides/ai-writing-tools | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /guides/ai-seo-tools | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /guides/ai-coding-tools | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /guides/ai-tools-for-web3 | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
+| /guides/ai-note-taking-tools | 200 | 是 | 是 | 否 | 是 | 不要求 | - |
 | /ai/chatgpt | 200 | 是 | 是 | 是 | 是 | 是 | - |
 | /ai/claude | 200 | 是 | 是 | 是 | 是 | 是 | - |
 | /ai/cursor | 200 | 是 | 是 | 是 | 是 | 是 | - |

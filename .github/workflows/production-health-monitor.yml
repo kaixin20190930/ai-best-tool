@@ -135,7 +135,12 @@ jobs:
             --connect-timeout 10 --max-time 30 "$BASE_URL/sitemap.xml" -o /tmp/sitemap.xml
           test "$(grep -c '<loc>' /tmp/sitemap.xml)" -gt 0
           ! grep -Eq '<loc>[^<]*/(admin|login|register|profile|pricing|submit|developer/listing|new|startup)(/|</loc>)' /tmp/sitemap.xml
-          ! grep -q 'comparison' /tmp/sitemap.xml
+          # Comparison releases are individually approved. Match exact URLs;
+          # the former blanket ban contradicted the approved Automation release.
+          grep -o '<loc>[^<]*comparison[^<]*</loc>' /tmp/sitemap.xml > /tmp/comparison-locs.txt || true
+          test "$(wc -l < /tmp/comparison-locs.txt)" -eq 2
+          grep -Fxq '<loc>https://aibesttool.com/guides/ai-tools-for-automation-comparison</loc>' /tmp/comparison-locs.txt
+          grep -Fxq '<loc>https://aibesttool.com/cn/guides/ai-tools-for-automation-comparison</loc>' /tmp/comparison-locs.txt
 
       - name: Check Stack and Trial privacy surface
         if: always()

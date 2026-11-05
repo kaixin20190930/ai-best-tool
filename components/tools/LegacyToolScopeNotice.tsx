@@ -1,3 +1,5 @@
+import React from 'react';
+
 import getLegacyToolScopeReview from '@/lib/config/legacyToolScopeReviews';
 import { getPublicToolScope } from '@/lib/content/publicToolScope';
 

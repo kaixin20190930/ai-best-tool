@@ -117,13 +117,16 @@ for (const contract of [
   '数据库工具记录 | 63',
   '已公开工具 | 50',
   '获准索引工具 | 13',
-  '正常运营日每天至少 1 个、最多 2 个',
-  '每天最多 1 个、目标每周 4 个、硬上限 5 个',
-  '目标每周 4 个、硬上限 5 个',
   '14-21 个',
   '公开和索引继续分离',
 ]) {
   assert(normalizedScaleRoadmap.includes(contract), `Scale roadmap contract is missing: ${contract}`);
+}
+assert(scaleRoadmap.includes('历史容量与维护参考'), 'Quantity roadmap must be demoted');
+assert(scaleRoadmap.includes('数量目标停止执行'), 'Retired publication quotas cannot control growth');
+const growthRoadmap = read('PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md');
+for (const contract of ['qualified non-brand clicks', 'Top 20', '当周没有合格释放对象时允许为 0', 'R5：Make']) {
+  assert(growthRoadmap.includes(contract), `Current growth contract is missing: ${contract}`);
 }
 for (const document of [main, weekly, roadmap, read('TOOL_INDEX_RELEASE_POLICY_CN.md')]) {
   assert(

@@ -87,6 +87,7 @@ async function fetchPage(route: string): Promise<AuditRow> {
     const response = await fetch(`${baseUrl}${route}`, {
       headers: { 'user-agent': 'ai-best-tool-priority-signal-audit/1.0' },
       redirect: 'follow',
+      signal: AbortSignal.timeout(20_000),
     });
     const html = await response.text();
 
@@ -183,7 +184,6 @@ async function main() {
         row.status >= 400 ||
         !row.canonical ||
         !row.description ||
-        !row.evidenceSignal ||
         !row.actionSignal ||
         (officialEvidencePaths.has(row.path) && !row.officialEvidence),
     )

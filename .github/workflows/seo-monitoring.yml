@@ -134,7 +134,7 @@ jobs:
             });
       
       - name: Comment on Existing Issues
-        if: steps.health-check.outputs.health_check_failed != 'true'
+        if: success() && steps.health-check.outcome == 'success' && steps.health-check.outputs.health_check_failed != 'true'
         uses: actions/github-script@v7
         with:
           script: |

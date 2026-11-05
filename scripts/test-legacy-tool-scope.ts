@@ -11,6 +11,7 @@ import getLegacyToolScopeReview, {
 import { dataList, detailList } from '../lib/data';
 import { toolToDetailData, toolToListRow } from '../lib/services/toolPresenter';
 import type { Tool } from '../lib/services/tools';
+import { getPublicToolScope } from '../lib/content/publicToolScope';
 
 const reviewedSlugs = ['adobe', 'salesforce_einstein', 'chatgpt-mac', 'gpt_4o', 'openai', 'sora'];
 
@@ -46,7 +47,11 @@ for (const slug of reviewedSlugs) {
     const html = renderToStaticMarkup(React.createElement(LegacyToolScopeNotice, { slug, locale }));
     assert(html.includes(`data-tool-scope-review="${slug}"`));
     assert(html.includes(review.checkedAt));
-    assert(html.includes(locale === 'en' ? 'not a hands-on test' : '不是实测'));
+    assert(html.includes(locale === 'en' ? 'Scope sources checked:' : '范围资料核对：'));
+    assert(!html.includes(locale === 'en' ? 'not a hands-on test' : '不是实测'));
+    for (const paragraph of getPublicToolScope(slug, locale) || []) {
+      assert(html.includes(paragraph), 'Reader scope and next action must remain visible');
+    }
     assert(!html.includes('<h1'), 'Notice must not add a second H1');
     for (const source of review.sources) {
       assert.equal(new URL(source.url).protocol, 'https:');
@@ -73,7 +78,7 @@ for (const slug of ['claude', 'firefly', 'agentforce', 'constructor', '__proto__
   assert.equal(renderToStaticMarkup(React.createElement(LegacyToolScopeNotice, { slug, locale: 'cn' })), '');
 }
 const page = readFileSync('app/[locale]/(with-footer)/ai/[websiteName]/page.tsx', 'utf8');
-assert(page.includes('<LegacyToolScopePage slug={canonicalSlug} title={data.title} locale={locale} />'));
+assert(page.includes('<LegacyToolScopePage slug={canonicalSlug} title={scopeCorrection.title || data.title} locale={locale} />'));
 assert(page.indexOf('<LegacyToolScopePage') < page.indexOf('<h1'), 'Scope page must bypass generic tool claims');
 assert(page.includes('<PageViewTracker toolId={dbTool?.id} />'), 'Preserve tool view tracking');
 assert(page.includes('getWebNavigationDetail(canonicalSlug, locale)'), 'Preserve fallback data path');
@@ -81,7 +86,7 @@ const guide = readFileSync(
   'app/[locale]/(with-footer)/guides/salesforce-einstein-alternatives-comparison/page.tsx',
   'utf8',
 );
-assert(guide.includes("slug='salesforce_einstein'"));
+assert(guide.includes("content: { kind: 'unavailable'"), 'Unverified alternatives must remain unavailable');
 assert(!guide.includes('commonly used as Salesforce Einstein alternatives'));
 assert(!guide.includes('common Salesforce Einstein alternatives'));
 assert(guide.includes('buildComparisonMetadata'), 'Preserve comparison noindex policy');
@@ -106,16 +111,18 @@ async function smoke() {
         : path.includes('adobe')
           ? 'adobe'
           : 'salesforce_einstein';
-      assert.equal((html.match(/data-tool-scope-review=/g) || []).length, 1);
-      assert(html.includes(`data-tool-scope-review="${slug}"`));
+      assert.equal((html.match(/data-tool-scope-review=/g) || []).length, path.startsWith('/ai/') ? 1 : 0);
       if (path.startsWith('/ai/')) {
+        assert(html.includes(`data-tool-scope-review="${slug}"`));
         assert(html.includes(`href="https://aibesttool.com${prefix}${path}"`), 'Tool canonical unchanged');
         assert.equal((html.match(/data-legacy-scope-page=/g) || []).length, 1);
         assert.equal((html.match(/<h1\b/g) || []).length, 1);
         assert(html.includes('data-seo-breadcrumbs'));
         assert(!raw.includes('"@type":"SoftwareApplication"'), 'Unresolved scope is not a single software application');
         assert(!html.includes('Compare Similar Tools'), 'Do not reintroduce generic comparison cards');
-        assert(html.includes(prefix ? '不是已完成的实测' : 'not completed hands-on testing'));
+        for (const paragraph of getPublicToolScope(slug, prefix ? 'cn' : 'en') || []) {
+          assert(html.includes(paragraph), 'Restricted page keeps reader scope and next action');
+        }
         assert(html.includes(`href="${prefix}/developer/listing?intent=claim"`));
       } else {
         assert(
