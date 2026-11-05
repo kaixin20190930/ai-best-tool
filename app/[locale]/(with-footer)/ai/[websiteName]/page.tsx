@@ -76,6 +76,7 @@ import ShareButton from '@/components/ShareButton';
 import ToolFeedbackBar from '@/components/ToolFeedbackBar';
 import LegacyToolScopePage from '@/components/tools/LegacyToolScopePage';
 import PublicToolDecision from '@/components/tools/PublicToolDecision';
+import N8nPricingDecision from '@/components/tools/N8nPricingDecision';
 import SafetyToolArchivePage from '@/components/tools/SafetyToolArchivePage';
 import TrackableLink from '@/components/TrackableLink';
 import { getToolStats } from '@/app/actions/analytics';
@@ -3344,7 +3345,7 @@ export default async function Page({
 
                 <div className='space-y-4'>
                   <h1 className='max-w-4xl text-4xl font-bold leading-tight text-slate-950 lg:text-6xl'>
-                    {data.title}
+                    {canonicalSlug === 'n8n' ? decisionMetadataPilot?.title : data.title}
                   </h1>
                   <p className='max-w-3xl text-base leading-7 text-slate-600 lg:text-lg'>
                     {getPublicToolSummary(canonicalSlug, locale, data.content)}
@@ -3388,6 +3389,7 @@ export default async function Page({
                   locale={locale}
                   task={aboveFoldTask}
                   tradeOff={aboveFoldLimit}
+                  buyerLanguage={canonicalSlug === 'n8n'}
                   checkedAt={
                     decisionCardV2?.reviewedAt || decisionCard.reviewSchedule.lastCheckedAt ? aboveFoldReviewedAt : null
                   }
@@ -3412,7 +3414,7 @@ export default async function Page({
                       </NextLink>
                     </div>
                   )}
-                  {priorityOfficialEvidence && (
+                  {priorityOfficialEvidence && canonicalSlug !== 'n8n' && (
                     <section
                       data-official-evidence='true'
                       className='rounded-[18px] border border-emerald-200 bg-emerald-50/60 p-5 shadow-sm'
@@ -3493,6 +3495,8 @@ export default async function Page({
                             rel='noreferrer'
                             className='inline-flex items-center rounded-lg border border-cyan-200 bg-white px-3 py-2 text-xs font-semibold text-cyan-800 hover:border-cyan-300 hover:bg-cyan-100'
                           >
+                {canonicalSlug === 'n8n' ? <N8nPricingDecision locale={locale} /> : null}
+
                             {source.label}
                           </a>
                         ))}
@@ -3593,9 +3597,13 @@ export default async function Page({
                 )}
 
                 <p className='max-w-3xl text-sm leading-6 text-slate-500'>
-                  {locale === 'cn'
-                    ? '最稳的下一步：先看官网，再拿相似工具和评论做对比。'
-                    : 'Best next step: open the official site first, then compare similar tools and comments.'}
+                  {canonicalSlug === 'n8n'
+                    ? isChinese
+                      ? '下一步：用一个真实流程记录 execution 数、失败恢复和维护工时，再决定 Cloud 或自托管。'
+                      : 'Next step: pilot one real workflow and record executions, failure recovery, and maintenance time before choosing Cloud or self-hosting.'
+                    : locale === 'cn'
+                      ? '最稳的下一步：先看官网，再拿相似工具和评论做对比。'
+                      : 'Best next step: open the official site first, then compare similar tools and comments.'}
                 </p>
               </section>
 
@@ -3669,11 +3677,22 @@ export default async function Page({
                 />
               </section>
 
-              {publicEvidenceLedger ? <EvidenceLedgerPanel ledger={publicEvidenceLedger} locale={locale} /> : null}
-
-              {publicChangeTimeline.length > 0 ? (
-                <ChangeTimelinePanel events={publicChangeTimeline} locale={locale} />
-              ) : null}
+              {canonicalSlug === 'n8n' && (publicEvidenceLedger || publicChangeTimeline.length > 0) ? (
+                <details className='rounded-lg border border-slate-200 bg-white p-5 shadow-sm'>
+                  <summary className='cursor-pointer font-semibold text-cyan-900'>
+                    {isChinese ? '展开已核验来源与价格变化记录' : 'Open verified sources and pricing change history'}
+                  </summary>
+                  <div className='mt-5 space-y-6'>
+                    {publicEvidenceLedger ? <EvidenceLedgerPanel ledger={publicEvidenceLedger} locale={locale} /> : null}
+                    {publicChangeTimeline.length > 0 ? <ChangeTimelinePanel events={publicChangeTimeline} locale={locale} /> : null}
+                  </div>
+                </details>
+              ) : (
+                <>
+                  {publicEvidenceLedger ? <EvidenceLedgerPanel ledger={publicEvidenceLedger} locale={locale} /> : null}
+                  {publicChangeTimeline.length > 0 ? <ChangeTimelinePanel events={publicChangeTimeline} locale={locale} /> : null}
+                </>
+              )}
 
               {featureEntries.length > 0 && (
                 <section className='rounded-lg bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:p-8'>
@@ -3745,9 +3764,9 @@ export default async function Page({
                 <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
                   <div className='max-w-2xl'>
                     <h3 className='text-base font-semibold text-slate-900'>
-                      {locale === 'cn'
-                        ? '先看官网，再回来写真实反馈'
-                        : 'Open the official site, then come back with real feedback'}
+                      {canonicalSlug === 'n8n'
+                        ? isChinese ? '分享你的真实 execution 成本与维护经验' : 'Share your real execution cost and maintenance experience'
+                        : locale === 'cn' ? '先看官网，再回来写真实反馈' : 'Open the official site, then come back with real feedback'}
                     </h3>
                     <p className='mt-1 text-sm leading-6 text-slate-600'>
                       {locale === 'cn'

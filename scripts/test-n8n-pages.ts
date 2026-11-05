@@ -19,8 +19,8 @@ async function main() {
     assert.equal(
       document.title,
       chinese
-        ? 'n8n 价格与自托管：成本、限制和替代方案'
-        : 'n8n Pricing & Self-Hosting: Costs, Limits and Alternatives',
+        ? 'n8n 价格与成本：Cloud vs 自托管（2026）'
+        : 'n8n Pricing & Costs: Cloud vs Self-Hosted (2026)',
     );
     assert.equal(
       document.querySelector('meta[name="description"]')?.getAttribute('content'),
@@ -39,6 +39,13 @@ async function main() {
     for (const term of ['Sustainable Use License', 'Community', '€667', 'AI Assistant']) {
       assert(body.includes(term), `${path}: missing visible ${term}`);
     }
+    assert.equal(
+      document.querySelector('h1')?.textContent?.trim(),
+      chinese ? 'n8n 价格与成本：Cloud vs 自托管（2026）' : 'n8n Pricing & Costs: Cloud vs Self-Hosted (2026)',
+    );
+    assert(document.querySelector('[data-n8n-pricing-decision]'), `${path}: pricing decision section must be visible`);
+    assert(body.includes(chinese ? '自托管 TCO 要加什么' : 'What belongs in self-hosted TCO'));
+    assert(body.includes(chinese ? 'n8n 是免费的吗？' : 'Is n8n free?'));
     assert(document.querySelector('[data-official-evidence="true"]'), `${path}: official evidence block must be visible`);
     if (released) {
       assert(

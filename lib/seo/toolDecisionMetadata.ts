@@ -15,14 +15,14 @@ type LocalizedToolDecisionMetadata = {
 const TOOL_DECISION_METADATA_PILOTS: Record<string, LocalizedToolDecisionMetadata> = {
   n8n: {
     en: {
-      title: 'n8n Pricing & Self-Hosting: Costs, Limits and Alternatives',
+      title: 'n8n Pricing & Costs: Cloud vs Self-Hosted (2026)',
       description:
         'Compare n8n Cloud and self-hosting by execution pricing, maintenance, Community Edition limits, licensing, and when Make or Lindy is a better fit.',
       primaryTask: 'Choose n8n Cloud or self-hosting for production automations',
       decisionAngle: 'Self-hosting adds control, but your team owns security, backups, upgrades, and recovery',
     },
     cn: {
-      title: 'n8n 价格与自托管：成本、限制和替代方案',
+      title: 'n8n 价格与成本：Cloud vs 自托管（2026）',
       description: '比较 n8n Cloud 与自托管的 execution 计费、维护责任、Community Edition 限制和许可边界，并判断何时改用 Make 或 Lindy。',
       primaryTask: '为生产自动化选择 n8n Cloud 或自托管',
       decisionAngle: '自托管换来更多控制，但安全、备份、升级和故障恢复都由团队负责',

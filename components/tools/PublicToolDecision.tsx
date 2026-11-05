@@ -55,6 +55,7 @@ export default function PublicToolDecision({
   evidenceSummary,
   children,
   experimentalModules,
+  buyerLanguage = false,
 }: {
   card: ToolDecisionCardModel;
   model: DecisionCardV2Model | null;
@@ -68,6 +69,7 @@ export default function PublicToolDecision({
   experimentalModules?: Omit<PublicModuleAreaProps, 'page' | 'placement'> & {
     page: { path: string; pageType: 'tool' };
   };
+  buyerLanguage?: boolean;
 }) {
   const cn = locale === 'cn' || locale === 'tw';
   return (
@@ -80,10 +82,14 @@ export default function PublicToolDecision({
       <div className='flex flex-wrap items-start justify-between gap-3'>
         <div>
           <p className='text-xs font-semibold uppercase tracking-wide text-cyan-700'>
-            {cn ? '先看结论，再看功能' : 'Decision first, features second'}
+            {buyerLanguage
+              ? cn ? '适合谁、成本怎么算、什么时候不该选' : 'Fit, cost, and when not to choose it'
+              : cn ? '先看结论，再看功能' : 'Decision first, features second'}
           </p>
           <h2 className='mt-2 text-2xl font-bold text-slate-950'>
-            {cn ? '工具决策情报 / 选择判断卡' : 'Tool Intelligence / Decision Card'}
+            {buyerLanguage
+              ? cn ? 'n8n 选型结论' : 'Should you choose n8n?'
+              : cn ? '工具决策情报 / 选择判断卡' : 'Tool Intelligence / Decision Card'}
           </h2>
         </div>
         {checkedAt && (
@@ -141,7 +147,9 @@ export default function PublicToolDecision({
           data-tool-evidence-summary
           className='mt-4 rounded-lg border border-cyan-100 bg-cyan-50/50 p-4 text-sm text-slate-700'
         >
-          <h3 className='font-semibold text-slate-950'>{cn ? '证据概览' : 'Evidence at a glance'}</h3>
+          <h3 className='font-semibold text-slate-950'>
+            {buyerLanguage ? (cn ? '来源与复核状态' : 'Sources and review status') : (cn ? '证据概览' : 'Evidence at a glance')}
+          </h3>
           <p className='mt-2'>
             {evidenceSummary.verified} {cn ? '条已核验' : 'verified'} · {evidenceSummary.decisionReady}{' '}
             {cn ? '条可支撑判断' : 'decision-ready'}
@@ -157,7 +165,7 @@ export default function PublicToolDecision({
             </p>
           )}
           <a className='mt-2 inline-block font-semibold text-cyan-800 underline' href='#evidence-ledger'>
-            {cn ? '查看证据账本' : 'View Evidence Ledger'}
+            {buyerLanguage ? (cn ? '查看已核验来源' : 'See verified sources') : (cn ? '查看证据账本' : 'View Evidence Ledger')}
           </a>
         </div>
       )}
