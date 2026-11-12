@@ -64,6 +64,10 @@ HTTP 的历史实测细节：草稿阶段三条流式 not-found 响应为 HTTP 2
 
 ## 证据与测试范围
 
+### 同步到日常任务
+
+11-12 用户已明确授权后续合格新工具自动完成完整链。原 `ai-best-tool-cluster` 已通过官方任务工具原地更新并精确回读，仍为 ACTIVE、每日上海时间 17:00、当前运营聊天；没有新增定时任务，观察和周报配置未改。执行手册已固化“草稿是中间态，最终独立 QA 后同轮继续公开和线上验收”的默认规则及 R/C/H 最小校验预算。实际公开签署仍按新对象/前像生成，不复用本次签署。配置验收通过，新提示首次调度的业务交付待真实运行验收；私有回读证据为 `daily-full-delivery-automation-update-2026-11-12.json`。本次同步只检查配置与文档，没有重新发布 Activepieces、开发功能或运行构建/产品测试。
+
 私有目录 `.local/gsc/operations/`：`manual-activepieces-selection-2026-11-12.json`、`manual-activepieces-internal-execution-2026-11-12.json`、`manual-activepieces-content-qa-2026-11-12.json`、`manual-activepieces-database-postimage-2026-11-12.json`、`manual-activepieces-final-verification-2026-11-12.json`。
 
 最终私有证据另包括 `activepieces-publication-qa-2026-11-12.json`、`activepieces-runtime-deploy-2026-11-12.json`、`activepieces-publication-execution-2026-11-12.json`、`activepieces-production-acceptance-2026-11-12.json` 及实际三语言 HTML。

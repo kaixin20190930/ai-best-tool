@@ -22,7 +22,7 @@
 ## 执行顺序
 
 1. 对数据库中已有候选运行 `--kind=candidate --mode=preflight`，保存输出哈希。使用同一哈希运行 `rollback`；普通工具可用上述精确内部准备授权运行 `commit` 和 `postcheck`，不必等待阶段 QA。既有独立 QA 授权也继续可用。该步骤只生成 draft，不允许公开。
-2. 在通用数据/Admin 编辑路径补齐真实官方来源、非占位媒体、三语言内容、Claim 边界和市场证据；不得把导入器生成的占位稿直接公开。
+2. 在通用数据/Admin 编辑路径补齐真实官方来源、非占位媒体、三语言内容和 Claim 边界；不得把导入器生成的占位稿直接公开。市场采用验证保留独立门禁，不是普通 monitor 公开的前置条件。日常流程须按执行手册继续后续公开与线上验收，不把 draft 当完成。
 3. 对 draft 的工具 UUID 运行 `--kind=tool` 同样的四步。`preflight` 会返回通用发布 blocker；只有空 blocker、rollback、独立 QA 均通过才可 commit。`postcheck` 回读 `published + monitor`、`noindex` 推导及发布审计。
 4. Research 使用 Gemini Notebook `cec78907-e2a1-4eb7-853a-a58334026280` 和 Perplexity `3d018623-85f9-4df4-bd55-9a4a0e7a2d93` 两次独立 `--kind=relation` 四步，不共享哈希或授权。RPC 再核对全部精确前像、官方证据与关系数量。
 
