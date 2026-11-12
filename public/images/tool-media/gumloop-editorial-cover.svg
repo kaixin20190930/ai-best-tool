@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">AI agents with scoped actions</title><desc id="desc">An original editorial diagram of a task, an agent and a permission checkpoint. This is not a vendor screenshot or logo.</desc>
+  <rect width="1200" height="675" rx="32" fill="#142128"/>
+  <text x="76" y="100" fill="#edf5f4" font-family="sans-serif" font-size="38" font-weight="700">AI agents. Scoped actions.</text>
+  <text x="76" y="148" fill="#b7c9c5" font-family="sans-serif" font-size="22">Connect the right tools. Review consequential steps.</text>
+  <path d="M290 330H445M705 330H860" stroke="#a8d6be" stroke-width="6" fill="none"/>
+  <rect x="76" y="245" width="214" height="170" rx="20" fill="#2b4148"/><rect x="445" y="245" width="260" height="170" rx="20" fill="#2b4148"/><rect x="860" y="245" width="264" height="170" rx="20" fill="#2b4148"/>
+  <text x="144" y="342" fill="#edf5f4" font-family="sans-serif" font-size="28">Task</text><text x="531" y="342" fill="#edf5f4" font-family="sans-serif" font-size="28">Agent</text><text x="904" y="342" fill="#edf5f4" font-family="sans-serif" font-size="28">Permission</text>
+  <text x="76" y="528" fill="#edf5f4" font-family="sans-serif" font-size="26">Check usage, connector access and approval settings.</text>
+  <text x="76" y="577" fill="#b7c9c5" font-family="sans-serif" font-size="22">A documented capability is not an execution guarantee.</text>
+  <text x="76" y="628" fill="#9ab3b3" font-family="sans-serif" font-size="16">AI Best Tool original editorial illustration · Not a product screenshot</text>
+</svg>
