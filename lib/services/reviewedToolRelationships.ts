@@ -4,7 +4,7 @@ import {
   getReviewedToolRelationshipDefinitions,
   type ReviewedToolRelationshipType,
 } from '@/lib/config/reviewedToolRelationships';
-import { getToolIndexDecision } from '@/lib/seo/toolIndexing';
+import { isReviewedRelationshipEligible } from '@/lib/seo/reviewedRelationshipEligibility';
 import { getLocalizedField, type Tool } from '@/lib/services/tools';
 
 export interface ReviewedToolRelationship {
@@ -24,6 +24,12 @@ export async function getReviewedToolRelationships(
   if (definitions.length === 0) return [];
 
   try {
+    const today = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Shanghai',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
     const targetSlugs = definitions.map((definition) => definition.relatedToolSlug);
     const result = await query<Tool>(
       `SELECT
@@ -43,7 +49,7 @@ export async function getReviewedToolRelationships(
 
     return definitions.flatMap((definition) => {
       const tool = toolsBySlug.get(definition.relatedToolSlug.toLowerCase());
-      if (!tool || !getToolIndexDecision(tool).indexable) return [];
+      if (!tool || !isReviewedRelationshipEligible(definition, tool, today)) return [];
 
       const rationale = getLocalizedField(definition.rationale, locale, locale === 'cn' ? 'cn' : 'en').trim();
       if (!rationale) return [];

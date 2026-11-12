@@ -2,12 +2,61 @@
   "schemaVersion": 1,
   "timezone": "Asia/Shanghai",
   "activeCluster": "automation",
-  "stage": "R4_REPAIR_MONITOR",
+  "stage": "R4_HOLD_MONITOR",
   "releases": [
-    { "id": "n8n-pricing", "releasedOn": "2026-11-05", "commit": "7d050803", "contentCooldownUntil": "2026-11-19", "paths": ["/ai/n8n", "/cn/ai/n8n"] },
-    { "id": "automation-comparison", "releasedOn": "2026-11-05", "commit": "7a769177", "contentCooldownUntil": "2026-11-19", "paths": ["/guides/ai-tools-for-automation-comparison", "/cn/guides/ai-tools-for-automation-comparison"] }
+    {
+      "id": "n8n-pricing",
+      "releasedOn": "2026-11-05",
+      "commit": "7d050803",
+      "contentCooldownUntil": "2026-11-19",
+      "paths": ["/ai/n8n", "/cn/ai/n8n"]
+    },
+    {
+      "id": "automation-comparison",
+      "releasedOn": "2026-11-05",
+      "commit": "7a769177",
+      "contentCooldownUntil": "2026-11-19",
+      "paths": ["/guides/ai-tools-for-automation-comparison", "/cn/guides/ai-tools-for-automation-comparison"]
+    }
   ],
   "milestoneDays": [3, 7, 14, 28],
-  "lindy": { "status": "repair_monitor", "releasedOn": null, "blockers": ["expired next_review_date", "missing verified indexIdentity", "observationComplete not recorded"] },
-  "make": { "status": "not_started", "releasedOn": null, "gate": "R4 distribution decision and at least 14 days of valid signals" }
+  "lindy": {
+    "status": "hold_monitor",
+    "releasedOn": null,
+    "blockers": ["pre-index monitor observation not yet independently recorded", "current site-level GSC/Coverage health not yet established"]
+  },
+  "make": {
+    "status": "distribution_held",
+    "releasedOn": null,
+    "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
+  },
+  "delivery": {
+    "updatedOn": "2026-11-12",
+    "ownerAutomation": "ai-best-tool-cluster",
+    "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
+    "items": [
+      {
+        "id": "lindy-freshness-identity",
+        "status": "production_committed_postcheck_pass",
+        "artifact": ".local/gsc/operations/automation-lindy-repair-readiness-2026-11-12.json",
+        "nextAction": "Completed with independent QA and sequential Freshness/identity commits; both postchecks alreadyApplied=true with zero additional writes. Reuse execution records; review pricing on 2026-11-26 unless a real source change occurs."
+      },
+      {
+        "id": "automation-reviewed-recommendations",
+        "status": "qa_and_build_pass_pending_deploy",
+        "artifact": "docs/PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md",
+        "nextAction": "Publish the approved runtime diff and verify the actual production Decision Card links, noindex/canonical and sitemap boundaries; do not repeat unchanged local validation."
+      },
+      {
+        "id": "lindy-index-distribution",
+        "status": "held",
+        "nextAction": "Review actual pre-index technical/fact/identity observations and current site-level GSC/Coverage health before independent index QA. Never wait for normal candidate ranking data while noindex, or fabricate observationComplete."
+      },
+      {
+        "id": "make-index-distribution",
+        "status": "held",
+        "nextAction": "Reconsider after R4 distribution decision and valid feedback; continue bounded on-site support independently."
+      }
+    ]
+  }
 }

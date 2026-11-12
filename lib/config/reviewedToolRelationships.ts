@@ -28,6 +28,52 @@ function relationship(
 // This is an editorial allowlist, not an algorithmic recommendation feed.
 // Additions require a directional rationale and a scheduled review.
 export const REVIEWED_TOOL_RELATIONSHIPS: Record<string, ReviewedToolRelationshipDefinition[]> = {
+  // Automation support pages can advance during the main n8n/comparison cooldown.
+  // Official sources and rationale are recorded in PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md.
+  lindy: [
+    {
+      relatedToolSlug: 'n8n',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-12',
+      reviewDueAt: '2026-11-26',
+      rationale: {
+        cn: '需要自行托管并维护工作流时比较 n8n；偏向委派团队任务时再评估 Lindy。先用相同任务核对集成、人工审核和运行成本。',
+        en: 'Compare n8n when you need to host and maintain workflows yourself; evaluate Lindy for delegated team tasks. Pilot the same task to check integrations, human review, and running cost.',
+      },
+    },
+    {
+      relatedToolSlug: 'make',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-12',
+      reviewDueAt: '2026-11-26',
+      rationale: {
+        cn: '需要在可视化画布定义步骤和查看执行历史时比较 Make；需要委派团队任务时再评估 Lindy。两者都有 AI 能力，先核对控制方式和实际用量。',
+        en: 'Compare Make for defining steps on a visual canvas and inspecting execution history; evaluate Lindy for delegated team tasks. Both offer AI capabilities, so check control and actual usage on one task.',
+      },
+    },
+  ],
+  make: [
+    {
+      relatedToolSlug: 'n8n',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-12',
+      reviewDueAt: '2026-11-26',
+      rationale: {
+        cn: '需要自行托管时比较 n8n，并计入部署和维护责任；留在 Make 时核对可视化流程、执行历史及所需集成。不要只按标价选择。',
+        en: 'Compare n8n when self-hosting is required, including deployment and maintenance work; for Make, check visual workflows, execution history, and required integrations. Do not choose on list price alone.',
+      },
+    },
+    {
+      relatedToolSlug: 'lindy',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-12',
+      reviewDueAt: '2026-11-26',
+      rationale: {
+        cn: '偏向委派团队任务时比较 Lindy；需要在画布定义流程和查看执行历史时评估 Make。先核对人工审核、连接权限和同一任务的用量。',
+        en: 'Compare Lindy for delegated team tasks; evaluate Make for defining workflows on a canvas and inspecting run history. Check human review, connection permissions, and usage on the same task.',
+      },
+    },
+  ],
   claude: [
     relationship('gemini', 'alternative', {
       cn: '两者都覆盖通用知识工作；优先比较生态集成、上下文工作流和数据边界。',

@@ -50,6 +50,9 @@ jobs:
       - name: Check reviewed relationship links
         run: pnpm run test:reviewed-tool-relationships
 
+      - name: Check growth observation reconciliation
+        run: pnpm run test:growth-milestones
+
       - name: Check legacy product scope notices
         run: pnpm run test:legacy-tool-scope
 

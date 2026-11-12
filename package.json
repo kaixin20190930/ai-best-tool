@@ -35,6 +35,7 @@
     "growth:weekly-report": "tsx scripts/report-product-growth.ts",
     "growth:observe": "tsx scripts/observe-product-growth.ts",
     "test:growth-scoreboard": "tsx scripts/test-product-growth-scoreboard.ts",
+    "test:growth-milestones": "tsx scripts/test-product-growth-milestones.ts",
     "test:gsc-fetch-readonly": "tsx scripts/test-gsc-search-analytics-readonly.ts",
     "test:gsc-output-safety": "tsx scripts/test-gsc-output-safety.ts",
     "test:gsc-decision-report": "tsx scripts/test-gsc-decision-report.ts",

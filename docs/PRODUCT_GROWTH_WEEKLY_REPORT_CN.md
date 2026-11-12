@@ -1,17 +1,17 @@
 # 产品增长周报
 
-生成时间：2026-11-05T09:24:13.605Z
-GSC 最新最终日期：2026-10-30（Pacific Time）
-数据状态：stale。发布后证据：unavailable; pre-release snapshot only。
+生成时间：2026-11-12T01:36:24.964Z
+GSC 最新最终日期：2026-11-09（Pacific Time）
+数据状态：available。发布后证据：requires release-window verification。
 
 结果只基于可见查询行；不能当作全站非品牌总量。匿名查询和 API 截断不填零。
 
 | 窗口 | 合格点击 | 合格曝光 | CTR | Top 20 决策簇（Automation） | 相关曝光页面（Automation） |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 2026-10-24 至 2026-10-30 | 0 | 60 | 0.00% | 0 | unavailable |
-| 2026-10-03 至 2026-10-30 | 1 | 211 | 0.47% | 1 | unavailable |
+| 2026-11-03 至 2026-11-09 | 0 | 7 | 0.00% | 0 | 1 |
+| 2026-10-13 至 2026-11-09 | 1 | 203 | 0.49% | 1 | 2 |
 
-n8n pricing/cost/plans 28 天：0 点击 / 179 曝光 / CTR 0.00%。
+n8n pricing/cost/plans 28 天：0 点击 / 176 曝光 / CTR 0.00%。
 
 Compare next / Evidence / outbound / 可归因自然搜索决策访问：unavailable。已有事件采集能力不等于完成可归因报表。
 页面×查询缺失时，相关曝光页/查询簇标为 unavailable；页面总曝光不能证明相关查询。

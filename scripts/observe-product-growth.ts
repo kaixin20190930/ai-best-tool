@@ -1,20 +1,19 @@
-import { readFile } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { loadEnvConfig } from '@next/env';
 
 import writeGscOutput from '../lib/integrations/gsc-output-safety';
+import {
+  reconcileGrowthMilestones,
+  updateGrowthObservationDocument,
+  type GrowthRelease,
+} from '../lib/seo/productGrowthMilestones';
 
 loadEnvConfig(process.cwd());
-type Release = { id: string; releasedOn: string; paths: string[] };
-function shift(date: string, days: number) {
-  const d = new Date(date + 'T00:00:00Z');
-  d.setUTCDate(d.getUTCDate() + days);
-  return d.toISOString().slice(0, 10);
-}
 async function main() {
   if (process.argv.length > 2) throw new Error('Observation takes no arguments and never changes indexing.');
   const root = process.cwd();
   const manifest = JSON.parse(await readFile('reports/seo/product-growth-releases.json', 'utf8')) as {
-    releases: Release[];
+    releases: GrowthRelease[];
     milestoneDays: number[];
   };
   const today = new Intl.DateTimeFormat('en-CA', {
@@ -23,6 +22,26 @@ async function main() {
     month: '2-digit',
     day: '2-digit',
   }).format(new Date());
+  const directory = '.local/gsc/operations';
+  const files = await readdir(directory).catch((error: NodeJS.ErrnoException) => {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  });
+  const ledgers = await Promise.all(
+    files
+      .filter((f) => /^product-growth-milestone-.*\.json$/.test(f))
+      .sort()
+      .map(async (file) => ({
+        file: directory + '/' + file,
+        data: JSON.parse(await readFile(directory + '/' + file, 'utf8')),
+      })),
+  );
+  const milestones = reconcileGrowthMilestones(manifest.releases, manifest.milestoneDays, today, ledgers);
+  const documentPath = 'docs/PRODUCT_GROWTH_OBSERVATION_CN.md';
+  const previous = await readFile(documentPath, 'utf8').catch((error: NodeJS.ErrnoException) => {
+    if (error.code === 'ENOENT') return '';
+    throw error;
+  });
   const base = 'https://aibesttool.com';
   const sitemapResponse = await fetch(base + '/sitemap.xml', { signal: AbortSignal.timeout(20000) });
   if (!sitemapResponse.ok) throw new Error('Sitemap HTTP ' + sitemapResponse.status);
@@ -59,15 +78,6 @@ async function main() {
       c.canonical !== base + c.path ||
       c.englishPrefixLinks ||
       (releasedPaths.has(c.path) ? c.noindex || !c.sitemap : !c.noindex || c.sitemap),
-  );
-  const milestones = manifest.releases.flatMap((release) =>
-    manifest.milestoneDays.map((day) => ({
-      release: release.id,
-      day,
-      dueOn: shift(release.releasedOn, day),
-      status: today < shift(release.releasedOn, day) ? 'not_due' : 'due_needs_evidence',
-      searchEvidence: 'unavailable until same-window final GSC/URL Inspection evidence is recorded',
-    })),
   );
   const report = {
     generatedAt: new Date().toISOString(),
@@ -115,17 +125,25 @@ async function main() {
     '| --- | --- | --- | --- |',
     ...milestones.map((m) => '| ' + [m.release, 'D+' + m.day, m.dueOn, m.status].join(' | ') + ' |'),
     '',
-    '到期只触发核查，不能自动标为完成。D+3 记录发现/技术，D+7 记录抓取，D+14/28 使用同窗最终查询与页面数据。',
-    'Lindy 尚未发布，不启动其 D+ 计时；Make 不提前进入索引。n8n 与 Automation 内容冷却至 2026-11-19，事实/技术错误除外。',
+    '未落账到期节点：' +
+      milestones.filter((m) => m.needsObservation).length +
+      '。已观察的 waiting_data/等待重抓不计成功，也不每日重复到期；后续在下一节点复查。账本位于 .local/gsc/operations/product-growth-milestone-*.json。',
+    'D+3 记录发现/技术，D+7 记录抓取，D+14/28 使用同窗最终查询与页面数据。内容冷却只约束对应已发布页面，不暂停其他工具的证据、去重、对比及有条件推荐准备。',
     '',
   ];
-  await writeGscOutput(root, 'docs/PRODUCT_GROWTH_OBSERVATION_CN.md', lines.join('\n'), 'summary');
+  await writeGscOutput(root, documentPath, updateGrowthObservationDocument(previous, lines.join('\n')), 'summary');
   console.log(
     JSON.stringify({
       productionWrites: 0,
       checks: checks.length,
       anomalies: anomalies.length,
-      milestonesDue: milestones.filter((m) => m.status !== 'not_due').length,
+      milestonesDue: milestones.filter((m) => m.needsObservation).length,
+      milestonesObserved: milestones.filter((m) => m.evidenceFile).length,
+      nextMilestone:
+        milestones
+          .filter((m) => m.status === 'not_due')
+          .map((m) => m.dueOn)
+          .sort()[0] || null,
     }),
   );
   if (anomalies.length) process.exitCode = 1;

@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import ts from 'typescript';
 
 import { REVIEWED_TOOL_RELATIONSHIPS } from '../lib/config/reviewedToolRelationships';
+import { isReviewedRelationshipEligible } from '../lib/seo/reviewedRelationshipEligibility';
 
 const root = process.cwd();
 const detailPage = readFileSync(join(root, 'app/[locale]/(with-footer)/ai/[websiteName]/page.tsx'), 'utf8');
@@ -87,8 +88,54 @@ assert.ok(
 );
 assert.ok(relationshipService.includes("AND status = 'published'"), 'Relationship targets must be published');
 assert.ok(
-  relationshipService.includes('getToolIndexDecision(tool).indexable'),
-  'Relationship targets must pass the tool indexing gate',
+  relationshipService.includes('isReviewedRelationshipEligible(definition, tool, today)'),
+  'Relationship targets must pass the reviewed public eligibility gate',
+);
+
+const definition = REVIEWED_TOOL_RELATIONSHIPS.lindy[1];
+const monitor = {
+  status: 'published',
+  pageQualityStatus: 'monitor',
+  categoryId: 'productivity',
+  imageUrl: '/images/tool-media/test-logo.svg',
+  thumbnailUrl: '/images/tool-media/test-screen.svg',
+  content: 'A'.repeat(80),
+  detail: 'B'.repeat(160),
+  pricing: 'freemium',
+  tags: ['automation'],
+};
+assert.equal(
+  isReviewedRelationshipEligible(definition, monitor, '2026-11-12'),
+  true,
+  'Reviewed public monitor targets need not wait for indexing',
+);
+for (const status of ['pending', 'draft', 'rejected'])
+  assert.equal(isReviewedRelationshipEligible(definition, { ...monitor, status }, '2026-11-12'), false);
+for (const pageQualityStatus of ['archive', 'merge_candidate', 'noindex'])
+  assert.equal(isReviewedRelationshipEligible(definition, { ...monitor, pageQualityStatus }, '2026-11-12'), false);
+assert.equal(
+  isReviewedRelationshipEligible(
+    definition,
+    { ...monitor, features: { marketValidation: { verdict: 'rejected' } } },
+    '2026-11-12',
+  ),
+  false,
+  'An explicit market rejection must exclude even a high-quality public monitor target',
+);
+assert.equal(
+  isReviewedRelationshipEligible(definition, { ...monitor, content: '', detail: '' }, '2026-11-12'),
+  false,
+  'Thin targets remain excluded',
+);
+assert.equal(
+  isReviewedRelationshipEligible(definition, monitor, '2026-11-26'),
+  false,
+  'Expired recommendations must stop displaying',
+);
+assert.equal(
+  isReviewedRelationshipEligible(definition, monitor, '2026-11-11'),
+  false,
+  'Future reviews cannot authorize links',
 );
 
 console.log(
