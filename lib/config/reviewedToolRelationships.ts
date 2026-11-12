@@ -52,6 +52,29 @@ export const REVIEWED_TOOL_RELATIONSHIPS: Record<string, ReviewedToolRelationshi
       },
     },
   ],
+  // Next unfinished Automation support page; sources: GUMLOOP_CONDITIONAL_COMPARISON_2026-11-12_CN.md.
+  gumloop: [
+    {
+      relatedToolSlug: 'make',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-12',
+      reviewDueAt: '2026-11-19',
+      rationale: {
+        cn: '步骤能预先确定、需要在画布编排跨应用 scenario 并追查运行时比较 Make；希望 Agent 按任务选择连接器工具时继续评估 Gumloop。两者都支持 AI，先用同一任务核对连接器写入权限、失败恢复和实际用量；未实测成本或可靠性。',
+        en: 'Compare Make when steps can be defined in advance and you need visual cross-app scenarios with execution history; evaluate Gumloop when an agent should choose connector tools for a task. Both support AI. Pilot the same task to check write permissions, failure recovery, and actual usage; cost and reliability have not been tested.',
+      },
+    },
+    {
+      relatedToolSlug: 'lindy',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-12',
+      reviewDueAt: '2026-11-19',
+      rationale: {
+        cn: '主要在团队频道或私聊委派研究、跟进和例行任务时比较 Lindy；需要配置 Agent 的连接器工具与逐工具审批时评估 Gumloop。两者都有 Agent 和审批，先核对连接账号、写入权限及同一任务的用量；Lindy 还需核算活跃席位和共享 credits，不按试用体验推断长期费用。',
+        en: 'Compare Lindy for research, follow-up, and routines delegated in team channels or DMs; evaluate Gumloop when configuring agent connector tools and per-tool approvals matters. Both offer agents and approvals. Check connected accounts, write permissions, and usage on the same task; for Lindy, include active seats and shared credits rather than inferring ongoing cost from a trial.',
+      },
+    },
+  ],
   // Automation support pages can advance during the main n8n/comparison cooldown.
   // Official sources and rationale are recorded in PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md.
   lindy: [
