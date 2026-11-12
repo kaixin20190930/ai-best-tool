@@ -2,6 +2,8 @@
 
 更新时间：2026-11-12
 
+2026-11-12 **Automation 对比与有条件推荐手动交付完成**：既有 Activepieces 页新增指向 Make/Gumloop 的两条方向性比较，说明托管/运维责任、Agent/明确流程、权限审批及实际用量取舍；不重收录、不重发 Tool，不改冷却中的主 comparison/n8n 正文。精确配置独立 QA 后提交 `a6cbc3d9` 并部署；一次 EN/CN/TW 线上样本共 6 个新增链接及完整理由可见，canonical/noindex/sitemap154 边界通过，目标页复用当日既有验收。旧选择器导致的初始失败保留，同 HTML 离线更正再获独立 QA；关系日期在配置门禁，TW 理由为既有英文 fallback。无数据库/索引写入、本地构建或全量测试；11-19 由既有日常 owner 合并关系与工具到期复核。见[本轮交付与线上验收](./AUTOMATION_CONDITIONAL_COMPARISON_2026-11-12_CN.md)。
+
 2026-11-12 **Coverage 诊断已提前完成并独立 QA_PASS**：最新控制台报告更新 11-09，已收录94/未收录1690，原因合计1691差1如实披露；14个当前应索引规范目标加3个排除对照完成有界核查，4个规范目标已收录、6旧抓取、3未知、1无当前技术阻塞，3正常排除。当前应索引可复现技术缺陷0，无需生产修补/放索引；站点仍warning，不假称全站恢复。本次11-13不重复，11-19与D+14合并复核未决证据。见[诊断与线上核查汇总](./COVERAGE_DIAGNOSIS_2026-11-12_CN.md)。
 
 2026-11-12 Make 到期欠账已[补做并生产验收](./MAKE_FRESHNESS_CATCH_UP_2026-11-12_CN.md)：六个官方源、独立 QA，实际 EN/CN/ZH 正文修正；既有 Freshness rollback0/commit1/postcheck0，单次线上采样通过，next_review_date=11-26，保持 published/monitor/noindex。不是日期空转，不改运行时代码或重跑构建全测。

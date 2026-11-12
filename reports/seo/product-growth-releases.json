@@ -40,6 +40,17 @@
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
       {
+        "id": "automation-conditional-comparison-manual-replay",
+        "status": "production_verified",
+        "commit": "a6cbc3d9e4d9c1e3d2c28509635bd95a52dd9d6d",
+        "completedOn": "2026-11-12",
+        "nextReviewDate": "2026-11-19",
+        "toolId": "7d89de9d-8281-4b93-bff7-0d1bf299388e",
+        "relatedToolSlugs": ["make", "gumloop"],
+        "artifact": "docs/AUTOMATION_CONDITIONAL_COMPARISON_2026-11-12_CN.md",
+        "nextAction": "Completed explicit manual replay prioritizing comparisons/conditional recommendations: two new directional overlaps on the existing Activepieces Decision Card, with Make/Gumloop only as support. Current exact three Tools published+monitor/quality100/not rejected; official sources and conditional tradeoffs independently QA_PASS. Existing relationships and cooled n8n/maincomparison body unchanged. Config a6cbc3d9 deployed successfully; one actual EN/CN/TW sample shows six localized native links and exact reasons, self-canonical/noindex, sitemap154/excluded. Six target locale pages reuse same-day PASS HTML/timestamps. Initial verifier wrongly expected obsolete article cards/per-link date labels; FAIL preserved, same saved HTML corrected offline and independently QA_PASS without new HTTP or production changes. Page fact-review date visible; individual relationship dates live in config/eligibility gate, not per-link labels; TW reason retains English fallback. DB/tool-publication/index/TaskFit writes0, no local build/tsc/full tests or new automation. Review these two reasons on Nov19 with existing daily owner and Activepieces/Gumloop maintenance; due-date gate hides them until reviewed/renewed. Do not repeat intake, Tool publication or completed comparisons. This is manual delivery, not first scheduled-trigger proof or measured growth. Coverage/D14 and index HOLD remain separate."
+      },
+      {
         "id": "gumloop-updated-daily-manual-replay",
         "status": "production_verified",
         "commit": "035ab9d0cc6ed9585be924df9ec6e80841974675",
