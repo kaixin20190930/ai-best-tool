@@ -47,7 +47,7 @@ API top rows 不穷尽、可能漏匿名查询。已返回查询的 0 点击是�
 
 n8n 与 Automation 于 11-05 完成生产技术验收；内容冷却至 11-19。节点：11-08、11-12、11-19、12-03。D+3 发现/技术，D+7 抓取，D+14/28 同窗最终查询、曝光、CTR 与页面价值。数据不成熟标 waiting_data，不提前填完成。观察日期为上海日历，GSC 窗口按 Pacific Time，不能直接混算。
 
-Lindy 尚无**索引分发** release 日期，不启动分发后 D+；它已经是公开 monitor 页。11-12 完成当前官方定价/用量复核、规范化身份查重，两阶段分别取得独立 QA 并按实际生产前像提交，postcheck 均已应用且追加写入 0；next_review_date 为 11-26，indexIdentity 已补齐。剩余是事前 monitor 技术/事实/意图观察记录与站点级 GSC/Coverage 健康评审；不需要等待索引 release，也不能要求 noindex 页先获得正常排名数据。observationComplete 未经证据独立复核前保持 false。Make 不为对称性放开索引，站内对比和推荐可继续。
+Lindy 尚无**索引分发** release 日期，不启动分发后 D+；公开 monitor 始于 10-17。11-12 的官方事实、规范化身份及事前观察分别取得独立 QA，并按每次实际生产后像顺序提交，三次 postcheck 均已应用且追加写入 0；next_review_date 为 11-26，indexIdentity 与 observationComplete 已补齐。观察结论基于 7 个真实抽样日及事实/身份核查，不宣称连续可用或搜索效果。正式只读索引评审仅剩 site_health 未通过：当前 Coverage 更新至 11-06，站点健康为 warning。11-13 由既有日常任务抽查最多 20 个相关 URL，区分旧抓取、正常排除与真实缺陷；完成后按证据重评，不能无限等待，也不能要求 noindex 页先获得正常排名数据。Make 不为对称性放开索引，站内对比和推荐可继续。
 
 周五推进轮合并周复盘，每月首次周复盘再合并资产/成本/授权治理，不创建第四条重复采集链。无差分不创建空 QA；遵循任务锁 R/C/H 差分校验，不为候选文档运行构建，不重复已通过的验证。
 
@@ -55,4 +55,4 @@ Lindy 尚无**索引分发** release 日期，不启动分发后 D+；它已经�
 
 分别记录：代码检查、手动首轮、任务创建、ACTIVE 回读、首次调度运行、业务结果。ACTIVE 只证明配置，首次自动运行尚未发生时写待首次调度验收。
 
-任务 ID：发布后观察 ai-best-tool、增长周报 ai-best-tool-2、日常推进与周复盘 ai-best-tool-cluster；沿用 ACTIVE heartbeat 和原实施聊天 01a1a537-2cf3-71c3-b2d7-0f9c2ead6132，不另建重复任务。手动回放与自动首次触发分别落账，不能以 ACTIVE 或手动 PASS 冒充自动运行。当前验收见[11-12 记录](./PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md)。本机及桌面应用须保持运行（[官方说明](https://learn.chatgpt.com/docs/automations)）。
+任务 ID：发布后观察 ai-best-tool、增长周报 ai-best-tool-2、日常推进与周复盘 ai-best-tool-cluster；三项 ACTIVE heartbeat 已通过工具迁至当前运营聊天 01a1be02-13bf-7ba3-a261-3b94c7fa980c，并回读确认，不另建重复任务。迁移后的首次自动运行待验收；历史运行与本轮手动回放不能代替它。当前验收见[11-12 记录](./PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md)。本机及桌面应用须保持运行（[官方说明](https://learn.chatgpt.com/docs/automations)）。

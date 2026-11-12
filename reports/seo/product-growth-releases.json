@@ -23,7 +23,9 @@
   "lindy": {
     "status": "hold_monitor",
     "releasedOn": null,
-    "blockers": ["pre-index monitor observation not yet independently recorded", "current site-level GSC/Coverage health not yet established"]
+    "monitorPublishedOn": "2026-10-17",
+    "observationComplete": true,
+    "blockers": ["site-level search health remains warning; current Coverage requires bounded diagnosis before index QA"]
   },
   "make": {
     "status": "distribution_held",
@@ -43,14 +45,21 @@
       },
       {
         "id": "automation-reviewed-recommendations",
-        "status": "qa_and_build_pass_pending_deploy",
+        "status": "production_verified",
+        "commit": "cc757dbff90fda0f20629592e31aa1b8035480f6",
         "artifact": "docs/PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md",
-        "nextAction": "Publish the approved runtime diff and verify the actual production Decision Card links, noindex/canonical and sitemap boundaries; do not repeat unchanged local validation."
+        "nextAction": "Completed: four actual production pages and eight localized decision links verified with health, noindex, canonical and sitemap boundaries. Review relationship reasons on 2026-11-26; reopen earlier only for changed evidence or a real anomaly."
       },
       {
         "id": "lindy-index-distribution",
         "status": "held",
-        "nextAction": "Review actual pre-index technical/fact/identity observations and current site-level GSC/Coverage health before independent index QA. Never wait for normal candidate ranking data while noindex, or fabricate observationComplete."
+        "nextAction": "Freshness, identity and sampled pre-index monitor observation are independently reviewed and production committed. Formal read-only review passes every gate except site_health. Reassess after bounded Coverage diagnosis; do not repeat completed repairs or demand candidate ranking data while noindex."
+      },
+      {
+        "id": "site-search-health-diagnosis",
+        "status": "ready_for_next_delivery",
+        "dueOn": "2026-11-13",
+        "nextAction": "Existing daily owner inspects current GSC Coverage reason samples, prioritizing at most 20 currently index-eligible affected URLs across crawled-not-indexed, soft-404 and duplicate groups. Separate intended noindex/redirects, old crawls and actual current defects. Record concrete fixes or waiting reasons; no bulk release, rewrite or new monitoring subsystem. Reuse same-day snapshots."
       },
       {
         "id": "make-index-distribution",

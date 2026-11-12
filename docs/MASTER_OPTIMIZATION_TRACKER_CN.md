@@ -2,7 +2,7 @@
 
 更新时间：2026-11-12
 
-2026-11-12 **运营闭环修复（覆盖历史全局等待指令）**：发布观察已读取节点账本，4 条 D+3/D+7 不再重复逾期，未落账到期 0，保留 Google 证据；冷却仅限制对应已发布页。原 Cluster heartbeat 改为每日 17:00 实际推进、周五合并复盘，三任务均回读 ACTIVE，首次自动运行仍待验收。Make/Lindy 已接入现有有条件推荐，本地生产模式英中 4 页/8 链接验证通过，noindex/sitemap 排除保持；推荐改动尚未部署。Lindy 两份可执行修复清单已完成当前生产零写 preflight，但独立 QA 与生产提交仍未完成，不能宣称已消除生产门禁。详见[当日验收](./PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md)和[执行手册](./PRODUCT_GROWTH_OPERATIONS_RUNBOOK_CN.md)。历史“唯一下一步是等 D+7”不再作为全产品暂停依据。
+2026-11-12 **运营闭环修复已上线（覆盖历史全局等待指令）**：独立 QA 后 runtime `cc757dbf` 已部署，线上英中 4 页/8 条条件推荐链接、health、noindex/canonical/sitemap 边界通过；发布观察 4 条 D+3/D+7 已落账，未落账到期 0，下一节点 11-19。冷却仅限制对应已发布页。Lindy 的 Freshness、身份、真实事前抽样观察已分别 QA 并顺序生产提交，幂等 postcheck 均通过，next_review_date 为 11-26；只读索引评审仅 site_health 未通过。当前 GSC Coverage 更新至 11-06，96 页已收录、136 页已抓取未收录，站点 warning；11-13 由既有日常任务做最多 20 URL 的针对性诊断。三项 ACTIVE 任务已迁到当前运营聊天，每日观察 10:00、实际推进 17:00、周五报告 16:00，迁移后首次自动运行待验收。详见[当日验收](./PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md)和[执行手册](./PRODUCT_GROWTH_OPERATIONS_RUNBOOK_CN.md)。历史“唯一下一步是等 D+7”不再作为全产品暂停依据。
 
 2026-11-12 **D+7 Google 抓取与页面×查询核查**：生产 8 URL 技术检查异常 0、生产写入 0；GSC 最新完整日为 11-09。英文 n8n 已收录且有真实页面×查询行，但 URL Inspection 最近抓取为 11-03，早于 11-05 发布，不能证明当前版本已重抓；中文 n8n 仍为未知 URL。英文 Automation comparison 仍显示 08-19 旧抓取时的 `noindex` 与旧 canonical，中文 comparison 为未知 URL，两种语言均无匹配页面×查询行。D+7 记录为等待重抓，不改页面、索引或 sitemap；下一节点为 11-19 D+14。调度存储恢复后，发布后观察、增长周报、唯一 Cluster 复盘三项 heartbeat 已重新创建并回读 ACTIVE。详见[发布后观察](./PRODUCT_GROWTH_OBSERVATION_CN.md)与[自动运营手册](./PRODUCT_GROWTH_OPERATIONS_RUNBOOK_CN.md)。
 
