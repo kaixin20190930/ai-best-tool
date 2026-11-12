@@ -26,7 +26,7 @@
 | 对象 | 现在的真实状态 | 补做或接续动作 |
 | --- | --- | --- |
 | 新工具完整交付 | Activepieces 已验收，本轮以另一新工具验证更新后的提示 | 本轮 Gumloop 完成到线上公开验收；后续按实际 Cluster 缺口继续，不凑漏掉天数的工具数 |
-| Make 关键事实 | 11-12 生产回读仍为 published/monitor，next_review_date=10-22，确有到期欠账 | 下一日常交付优先核对 comparison 实际引用的 credits/BYOK 费用及组织数据区边界，使用既有 Freshness 流程形成精确差分；真实复核后再独立 QA/回滚/提交/回查，不只顺延日期，不顺带放开索引 |
+| Make 关键事实 | 初始回读 next_review_date=10-22 确有欠账；已于 11-12 后续指令下完成，现为 published/monitor、next_review_date=11-26 | [实际正文修正、独立 QA、rollback0/commit1/postcheck0 及一次线上验收均通过](./MAKE_FRESHNESS_CATCH_UP_2026-11-12_CN.md)；不重做，索引仍单独 HOLD |
 | Lindy 事实、身份、观察与条件推荐 | 今天已完成受控生产修复及线上验收；next_review_date=11-26 | 已完成项不再补做；站点健康条件变化后重评索引，推荐理由及价格按 11-26 复核 |
 | 站点搜索健康 | 当前 warning，Coverage 诊断已纳入既有日常任务，due=11-13 | 按原计划抽查最多 20 个当前应索引的受影响 URL，区分历史抓取、正常排除和真实缺陷；记录最小修复或具体等待，不批量改页/放索引 |
 | n8n 到期维护 | 生产 next_review_date=11-15；正文冷却到 11-19 | 11-15 核对真正到期/变化的 Claim，必要来源或技术修复不受非必要改写冷却误限 |

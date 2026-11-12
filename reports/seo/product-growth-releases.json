@@ -51,11 +51,13 @@
       },
       {
         "id": "make-freshness-catch-up",
-        "status": "ready_for_next_delivery",
+        "status": "production_verified",
         "dueOn": "2026-10-22",
         "toolId": "c0bb3aba-33be-4e14-903e-5f1d036eec4a",
-        "artifact": "docs/DAILY_GUMLOOP_DELIVERY_AND_CATCHUP_2026-11-12_CN.md",
-        "nextAction": "Current production readback on 2026-11-12 confirms next_review_date=2026-10-22. Prioritize this actual overdue maintenance in the next ordinary daily delivery, alongside previously committed due work. Verify only credits/BYOK billing and organization data-region boundaries actually cited by the current Automation comparison, with current official evidence. Produce exact Freshness before/after, independent QA, real rollback/commit/postcheck; no date-only postponement, full-catalog review, forced new page or index release. Index distribution HOLD does not block this work."
+        "artifact": "docs/MAKE_FRESHNESS_CATCH_UP_2026-11-12_CN.md",
+        "nextAction": "Completed under explicit user authorization: six current official sources, independent QA bound to manifest 953338ac18b53c77d3a00e2017ae5f53f6b1de13d4f5ef21c02102ccf3d501ed; actual EN/CN/ZH billing/data paragraphs updated, unverified fixed-price/Free-entitlement current assertions removed, BYOK paid built-in eligibility/embedding/module exceptions and queue rejection clarified. Generic fresh preflight0/rollback0/commit1/postcheck0. One actual EN/CN/TW-route sample passed exact new paragraphs, official destination, canonical/noindex/sitemap0 and exact DB postimage; TW retains existing English-detail fallback, not a new translation. Initial title-verifier expectation corrected offline against the same saved HTML; no repeated HTTP or DB commit. No runtime/build/full tests or market/index/relation writes. Review on 2026-11-26 or real source change; do not repeat completed catch-up. Index distribution remains held separately.",
+        "completedOn": "2026-11-12",
+        "nextReviewDate": "2026-11-26"
       },
       {
         "id": "activepieces-manual-creation-review",
