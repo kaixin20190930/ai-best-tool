@@ -1,6 +1,6 @@
 # OPS2 无浏览器发布桥
 
-状态：通用桥已用于既有受控发布；本次新增 Catalog 内部准备授权仅供候选入队后的 draft 导入，不自动授予公开写入。
+状态：通用桥已用于既有受控发布；Catalog 内部准备授权仅供候选入队后的 draft 导入。2026-11-12 新增真实协作任务 QA 身份兼容，仅用于工具公开为 monitor，不授予索引。
 
 ## 范围
 
@@ -11,7 +11,13 @@
 - `relation` 仅调用现有 Research reviewed-group RPC，要求精确的两条 Tool Capability 和一条 Fit 前像，不涉及 Task Page、工具索引或 sitemap。
 - 不为 SciSpace、v0 或任何普通工具添加专属代码、发布 JSON 或 SQL。
 
-四个模式都输出结构化 JSON 与 `productionWrites`。`preflight`、`postcheck` 默认只读。`rollback` 对 Neon 目标在单一事务内执行通用服务后回滚；Research 关系回滚需要 `SUPABASE_DB_URL`，在事务内调用同一 RPC 后回滚。`candidate` 的 commit 有两个互斥模式：原独立 QA 模式保留 `OPS2_PUBLISH_AUTHORIZATION=candidate:<id>:<hash>`、`OPS2_ROLLBACK_HASH=<hash>`、真实管理员 reviewer 与独立 QA reference；新增内部准备模式仅接受 `OPS2_INTERNAL_PREPARATION_AUTHORIZATION=candidate:<id>:<candidatePreimageHash>:<reviewerUUID>:<新随机UUID nonce>`、匹配的 rollback hash 与真实管理员 reviewer，只能写 draft，审计 `reviewMode=internal_preparation`，不得带 QA 报告/reference/公开授权。两个模式的 postcheck 和零写重放按原审计模式校验，历史 QA 审计不迁移。`tool` 公开与 `relation` 仍只能用原独立 QA 授权；内部 token 一旦出现在这两条线会被拒绝。market validation 也只接受独立 QA。index/sitemap 不受内部准备模式影响。
+四个模式都输出结构化 JSON 与 `productionWrites`。`preflight`、`postcheck` 默认只读。`rollback` 对 Neon 目标在单一事务内执行通用服务后回滚；Research 关系回滚需要 `SUPABASE_DB_URL`，在事务内调用同一 RPC 后回滚。`candidate` 的 commit 有两个互斥模式：原独立 QA 模式保留 `OPS2_PUBLISH_AUTHORIZATION=candidate:<id>:<hash>`、`OPS2_ROLLBACK_HASH=<hash>`、真实管理员 reviewer 与独立 QA reference；新增内部准备模式仅接受 `OPS2_INTERNAL_PREPARATION_AUTHORIZATION=candidate:<id>:<candidatePreimageHash>:<reviewerUUID>:<新随机UUID nonce>`、匹配的 rollback hash 与真实管理员 reviewer，只能写 draft，审计 `reviewMode=internal_preparation`，不得带 QA 报告/reference/公开授权。两个模式的 postcheck 和零写重放按原审计模式校验，历史 QA 审计不迁移。`relation` 保留原独立 QA 授权；`tool` 支持下述协作 QA 兼容。内部 token 一旦出现在这两条线会被拒绝。market validation 仍保留原独立 QA。index/sitemap 不受内部准备模式影响。
+
+### 工具公开的协作 QA 身份
+
+原 `codex-thread:<UUID>` 契约保持有效。没有聊天 UUID 的真实协作 QA 可使用规范任务身份 `collaboration-agent:/root/<task>`，不得编造 UUID。总控提供 `OPS2_DEVELOPMENT_ACTOR`，必须与 `OPS2_QA_REFERENCE` 不同；`OPS2_QA_REPORT` 为独立 QA 实际签署的 JSON，包含 `status=PASS`、`operation=tool_monitor_publication`、`toolId`、`preimageHash`、`reviewer`、`developmentActor`、`qaActor`、`independentOfAuthor=true`、`checkedAt`。新发布/回滚报告须在 72 小时内（允许 5 分钟时钟偏差）；历史 postcheck 继续验证原报告，不因经过 72 小时失效。
+
+沿用真实管理员身份核查、精确前像及 rollback hash，授权值为 `OPS2_PUBLISH_AUTHORIZATION=tool:<id>:<preimageHash>:<qaActor>:<qaReportHash>`，其中报告哈希为解析后 JSON 的 `snapshotHash`。标题、媒体、用例与原有可见字段均进入前像。报告哈希、开发身份、QA 时间与发布审计在同一事务保存，postcheck/零写重放核对同一报告。此兼容仅接受 `tool`；不能用于 candidate、relation、market validation 或索引批准。环境变量和完整报告只留单次私有作业，不写入长期配置。
 
 ## 执行顺序
 

@@ -58,13 +58,45 @@ export function assertReviewScope(options: Options, currentHash: string, env = p
   assert.match(env.OPS2_REVIEWER_ID || '', uuid, 'A real reviewer UUID is required');
 }
 
+type ToolPublicationQa = { qaReportHash: string; developmentActor: string; reviewedAt: string };
+const collaborationActor = /^collaboration-agent:\/[a-z0-9_]+(?:\/[a-z0-9_]+)*$/;
+
+export function assertToolPublicationQa(options: Options, currentHash: string, env = process.env): ToolPublicationQa {
+  assert.equal(options.kind, 'tool', 'Collaboration QA is limited to monitor tool publication');
+  assert.ok(collaborationActor.test(env.OPS2_QA_REFERENCE || ''), 'Valid collaboration QA actor required');
+  assert.ok(collaborationActor.test(env.OPS2_DEVELOPMENT_ACTOR || ''), 'Development actor required');
+  assert.notEqual(env.OPS2_QA_REFERENCE, env.OPS2_DEVELOPMENT_ACTOR, 'Development actor cannot approve itself');
+  const report = JSON.parse(env.OPS2_QA_REPORT || 'null');
+  assert.ok(report && typeof report === 'object' && !Array.isArray(report), 'Independent publication QA report required');
+  assert.equal(report.status, 'PASS');
+  assert.equal(report.operation, 'tool_monitor_publication');
+  assert.equal(report.toolId, options.id);
+  assert.equal(report.preimageHash, currentHash, 'QA approved a different tool preimage');
+  assert.equal(report.reviewer, env.OPS2_REVIEWER_ID);
+  assert.equal(report.developmentActor, env.OPS2_DEVELOPMENT_ACTOR);
+  assert.equal(report.qaActor, env.OPS2_QA_REFERENCE);
+  assert.equal(report.independentOfAuthor, true);
+  const reviewedTime = Date.parse(report.checkedAt);
+  assert.ok(Number.isFinite(reviewedTime) && reviewedTime <= Date.now() + 300000 &&
+    (options.mode === 'postcheck' || reviewedTime >= Date.now() - 72 * 3600000), 'Recent publication QA required');
+  return { qaReportHash: snapshotHash(report), developmentActor: report.developmentActor,
+    reviewedAt: new Date(reviewedTime).toISOString() };
+}
+
 export function assertCommitScope(options: Options, currentHash: string, env = process.env) {
   assertReviewScope(options, currentHash, env);
+  assert.equal(env.OPS2_ROLLBACK_HASH, currentHash, 'Matching rollback rehearsal hash is required');
+  if (env.OPS2_QA_REFERENCE?.startsWith('collaboration-agent:')) {
+    const qa = assertToolPublicationQa(options, currentHash, env);
+    assert.equal(env.OPS2_PUBLISH_AUTHORIZATION,
+      `tool:${options.id}:${currentHash}:${env.OPS2_QA_REFERENCE}:${qa.qaReportHash}`,
+      'Exact tool and publication QA report authorization is required');
+    return qa;
+  }
   assert.match(env.OPS2_QA_REFERENCE || '', /^codex-thread:[0-9a-f-]{36}$/i,
     'Independent QA thread reference is required');
   assert.equal(env.OPS2_PUBLISH_AUTHORIZATION, `${options.kind}:${options.id}:${currentHash}`,
     'Exact one-object OPS2_PUBLISH_AUTHORIZATION is required');
-  assert.equal(env.OPS2_ROLLBACK_HASH, currentHash, 'Matching rollback rehearsal hash is required');
 }
 
 async function assertAdminReviewer(reviewerId: string) {
@@ -78,7 +110,8 @@ function toolFingerprint(row: Row) {
     id: row.id, name: row.name, url: row.url, status: row.status,
     page_quality_status: row.page_quality_status, next_review_date: row.next_review_date,
     category_id: row.category_id, image_url: row.image_url, thumbnail_url: row.thumbnail_url,
-    content: row.content, detail: row.detail, pricing: row.pricing, tags: row.tags,
+    title: row.title, content: row.content, detail: row.detail, pricing: row.pricing, tags: row.tags,
+    screenshots: row.screenshots, video_url: row.video_url, use_cases: row.use_cases,
     features: row.features, updated_at: row.updated_at,
   };
 }
@@ -136,6 +169,12 @@ export function assertToolAudit(row: Row, hash: string, env = process.env) {
   assert.equal(review?.preimageHash, hash);
   assert.equal(review?.qaReference, env.OPS2_QA_REFERENCE);
   assert.equal(review?.reviewer, env.OPS2_REVIEWER_ID);
+  if (env.OPS2_QA_REFERENCE?.startsWith('collaboration-agent:')) {
+    const qa = assertToolPublicationQa({ kind: 'tool', mode: 'postcheck', id: row.id, expectedHash: hash }, hash, env);
+    assert.equal(review?.qaReportHash, qa.qaReportHash);
+    assert.equal(review?.developmentActor, qa.developmentActor);
+    assert.equal(review?.qaReviewedAt, qa.reviewedAt);
+  }
   const date = typeof row.next_review_date_db_text === 'string' ? row.next_review_date_db_text
     : row.next_review_date instanceof Date ? row.next_review_date.toISOString().slice(0, 10)
       : String(row.next_review_date || '').slice(0, 10);
@@ -296,17 +335,23 @@ async function runTool(options: Options, deps: ToolLineDependencies) {
         blockers, ready: blockers.length === 0, productionWrites: 0 };
     }
     assert.deepEqual(blockers, [], 'Draft publication gate failed');
-    if (options.mode === 'commit') assertCommitScope(options, hash);
-    else assertReviewScope(options, hash);
+    let qa: ToolPublicationQa | undefined;
+    if (options.mode === 'commit') qa = assertCommitScope(options, hash);
+    else {
+      assertReviewScope(options, hash);
+      if (process.env.OPS2_QA_REFERENCE?.startsWith('collaboration-agent:'))
+        qa = assertToolPublicationQa(options, hash);
+    }
     await deps.assertReviewer(process.env.OPS2_REVIEWER_ID!);
-    const published = await client.query(buildReadyDraftMonitorPublishSql(evidenceReadyDraftSql, true), [
+    const published = await client.query(buildReadyDraftMonitorPublishSql(evidenceReadyDraftSql, true, Boolean(qa)), [
       [options.id], process.env.OPS2_REVIEWER_ID, process.env.OPS2_QA_REFERENCE || 'rollback-preview', hash,
+      ...(qa ? [qa.qaReportHash, qa.developmentActor, qa.reviewedAt] : []),
     ]);
     assert.equal(published.rowCount, 1, 'Draft changed or generic publication gate failed');
     const after = await readTool(client, options.id);
     assert.equal(after.status, 'published');
     assert.equal(after.page_quality_status, 'monitor');
-    assertToolAudit(after, hash, { OPS2_QA_REFERENCE: process.env.OPS2_QA_REFERENCE || 'rollback-preview',
+    assertToolAudit(after, hash, { ...process.env, OPS2_QA_REFERENCE: process.env.OPS2_QA_REFERENCE || 'rollback-preview',
       OPS2_REVIEWER_ID: process.env.OPS2_REVIEWER_ID });
     if (options.mode === 'rollback') {
       await client.query('ROLLBACK');
@@ -422,6 +467,8 @@ async function runRelation(options: Options) {
 export async function run(options: Options, deps = productionToolLineDependencies) {
   if (options.kind !== 'candidate' && process.env.OPS2_INTERNAL_PREPARATION_AUTHORIZATION)
     throw new Error('Internal preparation authorization is limited to candidate draft import');
+  if (options.kind !== 'tool' && process.env.OPS2_QA_REFERENCE?.startsWith('collaboration-agent:'))
+    throw new Error('Collaboration QA is limited to monitor tool publication');
   if (options.kind === 'candidate') return runCandidate(options, deps);
   if (options.kind === 'tool') return runTool(options, deps);
   return runRelation(options);

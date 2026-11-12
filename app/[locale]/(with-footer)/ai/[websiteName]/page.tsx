@@ -592,15 +592,16 @@ function getMediaCoverageSummary({
   heroImage,
   screenshotCount,
   hasVideo,
+  editorialCover,
 }: {
   locale: string;
   heroImage: string;
   screenshotCount: number;
   hasVideo: boolean;
+  editorialCover: boolean;
 }) {
   const isChinese = locale === 'cn';
   const hasPreview = Boolean(heroImage);
-  const totalAssets = screenshotCount + (hasVideo ? 1 : 0) + (hasPreview ? 1 : 0);
 
   if (screenshotCount >= 3 || (screenshotCount >= 1 && hasVideo)) {
     return {
@@ -614,15 +615,29 @@ function getMediaCoverageSummary({
     };
   }
 
-  if (totalAssets > 0) {
+  if (screenshotCount > 0 || hasVideo) {
     return {
       label: isChinese ? '预览一般' : 'Partial preview coverage',
       summary: isChinese
         ? '已经能大致看到产品长什么样，但做决定前仍建议打开官网再确认。'
         : 'You can get a rough feel for the product, but it is still worth checking the official site before deciding.',
       evidence: isChinese
-        ? `${screenshotCount} 张截图${hasPreview ? '，含封面预览' : ''}${hasVideo ? '，含视频' : ''}`
-        : `${screenshotCount} screenshots${hasPreview ? ', cover preview' : ''}${hasVideo ? ', video' : ''}`,
+        ? `${screenshotCount} 张截图${hasPreview ? '，含封面图' : ''}${hasVideo ? '，含视频' : ''}`
+        : `${screenshotCount} screenshots${hasPreview ? ', cover image' : ''}${hasVideo ? ', video' : ''}`,
+    };
+  }
+
+  if (hasPreview) {
+    const traditional = locale === 'tw';
+    return {
+      label: traditional ? (editorialCover ? '編輯示意圖' : '封面圖片')
+        : isChinese ? (editorialCover ? '编辑示意图' : '封面图片')
+          : editorialCover ? 'Editorial illustration' : 'Cover image',
+      summary: traditional ? '封面不代表真實介面；選型前請查看官網截圖或示範。'
+        : isChinese ? '封面不代表真实界面；选型前请查看官网截图或演示。'
+          : 'The cover does not establish what the interface looks like. Check official screenshots or a demo before choosing.',
+      evidence: traditional ? '尚無已核實的產品截圖或影片'
+        : isChinese ? '暂无已核实的产品截图或视频' : 'No verified product screenshots or video yet',
     };
   }
 
@@ -2979,6 +2994,9 @@ export default async function Page({
         ? getLocalizedField(dbTool.detail, locale)
         : data?.detail || data?.content || '';
     const heroImage = data.thumbnailUrl || data.imageUrl || '';
+    const editorialCover = /^\/images\/tool-media\/[a-z0-9-]+-(?:editorial-cover|neutral-editorial)\.svg$/.test(heroImage);
+    const editorialCoverLabel = locale === 'tw' ? '編輯示意圖，非產品截圖'
+      : isChinese ? '编辑示意图，非产品截图' : 'Editorial illustration, not a product screenshot';
     const pricingLabel = getPricingLabel(dbTool?.pricing);
     const updatedAt = dbTool?.updatedAt || dbTool?.createdAt;
     const ownerEmail = claimTool?.ownerEmail || '';
@@ -3136,8 +3154,9 @@ export default async function Page({
       heroImage,
       screenshotCount,
       hasVideo,
+      editorialCover,
     });
-    const mediaCoverage = decisionMediaSummary
+    const mediaCoverage = decisionMediaSummary && (screenshotCount > 0 || hasVideo)
       ? { ...mediaCoverageBase, summary: decisionMediaSummary }
       : mediaCoverageBase;
     const communitySignal = getCommunitySignalSummary({
@@ -3162,7 +3181,11 @@ export default async function Page({
     const websiteNameKey = websiteName.toLowerCase();
     const priorityEvidence = PRIORITY_TOOL_EVIDENCE[websiteNameKey] || null;
     let mediaChecklistItem = 'Preview media is still limited, so check the official screenshots before deciding.';
-    if (heroImage) {
+    if (editorialCover || (heroImage && screenshotCount === 0 && !hasVideo)) {
+      mediaChecklistItem = locale === 'tw' ? '封面不代表真實介面，請到官網查看截圖或示範。'
+        : isChinese ? '封面不代表真实界面，请到官网查看截图或演示。'
+          : 'The cover is not interface evidence; check official screenshots or a demo.';
+    } else if (heroImage) {
       mediaChecklistItem = isChinese
         ? '已有预览图，可先看产品界面是否与你的工作流匹配。'
         : 'A preview image is available, so you can sanity-check the interface fit.';
@@ -3272,7 +3295,7 @@ export default async function Page({
       const heroImageNode = (
         <BaseImage
           title={data.title}
-          alt={`${data.title} interface preview`}
+          alt={editorialCover ? `${data.title} — ${editorialCoverLabel}` : `${data.title} cover image`}
           fill
           src={heroImage}
           className='object-cover transition-transform duration-300 group-hover:scale-105'
@@ -3610,6 +3633,9 @@ export default async function Page({
               <aside className='space-y-4'>
                 <div className='overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-slate-200'>
                   {heroPreview}
+                  {editorialCover && (
+                    <p className='border-t border-slate-200 px-3 py-2 text-xs text-slate-500'>{editorialCoverLabel}</p>
+                  )}
                   <div className='grid grid-cols-3 divide-x divide-slate-200 border-t border-slate-200 text-center'>
                     <div className='p-3'>
                       <p className='text-xs text-slate-500'>{isChinese ? '浏览' : 'Views'}</p>

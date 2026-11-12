@@ -1,14 +1,14 @@
 import assert from 'node:assert/strict';
 import type { PoolClient } from 'pg';
 
-import { parseOptions, run, type ToolLineDependencies } from './run-ops2-publish-bridge';
+import { parseOptions, run, snapshotHash, type ToolLineDependencies } from './run-ops2-publish-bridge';
 
 const candidateId = 'cec78907-e2a1-4eb7-853a-a58334026280';
 const toolId = '2b8177ac-70b3-4475-a1ee-509ff8b4b622';
 const qaReference = 'codex-thread:01a13034-b928-7f63-888f-8bbb3846e78d';
 const nextReview = '2026-11-12';
 const envKeys = ['OPS2_REVIEWER_ID', 'OPS2_QA_REFERENCE', 'OPS2_PUBLISH_AUTHORIZATION', 'OPS2_ROLLBACK_HASH',
-  'OPS2_INTERNAL_PREPARATION_AUTHORIZATION', 'OPS2_QA_REPORT'] as const;
+  'OPS2_INTERNAL_PREPARATION_AUTHORIZATION', 'OPS2_QA_REPORT', 'OPS2_DEVELOPMENT_ACTOR'] as const;
 const originalEnv = Object.fromEntries(envKeys.map((key) => [key, process.env[key]]));
 
 type State = { candidate: Record<string, any>; tool: Record<string, any> | null };
@@ -55,6 +55,9 @@ function fixture(kind: 'candidate' | 'tool') {
         next_review_date: nextReview,
         features: { submission: { review: { publishMode: 'monitor_noindex', reviewer: params[1],
           qaReference: params[2], preimageHash: params[3], nextReviewDate: nextReview } } } };
+      if (params.length === 7) Object.assign(state.tool.features.submission.review, {
+        qaReportHash: params[4], developmentActor: params[5], qaReviewedAt: params[6],
+      });
       return { rows: [{ name: state.tool.name }], rowCount: 1 };
     }
     throw new Error('Unexpected mock query');
@@ -78,7 +81,7 @@ function fixture(kind: 'candidate' | 'tool') {
       return [];
     },
   };
-  return { deps, calls, get state() { return clone(state); }, tamperAudit() {
+  return { deps, calls, get state() { return clone(state); }, changeTitle() { state.tool!.title = 'Changed after QA'; }, tamperAudit() {
     if (kind === 'candidate') state.candidate.raw_payload.ops2PublicationBridge.qaReference = 'tampered';
     else state.tool!.features.submission.review.qaReference = 'tampered';
   } };
@@ -143,6 +146,61 @@ function writes(calls: string[]) {
   return calls.filter((call) => call === 'IMPORT' || /^UPDATE /.test(call));
 }
 
+async function exerciseCollaborationPublication() {
+  const object = fixture('tool');
+  const hash = (await run(options('tool', 'preflight'), object.deps)).preimageHash!;
+  authorize('tool', hash);
+  const qaActor = 'collaboration-agent:/root/operations_qa';
+  const developmentActor = 'collaboration-agent:/root';
+  const report = { status: 'PASS', operation: 'tool_monitor_publication', toolId, preimageHash: hash,
+    reviewer: toolId, qaActor, developmentActor, independentOfAuthor: true, checkedAt: new Date().toISOString() };
+  function useReport(value: unknown = report) {
+    process.env.OPS2_QA_REFERENCE = qaActor;
+    process.env.OPS2_DEVELOPMENT_ACTOR = developmentActor;
+    process.env.OPS2_QA_REPORT = JSON.stringify(value);
+    process.env.OPS2_PUBLISH_AUTHORIZATION = `tool:${toolId}:${hash}:${qaActor}:${snapshotHash(report)}`;
+  }
+  const commit = options('tool', 'commit', hash);
+  for (const invalid of [null, { ...report, qaActor: developmentActor }, { ...report, toolId: candidateId },
+    { ...report, preimageHash: '0'.repeat(64) }, { ...report, independentOfAuthor: false },
+    { ...report, checkedAt: new Date(Date.now() - 73 * 3600000).toISOString() },
+    { ...report, checkedAt: new Date(Date.now() + 3600000).toISOString() },
+    { ...report, extraUnapprovedClaim: true }]) {
+    useReport(invalid);
+    object.calls.length = 0;
+    await assert.rejects(run(commit, object.deps));
+    assert.deepEqual(writes(object.calls), []);
+    assert.equal(object.state.tool!.status, 'draft');
+  }
+  useReport();
+  process.env.OPS2_DEVELOPMENT_ACTOR = qaActor;
+  await assert.rejects(run(commit, object.deps), /cannot approve itself/);
+  useReport();
+  process.env.OPS2_PUBLISH_AUTHORIZATION = `tool:${toolId}:${hash}`;
+  await assert.rejects(run(commit, object.deps), /authorization/);
+  useReport();
+  for (const kind of ['candidate', 'relation']) {
+    await assert.rejects(run(parseOptions([`--kind=${kind}`, '--mode=preflight', `--id=${toolId}`]), object.deps),
+      /limited to monitor tool/);
+  }
+  const before = object.state;
+  assert.equal((await run(options('tool', 'rollback', hash), object.deps)).productionWrites, 0);
+  assert.deepEqual(object.state, before);
+  assert.equal((await run(commit, object.deps)).productionWrites, 1);
+  assert.equal(object.state.tool!.features.submission.review.qaReportHash, snapshotHash(report));
+  assert.equal((await run(options('tool', 'postcheck', hash), object.deps)).productionWrites, 0);
+  object.calls.length = 0;
+  assert.equal((await run(commit, object.deps)).productionWrites, 0);
+  assert.deepEqual(writes(object.calls), []);
+  useReport({ ...report, extraUnapprovedClaim: true });
+  await assert.rejects(run(options('tool', 'postcheck', hash), object.deps));
+  const changed = fixture('tool');
+  useReport();
+  changed.changeTitle();
+  await assert.rejects(run(commit, changed.deps), /Preimage changed/);
+  assert.deepEqual(writes(changed.calls), []);
+}
+
 async function exercise(kind: 'candidate' | 'tool') {
   const object = fixture(kind);
   const before = object.state;
@@ -205,6 +263,7 @@ async function main() {
     await exercise('candidate');
     await exercise('tool');
     await exerciseInternalCandidate();
+    await exerciseCollaborationPublication();
     console.log('OPS2 tool-line behavior mocks passed without a database');
   } finally {
     for (const key of envKeys) {
