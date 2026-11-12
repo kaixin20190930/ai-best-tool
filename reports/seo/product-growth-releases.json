@@ -40,6 +40,28 @@
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
       {
+        "id": "pipedream-freshness-scheduled",
+        "status": "production_verified",
+        "dueOn": "2026-10-23",
+        "completedOn": "2026-11-12",
+        "nextReviewDate": "2026-11-26",
+        "toolId": "2b5a4ac9-16a2-48f2-b53e-38fc6467aab0",
+        "artifact": "docs/PIPEDREAM_FRESHNESS_SCHEDULED_2026-11-12_CN.md",
+        "trigger": {
+          "kind": "scheduled_heartbeat",
+          "automationId": "ai-best-tool-cluster",
+          "triggeredAt": "2026-11-12T08:56:18.730Z"
+        },
+        "publicationMethod": "existing_tools_freshness_change_set",
+        "productionWrites": 1,
+        "productionUrls": [
+          "https://aibesttool.com/ai/pipedream",
+          "https://aibesttool.com/cn/ai/pipedream",
+          "https://aibesttool.com/tw/ai/pipedream"
+        ],
+        "nextAction": "Actual scheduled daily heartbeat completed overdue Pipedream maintenance, prioritizing due work over new intake or reciprocal-link quota. Shutdown date was already recorded Oct9; four current official sources and independent exact-manifest QA support new maintenance-mode/no-new-signup eligibility, Apr30 Workflows deletion, FileStore structural-export limits/omissions and account/refund limitations, with unaffected Connect. Only detail.en/cn/zh, maintenanceReview and next_review_date changed; exact protected-row postimage verified. Existing generic fresh preflight0/real rollback0/commit1/postcheck0; one actual EN/CN/TW sample17:04:56 Shanghai PASS title/new paragraphs/date/official links/no404/canonical/noindex, sitemap154/excluded; TW retains English-detail fallback. No runtime/assets/deploy requirement, GSC requests, local build/tsc/full tests, Tool-publication/index/TaskFit/relation writes or new automation. Review actual scoped evidence Nov26 under existing daily owner or reopen on real change. Completed Activepieces/Gumloop/Make and their four new relations deduplicated unchanged. This verifies this scheduled maintenance run, not all future automatic deliveries or measured growth; historical market/security evidence and Coverage/D14/index HOLD unchanged."
+      },
+      {
         "id": "gumloop-conditional-comparison-manual-replay",
         "status": "production_verified",
         "commit": "551f8087c4fc7d455071971ba8a7bc4386f3c8de",
