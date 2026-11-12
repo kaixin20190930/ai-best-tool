@@ -38,6 +38,26 @@
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
       {
+        "id": "gumloop-updated-daily-manual-replay",
+        "status": "production_verified",
+        "commit": "035ab9d0cc6ed9585be924df9ec6e80841974675",
+        "monitorPublishedOn": "2026-11-12",
+        "releasedOn": null,
+        "nextReviewDate": "2026-11-19",
+        "toolId": "9e1d9c9c-f26e-4f98-a28e-f3547bbac2f2",
+        "candidateId": "03cca389-cce1-43bc-ad1f-84e41a2e6047",
+        "artifact": "docs/DAILY_GUMLOOP_DELIVERY_AND_CATCHUP_2026-11-12_CN.md",
+        "nextAction": "Completed: current five-source evidence and trilingual content, one independent object-bound QA, owned media deployed, generic enqueue/import/tool rollback-commit-postcheck and zero-write replay. One actual EN/CN/TW acceptance passed title/summary/all limits/media SHA and editorial labeling/official destination/self-canonical/noindex/sitemap0; protected content and candidate unchanged. Do not enqueue or commit again. This proves explicit manual execution of the updated daily prompt, not first scheduled-trigger proof. Review on 2026-11-19 via existing daily owner. No index release/D+ clock, market or Task/Fit approval."
+      },
+      {
+        "id": "make-freshness-catch-up",
+        "status": "ready_for_next_delivery",
+        "dueOn": "2026-10-22",
+        "toolId": "c0bb3aba-33be-4e14-903e-5f1d036eec4a",
+        "artifact": "docs/DAILY_GUMLOOP_DELIVERY_AND_CATCHUP_2026-11-12_CN.md",
+        "nextAction": "Current production readback on 2026-11-12 confirms next_review_date=2026-10-22. Prioritize this actual overdue maintenance in the next ordinary daily delivery, alongside previously committed due work. Verify only credits/BYOK billing and organization data-region boundaries actually cited by the current Automation comparison, with current official evidence. Produce exact Freshness before/after, independent QA, real rollback/commit/postcheck; no date-only postponement, full-catalog review, forced new page or index release. Index distribution HOLD does not block this work."
+      },
+      {
         "id": "activepieces-manual-creation-review",
         "status": "production_verified",
         "commit": "4b8f3fedca68b7ba34e9f2aa74c2b8ee6d4467fe",
