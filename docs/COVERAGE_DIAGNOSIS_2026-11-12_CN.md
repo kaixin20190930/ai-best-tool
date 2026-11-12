@@ -30,6 +30,8 @@
 
 `site-search-health-diagnosis` 落账为已完成的只读交付，**11-13 不再重复执行本次诊断**。下一次有界复核为 **11-19**，由原日常任务承接，重叠 n8n/Automation 对象与既有 D+14 合并使用同一次证据；其余未决规范目标只补缺失的必要检查，不每天重抓。出现真实新异常可提前修复。Lindy/Make 索引分发维持原门禁；“尚未做 Coverage 诊断”不再是阻塞理由，不因此暂停其他维护、收录、对比和有条件推荐。
 
+11-12 已将上述结论及复核安排通过现有定时任务接口同步到每日 17:00 的 `ai-best-tool-cluster` 和每日 10:00 的 `ai-best-tool`；两项 ACTIVE、完整提示词及原时间/目标聊天均已回读确认，未新增重复任务。11-19 日常 owner 核查原 10 个未决目标（最多 20 个应索引 URL），错过则下一轮补做一次；复用观察任务重叠证据但不混同 D+14 与 Coverage 的业务结论。定时配置同步完成，不把未来自动业务执行提前记为通过；接下来继续原计划的合格工具公开、对比和有条件推荐。
+
 私有证据：`.local/gsc/operations/coverage-diagnosis-plan-2026-11-12.json`、`coverage-diagnosis-evidence-2026-11-12.json`、`coverage-diagnosis-assessment-2026-11-12.json`、`coverage-tool-status-readback-2026-11-12.json`、`coverage-diagnosis-qa-2026-11-12.json`、`coverage-sitemap-2026-11-12.xml` 和实际 HTML。公开只保存本汇总，不提交完整生产/GSC 对象或凭据。
 
 解释依据：[Google 网页索引报告说明](https://support.google.com/webmasters/answer/7440203?hl=en)、[请求重抓说明](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl)。预期排除不等于错误，请求抓取也不保证收录，不通过重复请求制造进度。
