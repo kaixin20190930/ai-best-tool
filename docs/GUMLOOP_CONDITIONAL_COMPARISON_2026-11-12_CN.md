@@ -23,8 +23,14 @@ Gumloop 连接器工具选择、账号和审批及 Make scenario/执行历史复
 
 ## 审核、发布与验收
 
-状态：**独立 QA_PASS，待部署及线上验收**。复用原唯一 QA，报告绑定当前配置指纹 `92edfe4cfc4680deebd7715e264e7ba2b868862fa59fc3278dd68f7e13eeeb9a`；精确移除本轮新增块后与原 HEAD 逐字节相同，Activepieces 两条及全部已有关系未变。生产消费者与已审版本相同，无 blocker；配置通过不冒充线上完成。
+状态：**独立 QA_PASS，已部署且线上验收通过**。复用原唯一 QA，报告绑定当前配置指纹 `92edfe4cfc4680deebd7715e264e7ba2b868862fa59fc3278dd68f7e13eeeb9a`；精确移除本轮新增块后与原 HEAD 逐字节相同，Activepieces 两条及全部已有关系未变。生产消费者与已审版本相同，无 blocker。内容提交 `551f8087c4fc7d455071971ba8a7bc4386f3c8de` 已推送且 Vercel 部署成功；提交钩子仅执行该配置原有 eslint/prettier。
 
-只核对来源、内容结构、方向去重、当前资格、复核日期及格式；无运行时组件/逻辑变化，不跑本地 build、TypeScript 或全量测试。独立 QA 通过后沿普通 Git 推送及现有生产部署，实际受影响 EN/CN/TW 页面各做一次定向验收。按当前原生 Compare next 链接核对完整理由、语言路径及目标锚点，不使用旧 article 卡片假设；页面事实日期与配置中的关系日期分别记录，TW 理由沿现有英文 fallback。
+11-12 15:59 上海完成一次定向生产验收：Gumloop EN/CN/TW 三页均 200、真实标题/正文存在，无流式 not-found；每页两条本地化原生链接及精确完整条件理由均可见，共 6 个新增入口。Lindy 三语言目标各补一次真实 HTML/锚点样本；Make 三语言目标复用今日成功 HTML 及原采样时间。各目标 `#decision-card` 存在，self-canonical/noindex 正常，三工具仍排除在 sitemap 之外；sitemap 仍 154 URL。没有首次采样失败、额外重抓或重复公开提交。
+
+页面事实复核日可见；每条关系的复核日与到期日在配置内，并由原资格服务生效，不声称逐链接显示日期。TW 关系理由为既有英文 fallback，不声称新增繁中译文。验收仅请求 HTML，不执行客户端事件，不计增长或实测工作流结果。
+
+数据库、候选、Tool 公开、Task/Fit、索引写入均 0；没有新增索引 release/D+、GSC 请求或定时任务。delivery 已将本项记为 `production_verified`，11-19 由原日常 owner 与 Gumloop 维护合并复核；已完成推荐不重复，未实际复核不得只改日期续期。本轮为明确手动执行，不提前认定首次自动调度交付成功。
+
+本轮只核对来源、内容结构、方向去重、当前资格、复核日期及格式，并完成上述一次部署后验收；无运行时组件/逻辑变化，未跑本地 build、TypeScript 或全量测试。按当前原生 Compare next 链接验收，没有使用旧 article 卡片假设。
 
 私有证据保留 `.local/gsc/operations/gumloop-conditional-comparison-*`；目标证据未变化则复用同日成功验收及其原时间，公开仅保存本汇总。11-19 Coverage/D+14 和其他已承诺维护节点保持，不新增定时任务。

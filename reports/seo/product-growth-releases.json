@@ -40,6 +40,17 @@
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
       {
+        "id": "gumloop-conditional-comparison-manual-replay",
+        "status": "production_verified",
+        "commit": "551f8087c4fc7d455071971ba8a7bc4386f3c8de",
+        "completedOn": "2026-11-12",
+        "nextReviewDate": "2026-11-19",
+        "toolId": "9e1d9c9c-f26e-4f98-a28e-f3547bbac2f2",
+        "relatedToolSlugs": ["make", "lindy"],
+        "artifact": "docs/GUMLOOP_CONDITIONAL_COMPARISON_2026-11-12_CN.md",
+        "nextAction": "Completed next unfinished Automation conditional comparisons on existing Gumloop page: two new directional overlaps to Make/Lindy. Exact current three Tools published+monitor/quality100/not rejected; scoped facts current through real Nov12 editorial/maintenance evidence, two Lindy official pages read and same-day Gumloop/Make sources reused. Independent exact config QA_PASS; all prior definitions including Activepieces two pairs byte-for-byte unchanged, cooled n8n/maincomparison body untouched. Config551f8087 deployed successfully; one actual EN/CN/TW Gumloop sample passed six native localized links with exact conditional reasons, titles/content/canonical/noindex. Make3 target locale HTMLs reused with original same-day timestamps, Lindy3 target anchor samples read once; sitemap154/exclusion unchanged, no failed/repeated sample. Relationship dates enforced in config, page fact date separate; TW reason English fallback remains. DB/Tool publication/index/TaskFit writes0, no GSC fetch/local build/tsc/full tests/new automation. Existing daily owner reviews the two reasons with Gumloop maintenance Nov19; actual evidence review required before renewing expiry. Do not repeat completed Activepieces/Gumloop comparisons or intake/publication. Manual delivery is not first automatic-trigger proof or growth; Coverage/D14 and index HOLD remain separate."
+      },
+      {
         "id": "automation-conditional-comparison-manual-replay",
         "status": "production_verified",
         "commit": "a6cbc3d9e4d9c1e3d2c28509635bd95a52dd9d6d",
