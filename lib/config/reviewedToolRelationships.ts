@@ -28,6 +28,30 @@ function relationship(
 // This is an editorial allowlist, not an algorithmic recommendation feed.
 // Additions require a directional rationale and a scheduled review.
 export const REVIEWED_TOOL_RELATIONSHIPS: Record<string, ReviewedToolRelationshipDefinition[]> = {
+  // Directional comparisons for the existing public Activepieces page; no index release.
+  // Sources and review scope: AUTOMATION_CONDITIONAL_COMPARISON_2026-11-12_CN.md.
+  activepieces: [
+    {
+      relatedToolSlug: 'make',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-12',
+      reviewDueAt: '2026-11-19',
+      rationale: {
+        cn: '希望由平台托管跨应用流程、并查看 scenario 执行历史时比较 Make；必须自行托管时，先核对 Activepieces 的版本范围和运维责任。两者都有 AI 能力，用同一流程核对连接器、人工审核与实际费用；未实测成本或可靠性。',
+        en: 'Compare Make for managed cross-app scenarios and execution history. If self-hosting is required, check the Activepieces edition and operations ownership first. Both offer AI capabilities; pilot the same workflow to check connectors, human review, and actual charges. Cost and reliability have not been tested.',
+      },
+    },
+    {
+      relatedToolSlug: 'gumloop',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-12',
+      reviewDueAt: '2026-11-19',
+      rationale: {
+        cn: '需要让 Agent 按任务选择连接器工具时比较 Gumloop；希望明确设置触发、分支和循环时评估 Activepieces 的流程。两者都有 Agent 与人工审批能力，先用同一任务核对账号权限、审批设置及用量，不把开放式工具调用当作无人监督保证。',
+        en: 'Compare Gumloop when an agent should choose connector tools for a task; evaluate Activepieces flows when you want explicit triggers, branches, and loops. Both offer agents and human approvals. Pilot the same task to check account permissions, approval settings, and usage; flexible tool use does not guarantee safe unattended work.',
+      },
+    },
+  ],
   // Automation support pages can advance during the main n8n/comparison cooldown.
   // Official sources and rationale are recorded in PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md.
   lindy: [
