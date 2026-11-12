@@ -39,11 +39,15 @@
     "items": [
       {
         "id": "activepieces-manual-creation-review",
-        "status": "draft_content_qa_pass_publication_held",
+        "status": "production_verified",
+        "commit": "4b8f3fedca68b7ba34e9f2aa74c2b8ee6d4467fe",
+        "monitorPublishedOn": "2026-11-12",
+        "releasedOn": null,
+        "nextReviewDate": "2026-11-19",
         "toolId": "7d89de9d-8281-4b93-bff7-0d1bf299388e",
         "candidateId": "5692e4a0-fbd9-4b08-bca3-13eb1e11e0d0",
         "artifact": "docs/MANUAL_TOOL_CREATION_ACCEPTANCE_2026-11-12_CN.md",
-        "nextAction": "Reuse this exact imported candidate and reviewed trilingual draft; do not enqueue again. Before public monitor publication, use a real independent QA chat or independently review shared QA identity compatibility for collaborator actors, deploy/verify the editorial asset and correct template wording that treats editorial art as an interface preview. No fabricated QA UUID, market validation, release date, Task/Fit or index approval. Manual replay is not an automatic daily-trigger acceptance."
+        "nextAction": "Completed: shared collaborator QA compatibility and editorial-cover wording independently approved and deployed; exact existing Tool published via generic rollback/commit/postcheck with report-bound audit, repeat commit zero-write. EN/CN/TW actual pages, media SHA, primary official link, self-canonical/noindex and sitemap exclusion verified. Existing daily owner reviews this Tool on 2026-11-19; reopen earlier only for new evidence/anomalies. No duplicate intake, index release/D+ clock, market validation or Task/Fit approval. Manual replay is not automatic daily-trigger acceptance."
       },
       {
         "id": "lindy-freshness-identity",
