@@ -63,11 +63,11 @@ API top rows 不穷尽、可能漏匿名查询。已返回查询的 0 点击是�
 
 n8n 与 Automation 于 11-05 完成生产技术验收；内容冷却至 11-19。节点：11-08、11-12、11-19、12-03。D+3 发现/技术，D+7 抓取，D+14/28 同窗最终查询、曝光、CTR 与页面价值。数据不成熟标 waiting_data，不提前填完成。观察日期为上海日历，GSC 窗口按 Pacific Time，不能直接混算。
 
-Lindy 尚无**索引分发** release 日期，不启动分发后 D+；公开 monitor 始于 10-17。11-12 的官方事实、规范化身份及事前观察分别取得独立 QA，并按每次实际生产后像顺序提交，三次 postcheck 均已应用且追加写入 0；next_review_date 为 11-26，indexIdentity 与 observationComplete 已补齐。观察结论基于 7 个真实抽样日及事实/身份核查，不宣称连续可用或搜索效果。正式只读索引评审仅剩 site_health 未通过：当前 Coverage 更新至 11-06，站点健康为 warning。11-13 由既有日常任务抽查最多 20 个相关 URL，区分旧抓取、正常排除与真实缺陷；完成后按证据重评，不能无限等待，也不能要求 noindex 页先获得正常排名数据。Make 不为对称性放开索引，站内对比和推荐可继续。
+Lindy 尚无**索引分发** release 日期，不启动分发后 D+；公开 monitor 始于 10-17。11-12 的官方事实、规范化身份及事前观察分别取得独立 QA，并按每次实际生产后像顺序提交，三次 postcheck 均已应用且追加写入 0；next_review_date 为 11-26，indexIdentity 与 observationComplete 已补齐。观察结论基于 7 个真实抽样日及事实/身份核查，不宣称连续可用或搜索效果。正式只读索引评审仅剩 site_health 未通过。用户已要求于 11-12 [提前完成原定 11-13 的 Coverage 诊断](./COVERAGE_DIAGNOSIS_2026-11-12_CN.md)：最新报告为 11-09，已收录 94/未收录 1,690，原因合计比总数多 1，差异保留披露。14 个当前应索引规范目标及 3 个排除对照经独立 QA；4 个规范目标已收录、6 个旧抓取、3 个 Google 未知、1 个未收录但当前无技术阻塞，3 个正常排除，未发现需要生产修复的应索引缺陷。站点健康保留 warning，不以样本假称全站恢复；该诊断已落账，11-13 不重复，下一次仅在 11-19 与既有 D+14 合并复核未决证据，真实异常可提前处理。不能把“诊断尚未做”继续作为阻塞，也不要求 noindex 候选先获得排名或暂停其他交付。Make 不为对称性放开索引，站内对比和推荐可继续。
 
 周五推进轮合并周复盘，每月首次周复盘再合并资产/成本/授权治理，不创建第四条重复采集链。无差分不创建空 QA；遵循任务锁 R/C/H 差分校验，不为候选文档运行构建，不重复已通过的验证。
 
-11-12 用户要求核对耽误工作的补做范围，见[实际交付与积压回收](./DAILY_GUMLOOP_DELIVERY_AND_CATCHUP_2026-11-12_CN.md)。Make 原 next_review_date=10-22 的欠账已按用户指令于 11-12 [完成实际事实更新、独立 QA、生产发布及线上验收](./MAKE_FRESHNESS_CATCH_UP_2026-11-12_CN.md)，delivery `make-freshness-catch-up` 为 `production_verified`，nextReviewDate=11-26；不重复补做，不因索引 HOLD 延误后续维护。保留 11-13 的站点健康诊断、11-15 n8n 到期维护及 11-19/12-03 观察节点；已完成项不重复，过去缺失的 Google 证据不补造，不按错过天数凑发布量。
+11-12 用户要求核对耽误工作的补做范围，见[实际交付与积压回收](./DAILY_GUMLOOP_DELIVERY_AND_CATCHUP_2026-11-12_CN.md)。Make 原 next_review_date=10-22 的欠账已按用户指令于 11-12 [完成实际事实更新、独立 QA、生产发布及线上验收](./MAKE_FRESHNESS_CATCH_UP_2026-11-12_CN.md)，delivery `make-freshness-catch-up` 为 `production_verified`，nextReviewDate=11-26；不重复补做，不因索引 HOLD 延误后续维护。原定 11-13 的诊断已于 11-12 提前完成；保留 11-15 n8n 到期维护及 11-19/12-03 观察节点；已完成项不重复，过去缺失的 Google 证据不补造，不按错过天数凑发布量。
 
 ## 五、验收
 

@@ -28,7 +28,7 @@
 | 新工具完整交付 | Activepieces 已验收，本轮以另一新工具验证更新后的提示 | 本轮 Gumloop 完成到线上公开验收；后续按实际 Cluster 缺口继续，不凑漏掉天数的工具数 |
 | Make 关键事实 | 初始回读 next_review_date=10-22 确有欠账；已于 11-12 后续指令下完成，现为 published/monitor、next_review_date=11-26 | [实际正文修正、独立 QA、rollback0/commit1/postcheck0 及一次线上验收均通过](./MAKE_FRESHNESS_CATCH_UP_2026-11-12_CN.md)；不重做，索引仍单独 HOLD |
 | Lindy 事实、身份、观察与条件推荐 | 今天已完成受控生产修复及线上验收；next_review_date=11-26 | 已完成项不再补做；站点健康条件变化后重评索引，推荐理由及价格按 11-26 复核 |
-| 站点搜索健康 | 当前 warning，Coverage 诊断已纳入既有日常任务，due=11-13 | 按原计划抽查最多 20 个当前应索引的受影响 URL，区分历史抓取、正常排除和真实缺陷；记录最小修复或具体等待，不批量改页/放索引 |
+| 站点搜索健康 | [11-12 已提前完成原定 11-13 的诊断及独立 QA](./COVERAGE_DIAGNOSIS_2026-11-12_CN.md)：14 个应索引规范候选、3 个排除对照；当前应索引技术缺陷 0，站点仍 warning | 本次不需生产修改，11-13 不重做；11-19 与原 D+14 合并复核未决证据，出现真实新异常再修复；不批量放索引 |
 | n8n 到期维护 | 生产 next_review_date=11-15；正文冷却到 11-19 | 11-15 核对真正到期/变化的 Claim，必要来源或技术修复不受非必要改写冷却误限 |
 | n8n/Automation 发布观察 | D+3/D+7 已落账，业务仍等待重抓；下一节点 11-19/12-03 | 只在到期节点核查新增真实证据；不能把已做的 waiting_data 节点每日重复补做，也不能补造 Google 重抓 |
 | 新工具复核 | Activepieces 和本轮 Gumloop 目标 nextReviewDate=11-19 | 同一既有 daily owner 接续；普通 monitor 没有索引 release，不启动分发后 D+ |
