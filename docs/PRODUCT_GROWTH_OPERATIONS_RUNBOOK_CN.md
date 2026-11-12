@@ -46,6 +46,17 @@ Coverage 由日常 owner 在 11-19 有界复核原 10 个未决规范目标，�
 
 **公开与索引分开**：普通 monitor 公开不以 market validation、GSC 查询行或索引批准为前置条件。market validation、索引/sitemap、Task/Fit/推荐关系、合并/删除/归档仍分别走原门禁；本授权不扩大这些范围。monitorPublishedOn 与 nextReviewDate 单独记录，没有真实索引 release 不启动分发后 D+，不伪造 observationComplete 或增长结果。
 
+### 对比与有条件推荐到线上验收（11-12 已同步日常默认流程）
+
+用户已要求将[本轮 Activepieces → Make/Gumloop 的实际交付](./AUTOMATION_CONDITIONAL_COMPARISON_2026-11-12_CN.md)同步到日常任务。`ai-best-tool-cluster` 已通过定时任务接口原位更新并完整回读 PASS，仍 ACTIVE、每日 17:00、原目标聊天；观察和周报未变，未新建任务。私有回读记录为 `.local/gsc/operations/daily-comparison-workflow-automation-update-2026-11-12.json`。配置通过不等于未来自动业务执行已完成。
+
+1. **选差分和去重**：先读 delivery、当前生产验收与任务锁，按主页面、目标、关系类型、内容/证据变化和复核节点接续真实阶段。一个主交付、最多两个支持 Tool；既有 Activepieces 两条关系已完成，不重做收录、公开或同版比较，到 11-19 与相关工具维护合并复核。只有新决策缺口、事实变化、到期或真实异常才重开，不能靠重复已完成项制造进展。等待 Google 收录或单项 HOLD 不阻断其他合格对比、推荐与工具公开。
+2. **内容与资格**：复用现有页面/矩阵和唯一意图，说明适合/不适合、限制、双向取舍、官方来源及未实测项。普通编辑推荐沿 `lib/config/reviewedToolRelationships.ts` 与既有资格服务；当前主页面和目标须合格 published、事实新鲜，monitor/noindex 可作站内去向，过期或被排除项继续隐藏。关系带 reviewedAt、reviewDueAt 和下一复核日；到期实际核查证据后才续期，不只顺延日期。不把共有能力写成独有，不承诺实测优胜，不新增算法或推荐框架。
+3. **审核并继续发布**：完整差分和当前状态就绪后，一位真实独立 QA 绑定精确文件/对象/证据哈希；复用同一 QA，返修回原任务，不沿用样板签署。通过且授权齐备即同轮继续发布，不能止于研究、草稿、ready、QA 或 Git 提交。纯编辑配置/页面内容沿普通 Git 提交、推送及现有部署确认，不重新调用 Tool enqueue/import/publication，也不把 Research relation RPC 当普通推荐发布器；确需数据写入才走该对象既有受控契约，Task/Fit 和索引权限不扩大。
+4. **一次线上验收与落账**：检查实际受影响语言页面的内容、完整条件理由、本地化链接和目标锚点，以及原 canonical/robots/sitemap 边界；不只看 200。以当前消费者 DOM 为准，`PublicToolDecision` 的 Compare next 使用原生链接，不要求旧 article 卡片。页面事实日期与配置中的关系日期分别验证；TW 现有英文回退如实记。目标证据未变可复用有效同日 PASS、原时间及 HTML 指纹。验收器假设错误保留初始失败并对同一证据离线更正，真实生产失败只修具体边界；不删必要断言、不重复发布。只有实际发布且验收通过才标 production_verified，私有保存完整证据，delivery 写清 URL、提交、真实写入数、限制、nextReviewDate 和原日常 owner；真实阻塞精确落账并继续其他合格项。
+
+本流程沿下述最小校验预算；纯内容/配置只核对来源、结构、资格、日期和格式，不跑本地 build、TypeScript 或全量测试。不为调度开发新功能，不因 Google 等待停工，也不免除现有 QA、关系或索引门禁。
+
 **最小校验预算**：纯候选、内容、证据或配图只查来源、结构和格式，不跑 TypeScript、全量测试或本地 build；受控数据库写做必要前像、真实回滚和回查。只有实际运行时代码改动才做直接相关测试及增量 TypeScript；影响渲染、路由、构建或发布路径才做一次最终 build。每批部署后一次定向线上验收，未变化的 PASS/成功采样复用；真实新异常才重开对应检查。不重做全库内容审查或重复 GSC 采集，不为自动化另开发功能、框架或算法。
 
 一个主页面、最多两个支持 Tool，只审到期、变化或将被引用的关键 Claim。只有状态未知才运行 bounded freshness 审计，不因周五重审全库或重复 quality inventory。排序沿用真实搜索机会、Cluster 缺口、BOFU 意图、准备度、维护成本，confidence 不计增长。新增输入核对唯一 ID、规范化官网、alias、候选与 Task Fit 意图，低置信不自动合并。月度 autoMerged 抽查维持原规则，无样本 N/A。

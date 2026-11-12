@@ -34,3 +34,7 @@
 校验限于来源、两条关系的结构/日期/方向、当前目标资格、到期边界和格式；仅编辑配置，无运行时逻辑或组件变化，未跑本地 build、TypeScript 或全量测试。Git 提交钩子执行了该配置文件原有格式/静态检查；线上只做上述一次针对性采样，不重复提交 Tool 数据。
 
 原始生产状态、证据指纹、独立 QA 与验收保留 `.local/gsc/operations/automation-conditional-comparison-*`，公开只保存本汇总。站点搜索健康继续 warning，11-19 Coverage 与原 D+14 安排不变。
+
+## 日常任务接续
+
+11-12 用户随后授权将本次流程同步到日常任务，已通过定时任务接口原位更新 `ai-best-tool-cluster` 并完整回读 PASS，保留 ACTIVE、每日 17:00 和原目标聊天。后续合格对比/有条件推荐从真实差分、独立 QA、现有发布路径推进到部署及线上验收，不止步于草稿或 QA；普通内容配置不重走 Tool 收录/公开。已完成项按内容/证据变化和复核节点去重，本次两条关系到 11-19 再实际复核；Google 等待不暂停其他合格交付。原最小校验和各项门禁保持，不新增任务、功能或测试。详细流程见[执行手册](./PRODUCT_GROWTH_OPERATIONS_RUNBOOK_CN.md)，回读证据为 `.local/gsc/operations/daily-comparison-workflow-automation-update-2026-11-12.json`；本次只确认调度配置同步，不提前记未来自动执行成功。
