@@ -1,6 +1,6 @@
 # 产品增长自动运营执行手册
 
-更新：2026-11-12。上位路线：[产品增长路线](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)。本手册覆盖旧复盘中的全局等待解释。
+更新：2026-11-13。上位路线：[产品增长路线](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)。本手册覆盖旧复盘中的全局等待解释。
 
 到期观察与日常交付并行：前者负责市场反馈，后者消除当前 Cluster 的真实缺口。单个页面的冷却、GSC 缺行、某个工具索引 HOLD 都不能暂停其他已授权且可独立完成的证据复核、身份查重、对比和有条件推荐。日历决定检查时间，不强制发布。当前唯一 Cluster 是 Automation，处于 R4 repair_monitor；Make 的**索引分发**仍等待 R4 分发决策和至少 14 天有效反馈，站内支持工作不因此停止。
 
@@ -91,3 +91,7 @@ Lindy 尚无**索引分发** release 日期，不启动分发后 D+；公开 mon
 分别记录：代码检查、手动首轮、任务创建、ACTIVE 回读、首次调度运行、业务结果。ACTIVE 只证明配置，首次自动运行尚未发生时写待首次调度验收。
 
 任务 ID：发布后观察 ai-best-tool、增长周报 ai-best-tool-2、日常推进与周复盘 ai-best-tool-cluster；三项 ACTIVE heartbeat 已通过工具迁至当前运营聊天 01a1be02-13bf-7ba3-a261-3b94c7fa980c，并回读确认，不另建重复任务。11-12 用户已授权把 Activepieces 跑通的完整链同步到原每日 17:00 任务；该任务提示已更新为“收录→三语言页面→独立 QA→公开→线上验收→落账”，观察与周报仍保持原来只读范围。新提示的首次调度执行尚待真实运行验收，ACTIVE/手动 PASS 不代表自动业务交付已成功。当前验收见[11-12 记录](./PRODUCT_GROWTH_OPERATIONS_ACCEPTANCE_2026-11-12_CN.md)。本机及桌面应用须保持运行（[官方说明](https://learn.chatgpt.com/docs/automations)）。
+
+### 2026-11-13 实际调度验收
+
+上述 11-12 的“新提示首次调度待验收”状态已由本次真实 heartbeat 更新：`ai-best-tool-cluster` 于 `2026-11-13T09:21:13.781Z` 执行，新增 Zapier 一个 Tool 及 EN/CN/TW 页面，经同一独立 QA、通用公开、一次三语言线上采样和验收更正附录 PASS 后落账 `production_verified`，保持 monitor/noindex、nextReviewDate=11-20。来源预期错误的初始 FAIL 原样保留，只在相同 HTML 上按已审 draft 与真实消费者契约更正，未重复采样或发布。见[实际交付记录](./DAILY_ZAPIER_DELIVERY_2026-11-13_CN.md)和 delivery `zapier-scheduled-new-tool`。这证明本次调度的新工具闭环，不代表所有未来运行或搜索增长；原日常 owner 按清单接续，未创建新任务。

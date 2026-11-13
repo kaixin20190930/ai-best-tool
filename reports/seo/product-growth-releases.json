@@ -35,10 +35,34 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-12",
+    "updatedOn": "2026-11-13",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
+      {
+        "id": "zapier-scheduled-new-tool",
+        "status": "production_verified",
+        "commit": "d2269383538e71a2e29aa6f57461d96b1d472f05",
+        "completedOn": "2026-11-13",
+        "monitorPublishedOn": "2026-11-13",
+        "releasedOn": null,
+        "nextReviewDate": "2026-11-20",
+        "toolId": "342075a5-bc38-42e4-b26e-6c01efc318b9",
+        "candidateId": "3f1b8b94-026e-4ed7-b821-ca2311176a34",
+        "artifact": "docs/DAILY_ZAPIER_DELIVERY_2026-11-13_CN.md",
+        "trigger": {
+          "kind": "scheduled_heartbeat",
+          "automationId": "ai-best-tool-cluster",
+          "triggeredAt": "2026-11-13T09:21:13.781Z"
+        },
+        "productionWrites": 5,
+        "productionUrls": [
+          "https://aibesttool.com/ai/zapier",
+          "https://aibesttool.com/cn/ai/zapier",
+          "https://aibesttool.com/tw/ai/zapier"
+        ],
+        "nextAction": "Actual scheduled new-tool delivery completed: bounded current identity/alias/candidate dedupe, four official sources and real EN/CN/TW content, original editorial SVG deployed d2269383, generic enqueue1/draft-import3 with actual rollback/postchecks, one exact-object independent QA, fresh Tool preflight/real rollback/publication1/postcheck0/idempotent replay0. One actual three-language sampling; preserve initial verifier FAIL from incorrect primary-source assumption, same-HTML offline correction plus same independent QA appendix PASS; no repeated sampling or publication. Final acceptance PASS title/summary/six limits/media200+hash+illustration label+alt/primary official source/destination/selfcanonical/noindex/sitemap exclusion, protected content/candidate and report-bound audit unchanged. No prior Activepieces/Gumloop intake or comparison repeated, no runtime/localbuild/tsc/fulltests/new framework/automation/GSC fetch. Review actual Classic/Next Gen/Agents billing and Dec1 transition evidence Nov20 under existing daily owner; no date-only renewal. Market validation empty, no Task/Fit/relation/index writes or release/D+clock; site warning/Coverage original conclusion unchanged. This verifies this actual scheduled new-tool delivery, not future runs or growth; weekly review reuses today finalNov10 snapshot."
+      },
       {
         "id": "pipedream-freshness-scheduled",
         "status": "production_verified",
