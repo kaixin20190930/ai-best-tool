@@ -28,6 +28,30 @@ function relationship(
 // This is an editorial allowlist, not an algorithmic recommendation feed.
 // Additions require a directional rationale and a scheduled review.
 export const REVIEWED_TOOL_RELATIONSHIPS: Record<string, ReviewedToolRelationshipDefinition[]> = {
+  // Decision paths for the published Zapier page; no new Tool or index release.
+  // Sources and scope: ZAPIER_CONDITIONAL_COMPARISON_2026-11-14_CN.md.
+  zapier: [
+    {
+      relatedToolSlug: 'make',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-14',
+      reviewDueAt: '2026-11-19',
+      rationale: {
+        cn: '更偏好在 scenario 模块画布编排跨应用流程、查看执行历史时比较 Make。Zapier 也有分支、AI 和运行记录，先确认所用 Classic 或 Next Gen 版本，再用同一流程核对连接器动作、失败处理和实际用量；未实测成本或可靠性。',
+        en: 'Compare Make if you prefer a scenario module canvas for cross-app workflows and execution history. Zapier also offers branching, AI, and run records; confirm your Classic or Next Gen version, then pilot the same workflow to check connector actions, failure handling, and actual usage. Cost and reliability have not been tested.',
+      },
+    },
+    {
+      relatedToolSlug: 'activepieces',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-14',
+      reviewDueAt: '2026-11-19',
+      rationale: {
+        cn: '需要在自己的基础设施运行工作流时比较 Activepieces，先核对版本、许可及部署、升级和备份责任；不愿承担这些运维工作时继续评估托管的 Zapier。两者都有 AI 能力，不能把自托管核心当作全部付费功能免费；用同一任务核对连接器权限、人工审核与实际费用，未实测运维或可靠性。',
+        en: 'Compare Activepieces when workflows must run on your own infrastructure, checking the edition, license, and responsibility for deployment, upgrades, and backups. Evaluate managed Zapier if you do not want that operations work. Both offer AI; a self-hosted core does not make every paid feature free. Pilot the same task to check connector permissions, human review, and actual charges; operations and reliability have not been tested.',
+      },
+    },
+  ],
   // Directional comparisons for the existing public Activepieces page; no index release.
   // Sources and review scope: AUTOMATION_CONDITIONAL_COMPARISON_2026-11-12_CN.md.
   activepieces: [
