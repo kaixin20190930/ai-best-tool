@@ -35,10 +35,30 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-13",
+    "updatedOn": "2026-11-14",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
+      {
+        "id": "zapier-conditional-comparison-scheduled",
+        "status": "deployment_blocked",
+        "commit": "7383792958b78659af6badb685b871923d258989",
+        "preparedOn": "2026-11-14",
+        "lastAttemptAt": "2026-11-14T10:18:48.781Z",
+        "nextReviewDate": "2026-11-19",
+        "toolId": "342075a5-bc38-42e4-b26e-6c01efc318b9",
+        "relatedToolSlugs": ["make", "activepieces"],
+        "artifact": "docs/ZAPIER_CONDITIONAL_COMPARISON_2026-11-14_CN.md",
+        "trigger": {
+          "kind": "scheduled_heartbeat",
+          "automationId": "ai-best-tool-cluster",
+          "triggeredAt": "2026-11-14T08:58:22.965Z"
+        },
+        "productionWrites": 0,
+        "configSha256": "3a5727297236f4e684dccaac739c03c0d39f8b780dbc570dcc81c93f3bce54a4",
+        "blockingReason": "Exact two-link config independently QA_PASS and pushed, but no deployment status returned for content73837929 by10:17Z; read-only IAB console requires login. One actual EN HTML10:18:48Z still has no reviewed comparison links. Deployment success and localized acceptance are unverified; underlying deployment cause unknown.",
+        "nextAction": "Existing daily owner resumes this exact pending Tool/config first; check authenticated Vercel Git deployment for pushed73837929 or a later commit carrying exact3a572729 config. No repeated Tool enqueue/import/publication, no empty push or deployment-config changes without evidence. Once actual new production deployment is confirmed, perform one bounded EN/CN/TW link/full-rationale/content/target-anchor/index-boundary acceptance and only then production_verified. Preserve initial missing-link probe and original time/hash; do not resample all before deployment changes. Reuse sole QA/exact unchanged valid config; real changes/expiry return same QA. Relationship expiryNov19 requires actual evidence review under original owner, Zapier whole-toolNov20 remains. No GSC/build/tsc/fulltests/DB/Tool/index/TaskFit/relation writes/new agent/automation; Coverage/D14/n8n due work and prior completed intake/pairs remain unchanged. This actual scheduled comparison attempt is not completed delivery or growth."
+      },
       {
         "id": "zapier-scheduled-new-tool",
         "status": "production_verified",
