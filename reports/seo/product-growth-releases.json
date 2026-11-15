@@ -35,19 +35,44 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-14",
+    "updatedOn": "2026-11-15",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
       {
+        "id": "n8n-freshness-scheduled",
+        "status": "production_verified",
+        "dueOn": "2026-11-15",
+        "completedOn": "2026-11-15",
+        "nextReviewDate": "2026-11-29",
+        "toolId": "23bb3601-a5ac-42c3-bff3-64b06a063959",
+        "artifact": "docs/N8N_FRESHNESS_SCHEDULED_2026-11-15_CN.md",
+        "trigger": {
+          "kind": "scheduled_heartbeat",
+          "automationId": "ai-best-tool-cluster",
+          "triggeredAt": "2026-11-15T12:20:13.694Z"
+        },
+        "publicationMethod": "existing_tools_freshness_change_set",
+        "productionWrites": 1,
+        "productionUrls": [
+          "https://aibesttool.com/ai/n8n",
+          "https://aibesttool.com/cn/ai/n8n",
+          "https://aibesttool.com/tw/ai/n8n"
+        ],
+        "nextAction": "Due actual official four-source maintenance and same independent exact-manifest QA completed. Public annual prices unchanged but actual checked date renewed; clarified internal-author client service/account connections versus outside-customer workflow configuration commercial license boundary and replaced stale detail license source. Only detail.en/cn/zh, maintenanceReview and next_review_date changed. Generic fresh preflight0/actual rollback0/commit1/postcheck0, exact protected postimage PASS. One EN/CN/TW actual sample passed realtitle/summary/full dated pricing and license detail/four official links/destination/no404/selfcanonical. Original EN/CN index and TW noindex/English detail fallback remain; same-day saved sitemap154 reused with original12:24Z time/hash, only n8n EN/CN included. No runtime/build/tsc/fulltests/GSC/Toolrepublish/index/TaskFit/relation changes, no new release/D+clock or automation. Historic staticNov1 and market/editorial dates protected, no account/performance/license permission test. Existing daily owner reviews scoped actual evidence Nov29 or earlier real change; all Nov19 Coverage/D14/tools/relations and ZapierNov20 nodes retained. Maintenance is not new Tool intake or measured growth."
+      },
+      {
         "id": "zapier-conditional-comparison-scheduled",
-        "status": "deployment_blocked",
+        "status": "production_verified",
         "commit": "7383792958b78659af6badb685b871923d258989",
         "preparedOn": "2026-11-14",
-        "lastAttemptAt": "2026-11-14T10:18:48.781Z",
+        "lastAttemptAt": "2026-11-15T12:24:00.732Z",
         "nextReviewDate": "2026-11-19",
         "toolId": "342075a5-bc38-42e4-b26e-6c01efc318b9",
-        "relatedToolSlugs": ["make", "activepieces"],
+        "relatedToolSlugs": [
+          "make",
+          "activepieces"
+        ],
         "artifact": "docs/ZAPIER_CONDITIONAL_COMPARISON_2026-11-14_CN.md",
         "trigger": {
           "kind": "scheduled_heartbeat",
@@ -56,8 +81,15 @@
         },
         "productionWrites": 0,
         "configSha256": "3a5727297236f4e684dccaac739c03c0d39f8b780dbc570dcc81c93f3bce54a4",
-        "blockingReason": "Exact two-link config independently QA_PASS and pushed, but no deployment status returned for content73837929 by10:17Z; read-only IAB console requires login. One actual EN HTML10:18:48Z still has no reviewed comparison links. Deployment success and localized acceptance are unverified; underlying deployment cause unknown.",
-        "nextAction": "Existing daily owner resumes this exact pending Tool/config first; check authenticated Vercel Git deployment for pushed73837929 or a later commit carrying exact3a572729 config. No repeated Tool enqueue/import/publication, no empty push or deployment-config changes without evidence. Once actual new production deployment is confirmed, perform one bounded EN/CN/TW link/full-rationale/content/target-anchor/index-boundary acceptance and only then production_verified. Preserve initial missing-link probe and original time/hash; do not resample all before deployment changes. Reuse sole QA/exact unchanged valid config; real changes/expiry return same QA. Relationship expiryNov19 requires actual evidence review under original owner, Zapier whole-toolNov20 remains. No GSC/build/tsc/fulltests/DB/Tool/index/TaskFit/relation writes/new agent/automation; Coverage/D14/n8n due work and prior completed intake/pairs remain unchanged. This actual scheduled comparison attempt is not completed delivery or growth."
+        "nextAction": "Completed real scheduled continuation Nov15 after a later carrying commit1cc1f45f reached Vercel success. Exact previously approved config3a572729 and sole Nov14 QA reused; no source/config changes, repeated publication, deployment manipulation or new QA. One actual three-language Zapier sample verified six localized native links/full conditional reasons and original fact dateNov13; six actual target locale pages passed title/content/decision anchors/canonical/noindex, sitemap154/exclusion unchanged. Initial Nov14 missing-link probe and unconfirmed deployment records preserved with original time/hash; underlying delay cause remains unknown. DB/Tool/index/TaskFit/relation writes0, GSC0, no local build/tsc/fulltests/new agent/automation. Existing daily owner actually reviews these two reasons Nov19 with Activepieces maintenance; expiration rule remains, no date-only renewal. Zapier whole-tool Nov20 unchanged. TW reasons use original English fallback; this delivery is not a new Tool or measured growth.",
+        "previousBlockingReason": "Exact two-link config independently QA_PASS and pushed, but no deployment status returned for content73837929 by10:17Z; read-only IAB console requires login. One actual EN HTML10:18:48Z still has no reviewed comparison links. Deployment success and localized acceptance are unverified; underlying deployment cause unknown.",
+        "completedOn": "2026-11-15",
+        "deploymentCommit": "1cc1f45f3125d03174d03a824b6ab4593367b968",
+        "productionUrls": [
+          "https://aibesttool.com/ai/zapier",
+          "https://aibesttool.com/cn/ai/zapier",
+          "https://aibesttool.com/tw/ai/zapier"
+        ]
       },
       {
         "id": "zapier-scheduled-new-tool",

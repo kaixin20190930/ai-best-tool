@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-11-13
+更新时间：2026-11-15
+
+2026-11-15 **日常接续与到期维护完成**：昨日 Zapier→Make/Activepieces 两条有条件推荐在后续承载同一已审配置的部署成功后，一次三语言6入口及6目标页验收通过，delivery现为production_verified；原缺链接证据保留，没有重收录或重发Tool。今天到期n8n四官方源实际复核、许可边界及正文链接澄清经原独立QA后，通用preflight/真实rollback/commit/postcheck为0/0/1/0，三语言实际内容和原索引边界通过，nextReviewDate=11-29。静态历史证据日期不改，TW保留原fallback，复用同日sitemap证据，无重复GSC、本地build/tsc/全测或新定时任务。11-19原Coverage/D+14/相关工具与推荐、11-20 Zapier复核仍由原owner承接；不以交付数量计增长。见[n8n实际维护](./N8N_FRESHNESS_SCHEDULED_2026-11-15_CN.md)和[Zapier接续验收](./ZAPIER_CONDITIONAL_COMPARISON_2026-11-14_CN.md)。
 
 2026-11-13 **日常定时新工具交付与周复盘完成**：新增 Zapier 一个真实 Tool 和 EN/CN/TW 三语言页面，四个官方来源、身份/alias/候选去重、真实独立 QA、原创素材部署、通用候选/草稿/公开流程及一次线上验收均通过；最终 published+monitor/noindex，nextReviewDate=11-20。内部入队1、导入3、正式公开1，postchecks及一次幂等重放0写，不把5次写入算5个工具；未重做已完成工具/四条比较、Coverage或GSC。初始来源断言误配保留FAIL，同份HTML离线更正与同一QA附录通过，无重复采样/发布；素材提交 `d2269383` 已部署，无运行时代码或本地build/tsc/全测。11-15 n8n维护、11-19 D+14/Coverage/工具关系、11-20 Zapier计费转换节点交原owner；索引HOLD仍不阻止合格站内交付，页面/PASS数量不算增长。详见[Zapier完整交付](./DAILY_ZAPIER_DELIVERY_2026-11-13_CN.md)与[本周Cluster复盘](./PRODUCT_GROWTH_CLUSTER_REVIEW_2026-11-13_CN.md)。
 
