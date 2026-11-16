@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-11-15
+更新时间：2026-11-16
+
+2026-11-16 **日常新增Bardeen已公开验收**：实际调度完成一个新Tool和EN/CN/TW页面，身份/候选去重、四官方源、三语言完整决策内容、原创示意图部署、原唯一独立QA及通用收录公开流程通过；持久写入5=入队1/导入3/公开1，回滚与回查0写，最终published+monitor/noindex、nextReviewDate=11-23。一次三语言真实内容、六条限制、主官方来源、素材SHA与标识、canonical/noindex/sitemap排除验收通过；免费额度刷新及无人值守运行保持未验证。未重复旧工具/比较或GSC，无运行时代码、本地build/tsc/全测、新任务或索引放行。原11-19/20/26/29节点不变，页面数量不算增长。见[Bardeen完整交付](./DAILY_BARDEEN_DELIVERY_2026-11-16_CN.md)。
 
 2026-11-15 **日常接续与到期维护完成**：昨日 Zapier→Make/Activepieces 两条有条件推荐在后续承载同一已审配置的部署成功后，一次三语言6入口及6目标页验收通过，delivery现为production_verified；原缺链接证据保留，没有重收录或重发Tool。今天到期n8n四官方源实际复核、许可边界及正文链接澄清经原独立QA后，通用preflight/真实rollback/commit/postcheck为0/0/1/0，三语言实际内容和原索引边界通过，nextReviewDate=11-29。静态历史证据日期不改，TW保留原fallback，复用同日sitemap证据，无重复GSC、本地build/tsc/全测或新定时任务。11-19原Coverage/D+14/相关工具与推荐、11-20 Zapier复核仍由原owner承接；不以交付数量计增长。见[n8n实际维护](./N8N_FRESHNESS_SCHEDULED_2026-11-15_CN.md)和[Zapier接续验收](./ZAPIER_CONDITIONAL_COMPARISON_2026-11-14_CN.md)。
 
