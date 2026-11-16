@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+<title id="title">From website data to reviewed lead records</title>
+<desc id="desc">Original editorial diagram of collecting source data, reviewing AI qualification and exporting records. No vendor marks or product interface.</desc>
+<rect width="1200" height="675" rx="32" fill="#172b2a"/>
+<text x="70" y="98" fill="#effbf6" font-family="sans-serif" font-size="36" font-weight="700">Review the lead, then use the result.</text>
+<text x="70" y="145" fill="#b9d8cc" font-family="sans-serif" font-size="22">Source access, AI judgement and usage limits are separate checks.</text>
+<path d="M310 330H440M730 330H860" stroke="#94ceaf" stroke-width="6" fill="none"/>
+<rect x="70" y="245" width="240" height="170" rx="22" fill="#2e4a40"/>
+<rect x="440" y="245" width="290" height="170" rx="22" fill="#2e4a40"/>
+<rect x="860" y="245" width="270" height="170" rx="22" fill="#2e4a40"/>
+<text x="103" y="340" fill="#effbf6" font-family="sans-serif" font-size="28">Website data</text>
+<text x="510" y="340" fill="#effbf6" font-family="sans-serif" font-size="28">AI review</text>
+<text x="950" y="340" fill="#effbf6" font-family="sans-serif" font-size="28">Export</text>
+<text x="70" y="525" fill="#effbf6" font-family="sans-serif" font-size="26">A qualified lead still needs a human check.</text>
+<text x="70" y="575" fill="#b9d8cc" font-family="sans-serif" font-size="22">Check data rights, row usage and the chosen account.</text>
+<text x="70" y="628" fill="#a8c7bb" font-family="sans-serif" font-size="16">AI Best Tool original editorial illustration · Not a product screenshot</text>
+</svg>
