@@ -28,6 +28,30 @@ function relationship(
 // This is an editorial allowlist, not an algorithmic recommendation feed.
 // Additions require a directional rationale and a scheduled review.
 export const REVIEWED_TOOL_RELATIONSHIPS: Record<string, ReviewedToolRelationshipDefinition[]> = {
+  // Decision paths for the published Bardeen page; no new Tool or index release.
+  // Sources and scope: BARDEEN_CONDITIONAL_COMPARISON_2026-11-17_CN.md.
+  bardeen: [
+    {
+      relatedToolSlug: 'make',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-17',
+      reviewDueAt: '2026-11-19',
+      rationale: {
+        cn: '线索研究后还需在可视化 scenario 中编排跨应用步骤、追查执行历史时比较 Make；重点是网页线索采集、AI 筛选和信息补全导出时继续评估 Bardeen。两者都有 AI，先用同一任务核对连接器动作、数据访问权限、失败处理和实际用量；未实测成本、可靠性或关闭浏览器后的执行。',
+        en: 'Compare Make when lead research must continue through visual cross-app scenarios and execution history; evaluate Bardeen when web lead sourcing, AI qualification, and enriched exports are the focus. Both offer AI. Pilot the same task to check connector actions, data access, failure handling, and actual usage; cost, reliability, and execution with the browser closed have not been tested.',
+      },
+    },
+    {
+      relatedToolSlug: 'gumloop',
+      relationshipType: 'overlaps',
+      reviewedAt: '2026-11-17',
+      reviewDueAt: '2026-11-19',
+      rationale: {
+        cn: '研究及后续操作跨越多个应用、需要让 Agent 选择连接器工具并配置逐工具审批时比较 Gumloop；重点是网页线索采集、筛选和补全导出时继续评估 Bardeen。两者都有 AI 和 Agent 能力，先核对数据来源权限、连接账号、写入审批和实际用量；没有实测准确率或无人值守可靠性。',
+        en: 'Compare Gumloop when research and follow-up span apps and you need an agent to choose connector tools with per-tool approval settings; evaluate Bardeen for web lead sourcing, qualification, and enriched exports. Both offer AI and agent capabilities. Check source permissions, connected accounts, write approvals, and actual usage on the same task; accuracy and unattended reliability have not been tested.',
+      },
+    },
+  ],
   // Decision paths for the published Zapier page; no new Tool or index release.
   // Sources and scope: ZAPIER_CONDITIONAL_COMPARISON_2026-11-14_CN.md.
   zapier: [
