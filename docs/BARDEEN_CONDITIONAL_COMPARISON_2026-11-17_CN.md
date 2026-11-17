@@ -28,9 +28,17 @@ Bardeen 工具整体事实复核11-23、其他既有节点和Coverage/D+14计划
 
 ## 发布与验收
 
-当前状态：来源、结构、资格及日期检查通过，待独立 QA、现有 Git 部署和一次定向线上验收，尚不标 production_verified。
-发布后核对主页面EN/CN/TW的真实标题/摘要、原事实日期、完整条件理由和本地化原生链接，及两个目标三语言的真实内容/锚点；
-核对无流式not-found、self-canonical/noindex和sitemap排除。逐关系日期在配置与资格门禁中验证，不要求模板显示不存在的逐链接日期。
+状态：**独立 QA_PASS、实际部署及线上验收通过，delivery 已记 production_verified**。
+复用原唯一独立 QA `/root/operations_qa`，报告绑定本次配置、生产前像、来源核查及消费者指纹；没有沿用旧对象签署。
+内容提交 `bdb5e53f61b9caef9253bb69aab23e4c241efbb5` 已推送并确认 Vercel 部署成功。提交钩子仅运行该配置原有 eslint/prettier，提交后配置哈希仍与 QA 精确一致。
+
+`2026-11-17T09:18:01.014Z` 完成一次定向线上验收：Bardeen EN/CN/TW 三页均200，真实标题/摘要、原11-16事实日期、
+两条本地化原生链接及完整条件理由可见，共六个新增入口；Make、Gumloop六条语言目标页均有真实标题/摘要及 `#decision-card` 锚点。
+九页均无流式not-found、self-canonical/noindex正确，sitemap仍154条且三工具均排除。没有初始失败、重复采样或重复发布。
+所有九页为本轮实际采样；没有把历史PASS称作新采样。逐关系日期在配置与原资格门禁中核验，不声称模板显示逐链接日期。
+
+这完成本次真实调度的有条件推荐交付，不是新增Tool或新建三份页面代码，也不代表Google收录或增长。
+实际QA、部署与验收留在私有目录，公开只保留本汇总。11-19原日常owner需实际复核两条理由再续期，Bardeen整体11-23不变。
 
 本轮不调用候选、Tool公开或Research关系RPC，不写生产数据库、Task/Fit、索引或sitemap，不创建索引release/D+时钟。
 只进行来源/结构/资格/格式核对，纯编辑配置没有本地build、TypeScript或全量测试；复用今日只读观察，不重复GSC/Coverage。

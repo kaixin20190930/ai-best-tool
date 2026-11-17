@@ -35,10 +35,36 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-16",
+    "updatedOn": "2026-11-17",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
+      {
+        "id": "bardeen-conditional-comparison-scheduled",
+        "status": "production_verified",
+        "commit": "bdb5e53f61b9caef9253bb69aab23e4c241efbb5",
+        "completedOn": "2026-11-17",
+        "nextReviewDate": "2026-11-19",
+        "toolId": "9e5fb82e-b711-4403-8a6f-619982789c67",
+        "relatedToolSlugs": [
+          "make",
+          "gumloop"
+        ],
+        "artifact": "docs/BARDEEN_CONDITIONAL_COMPARISON_2026-11-17_CN.md",
+        "trigger": {
+          "kind": "scheduled_heartbeat",
+          "automationId": "ai-best-tool-cluster",
+          "triggeredAt": "2026-11-17T09:06:31.708Z"
+        },
+        "productionWrites": 0,
+        "productionUrls": [
+          "https://aibesttool.com/ai/bardeen",
+          "https://aibesttool.com/cn/ai/bardeen",
+          "https://aibesttool.com/tw/ai/bardeen"
+        ],
+        "configSha256": "b6d20b5af082145906c8ece1d08e8cfae61c3232d8b00e08a6d8a054edeb9e0a",
+        "nextAction": "Completed actual scheduled conditional comparison on existing Bardeen page: two new directional overlaps to Make/Gumloop. Eight known maintenance dates future, bounded unfinished Automation queue empty and existing delivery complete; prioritize concrete user decision gap, not a full-market rejection of new tools. Three exact saved Tools published+monitor/quality100/not rejected. Four current official sources actually read and sole independent exact-config QA_PASS; all old definitions byte-for-byte unchanged, cooled n8n/main comparison untouched. Ordinary Git commit bdb5e53f reached Vercel success, one actual EN/CN/TW Bardeen sample verified six localized native links/full conditional reasons plus original fact date Nov16; six actual target locale pages passed title/summary/decision anchors/no404/selfcanonical/noindex, sitemap154/excluded unchanged. No failed or repeated sample, Tool intake/republish/DB/index/TaskFit/relation-RPC writes0, GSC0, runtime/build/tsc/fulltests/new agent/automation0. Reasons are source-based editorial preference, both AI/agents not exclusive, no cost/accuracy/reliability/closed-browser guarantee. TW reasons use existing English fallback, not new translation; relation dates in config, not per-link labels. Existing daily owner actually reviews both reasons Nov19 with Gumloop/relationships, expiry preserved until fresh evidence; Bardeen whole-tool Nov23 and all original Coverage/D14/Nov20/26/29 nodes unchanged. No index release/D+ clock or measured growth."
+      },
       {
         "id": "bardeen-scheduled-new-tool",
         "status": "production_verified",
