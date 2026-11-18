@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-11-17
+更新时间：2026-11-18
+
+2026-11-18 **日常新增 Relevance AI 已公开验收**：实际调度完成一个新 Tool 及真实 EN/CN/TW 内容，六官方源、精确身份/候选去重、原同一独立 QA、原创素材部署和通用收录公开链通过。素材 `5eff13ab` 已部署，入队1/导入3/公开1，回滚/回查/幂等0写；一次三语言完整内容、六限制、费用、主来源/去向、媒体SHA/标识、canonical/noindex/sitemap排除验收PASS，最终published+monitor/noindex。付费权益、Free退役及双用量维度谨慎限定，不声称账号/执行/可靠性实测；私有回查错误slug已按真实ID更正，无生产缺陷或重复发布。nextReviewDate=11-25交原owner实际复核；11-19及20/23/26/29原节点保留。无重复Google采集、运行时代码、本地build/tsc/全测、新任务或索引/推荐扩权，不计增长。见[Relevance AI 完整交付](./DAILY_RELEVANCEAI_DELIVERY_2026-11-18_CN.md)。
 
 2026-11-17 **Bardeen有条件比较已部署验收**：实际日常任务补齐既有Bardeen→Make/Gumloop两条方向性去向，四官方源及原唯一独立QA通过，原有推荐和冷却正文不变。内容提交`bdb5e53f`部署成功，一次Bardeen三语言六入口/完整理由与六目标页验收PASS，原事实日11-16、monitor/noindex及sitemap排除保持；TW理由沿原英文回退。无新增Tool、生产数据库/索引/TaskFit写入或GSC，无运行时代码、本地build/tsc/全量测试、新任务。两条关系11-19与原Gumloop/推荐节点实际复核，Bardeen整体11-23和其他节点不变，交付数量不算增长。见[Bardeen比较交付](./BARDEEN_CONDITIONAL_COMPARISON_2026-11-17_CN.md)。
 

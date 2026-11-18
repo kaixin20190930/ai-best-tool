@@ -35,10 +35,34 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-17",
+    "updatedOn": "2026-11-18",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
+      {
+        "id": "relevanceai-scheduled-new-tool",
+        "status": "production_verified",
+        "commit": "5eff13ab560337feb9468a770dfaadbca3f64fd7",
+        "completedOn": "2026-11-18",
+        "monitorPublishedOn": "2026-11-18",
+        "releasedOn": null,
+        "nextReviewDate": "2026-11-25",
+        "toolId": "30bbbf13-ee9c-48e8-b0bb-62455abb19b3",
+        "candidateId": "b67733c8-589b-4164-aafc-6f76b5511440",
+        "artifact": "docs/DAILY_RELEVANCEAI_DELIVERY_2026-11-18_CN.md",
+        "trigger": {
+          "kind": "scheduled_heartbeat",
+          "automationId": "ai-best-tool-cluster",
+          "triggeredAt": "2026-11-18T08:55:31.487Z"
+        },
+        "productionWrites": 5,
+        "productionUrls": [
+          "https://aibesttool.com/ai/relevance-ai",
+          "https://aibesttool.com/cn/ai/relevance-ai",
+          "https://aibesttool.com/tw/ai/relevance-ai"
+        ],
+        "nextAction": "Actual scheduled Relevance AI full new-tool delivery completed: eight known maintenance dates future, bounded unfinished Automation queue empty and exact current name/title/alias/domain/indexIdentity/candidate-normalized-URL dedupe clear. Six current complementary official sources, genuine EN/CN/TW and original neutral editorial SVG; paid-plan/Free-retirement, AI versus mandatory handoff, human review, Actions versus Vendor Credits and Enterprise scope limited without account/quote/performance/security claims. Generic enqueue1/import3 actual rollback/postchecks; same sole independent QA binds this actual draft and preimage, no old signature. Asset5eff13ab Vercel success/liveSHA; fresh tool preflight0/real rollback0/commit1/postcheck0/idempotent replay0. One actual three-language acceptance09:23Z PASS realtitle/summary/full detail/audiences/sixlimits/pricing/primary evidence source/destination/media200+SHA+illustrationlabel+alt/no404/selfcanonical/noindex/sitemap exclusion154 unchanged; protected Tool/candidate and report-bound audit intact. Private initial draft-readback wrong slug assumption preserved/corrected by exact Tool ID, no production defect or repeat intake/write/sample. GSC/Inspection/Coverage collection0, no runtime/localbuild/tsc/fulltests/new agent/framework/automation or index/market/TaskFit/relation writes, no index release/D+clock or measured growth. Existing daily owner actually reviews Nov25 facts and entitlements; original Nov19Coverage/D14/tools/relationships, Nov20/23/26/29 retained."
+      },
       {
         "id": "bardeen-conditional-comparison-scheduled",
         "status": "production_verified",
