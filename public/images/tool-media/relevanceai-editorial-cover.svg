@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Relevance AI workflow selection</title>
+  <desc id="desc">Original neutral editorial diagram: specialist agents hand off work with a review boundary. Not a product screenshot.</desc>
+  <rect width="1200" height="630" rx="32" fill="#102830"/>
+  <text x="70" y="100" fill="#f0fbfa" font-family="Arial,sans-serif" font-size="42" font-weight="700">Relevance AI</text>
+  <text x="70" y="150" fill="#a9d7cf" font-family="Arial,sans-serif" font-size="24">Specialist agents, explicit handoffs</text>
+  <path d="M340 310H455M745 310H860" fill="none" stroke="#72c9b8" stroke-width="6"/>
+  <path d="m440 298 15 12-15 12m405-24 15 12-15 12" fill="none" stroke="#72c9b8" stroke-width="5"/>
+  <g fill="#20464d" stroke="#72c9b8" stroke-width="2">
+    <rect x="70" y="235" width="270" height="150" rx="18"/>
+    <rect x="465" y="235" width="270" height="150" rx="18"/>
+    <rect x="860" y="235" width="270" height="150" rx="18"/>
+  </g>
+  <g fill="#f0fbfa" font-family="Arial,sans-serif" font-size="28" text-anchor="middle">
+    <text x="205" y="305">Research</text><text x="600" y="305">Draft</text><text x="995" y="305">Review</text>
+  </g>
+  <g fill="#b4d8d1" font-family="Arial,sans-serif" font-size="19" text-anchor="middle">
+    <text x="205" y="345">Sources and permissions</text><text x="600" y="345">Tools and usage</text><text x="995" y="345">Human approval</text>
+  </g>
+  <text x="70" y="475" fill="#b4d8d1" font-family="Arial,sans-serif" font-size="23">Choose routing, verify costs, review consequential actions.</text>
+  <text x="70" y="565" fill="#a9d7cf" font-family="Arial,sans-serif" font-size="20">Editorial illustration, not a product screenshot</text>
+</svg>
