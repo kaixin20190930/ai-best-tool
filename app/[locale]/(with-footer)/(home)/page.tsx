@@ -4,6 +4,7 @@ import { ArrowRight, BadgeCheck, Clock3, Compass, FolderOpen, Search as SearchIc
 import { getTranslations } from 'next-intl/server';
 
 import { FEATURED_GUIDE_HREFS, GUIDE_PAGES } from '@/lib/content/guides';
+import { getTopicDecisionProfile } from '@/lib/content/topicDecisionProfiles';
 import { topListTopics } from '@/lib/data/topLists';
 import { BASE_URL } from '@/lib/env';
 import { SEO_CONFIG } from '@/lib/seo/constants';
@@ -159,7 +160,17 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ] as const;
   const priorityTopListTopics = priorityTopListKeys
     .map((key) => topListTopics.find((topic) => topic.key === key))
-    .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic));
+    .filter((topic): topic is (typeof topListTopics)[number] => Boolean(topic))
+    .map((topic) => {
+      if (!isChinese) return topic;
+      const profile = getTopicDecisionProfile(topic.key);
+      const guide = GUIDE_PAGES.find((page) => page.href === topic.guideHref);
+      return {
+        ...topic,
+        title: profile?.title.cn || guide?.title.cn || topic.title,
+        summary: profile?.description.cn || guide?.desc.cn || topic.summary,
+      };
+    });
 
   // Generate Organization schema for homepage
   const organizationSchema = generateOrganizationSchema({
@@ -351,7 +362,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
                     <div className='flex items-start justify-between gap-3'>
                       <div>
                         <h3 className='font-semibold text-slate-950'>
-                          {getCategoryLocalizedField(category.name, locale)}
+                          {getCategoryLocalizedField(category.name, locale, isChinese ? 'zh' : 'en')}
                         </h3>
                         <p className='mt-1 text-sm text-slate-500'>
                           {category.toolCount} {isChinese ? '个工具' : 'tools'}

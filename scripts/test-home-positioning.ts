@@ -1,6 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { GUIDE_PAGES } from '../lib/content/guides';
+import { getTopicDecisionProfile } from '../lib/content/topicDecisionProfiles';
+import { topListTopics } from '../lib/data/topLists';
+
 const homePath = path.join(process.cwd(), 'app', '[locale]', '(with-footer)', '(home)', 'page.tsx');
 const source = fs.readFileSync(homePath, 'utf8');
 const faqPath = path.join(process.cwd(), 'components', 'Faq.tsx');
@@ -62,6 +66,26 @@ if (latestInventoryIndex === -1 || source.includes("href='/submit'") || source.i
 }
 if (!footerSource.includes("'/developer/listing'")) throw new Error('Owner entry must remain available in the footer.');
 
+for (const binding of [
+  'if (!isChinese) return topic;',
+  'title: profile?.title.cn || guide?.title.cn || topic.title',
+  'summary: profile?.description.cn || guide?.desc.cn || topic.summary',
+  "getCategoryLocalizedField(category.name, locale, isChinese ? 'zh' : 'en')",
+]) {
+  if (!source.includes(binding)) throw new Error(`Homepage localization binding missing: ${binding}`);
+}
+for (const key of ['ai-coding-tools', 'free-ai-coding-tools', 'ai-agent-tools', 'ai-chatbot-tools'] as const) {
+  const topic = topListTopics.find((item) => item.key === key)!;
+  const profile = getTopicDecisionProfile(key);
+  const guide = GUIDE_PAGES.find((item) => item.href === topic.guideHref);
+  if (!/[\u4e00-\u9fff]/.test(profile?.title.cn || guide?.title.cn || '')) {
+    throw new Error(`Homepage task card has no Chinese title: ${key}`);
+  }
+  if (!/[\u4e00-\u9fff]/.test(profile?.description.cn || guide?.desc.cn || '')) {
+    throw new Error(`Homepage task card has no Chinese summary: ${key}`);
+  }
+}
+
 console.log(
-  '✅ Homepage positioning passed: decision-platform topic, evidence method, and commercial boundary are intact.',
+  '✅ Homepage positioning passed: decision-platform topic, evidence method, commercial boundary and four Chinese task-card sources are intact.',
 );
