@@ -77,26 +77,27 @@ export const REVIEWED_TOOL_RELATIONSHIPS: Record<string, ReviewedToolRelationshi
     },
   ],
   // Directional comparisons for the existing public Activepieces page; no index release.
-  // Sources and review scope: AUTOMATION_CONDITIONAL_COMPARISON_2026-11-12_CN.md.
+  // Original scope: AUTOMATION_CONDITIONAL_COMPARISON_2026-11-12_CN.md.
+  // Due review: AUTOMATION_DUE_REVIEW_2026-11-19_CN.md; shared AI/agent capabilities are not exclusive.
   activepieces: [
     {
       relatedToolSlug: 'make',
       relationshipType: 'overlaps',
-      reviewedAt: '2026-11-12',
-      reviewDueAt: '2026-11-19',
+      reviewedAt: '2026-11-19',
+      reviewDueAt: '2026-11-26',
       rationale: {
-        cn: '希望由平台托管跨应用流程、并查看 scenario 执行历史时比较 Make；必须自行托管时，先核对 Activepieces 的版本范围和运维责任。两者都有 AI 能力，用同一流程核对连接器、人工审核与实际费用；未实测成本或可靠性。',
-        en: 'Compare Make for managed cross-app scenarios and execution history. If self-hosting is required, check the Activepieces edition and operations ownership first. Both offer AI capabilities; pilot the same workflow to check connectors, human review, and actual charges. Cost and reliability have not been tested.',
+        cn: '偏好 Make 的托管 scenario 画布与运行级用量历史时比较 Make；必须自行托管时，先核对 Activepieces 的版本范围和运维责任。两者都有流程、AI/Agent 与执行记录，不能把这些当成独有优势。用同一流程核对连接器、人工审核、平台积分及模型费用；未实测成本或可靠性。',
+        en: 'Compare Make if you prefer its managed scenario canvas and run-level usage history. If self-hosting is required, check the Activepieces edition and operations ownership first. Both offer workflows, AI/agents, and execution records; these are not exclusive advantages. Pilot the same workflow to check connectors, human review, platform credits, and model charges. Cost and reliability have not been tested.',
       },
     },
     {
       relatedToolSlug: 'gumloop',
       relationshipType: 'overlaps',
-      reviewedAt: '2026-11-12',
-      reviewDueAt: '2026-11-19',
+      reviewedAt: '2026-11-19',
+      reviewDueAt: '2026-11-26',
       rationale: {
-        cn: '需要让 Agent 按任务选择连接器工具时比较 Gumloop；希望明确设置触发、分支和循环时评估 Activepieces 的流程。两者都有 Agent 与人工审批能力，先用同一任务核对账号权限、审批设置及用量，不把开放式工具调用当作无人监督保证。',
-        en: 'Compare Gumloop when an agent should choose connector tools for a task; evaluate Activepieces flows when you want explicit triggers, branches, and loops. Both offer agents and human approvals. Pilot the same task to check account permissions, approval settings, and usage; flexible tool use does not guarantee safe unattended work.',
+        cn: '需要按连接器区分读取与写入/删除、配置逐工具允许/询问/拒绝规则时比较 Gumloop；偏好先明确触发、分支、循环及关键审批点时评估 Activepieces 流程。两者都有 Agent 与人工审批，不是能力二选一。用同一任务核对连接账号、审批预设及平台和模型用量；配置审批不等于无人监督保证。',
+        en: 'Compare Gumloop when you need connector read versus write/delete approval presets and per-tool allow/ask/deny rules; evaluate Activepieces flows when you prefer explicit triggers, branches, loops, and key approval points. Both offer agents and human approvals, not mutually exclusive capabilities. Pilot the same task to check connected accounts, approval presets, and platform and model usage; configured approval does not guarantee safe unattended work.',
       },
     },
   ],
