@@ -99,8 +99,12 @@ export function generateSoftwareSchema(tool: ToolMetadata): object {
     applicationCategory: tool.category,
     operatingSystem: 'Web',
     image: tool.image,
-    isAccessibleForFree: tool.pricing?.type === 'free' || tool.pricing?.type === 'freemium',
   };
+
+  // Absence of verified pricing is not a verified free or paid offer.
+  if (tool.pricing?.type === 'free' || tool.pricing?.type === 'freemium' || tool.pricing?.type === 'paid') {
+    schema.isAccessibleForFree = tool.pricing.type !== 'paid';
+  }
 
   if (tool.longDescription) {
     schema.abstract = tool.longDescription;

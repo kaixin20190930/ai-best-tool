@@ -57,6 +57,18 @@ export function getMonitorPublicationBlockers(tool: PublicationTool): string[] {
     ? features.submission as Record<string, unknown> : {};
   const commercial = submission.commercial && typeof submission.commercial === 'object'
     ? submission.commercial as Record<string, unknown> : {};
+  // Unknown is not free: ordinary monitor entries need explicit localized pricing context.
+  // Paid listings still require the original complete pricing/payment gate.
+  const decision = features.decision && typeof features.decision === 'object'
+    ? features.decision as Record<string, unknown> : {};
+  const summary = decision.pricingSummary && typeof decision.pricingSummary === 'object'
+    ? decision.pricingSummary as Record<string, unknown> : {};
+  const hasPricingContext = [summary.en, summary.cn || summary.zh, summary.tw]
+    .every((value) => typeof value === 'string' && value.trim().length >= 20);
+  if (tool.pricing === null && commercial.plan !== 'standard_paid' && hasPricingContext) {
+    const pricingBlocker = blockers.indexOf('Pricing');
+    if (pricingBlocker !== -1) blockers.splice(pricingBlocker, 1);
+  }
   if (!isMonitorPaymentEligible(commercial)) {
     blockers.push('Priority review payment');
   }

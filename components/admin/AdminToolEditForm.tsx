@@ -369,7 +369,8 @@ export default function AdminToolEditForm({
     const thumbnailUrl = String(formData.get('thumbnail_url') || '').trim();
     const categoryId = String(formData.get('category_id') || '').trim();
     const tagsStr = String(formData.get('tags') || '');
-    const pricing = String(formData.get('pricing') || 'free');
+    const pricingInput = formData.get('pricing');
+    const pricing = pricingInput === 'unknown' ? null : pricingInput === null ? undefined : String(pricingInput);
     const status = String(formData.get('status') || 'draft');
     const formCommercialPlan = String(formData.get('commercial_plan') || 'free');
     const formCommercialStatus = String(
@@ -1046,9 +1047,10 @@ export default function AdminToolEditForm({
             <select
               id="pricing"
               name="pricing"
-              defaultValue={tool.pricing || 'free'}
+              defaultValue={tool.pricing ?? 'unknown'}
               className="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-cyan-600 focus:outline-none focus:ring-1 focus:ring-cyan-200"
             >
+              <option value="unknown">Not publicly confirmed — check website</option>
               <option value="free">Free</option>
               <option value="freemium">Freemium</option>
               <option value="paid">Paid</option>

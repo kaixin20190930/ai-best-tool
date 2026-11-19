@@ -11,10 +11,10 @@ import { shouldSendSubmissionStatusEmail } from '@/app/actions/userPreferences';
 import { getPaidListingPublishGate, getToolQuality } from '@/lib/services/toolQuality';
 import { buildReadyDraftMonitorPublishSql, getMonitorPublicationBlockers, getMonitorReviewDate, submissionReviewSlaHoursSql, withMonitorPublicationReview } from '@/lib/services/admin/submissionPublication';
 import { evidenceCompleteSql, evidenceReadyDraftSql, mediaNeededSql, toolQualityScoreSql } from '@/lib/services/admin/draftPublicationSql';
+import { parseToolPricingPatch, toolPricingSnapshotHash, updateDraftToolPricing } from '@/lib/services/admin/toolPricing';
 
 const publicLocales = ['en', 'cn', 'tw', 'jp', 'de', 'es', 'fr', 'pt', 'ru'];
 const validStatuses = ['draft', 'pending', 'published', 'rejected'] as const;
-const validPricing = ['free', 'freemium', 'paid'] as const;
 const validOutreachStatuses = [
   'not_started',
   'contacted',
@@ -25,7 +25,6 @@ const validOutreachStatuses = [
 const validOutreachClosedReasons = ['claimed', 'no_reply', 'invalid_contact', 'not_interested'] as const;
 
 type ToolStatus = (typeof validStatuses)[number];
-type ToolPricing = (typeof validPricing)[number];
 export type OutreachStatus = (typeof validOutreachStatuses)[number];
 export type OutreachClosedReason = (typeof validOutreachClosedReasons)[number];
 
@@ -451,18 +450,6 @@ function assertStatus(status: string | undefined): ToolStatus | undefined {
   }
 
   return status as ToolStatus;
-}
-
-function assertPricing(pricing: string | undefined): ToolPricing | undefined {
-  if (pricing === undefined) {
-    return undefined;
-  }
-
-  if (!validPricing.includes(pricing as ToolPricing)) {
-    throw new Error('Invalid pricing value');
-  }
-
-  return pricing as ToolPricing;
 }
 
 function revalidateAdminToolPaths() {
@@ -1091,7 +1078,7 @@ export async function updateTool(
     thumbnail_url?: string;
     category_id?: string | null;
     tags?: string[];
-    pricing?: string;
+    pricing?: string | null;
     status?: string;
     commercialPlan?: 'free' | 'standard_paid';
     commercialStatus?: string;
@@ -1172,7 +1159,15 @@ export async function updateTool(
     const existingFeatures = getRecord(existingResult.rows[0].features);
     const submittedByEmail = getSubmittedByEmailFromFeatures(existingResult.rows[0].features);
     const nextStatus = assertStatus(data.status);
-    const nextPricing = assertPricing(data.pricing);
+    const nextPricing = parseToolPricingPatch(data.pricing);
+    if (existingStatus === 'draft' && Object.keys(data).length === 1 && nextPricing !== undefined) {
+      const snapshot = await pool.query('SELECT to_jsonb(t) AS row FROM tools t WHERE id=$1', [toolId]);
+      await updateDraftToolPricing({ toolId, reviewerId: reviewer.id,
+        expectedHash: toolPricingSnapshotHash(snapshot.rows[0].row), pricing: nextPricing, mode: 'commit' });
+      revalidateAdminToolPaths();
+      revalidatePublicToolPaths(existingName);
+      return { success: true };
+    }
     const nextTags = normalizeTags(data.tags);
     const nextCommercialPlan =
       data.commercialPlan !== undefined
