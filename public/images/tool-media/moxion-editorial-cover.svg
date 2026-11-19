@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">GIF creation and finishing workflow — editorial illustration</title>
+  <desc id="desc">Original neutral illustration of a prompt, three motion frames and a GIF export. Not a product screenshot.</desc>
+  <rect width="1200" height="675" fill="#102532"/>
+  <text x="80" y="100" fill="#b8e8df" font-family="sans-serif" font-size="24" letter-spacing="4">AI BEST TOOL · EDITORIAL</text>
+  <text x="80" y="177" fill="#ffffff" font-family="sans-serif" font-size="48">GIF creation → finishing</text>
+  <rect x="80" y="244" width="240" height="235" rx="20" fill="#234456"/>
+  <path d="M118 300h156m-156 36h122m-122 36h91" stroke="#b8e8df" stroke-width="10"/>
+  <path d="M349 360h65m-18-18 18 18-18 18" fill="none" stroke="#65d5bd" stroke-width="8"/>
+  <g fill="#315e70" stroke="#8ddfd1" stroke-width="4"><rect x="444" y="290" width="125" height="150" rx="12"/><rect x="583" y="268" width="125" height="172" rx="12"/><rect x="722" y="244" width="125" height="196" rx="12"/></g>
+  <g fill="#a2eddb"><circle cx="506" cy="365" r="23"/><circle cx="645" cy="344" r="23"/><circle cx="784" cy="323" r="23"/></g>
+  <path d="M873 360h65m-18-18 18 18-18 18" fill="none" stroke="#65d5bd" stroke-width="8"/>
+  <rect x="962" y="290" width="158" height="150" rx="20" fill="#65d5bd"/><text x="997" y="379" fill="#102532" font-family="sans-serif" font-size="42">GIF</text>
+  <text x="80" y="571" fill="#c5d6df" font-family="sans-serif" font-size="23">Prompt / image · motion · resize / compress / export</text>
+  <text x="80" y="621" fill="#8aa7b7" font-family="sans-serif" font-size="20">Neutral editorial illustration — not a product screenshot</text>
+</svg>

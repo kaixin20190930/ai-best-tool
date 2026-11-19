@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Recording to reviewed transcript — editorial illustration</title>
+  <desc id="desc">Original diagram distinguishing browser noise removal from cloud transcription and editable text. Not a product screenshot.</desc>
+  <rect width="1200" height="675" fill="#16263c"/>
+  <text x="80" y="100" fill="#bcd7ff" font-family="sans-serif" font-size="24" letter-spacing="4">AI BEST TOOL · EDITORIAL</text>
+  <text x="80" y="177" fill="#ffffff" font-family="sans-serif" font-size="48">Recording → reviewed transcript</text>
+  <rect x="80" y="245" width="290" height="230" rx="20" fill="#294568"/>
+  <path d="M119 354h23m18-35v70m25-110v150m25-120v90m25-125v160m25-119v78m25-54v30m25-54v78" stroke="#96c5ff" stroke-width="10"/>
+  <path d="M396 360h65m-18-18 18 18-18 18" stroke="#96c5ff" stroke-width="8" fill="none"/>
+  <rect x="491" y="277" width="219" height="166" rx="24" fill="#416c9e"/><text x="527" y="345" fill="#fff" font-family="sans-serif" font-size="25">CLOUD</text><text x="517" y="390" fill="#e1edff" font-family="sans-serif" font-size="22">Transcription</text>
+  <path d="M739 360h65m-18-18 18 18-18 18" stroke="#96c5ff" stroke-width="8" fill="none"/>
+  <rect x="836" y="245" width="284" height="230" rx="20" fill="#294568"/><path d="M877 300h201m-201 40h177m-177 40h201m-201 40h135" stroke="#d4e7ff" stroke-width="9"/>
+  <text x="80" y="571" fill="#d1deef" font-family="sans-serif" font-size="23">Local noise removal ≠ cloud transcription · review before export</text>
+  <text x="80" y="621" fill="#99b0cb" font-family="sans-serif" font-size="20">Neutral editorial illustration — not a product screenshot</text>
+</svg>
