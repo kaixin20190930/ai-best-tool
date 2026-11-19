@@ -1,6 +1,6 @@
 # 产品增长自动运营执行手册
 
-更新：2026-11-13。上位路线：[产品增长路线](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)。本手册覆盖旧复盘中的全局等待解释。
+更新：2026-11-19。上位路线：[产品增长路线](./PRODUCT_GROWTH_ROUTE_AND_ROADMAP_2026-11_CN.md)。本手册覆盖旧复盘中的全局等待解释。
 
 到期观察与日常交付并行：前者负责市场反馈，后者消除当前 Cluster 的真实缺口。单个页面的冷却、GSC 缺行、某个工具索引 HOLD 都不能暂停其他已授权且可独立完成的证据复核、身份查重、对比和有条件推荐。日历决定检查时间，不强制发布。当前唯一 Cluster 是 Automation，处于 R4 repair_monitor；Make 的**索引分发**仍等待 R4 分发决策和至少 14 天有效反馈，站内支持工作不因此停止。
 
@@ -25,6 +25,8 @@
 11-12 已通过定时任务接口原位同步 Coverage 诊断结论及 11-19 复核节点，并逐字回读确认 `ai-best-tool-cluster` 与 `ai-best-tool` 均 ACTIVE，原时间、目标聊天及职责保留，未新增任务；增长周报不变。任务配置同步通过不等于下一次定时业务执行已完成。私有回读记录为 `.local/gsc/operations/coverage-daily-automation-sync-2026-11-12.json`。
 
 Coverage 由日常 owner 在 11-19 有界复核原 10 个未决规范目标，最多 20 个应索引 URL；若错过则下一轮补做一次，不在 11-13 或每天重做已完成诊断。先复用同日 D+14 重叠对象的真实 Inspection/技术证据和 GSC 快照，D+14 同窗最终页面×查询照常独立落账。逐目标结论、时间、复用来源和限制留在 `.local/gsc/operations/coverage-diagnosis-review-2026-11-19.json`；已完成或 waiting_data 表示本次核查已做，依据新证据确定下一必要节点，真实新异常才提前重开。4 个已收录规范目标和 3 个正常排除对照不例行重查，站点 warning 与原索引门禁保留。
+
+11-19 用户已手动提前执行上述原 10 个目标复核：5 个旧抓取、3 个 unknown、2 个已抓取未收录且无当前技术阻塞；6 条缺失 Inspection/技术样本补齐，4 条同日证据复用，没有第二次 Search Analytics 拉取。`/cn` 已于 11-12 重抓，不能再当作尚未抓过此前首页版本；其四张英文任务卡及六分类中文取值断点按当前精确独立 QA 修复，实际发布阶段以 delivery `cn-home-localization-repair` 和[本次记录](./COVERAGE_REVIEW_AND_CN_HOME_REPAIR_2026-11-19_CN.md)为准，不在验收前提前标 production_verified。原日常 owner 接续：11-26 只复核首页修复后的必要 Google 证据，其余原未决目标 12-03 与 D+28 复用；私有账本逐目标保存下一节点。已有本次 completed/waiting_data 记录不再重复 11-19 整批诊断；站点 warning、D+14 waiting_data 和索引门禁保持，不新建任务，也不阻止其他独立日常交付。
 
 日常任务继续检查新工具公开、对比事实/限制/适用场景、有条件推荐三类机会，每轮选一个最有用户价值的主交付、最多两个支持 Tool，优先履行到期维护；无合格新工具时接续其他可独立完成的对比或推荐。等待 Google 收录不是停工理由，也不免除原门禁：对比复用现有页面和唯一意图，推荐沿原关系流程使用新鲜理由、适合/不适合及有效日期，合格 published + monitor/noindex 工具可作站内决策去向。已完成的 Activepieces、Gumloop、Make 不重复收录、发布或补做；内容冷却和最小校验预算照常。
 

@@ -1,6 +1,8 @@
 # 收录与搜索质量主计划
 
-更新时间：2026-11-18
+更新时间：2026-11-19
+
+2026-11-19 **Coverage 原定复核及中文首页最小修复已完成**：原10个未决规范目标为5旧抓取、3 Google未知、2已抓取未收录且无当前技术阻塞；6缺失Inspection/技术样本补齐，4同日证据与成功GSC快照复用，不重查已收录4项及排除3项。`/cn`已于11-12重抓，确证四任务卡英文及六分类zh取值断点，复用已有中文资料最小修复，经原唯一独立QA后提交`c0faac6c`生产READY，一次三首页+sitemap实际采样内容/入口/原索引边界通过。根canonical末尾斜线误报的初始FAIL保留，同份HTML离线更正PASS，零重采样/重发布；sitemap154集合/指纹不变，生产DB/索引/关系写入0。仅定向检查、增量tsc与一次本地build，无全测/新功能/新任务；修复不是Google根因定论或收录成功，站点warning、D14 waiting_data及原HOLD保留。11-19整批不每日重做；原日常owner于11-26核查首页修复后证据，其余原9目标12-03复用D28证据，其他日常交付不因等待Google停工。见[本次复核与线上验收](./COVERAGE_REVIEW_AND_CN_HOME_REPAIR_2026-11-19_CN.md)。
 
 2026-11-18 **日常新增 Relevance AI 已公开验收**：实际调度完成一个新 Tool 及真实 EN/CN/TW 内容，六官方源、精确身份/候选去重、原同一独立 QA、原创素材部署和通用收录公开链通过。素材 `5eff13ab` 已部署，入队1/导入3/公开1，回滚/回查/幂等0写；一次三语言完整内容、六限制、费用、主来源/去向、媒体SHA/标识、canonical/noindex/sitemap排除验收PASS，最终published+monitor/noindex。付费权益、Free退役及双用量维度谨慎限定，不声称账号/执行/可靠性实测；私有回查错误slug已按真实ID更正，无生产缺陷或重复发布。nextReviewDate=11-25交原owner实际复核；11-19及20/23/26/29原节点保留。无重复Google采集、运行时代码、本地build/tsc/全测、新任务或索引/推荐扩权，不计增长。见[Relevance AI 完整交付](./DAILY_RELEVANCEAI_DELIVERY_2026-11-18_CN.md)。
 

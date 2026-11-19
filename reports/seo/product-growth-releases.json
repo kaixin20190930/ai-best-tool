@@ -35,10 +35,24 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-18",
+    "updatedOn": "2026-11-19",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
+      {
+        "id": "cn-home-localization-repair",
+        "status": "production_verified",
+        "commit": "c0faac6c16df294068e5d24cb8d1ffe007ff39d4",
+        "completedOn": "2026-11-19",
+        "nextReviewDate": "2026-11-26",
+        "ownerAutomation": "ai-best-tool-cluster",
+        "artifact": "docs/COVERAGE_REVIEW_AND_CN_HOME_REPAIR_2026-11-19_CN.md",
+        "trigger": {"kind": "manual_user_request", "requestedOn": "2026-11-19"},
+        "deploymentId": "dpl_GePtR3JpxizHz9hyUhFGG6NrQyEk",
+        "productionWrites": 0,
+        "productionUrls": ["https://aibesttool.com/cn", "https://aibesttool.com/tw", "https://aibesttool.com/"],
+        "nextAction": "Confirmed actual /cn content gaps, not a proven Google exclusion cause: four task cards rendered English-only metadata and six categories bypassed existing zh names. Exact current independent QA passed minimal home-only reuse of existing profile/guide Chinese copy and zh category fallback; EN original objects/copy, links, metadata and index boundaries unchanged. Content c0faac6c exact Git production deployment READY with formal aliases; one actual three-homepage plus sitemap sampling verified full four-card titles/summaries, six category labels/localized links, real H1/title/no404/canonical and original CN/EN indexable versus TW noindex boundaries. Initial root canonical literal trailing-slash verifier FAIL preserved; same saved HTML revalidated using parsed complete URL equivalence, final all assertions PASS with zero new HTTP or repeat publication. Sitemap exact154 URL set and file fingerprint unchanged. Direct home regression, incremental TypeScript and one final local build only; no full tests or added framework/automation. Production database/Tool/index/TaskFit/relation writes0 and no new index release/D+clock. Existing daily owner reviews actual post-repair Google evidence Nov26 once, merging same-day sources; no daily repeat, date-only renewal or growth claim. English fallback tool text and shared cn/tw simplified copy remain explicitly scoped limitations; site warning and D14 waiting_data remain."
+      },
       {
         "id": "relevanceai-scheduled-new-tool",
         "status": "production_verified",
@@ -289,10 +303,14 @@
         "id": "site-search-health-diagnosis",
         "status": "completed_readonly",
         "dueOn": "2026-11-13",
-        "nextAction": "Completed ahead of Nov13 under explicit user request: latest authorized Coverage UI datedNov9, indexed94/notIndexed1690; reason sum1691 differs by1, preserved and disclosed. Bounded17 targets:14 current eligible canonical candidates (11 new URL Inspection+3 same-day D7 reuse) and3 exclusion controls. Independent QA_PASS confirms4 canonical targets already indexed behind historical www aliases,6 old crawls,3 unknown,1 notindexed/no current technical blocker,3 intentional exclusions. Current eligible technical defects0; no production content/DB/index/sitemap/config/runtime changes or build/full tests. Initial two excluded-control flags adjudicated with actual absent exact-slug Tool and explicit noindex/source policy; raw evidence retained. Do not re-run diagnosis on Nov13 or each day. Existing daily owner rechecks unresolved evidence boundedly on Nov19, merging overlap with existing D14 inspection and same-day snapshots; earlier only for real anomaly. No bulk index release or fabricated healthy state.",
+        "nextAction": "Nov12 original diagnosis remains complete (4 canonical already indexed,6 old crawls,3 unknown,1 no current technical blocker,3 expected exclusions); historical Coverage total1690/reasonSum1691 discrepancy retained. User manually completed Nov19 original ten unresolved targets:5 old crawls,3 unknown,2 crawled/notindexed without reproduced current technical blocker, including /cn actually recrawled Nov12 after prior home edits. Six missing real Inspection/technical samples added once; four same-day Inspection/technical sources and successful finalNov16 GSC snapshot reused, no second Search Analytics fetch, indexed4/exclusion3 not repeated. Exact independent QA_PASS; current sampled technical blockers0, site warning unchanged, not indexing/growth success. Confirmed /cn language-content defects were separately repaired/deployed/accepted as cn-home-localization-repair, not index approval. Nov19 review is completed with Google business outcome waiting_data, do not repeat daily. Existing daily owner reviews /cn post-repair Google evidence Nov26 once; other nine original unresolved targets Dec3 with original D28 overlap and actual source/timestamps, only real anomaly earlier. No bulk index release, new automation or product-wide stop.",
         "completedOn": "2026-11-12",
-        "nextReviewDate": "2026-11-19",
-        "artifact": "docs/COVERAGE_DIAGNOSIS_2026-11-12_CN.md"
+        "lastReviewedOn": "2026-11-19",
+        "reviewStatus": "completed_waiting_google",
+        "nextReviewDate": "2026-11-26",
+        "remainingTargetsReviewDate": "2026-12-03",
+        "artifact": "docs/COVERAGE_DIAGNOSIS_2026-11-12_CN.md",
+        "reviewArtifact": "docs/COVERAGE_REVIEW_AND_CN_HOME_REPAIR_2026-11-19_CN.md"
       },
       {
         "id": "make-index-distribution",
