@@ -101,26 +101,26 @@ export const REVIEWED_TOOL_RELATIONSHIPS: Record<string, ReviewedToolRelationshi
       },
     },
   ],
-  // Next unfinished Automation support page; sources: GUMLOOP_CONDITIONAL_COMPARISON_2026-11-12_CN.md.
+  // Due directional review Nov19: GUMLOOP_CONDITIONAL_COMPARISON_2026-11-12_CN.md.
   gumloop: [
     {
       relatedToolSlug: 'make',
       relationshipType: 'overlaps',
-      reviewedAt: '2026-11-12',
-      reviewDueAt: '2026-11-19',
+      reviewedAt: '2026-11-19',
+      reviewDueAt: '2026-11-26',
       rationale: {
-        cn: '步骤能预先确定、需要在画布编排跨应用 scenario 并追查运行时比较 Make；希望 Agent 按任务选择连接器工具时继续评估 Gumloop。两者都支持 AI，先用同一任务核对连接器写入权限、失败恢复和实际用量；未实测成本或可靠性。',
-        en: 'Compare Make when steps can be defined in advance and you need visual cross-app scenarios with execution history; evaluate Gumloop when an agent should choose connector tools for a task. Both support AI. Pilot the same task to check write permissions, failure recovery, and actual usage; cost and reliability have not been tested.',
+        cn: '偏好用 scenario 模块画布检查跨应用步骤和运行级用量历史时比较 Make；需要按连接器配置读取与写入/删除审批预设、逐工具允许/询问/拒绝规则时评估 Gumloop。两者都有流程与 AI/Agent，不是固定流程和 Agent 的二选一。用同一任务核对连接账号、写入审批、失败恢复及平台和模型用量；未实测成本或可靠性。',
+        en: 'Compare Make if you prefer a scenario module canvas for cross-app steps and run-level usage history; evaluate Gumloop for connector read versus write/delete approval presets and per-tool allow/ask/deny rules. Both offer workflows and AI/agents, not a choice between fixed flows and agents. Pilot the same task to check connected accounts, write approvals, failure recovery, and platform and model usage; cost and reliability have not been tested.',
       },
     },
     {
       relatedToolSlug: 'lindy',
       relationshipType: 'overlaps',
-      reviewedAt: '2026-11-12',
-      reviewDueAt: '2026-11-19',
+      reviewedAt: '2026-11-19',
+      reviewDueAt: '2026-11-26',
       rationale: {
-        cn: '主要在团队频道或私聊委派研究、跟进和例行任务时比较 Lindy；需要配置 Agent 的连接器工具与逐工具审批时评估 Gumloop。两者都有 Agent 和审批，先核对连接账号、写入权限及同一任务的用量；Lindy 还需核算活跃席位和共享 credits，不按试用体验推断长期费用。',
-        en: 'Compare Lindy for research, follow-up, and routines delegated in team channels or DMs; evaluate Gumloop when configuring agent connector tools and per-tool approvals matters. Both offer agents and approvals. Check connected accounts, write permissions, and usage on the same task; for Lindy, include active seats and shared credits rather than inferring ongoing cost from a trial.',
+        cn: '希望在团队频道或私聊委派研究、跟进和定时例行任务时比较 Lindy；偏好明确设置连接器账号及逐工具允许/询问/拒绝规则时评估 Gumloop。两者都有 Agent 和审批，配置粒度及工作入口是比较维度，不是独有能力。用同一任务核对外部写入审批、活跃付费席位、共享 credits 和重任务暂停；试用及审批设置不等于长期免费、固定成本或无人监督保证。',
+        en: 'Compare Lindy for research, follow-up, and scheduled routines delegated in team channels or DMs; evaluate Gumloop if explicit connector accounts and per-tool allow/ask/deny rules are your preference. Both offer agents and approvals; control granularity and the work entry point are comparison dimensions, not exclusive capabilities. Pilot the same task to check external-write approvals, active paid seats, pooled credits, and heavy-task pauses; a trial or approval configuration does not guarantee ongoing free use, fixed cost, or safe unattended work.',
       },
     },
   ],
