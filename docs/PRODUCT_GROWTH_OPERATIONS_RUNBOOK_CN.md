@@ -115,4 +115,4 @@ Lindy 尚无**索引分发** release 日期，不启动分发后 D+；公开 mon
 当前阶段及证据以 delivery 的 `zapier-conditional-comparison-scheduled`、`n8n-freshness-scheduled` 为准；不重复收录或公开。
 11-19 Coverage/D+14/相关工具和关系、11-20 Zapier工具整体节点不变，均由原owner承接；等待Google不阻止其他合格交付。
 
-11-19 实际日常 heartbeat 已按到期优先完成 [Activepieces 主页面的事实与条件推荐复核](./AUTOMATION_DUE_REVIEW_2026-11-19_CN.md)：Activepieces/Gumloop 两个 Tool 事实维护及 Activepieces→Make/Gumloop 两条关系经当前独立 QA、受控提交、生产部署和一次三语言验收，下一实际复核 11-26。原历史日期不冒充今日全部事实验证；未新建或重发 Tool。Gumloop/Zapier/Bardeen 其余六条方向性关系仍为 11-19 已到期、隐藏、待复核，由下一有界日常轮按原到期和维护紧迫度接续，Zapier 整体 11-20 不变。工具事实维护不等于其他方向推荐通过；不只延长日期，也不为补齐关系扩大当轮一个主页面、最多两个支持 Tool 的范围。今日 Coverage/D+14、中文首页修复和四个所有者产品公开复用既有完成记录，不再整批重做，不新增任务。
+11-19 实际日常 heartbeat 已按到期优先完成 [Activepieces 主页面的事实与条件推荐复核](./AUTOMATION_DUE_REVIEW_2026-11-19_CN.md)：Activepieces/Gumloop 两个 Tool 事实维护及 Activepieces→Make/Gumloop 两条关系经当前独立 QA、受控提交、生产部署和一次三语言验收，下一实际复核 11-26。随后用户明确接续的 [Gumloop→Make/Lindy 两条关系](./GUMLOOP_CONDITIONAL_COMPARISON_2026-11-12_CN.md)也已实际复核、发布并验收，下一节点 11-26；不是重发 Tool 或只延长日期。剩余 Zapier/Bardeen 四条关系保持 11-19 到期隐藏待实际复核，由下一有界日常轮接续，Zapier 整体 11-20 不变。工具事实维护不等于其他方向推荐通过，不扩大每轮一个主页面、最多两个支持 Tool 的范围。今日 Coverage/D+14、中文首页修复和四个所有者产品公开复用既有完成记录，不再整批重做，不新增任务。

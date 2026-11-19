@@ -34,3 +34,13 @@ Gumloop 连接器工具选择、账号和审批及 Make scenario/执行历史复
 本轮只核对来源、内容结构、方向去重、当前资格、复核日期及格式，并完成上述一次部署后验收；无运行时组件/逻辑变化，未跑本地 build、TypeScript 或全量测试。按当前原生 Compare next 链接验收，没有使用旧 article 卡片假设。
 
 私有证据保留 `.local/gsc/operations/gumloop-conditional-comparison-*`；目标证据未变化则复用同日成功验收及其原时间，公开仅保存本汇总。11-19 Coverage/D+14 和其他已承诺维护节点保持，不新增定时任务。
+
+## 2026-11-19 到期复核（用户接续）
+
+两条既有 Gumloop→Make/Lindy 推荐已实际复核、更新发布并通过线上验收，reviewedAt=11-19、reviewDueAt/nextReviewDate=11-26，不是只顺延日期。复用今日四份 Gumloop/Make 官方证据，补齐两份 Lindy 官方证据；明确双方共有的 AI/Agent/审批能力，以及连接器权限、使用量、活跃席位和共享 credits 的取舍，未实测费用或可靠性。
+
+原独立 QA 对当前完整差分 PASS；业务提交 `0f115f2a904bd5ef0d7687563ba377fea4bed85c` 的生产部署 `dpl_4GSHnyPZ68UT2VAtyKqur7Yy7wXR` 已精确确认 READY 和正式域名。一次验收新采 Gumloop/Lindy 六个语言页面，复用 Make 三页原 09:37 UTC 成功样本及 03:30 UTC sitemap 指纹：真实标题/摘要、完整条件理由、本地化原生链接和目标锚点、canonical/noindex/排除均 PASS；TW 推荐理由仍为英文 fallback。没有初次失败或重复采样。
+
+仅编辑配置，无数据库写入、工具重新公开、索引放开、GSC 采集、运行时代码、build、TypeScript 或全量测试。现有日常任务原位提效并精确回读，原门禁、每日 17:00 及原聊天保留；配置更新不冒充下一次自动业务执行。本轮私有主记录为 `.local/gsc/operations/gumloop-due-review-2026-11-19.json`，公开只保留本短结论及原 delivery 当前状态，记录提交复用此次有效验收。
+
+剩余 Zapier/Bardeen 四条到期推荐保持隐藏待实际复核，由原日常 owner 在后续有界轮次接续，Zapier 工具整体 11-20 节点不变；不重复 Activepieces/Gumloop 已完成项，也不因等待 Google 收录停工。
