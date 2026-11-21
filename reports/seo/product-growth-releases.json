@@ -35,7 +35,7 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-19",
+    "updatedOn": "2026-11-22",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
@@ -260,12 +260,17 @@
       {
         "id": "zapier-conditional-comparison-scheduled",
         "status": "production_verified",
-        "reviewStatus": "expired_hidden_pending_review",
-        "currentReviewAction": "Nov19 original two relations expired and remain hidden, not covered by the AP-main two-relation review. Existing daily owner resumes actual directional source review with due maintenance; Zapier whole-tool Nov20 unchanged. Retain original due date and historical initial acceptance, never renew by date alone.",
+        "reviewStatus": "reviewed_production_verified",
+        "lastReviewedOn": "2026-11-21",
+        "latestReviewCompletedOn": "2026-11-22",
+        "latestReviewCommit": "7130fdf86ab1cc73652a822d75d80087f94b278e",
+        "latestReviewDeploymentId": "dpl_8DPE6aoVWsEd5YHXU9Ndmzrj4RaU",
+        "latestReviewArtifact": "docs/ZAPIER_CONDITIONAL_COMPARISON_2026-11-14_CN.md",
+        "currentReviewAction": "Actual Nov21 source-based review of the same two Zapier→Make/Activepieces reasons, not date-only renewal. Current exact independent QA reused unchanged after interruption; signed config7130fdf8 production READY/formal aliases confirmed. Nov22 once-only9 locale HTML+SVG+sitemap acceptance PASS full reasons, decision anchors, original content, dated freshness and unchanged monitor/noindex/exclusion; native Node transport failures and offline JSONB serialization correction retained, successful DB readback and first curl HTML reused without duplicate successful sampling or writes. TW reasons/freshness retain existing EN fallback. Next actual review Nov27 before Dec1 billing transition; Make/AP tool maintenance remains Nov26, Bardeen two expired reasons remain separate and hidden. No Tool republication, GSC/Inspection/Coverage collection, index/TaskFit/market/Research writes, runtime/build/tsc/fulltests or new automation. Historical initial delivery fields below remain unchanged.",
         "commit": "7383792958b78659af6badb685b871923d258989",
         "preparedOn": "2026-11-14",
         "lastAttemptAt": "2026-11-15T12:24:00.732Z",
-        "nextReviewDate": "2026-11-19",
+        "nextReviewDate": "2026-11-27",
         "toolId": "342075a5-bc38-42e4-b26e-6c01efc318b9",
         "relatedToolSlugs": [
           "make",
@@ -292,11 +297,17 @@
       {
         "id": "zapier-scheduled-new-tool",
         "status": "production_verified",
+        "lastReviewedOn": "2026-11-21",
+        "latestMaintenanceCompletedOn": "2026-11-22",
+        "latestMaintenanceArtifact": "docs/ZAPIER_CONDITIONAL_COMPARISON_2026-11-14_CN.md",
+        "latestMaintenanceCommit": "7130fdf86ab1cc73652a822d75d80087f94b278e",
+        "latestMaintenanceProductionWrites": 1,
+        "currentReviewAction": "Completed overdue scoped fact review using original Nov20 Zapier and Nov19 support official snapshots with original times/hashes. Explicitly preserve conflicting minimum-one-task versus zero-task-run rules, Dec1 17:00UTC future billing transition, unavailable NextGen per-run/external-SDK per-script usage and separate Agents activities; no account/bill/performance test. Exact independent QA and generic preflight0/real rollback0/commit1/postcheck0, only freshnessSummary.en/zh, maintenanceReview and next_review_date changed; original detail/pricing/limits/trueTW/audits protected and Make/AP complete rows unchanged. No repeated writes on Nov22 continuation. Exact signed config production READY and actual Nov22 EN/CN/TW content/media/source/canonical/noindex plus support anchors/sitemap154 exclusion acceptance PASS. Next real fact review Nov27 before transition; monitor public is not indexed or measured growth. Initial Nov13 intake/publication fields and cumulative5 writes below are historical, not this maintenance count.",
         "commit": "d2269383538e71a2e29aa6f57461d96b1d472f05",
         "completedOn": "2026-11-13",
         "monitorPublishedOn": "2026-11-13",
         "releasedOn": null,
-        "nextReviewDate": "2026-11-20",
+        "nextReviewDate": "2026-11-27",
         "toolId": "342075a5-bc38-42e4-b26e-6c01efc318b9",
         "candidateId": "3f1b8b94-026e-4ed7-b821-ca2311176a34",
         "artifact": "docs/DAILY_ZAPIER_DELIVERY_2026-11-13_CN.md",
