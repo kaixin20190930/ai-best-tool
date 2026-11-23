@@ -35,7 +35,7 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-22",
+    "updatedOn": "2026-11-23",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
@@ -186,11 +186,16 @@
       {
         "id": "bardeen-conditional-comparison-scheduled",
         "status": "production_verified",
-        "reviewStatus": "expired_hidden_pending_review",
-        "currentReviewAction": "Nov19 original two relations expired under the existing eligibility gate; not reviewed or renewed by the Activepieces-main round. Existing daily owner resumes an actual bounded source/directional review by original due date and maintenance urgency; no date-only extension. Historical initial production acceptance remains below; Bardeen whole-tool Nov23 is separate.",
+        "reviewStatus": "reviewed_production_verified",
+        "lastReviewedOn": "2026-11-23",
+        "latestReviewCompletedOn": "2026-11-23",
+        "latestReviewCommit": "7f5baa2bb6b91270eec1725aa0b54220584088e6",
+        "latestReviewDeploymentId": "dpl_6Vbe8m9KAY2iA6BpHaFC12nFQjxg",
+        "latestReviewArtifact": "docs/BARDEEN_CONDITIONAL_COMPARISON_2026-11-17_CN.md",
+        "currentReviewAction": "Resumed Nov22 preparation and actually reviewed the same two reasons Nov23, using original Nov22 Bardeen and Nov19 support official evidence with original timestamps/hashes, current exact three-row read-only eligibility and one independent exact-config QA. Clarified Make run-level usage attribution versus Bardeen accumulating action-output-row credits/expiry, and Gumloop tool approvals plus different usage units; no exclusive AI, free-reset or tested-cost/reliability promises. Config7f5baa2b exact production READY/formal aliases; one Nov23 nine-locale content sample PASS full two localized native reasons, target anchors, actual presenter summaries, unchanged Bardeen detail/six limits/pricing/original Nov16 fact date, official links/no404/selfcanonical/noindex; sitemap154/excluded. Zero production DB or repeated Tool writes, no GSC/Inspection/Coverage/build/tsc/fulltests/new framework/automation. TW reasons retain EN fallback. Next actual relation review Nov26; Bardeen whole-tool maintenance due Nov23 remains a separate outstanding item, not renewed or claimed complete. Initial publication fields below remain historical.",
         "commit": "bdb5e53f61b9caef9253bb69aab23e4c241efbb5",
         "completedOn": "2026-11-17",
-        "nextReviewDate": "2026-11-19",
+        "nextReviewDate": "2026-11-26",
         "toolId": "9e5fb82e-b711-4403-8a6f-619982789c67",
         "relatedToolSlugs": [
           "make",
