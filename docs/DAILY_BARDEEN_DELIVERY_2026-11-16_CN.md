@@ -1,5 +1,13 @@
 # Bardeen 日常完整交付
 
+## 2026-11-24 到期事实维护完成
+
+补完原11-23节点：复用11-22产品/采集/定价原快照，补读官方AI页；实际核对产品身份、AI筛选/生成、来源权限和浏览器运行、动作输出行累计积分/补全差异/期末到期。免费刷新、账号权益、关闭浏览器执行及效果仍未知，不改为免费或可靠性保证。
+
+当前精确前像和最小清单经唯一独立QA通过，沿原通用 freshness 执行真实 preflight0/rollback0/commit1/postcheck0，完整数据库后像匹配。只更新维护摘要en/zh、maintenanceReview和next_review_date，原正文、真实繁中、费用、六限制、公开审计及索引不变；昨天已完成推荐不重复写入。一次EN/CN/TW实际线上验收通过标题/摘要、完整新维护说明及原正文/适用人群/费用/限制、两条本地化推荐、官网、示意图标识alt、无流式404、canonical/noindex和sitemap154排除。TW维护摘要沿英文回退，不称新增繁中翻译；素材未改，不称重新采样素材。
+
+工具事实下一次实际复核12-01，两条推荐独立节点仍11-26。生产写入1，无新Tool/代码/部署/构建/TypeScript/全量测试/GSC/Inspection/Coverage或新增任务。私有主记录 `.local/gsc/operations/bardeen-facts-2026-11-24.json`。以下为初次交付历史。
+
 2026-11-16（上海），原 `ai-best-tool-cluster` 于 `2026-11-16T08:58:23.419Z` 实际触发。本轮新增 Bardeen **一个真实 Tool**，
 完成 EN/CN/TW 内容、素材、通用候选/草稿/公开流程、唯一独立 QA 及一次线上验收，最终 `published + monitor/noindex`、
 `production_verified`，下次事实复核11-23，由原日常 owner 接续。

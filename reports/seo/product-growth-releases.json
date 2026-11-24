@@ -35,7 +35,7 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-23",
+    "updatedOn": "2026-11-24",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
@@ -219,11 +219,16 @@
       {
         "id": "bardeen-scheduled-new-tool",
         "status": "production_verified",
+        "lastReviewedOn": "2026-11-24",
+        "latestMaintenanceCompletedOn": "2026-11-24",
+        "latestMaintenanceArtifact": "docs/DAILY_BARDEEN_DELIVERY_2026-11-16_CN.md",
+        "latestMaintenanceProductionWrites": 1,
+        "currentReviewAction": "Nov23 overdue whole-tool scoped fact review completed Nov24, not date-only renewal or duplicate intake. Reused Nov22 official product/scraper/pricing original times/hashes; captured missing AI source once. Identity, lead qualification/generation, source-data access, browser runtime, cumulative action-output-row credits/enrichment/expiry reviewed; free-reset/account/checkout/closed-browser/security/accuracy/reliability remain unverified. Same independent operations_qa binds exact manifest and current Tool preimage. Generic fresh preflight0/real transaction rollback0/commit1/postcheck0; exact complete postimage PASS, only en/zh freshness summaries, maintenanceReview and next_review_date changed. Original trueTW/body/limits/pricing/quality/index/publication audit protected. Once Nov24 EN/CN/TW acceptance PASS full new freshness, actual summaries/title/detail/audiences/six limits/pricing, yesterday unchanged native reasons, original illustration labeling/alt, official links/no404/selfcanonical/noindex, sitemap154/excluded. No runtime/code/assets/deploy required, build/tsc/fulltests/GSC/Inspection/Coverage/new automation/index/Tool publication writes. TW freshness retains EN fallback, no new TW translation. Next actual Tool fact review Dec01; separate two relationship reasons remain Nov26. Historical initial intake fields below are not this maintenance count; prior separate-whole-tool outstanding note is closed by this actual review.",
         "commit": "8dabecd8d848c5d8aa9a158361d0d8bc0f6df405",
         "completedOn": "2026-11-16",
         "monitorPublishedOn": "2026-11-16",
         "releasedOn": null,
-        "nextReviewDate": "2026-11-23",
+        "nextReviewDate": "2026-12-01",
         "toolId": "9e5fb82e-b711-4403-8a6f-619982789c67",
         "candidateId": "0fb839c1-2d7c-4da2-ae12-acc878218a8f",
         "artifact": "docs/DAILY_BARDEEN_DELIVERY_2026-11-16_CN.md",
