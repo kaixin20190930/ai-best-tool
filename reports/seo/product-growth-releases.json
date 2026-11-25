@@ -35,7 +35,7 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-24",
+    "updatedOn": "2026-11-25",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
@@ -162,11 +162,16 @@
       {
         "id": "relevanceai-scheduled-new-tool",
         "status": "production_verified",
+        "lastReviewedOn": "2026-11-25",
+        "latestMaintenanceCompletedOn": "2026-11-25",
+        "latestMaintenanceArtifact": "docs/DAILY_RELEVANCEAI_DELIVERY_2026-11-18_CN.md",
+        "latestMaintenanceProductionWrites": 1,
+        "currentReviewAction": "Actual Nov25 scheduled due fact maintenance completed, not date-only renewal or repeated intake. Six current complementary official pages read: Free retirement, paid Pro/Team versus Enterprise-focused marketing, AI versus mandatory handoffs/oversight, separate Actions/Vendor Credits and Enterprise governance. Clarified Pro/Team Vendor Credits rollover while subscribed, base Actions renewal reset versus purchased Actions carryover; Enterprise rollover requires account-team confirmation. No inferred exact account allowance/checkout/security/accuracy/approval guarantee. Same sole independent QA binds exact current Tool preimage and manifest975020a1; generic fresh preflight0/real transaction rollback0/commit1/postcheck0 and exact full protected postimage PASS. Only en/zh freshness summaries, maintenanceReview and next_review_date changed, original trueTW/body/pricing/six limits/publication audit/index protected. Once actual EN/CN/TW acceptance PASS realtitle/actual summary/full detail/audiences/pricing/all limits/new freshness/official/no404/illustrationlabel-alt/selfcanonical/noindex, sitemap154/excluded. TW freshness retains existing EN fallback, no new translation or asset sampling. No runtime/assets/deploy prerequisite/build/tsc/fulltests/GSC/Inspection/Coverage/intake/Toolpublication/recommendation/index writes or new automation. Next actual fact review Dec02 by existing owner; initial Nov18 fields below are historical, not this maintenance count.",
         "commit": "5eff13ab560337feb9468a770dfaadbca3f64fd7",
         "completedOn": "2026-11-18",
         "monitorPublishedOn": "2026-11-18",
         "releasedOn": null,
-        "nextReviewDate": "2026-11-25",
+        "nextReviewDate": "2026-12-02",
         "toolId": "30bbbf13-ee9c-48e8-b0bb-62455abb19b3",
         "candidateId": "b67733c8-589b-4164-aafc-6f76b5511440",
         "artifact": "docs/DAILY_RELEVANCEAI_DELIVERY_2026-11-18_CN.md",

@@ -1,5 +1,13 @@
 # Relevance AI 日常完整交付
 
+## 2026-11-25 到期事实维护完成
+
+实际复核六份当前官方来源：Free退役、付费Pro/Team与Enterprise营销范围、交接/人工审核、双用量维度及企业治理边界。补充Pro/Team的Vendor Credits持续订阅结转、基础Actions续期重置与购买Actions结转，Enterprise结转须向客户团队确认；没有推定账号精确额度、结账或审批强制性。
+
+唯一独立QA绑定当前精确前像及清单后，原通用freshness执行preflight0/真实rollback0/commit1/postcheck0，完整保护后像匹配。只更新en/zh维护摘要、maintenanceReview和next_review_date，原正文、真实繁中、六限制、费用、公开审计及索引不变。一次EN/CN/TW线上验收通过完整新摘要与原内容/人群/限制/费用、官网、示意图标识alt、无流式404、canonical/noindex及sitemap154排除；TW维护摘要为原英文回退，不称新增翻译或素材采样。
+
+下一实际事实复核12-02，原owner接续。生产写入1，无重复收录/Tool公开、运行时代码/素材/部署、本地build/TypeScript/全量测试/GSC/Inspection/Coverage/推荐或索引写入、新增任务。私有主记录 `.local/gsc/operations/relevanceai-facts-2026-11-25.json`。以下为初次交付历史。
+
 2026-11-18（上海），原 `ai-best-tool-cluster` 于 `2026-11-18T08:55:31.487Z` 实际触发。
 本轮新增 Relevance AI 一个真实 Tool，完成 EN/CN/TW 页面、原创素材、独立 QA、通用公开和线上验收，
 最终 `published + monitor/noindex`、`production_verified`。不是只导入草稿，也不是 Google 收录或增长成功。
