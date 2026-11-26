@@ -35,7 +35,7 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-25",
+    "updatedOn": "2026-11-26",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
@@ -148,9 +148,12 @@
       {
         "id": "cn-home-localization-repair",
         "status": "production_verified",
+        "lastGoogleReviewedOn": "2026-11-26",
+        "googleReviewStatus": "completed_waiting_postrepair_recrawl",
+        "currentGoogleReviewAction": "Existing daily owner completed the promised single /cn postrepair check Nov26: exactly one real URL Inspection still reports crawled/currently not indexed and last crawl Nov12, before actual Nov19 repair; no postrepair recrawl/indexing evidence or repair-outcome attribution. One current /cn HTML verifies the original four localized task cards, six categories, title/H1/no404/selfcanonical/indexable boundary; no reproduced current defect and no production repair/publication needed. Reused morning observer; Search Analytics not needed, fetch0, other nine Coverage targets not repeated. Private coverage-cn-postrepair-review-2026-11-26.json retains raw response, original source times/fingerprints and limitations. Existing owner checks next necessary /cn evidence Dec03 with original bounded Coverage/D28 overlap, but D28 final page-query remains independently due. Sitewarning and Lindy/Make indexHOLD unchanged; no daily repeat or growth claim. Other Tool/reason maintenance dueNov26 remains separate unfinished work, not renewed by this single-main review.",
         "commit": "c0faac6c16df294068e5d24cb8d1ffe007ff39d4",
         "completedOn": "2026-11-19",
-        "nextReviewDate": "2026-11-26",
+        "nextReviewDate": "2026-12-03",
         "ownerAutomation": "ai-best-tool-cluster",
         "artifact": "docs/COVERAGE_REVIEW_AND_CN_HOME_REPAIR_2026-11-19_CN.md",
         "trigger": {"kind": "manual_user_request", "requestedOn": "2026-11-19"},
@@ -458,12 +461,16 @@
       {
         "id": "site-search-health-diagnosis",
         "status": "completed_readonly",
+        "latestBoundedReviewOn": "2026-11-26",
+        "latestBoundedReviewScope": "/cn only; Nov19 original whole ten-target review remains historical and complete",
+        "latestBoundedReviewStatus": "completed_waiting_postrepair_recrawl",
+        "latestBoundedReviewAction": "Nov26 promised /cn-only postrepair Google check completed: one actual Inspection still lastcrawlNov12/crawled-notindexed, earlier than Nov19 repair, and one current CN content/technical sample PASS. No additional Search Analytics fetch, other9 inspections, production changes, index approval or sitehealthy claim. Raw evidence/times/limits in private coverage-cn-postrepair-review-2026-11-26.json. Next necessary /cn evidence Dec03 merged with existing original nine unresolved targets/overlapping D28 sources once; D28 final same-window page-query ledger remains separate. Historical Nov19 nextAction below is superseded only for /cn next node, not re-opened whole diagnosis.",
         "dueOn": "2026-11-13",
         "nextAction": "Nov12 original diagnosis remains complete (4 canonical already indexed,6 old crawls,3 unknown,1 no current technical blocker,3 expected exclusions); historical Coverage total1690/reasonSum1691 discrepancy retained. User manually completed Nov19 original ten unresolved targets:5 old crawls,3 unknown,2 crawled/notindexed without reproduced current technical blocker, including /cn actually recrawled Nov12 after prior home edits. Six missing real Inspection/technical samples added once; four same-day Inspection/technical sources and successful finalNov16 GSC snapshot reused, no second Search Analytics fetch, indexed4/exclusion3 not repeated. Exact independent QA_PASS; current sampled technical blockers0, site warning unchanged, not indexing/growth success. Confirmed /cn language-content defects were separately repaired/deployed/accepted as cn-home-localization-repair, not index approval. Nov19 review is completed with Google business outcome waiting_data, do not repeat daily. Existing daily owner reviews /cn post-repair Google evidence Nov26 once; other nine original unresolved targets Dec3 with original D28 overlap and actual source/timestamps, only real anomaly earlier. No bulk index release, new automation or product-wide stop.",
         "completedOn": "2026-11-12",
         "lastReviewedOn": "2026-11-19",
         "reviewStatus": "completed_waiting_google",
-        "nextReviewDate": "2026-11-26",
+        "nextReviewDate": "2026-12-03",
         "remainingTargetsReviewDate": "2026-12-03",
         "artifact": "docs/COVERAGE_DIAGNOSIS_2026-11-12_CN.md",
         "reviewArtifact": "docs/COVERAGE_REVIEW_AND_CN_HOME_REPAIR_2026-11-19_CN.md"
