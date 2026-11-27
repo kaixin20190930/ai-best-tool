@@ -35,7 +35,7 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-26",
+    "updatedOn": "2026-11-27",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
@@ -417,12 +417,17 @@
       {
         "id": "make-freshness-catch-up",
         "status": "production_verified",
+        "lastReviewedOn": "2026-11-27",
+        "latestMaintenanceCompletedOn": "2026-11-27",
+        "latestMaintenanceProductionWrites": 1,
+        "ownerAutomation": "ai-best-tool-cluster",
+        "currentReviewAction": "Nov26-due Make actual fact maintenance completed Nov27. Six current official sources reviewed: operation/module/polling/bundle exceptions, built-in custom AI paid eligibility and embedding/provider charges, expiry/exhaustion/full webhook queue rejection, run-level credit attribution and immutable US/EU organization region; exact checkout/account/recovery/security not tested. Existing row lacks decision freshness fields, so reused original generic detail contract without adding fields/framework: one dated paragraph in EN/CN/ZH plus neutral conclusion heading, maintenanceReview and next_review_date only. Initial contains-old-body append manifest rejected by same independent QA before production; preserved initial evidence, revised content-only manifest703953b5 avoids duplicate replacement, same QA PASS, no writer change. Fresh preflight0/real rollback0/commit1/postcheck0 and exact complete protected postimage PASS. Once actual EN/CN/TW acceptance PASS complete new paragraph and original body paragraphs, real presenter title/summary versus route English-detail TW fallback, official/decision anchor/no404/selfcanonical/noindex; sitemap154 excluded. Original market/editorial/pricing/quality/index and recommendations protected. Next actual fact review Dec04. Other overdue Nov26 Tool/reason maintenance and Zapier Nov27 remain separate pending actual review, not renewed or counted complete. Friday review reuses today's finalNov25 weekly snapshot/observer: no growth or second-page spread evidence, warning/indexHOLD retained. No new GSC/Inspection/Coverage, intake/Tool publication/index/relation/runtime/assets/deploy/build/tsc/fulltests or automation. Initial historical fields below are not this maintenance count.",
         "dueOn": "2026-10-22",
         "toolId": "c0bb3aba-33be-4e14-903e-5f1d036eec4a",
         "artifact": "docs/MAKE_FRESHNESS_CATCH_UP_2026-11-12_CN.md",
         "nextAction": "Completed under explicit user authorization: six current official sources, independent QA bound to manifest 953338ac18b53c77d3a00e2017ae5f53f6b1de13d4f5ef21c02102ccf3d501ed; actual EN/CN/ZH billing/data paragraphs updated, unverified fixed-price/Free-entitlement current assertions removed, BYOK paid built-in eligibility/embedding/module exceptions and queue rejection clarified. Generic fresh preflight0/rollback0/commit1/postcheck0. One actual EN/CN/TW-route sample passed exact new paragraphs, official destination, canonical/noindex/sitemap0 and exact DB postimage; TW retains existing English-detail fallback, not a new translation. Initial title-verifier expectation corrected offline against the same saved HTML; no repeated HTTP or DB commit. No runtime/build/full tests or market/index/relation writes. Review on 2026-11-26 or real source change; do not repeat completed catch-up. Index distribution remains held separately.",
         "completedOn": "2026-11-12",
-        "nextReviewDate": "2026-11-26"
+        "nextReviewDate": "2026-12-04"
       },
       {
         "id": "activepieces-manual-creation-review",
