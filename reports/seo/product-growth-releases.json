@@ -35,7 +35,7 @@
     "gate": "R4 distribution decision and at least 14 days of valid signals; this does not block on-site evidence, comparison or recommendations"
   },
   "delivery": {
-    "updatedOn": "2026-11-27",
+    "updatedOn": "2026-11-28",
     "ownerAutomation": "ai-best-tool-cluster",
     "cooldownScope": "Only discretionary edits to the released paths; never a product-wide or cluster-wide stop",
     "items": [
@@ -435,11 +435,20 @@
         "commit": "4b8f3fedca68b7ba34e9f2aa74c2b8ee6d4467fe",
         "monitorPublishedOn": "2026-11-12",
         "releasedOn": null,
-        "nextReviewDate": "2026-11-26",
-        "lastReviewedOn": "2026-11-19",
+        "nextReviewDate": "2026-12-05",
+        "lastReviewedOn": "2026-11-28",
+        "latestMaintenanceCompletedOn": "2026-11-28",
+        "latestMaintenanceProductionWrites": 1,
+        "ownerAutomation": "ai-best-tool-cluster",
+        "productionUrls": [
+          "https://aibesttool.com/ai/activepieces",
+          "https://aibesttool.com/cn/ai/activepieces",
+          "https://aibesttool.com/tw/ai/activepieces"
+        ],
         "latestMaintenanceArtifact": "docs/AUTOMATION_DUE_REVIEW_2026-11-19_CN.md",
-        "latestMaintenanceCommit": "402606883610a9cbb57ef6f9dfbfca7b0c80101d",
-        "currentReviewAction": "Actual Nov19 scoped official pricing/flow/agent/hosting review completed with unresolved entitlement conflicts retained, exact-manifest independent QA, generic rollback/commit/postcheck and full trilingual content acceptance. Existing two AP conditional reasons also actually reviewed/deployed/accepted, not Tool republication. Next actual Tool and two-reason evidence review Nov26; see scheduled due-review record. Original creation/QA below are historical, not reused as this review signature.",
+        "latestMaintenanceCommit": null,
+        "latestMaintenancePatchSha256": "20af00877d99c35b1654f2009b5ade938e39ffc2de019e012aef95009656acfd",
+        "currentReviewAction": "Nov26-due fact review completed Nov28 against four current official sources. Pricing now consistently states monthly Free-credit refresh: corrected the obsolete conflict in EN/CN/TW/ZH pricing, limits and linked claim boundary; API/MCP eligibility conflict, edition/BYOK caveats and untested account terms remain. Same independent QA approved exact fifteen-path patch and parameterized SQL under the original full-preimage/real-rollback/commit/postcheck contract; original generic freshness allowlist unchanged. Commit1, all other stages0, complete protected postimage verified. One actual three-language sample verifies complete new and original content, primary official destination, canonical/noindex and expired recommendations hidden; sitemap154 excludes monitor URLs. Initial extra pricing-link expectation FAIL retained; same original HTML corrected offline against actual primary-source renderer and reviewed by the same QA, no repeat HTTP or production write. Pure database correction, no runtime/content Git deployment; this patch hash identifies the content. Next actual Tool review Dec05. Separate two AP recommendations remain Nov26 overdue/hidden, not renewed by this fact review; other overdue maintenance remains with existing daily owner. No intake/index/relationship/GSC/build/full tests or new automation. Original creation fields below remain historical.",
         "toolId": "7d89de9d-8281-4b93-bff7-0d1bf299388e",
         "candidateId": "5692e4a0-fbd9-4b08-bca3-13eb1e11e0d0",
         "artifact": "docs/MANUAL_TOOL_CREATION_ACCEPTANCE_2026-11-12_CN.md",
